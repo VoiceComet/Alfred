@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+
+	"name": "Chrome Speech Control",
+	"description": "This extension adds a speech control option to your browser.",
+	"version": "1.0",
+
+	"permissions": [
+		"tabs"
+	],
+
+	"background": {
+		"scripts": [
+			"scripts/utils.js", 
+			"scripts/classes.js", 
+			"scripts/background.js"
+		]
+	},
+	
+	"browser_action": {
+		"default_icon": { "128": "images/mic_on.png" }
+	}
+}
