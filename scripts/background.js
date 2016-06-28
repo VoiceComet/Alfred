@@ -11,6 +11,7 @@ globalCommonState.init = function () {
 
 var activeState;
 var modules = [];
+var permissionGrounded = true;
 
 function addModule(module) {
 	module.init();
