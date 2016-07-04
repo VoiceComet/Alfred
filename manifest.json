@@ -12,6 +12,10 @@
 	"background": {
 		"scripts": [
 			"scripts/utils.js",
+			"scripts/classes/Module.js",
+			"scripts/classes/State.js",
+			"scripts/classes/Action.js",
+			"scripts/classes/Command.js",
 			"scripts/background.js"
 		]
 	},

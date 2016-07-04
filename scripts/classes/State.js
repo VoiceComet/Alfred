@@ -11,6 +11,14 @@ function State (name) {
 	this.interimResults = false;
 	this.lang = 'en';
 	
+	//standard actions
+	this.ableToMute = true;
+	this.muteActionIn;
+	this.muteActionOut;
+	this.muteState;
+	this.ableToCancel = true;
+	this.cancelAction;
+	
 	/**
 	 * action: Action object
 	*/
@@ -18,14 +26,55 @@ function State (name) {
         this.actions.push(action);
     };
 	
+	//generate standard actions
+	this.generateStandardActions = function() {
+		//mute
+		if (this.muteState == null) {
+			this.muteState = new State("MuteState of " + this.name);
+			this.muteState.init = function() {
+				this.ableToMute = false;
+				this.ableToCancel = false;
+				alert('mute, say "listen"');
+			}
+			this.muteActionIn = new Action(0, this.muteState);
+			this.muteActionIn.addCommand(new Command("mute", 0));
+			this.muteActionOut = new Action(0, this);
+			this.muteActionOut.addCommand(new Command("listen", 0));
+			this.muteActionOut.act = function() {
+				alert("demuted");
+			}
+			this.muteState.addAction(this.muteActionOut);
+		}
+		
+		//abort
+		if (this.cancelAction == null) {
+			this.cancelAction = new Action(0, globalCommonState);
+			this.cancelAction.addCommand(new Command("cancel", 0));
+			this.cancelAction.act = function() {
+				alert("cancel");
+			}
+		}
+	};
+	
+	//generate standard actions
+	this.activateStandardActions = function() {
+		if (this.ableToMute) {
+			this.addAction(this.muteActionIn);
+		}
+		
+		if (this.ableToCancel) {
+			this.addAction(this.cancelAction);
+		}
+	};
+	
 	//has to override
 	this.init = function() {};
 	
     this.run = function() {
+		this.generateStandardActions();
 		this.init();
-		if (this.recognizing) {
-			this.createWebkitSpeechRecognition();			
-		}
+		this.activateStandardActions();
+		this.startSpeechRecognition();
     };
 	
 	//you can override this function
@@ -41,11 +90,16 @@ function State (name) {
 					if (result[0] == text) { //result.index == 0
 						var arguments = [];
 						for (var k = 1;  k <= this.actions[i].commands[j].parameterCount; k++) {
-							arguments[k-1] = result[k];
+							arguments[k-1] = result[k].trim();
 						}
 						this.actions[i].act(arguments);
 						this.stopSpeechRecognition();
-						changeActiveState(this.actions[i].followingState);
+						//change state or start new speech recognition
+						if (this.actions[i].followingState != this) {
+							changeActiveState(this.actions[i].followingState);
+						} else {
+							this.startSpeechRecognition();
+						}
 						return;
 					}
 				}
@@ -57,12 +111,12 @@ function State (name) {
 	this.createWebkitSpeechRecognition = function() {
 		var that = this;
 		
-		recognition = new webkitSpeechRecognition();
-		recognition.continuous = this.continuous;
-		recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
-		recognition.lang = this.lang; //TODO: selectable language? de-DE
+		this.recognition = new webkitSpeechRecognition();
+		this.recognition.continuous = this.continuous;
+		this.recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
+		this.recognition.lang = this.lang; //TODO: selectable language? de-DE
 		
-		recognition.onresult = function(event) {
+		this.recognition.onresult = function(event) {
 			var text = "";
 			for (var i = event.resultIndex; i < event.results.length; i++) {
 				text += event.results[i][0].transcript;
@@ -70,14 +124,14 @@ function State (name) {
 			that.analyseRecognitionResult(text.trim());
 		};
 		
-		recognition.onnomatch = function(event) {
+		this.recognition.onnomatch = function(event) {
 			//alert("onnomatch");
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
 				alert("nomatch: " + event.results[i][0].transcript);
 			}
 		};
 		
-		recognition.onerror = function(event) {
+		this.recognition.onerror = function(event) {
 			//alert("onerror");
 			if (event.error == "not-allowed") {
 				//get permission
@@ -93,7 +147,7 @@ function State (name) {
 			}
 		};
 		
-		recognition.onend = function(event) {
+		this.recognition.onend = function(event) {
 			//alert("onend");
 			if (that.recognizing) {
 				//restart
@@ -101,14 +155,20 @@ function State (name) {
 			}
 		};
 		
-		recognition.start();
+		this.recognition.start();
 		//alert("start");
+	}
+	
+	this.startSpeechRecognition = function() {
+		if (this.recognizing) {
+			this.createWebkitSpeechRecognition();
+		}
 	}
 	
 	this.stopSpeechRecognition = function() {
 		//override onend and onerror function to suppress restart at fast switching of this.recognizing
-		recognition.onerror = function(event) {}; 
-		recognition.onend = function(event) {}; 
-		recognition.stop();
+		this.recognition.onerror = function(event) {};
+		this.recognition.onend = function(event) {};
+		this.recognition.stop();
 	}
 }
