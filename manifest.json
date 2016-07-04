@@ -11,8 +11,7 @@
 
 	"background": {
 		"scripts": [
-			"scripts/utils.js", 
-			"scripts/classes.js", 
+			"scripts/utils.js",
 			"scripts/background.js"
 		]
 	},

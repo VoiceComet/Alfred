@@ -1,14 +1,11 @@
-var globalCommonState = new State("GlobalCommonState");
-globalCommonState.init = function () {
-	this.actions = [];
-	//add actions of modules
-	for (var i = 0; i < modules.length; i++) {
-		for (var j = 0; j < modules[i].actions.length; j++) {
-			this.addAction(modules[i].actions[j]);
-		}
-	}
-};
+//import classes
+importJsFile("scripts/classes/Module.js");
+importJsFile("scripts/classes/State.js");
+importJsFile("scripts/classes/Action.js");
+importJsFile("scripts/classes/Command.js");
 
+
+var globalCommonState;
 var activeState;
 var modules = [];
 var permissionGrounded = true;
@@ -48,6 +45,17 @@ window.addEventListener("load", function() {
 	if (!('webkitSpeechRecognition' in window)) {
 		alert("webkitSpeechRecognition not available.");
 	} else {
+		globalCommonState = new State("GlobalCommonState");
+		globalCommonState.init = function () {
+			this.actions = [];
+			//add actions of modules
+			for (var i = 0; i < modules.length; i++) {
+				for (var j = 0; j < modules[i].actions.length; j++) {
+					this.addAction(modules[i].actions[j]);
+				}
+			}
+		};
+		
 		changeActiveState(globalCommonState);
 	}
 }, false);

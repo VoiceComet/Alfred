@@ -1,26 +1,4 @@
 /**
- * init: function(){}
-*/
-function Module (name, init) {
-	this.name = name;
-    this.actions = [];
-	
-    this.addAction = function(action) {
-		this.actions.push(action);
-    };
-	
-	this.addActions = function(actions) {
-		for (var i = 0; i < actions.length; i++) {
-			this.addAction(actions[i]);
-		}
-    };
-	
-	this.init = init;
-}
-
-
-
-/**
  * name: str, name of state
 */
 function State (name) {
@@ -134,42 +112,3 @@ function State (name) {
 		recognition.stop();
 	}
 }
-
-
-/**
- * parameterCount: int, count of parameters
- * followingState: State object, state after action run
-*/
-function Action (parameterCount, followingState) {
-    this.commands = [];
-    this.followingState = followingState;
-    this.parameterCount = parameterCount;
-	
-    this.addCommand = function(command) {
-		if (this.parameterCount == command.parameterCount) {
-			this.commands.push(command);
-		} else {
-			//error message
-			alert("parameterCount not the same");
-		}
-    };
-	
-	this.addCommands = function(commands) {
-		for (var i = 0; i < commands.length; i++) {
-			this.addCommand(commands[i]);
-		}
-    };
-	
-	//has to override
-	this.act = function(arguments) {};
-}
-
-/**
- * expression: str, regular expression
- * parameterCount: int, count of parameters
-*/
-function Command (expression, parameterCount) {
-	this.expression = new RegExp(expression, 'i');
-    this.parameterCount = parameterCount;
-}
-
