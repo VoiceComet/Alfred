@@ -85,7 +85,6 @@ function State (name) {
 				//test the regular expression
 				var result = this.actions[i].commands[j].expression.exec(text);
 				if (result != null) {
-					
 					//text longer than found expression?
 					if (result[0] == text) { //result.index == 0
 						var arguments = [];
