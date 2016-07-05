@@ -9,6 +9,7 @@ function State (name) {
 	this.recognizing = true;
 	this.continuous = false;
 	this.interimResults = false;
+	this.maxAlternatives = 10;
 	this.lang = 'en';
 	
 	//standard actions
@@ -38,6 +39,7 @@ function State (name) {
 			}
 			this.muteActionIn = new Action(0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
+			this.muteActionIn.addCommand(new Command("don't listen", 0));
 			this.muteActionOut = new Action(0, this);
 			this.muteActionOut.addCommand(new Command("listen", 0));
 			this.muteActionOut.act = function() {
@@ -78,33 +80,110 @@ function State (name) {
     };
 	
 	//you can override this function
-	this.analyseRecognitionResult = function(text) {
+	this.analyseRecognitionResult = function(alternatives) {
 		//alert("analyseRecognitionResult");
+		var that = this;
+		
+		//little hit object
+		function Hit(execResult, action, alternativeIndex) {
+			this.execResult = execResult;
+			this.action = action;
+			this.alternativeIndex = alternativeIndex;
+		}
+		
+		//run action of hit
+		function runHitAction(hit) {
+			var arguments = [];
+			for (var i = 1;  i <= hit.action.parameterCount; i++) {
+				arguments[i-1] = hit.execResult[i].trim();
+			}
+			hit.action.act(arguments);
+			that.stopSpeechRecognition();
+			//change state or start new speech recognition
+			if (hit.action.followingState != that) {
+				changeActiveState(hit.action.followingState);
+			} else {
+				that.startSpeechRecognition();
+			}
+		}
+		
+		var hits = [];
+		var hitIndex = 0;
+		
+		//all actions
 		for (var i = 0; i < this.actions.length; i++) {
+			//all commands of action
 			for (var j = 0; j < this.actions[i].commands.length; j++) {
-				//test the regular expression
-				var result = this.actions[i].commands[j].expression.exec(text);
-				if (result != null) {
-					//text longer than found expression?
-					if (result[0] == text) { //result.index == 0
-						var arguments = [];
-						for (var k = 1;  k <= this.actions[i].commands[j].parameterCount; k++) {
-							arguments[k-1] = result[k].trim();
+				//all alternatives
+				for (var k = 0; k < alternatives.length; k++) {
+					alternatives[k] = alternatives[k].trim(); //delete spaces at string beginning and ending
+					//test the regular expression
+					var execResult = this.actions[i].commands[j].expression.exec(alternatives[k]);
+					if (execResult != null) {
+						//result found, add to hits array
+						hits[hitIndex] = new Hit(execResult, this.actions[i], k);
+						hitIndex++;
+						
+						//text not the same than found expression
+						if (execResult[0] == alternatives[k]) { //result.index == 0
+							//perfect text match
+							runHitAction(hits[hitIndex-1]);
+							return;
 						}
-						this.actions[i].act(arguments);
-						this.stopSpeechRecognition();
-						//change state or start new speech recognition
-						if (this.actions[i].followingState != this) {
-							changeActiveState(this.actions[i].followingState);
-						} else {
-							this.startSpeechRecognition();
-						}
-						return;
 					}
 				}
 			}
 		}
-		notify("not found: '" + text + "'");
+		
+		if (hits.length > 0) {
+			//simple ActionHit object
+			function ActionHit(action) {
+				this.action = action;
+				this.hits = [];
+			}
+			
+			var actionHits = [];
+			
+			var text = "";
+			//no perfect match
+			for (var i = 0; i < hits.length; i++) {
+				//search index of action in actionHits
+				var index = -1;
+				for (var j = 0; j < actionHits.length; j++) {
+					if (actionHits[j].action == hits[i].action) {
+						index = j;
+						break;
+					}
+				}
+				
+				if (index < 0) {
+					//action does not exist in actionHits
+					actionHits.push(new ActionHit(hits[i].action));
+					index = actionHits.length-1;
+				}
+				//add hit to actionHit
+				actionHits[index].hits.push(hits[i])
+				
+				text += hits[i].alternativeIndex + ": " + alternatives[hits[i].alternativeIndex] + "\n";
+			}
+			
+			if (actionHits.length > 0) {
+				if (actionHits.length == 1) {
+					//only one action found
+					runHitAction(actionHits[0].hit[0]); //run first hit
+					return;
+				} else {
+					//TODO more than one action
+					notify(actionHits.length + " actions found");
+				}
+			}
+			notify(text, 5000);
+		} else {
+			//not found
+			notify("not found: '" + alternatives[0] + "'");
+		}
+		
+		
 	};
 	
 	this.createWebkitSpeechRecognition = function() {
@@ -113,14 +192,23 @@ function State (name) {
 		this.recognition = new webkitSpeechRecognition();
 		this.recognition.continuous = this.continuous;
 		this.recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
+		this.recognition.maxAlternatives = this.maxAlternatives;
 		this.recognition.lang = this.lang; //TODO: selectable language? de-DE
 		
 		this.recognition.onresult = function(event) {
-			var text = "";
+			var alternatives = [];
 			for (var i = event.resultIndex; i < event.results.length; i++) {
-				text += event.results[i][0].transcript;
+				//all alteratives
+				for (var j = 0; j < event.results[i].length; j++) {
+					if (j in alternatives) {
+						alternatives[j] += event.results[i][j].transcript;
+					} else {
+						alternatives[j] = event.results[i][j].transcript;
+					}
+				}
 			}
-			that.analyseRecognitionResult(text.trim());
+			
+			that.analyseRecognitionResult(alternatives);
 		};
 		
 		this.recognition.onnomatch = function(event) {
