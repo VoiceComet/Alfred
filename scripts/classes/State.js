@@ -84,106 +84,92 @@ function State (name) {
 		//alert("analyseRecognitionResult");
 		var that = this;
 		
-		//little hit object
-		function Hit(execResult, action, alternativeIndex) {
+		//simple hit object
+		function Hit(execResult, alternativeIndex) {
 			this.execResult = execResult;
-			this.action = action;
 			this.alternativeIndex = alternativeIndex;
+		}
+		//simple ActionHit object
+		function ActionHit(action) {
+			this.action = action;
+			this.hits = [];
 		}
 		
 		//run action of hit
-		function runHitAction(hit) {
+		function runHitAction(actionHit) {
 			var arguments = [];
-			for (var i = 1;  i <= hit.action.parameterCount; i++) {
-				arguments[i-1] = hit.execResult[i].trim();
+			for (var i = 1;  i <= actionHit.action.parameterCount; i++) {
+				arguments[i-1] = actionHit.hits[0].execResult[i].trim();
 			}
-			hit.action.act(arguments);
+			actionHit.action.act(arguments);
 			that.stopSpeechRecognition();
 			//change state or start new speech recognition
-			if (hit.action.followingState != that) {
-				changeActiveState(hit.action.followingState);
+			if (actionHit.action.followingState != that) {
+				changeActiveState(actionHit.action.followingState);
 			} else {
 				that.startSpeechRecognition();
 			}
 		}
 		
-		var hits = [];
-		var hitIndex = 0;
+		var actionHits = [];
+		var actionHitsIndex = 0;
 		
 		//all actions
 		for (var i = 0; i < this.actions.length; i++) {
 			//all commands of action
 			for (var j = 0; j < this.actions[i].commands.length; j++) {
+				var actionAdded = false;
 				//all alternatives
 				for (var k = 0; k < alternatives.length; k++) {
 					alternatives[k] = alternatives[k].trim(); //delete spaces at string beginning and ending
 					//test the regular expression
 					var execResult = this.actions[i].commands[j].expression.exec(alternatives[k]);
 					if (execResult != null) {
-						//result found, add to hits array
-						hits[hitIndex] = new Hit(execResult, this.actions[i], k);
-						hitIndex++;
+						//result found
+						if (!actionAdded) {
+							//add to actionHits array
+							actionHits[actionHitsIndex] = new ActionHit(this.actions[i]);
+							actionAdded = true;
+						}
+						//add hit to actionHit
+						actionHits[actionHitsIndex].hits.push(new Hit(execResult, k));
 						
 						//text not the same than found expression
 						if (execResult[0] == alternatives[k]) { //result.index == 0
 							//perfect text match
-							runHitAction(hits[hitIndex-1]);
+							runHitAction(actionHits[actionHitsIndex]);
 							return;
 						}
 					}
 				}
+				
+				//increment index for each added action
+				if (actionAdded) actionHitsIndex++;
 			}
 		}
 		
-		if (hits.length > 0) {
-			//simple ActionHit object
-			function ActionHit(action) {
-				this.action = action;
-				this.hits = [];
-			}
-			
-			var actionHits = [];
-			
-			var text = "";
-			//no perfect match
-			for (var i = 0; i < hits.length; i++) {
-				//search index of action in actionHits
-				var index = -1;
-				for (var j = 0; j < actionHits.length; j++) {
-					if (actionHits[j].action == hits[i].action) {
-						index = j;
-						break;
+		if (actionHits.length > 0) {
+			if (actionHits.length == 1) {
+				//only one action found
+				runHitAction(actionHits[0]); //run first actionHit
+				return;
+			} else {
+				//TODO more than one action
+				notify(actionHits.length + " actions found");
+				
+				var text = "";
+				//no perfect match
+				for (var i = 0; i < actionHits.length; i++) {
+					for (var j = 0; j < actionHits[i].hits.length; j++) {
+						text += actionHits[i].hits[j].alternativeIndex + ": " + alternatives[actionHits[i].hits[j].alternativeIndex] + "\n";
 					}
 				}
-				
-				if (index < 0) {
-					//action does not exist in actionHits
-					actionHits.push(new ActionHit(hits[i].action));
-					index = actionHits.length-1;
-				}
-				//add hit to actionHit
-				actionHits[index].hits.push(hits[i])
-				
-				text += hits[i].alternativeIndex + ": " + alternatives[hits[i].alternativeIndex] + "\n";
+				notify(text, 5000);
 			}
-			
-			if (actionHits.length > 0) {
-				if (actionHits.length == 1) {
-					//only one action found
-					runHitAction(actionHits[0].hit[0]); //run first hit
-					return;
-				} else {
-					//TODO more than one action
-					notify(actionHits.length + " actions found");
-				}
-			}
-			notify(text, 5000);
 		} else {
 			//not found
 			notify("not found: '" + alternatives[0] + "'");
 		}
-		
-		
 	};
 	
 	this.createWebkitSpeechRecognition = function() {
