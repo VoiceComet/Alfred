@@ -1,5 +1,7 @@
 var moduleList = [
-	"testModule.js"
+	"BrowserActionsModule.js"
+	//"testModule.js"
+	
 	//add modules here
 ];
 

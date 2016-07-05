@@ -37,6 +37,19 @@ addModule(new Module("Test", function() {
 	};
 	this.addAction(action2);
 	//-----Action 2 End-----------
+	
+	//-----Action 3 Start-----------
+	var action3 = new Action(2, globalCommonState);
+	var commands = [
+		new Command("new tab", 2)
+	];
+	action3.addCommands(commands);
+	action3.act = function () {
+		alert("open new tab")
+		chrome.tabs.create({"url": www.google.com});
+	};
+	this.addAction(action3);
+	//-----Action 3 End-----------
 	//... more actions
 
 	/** END Create Init Actions **/
