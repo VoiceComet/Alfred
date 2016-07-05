@@ -6,21 +6,18 @@ addModule(new Module("BrowserActionsModule", function() {
  * open new tab
 */
 
-	var newTabAction = new Action(0, globalCommonState);
-	newTabAction.addCommand(new Command("new tab", 0));
-	newTabAction.act = function() {
+	var newTab = new Action(0, globalCommonState);
+	newTab.addCommand(new Command("new tab", 0));
+	newTab.act = function() {
 		chrome.tabs.create({active: true});
 	};
-	this.addAction(newTabAction);
+	this.addAction(newTab);
 	
-	var openInNewTab = new Action(0, globalCommonState);
-	openInNewTab.addCommand(new Command(/open .*/, 0));
-	openInNewTab.act = function() {
-		var re = openInNewTab.commands[0].expression;
-		//alert("Test2");
-		//var url = "http://www." + re + ".com"
-		//alert(url);
-		//chrome.tabs.create({url: url, active: true});
+	var openInNewTab = new Action(1, globalCommonState);
+	openInNewTab.addCommand(new Command("open (.*)", 1));
+	openInNewTab.act = function(arguments) {
+		var url = "http://www." + arguments[0] + ".com"
+		chrome.tabs.create({url: url, active: true});
 	};
 	this.addAction(openInNewTab);
 	
@@ -28,10 +25,10 @@ addModule(new Module("BrowserActionsModule", function() {
  * search for an expression
 */
 
-	var search = new Action(0, globalCommonState);
-	search.addCommand(new Command(/search for .*/, 0));
-	search.act = function() {
-		alert("searched for ");
+	var search = new Action(1, globalCommonState);
+	search.addCommand(new Command("search for (.*)", 1));
+	search.act = function(arguments) {
+		alert("searched for " + arguments[0]);
 	};
 	this.addAction(search);
 }));

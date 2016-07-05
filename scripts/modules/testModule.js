@@ -39,14 +39,14 @@ addModule(new Module("Test", function() {
 	//-----Action 2 End-----------
 	
 	//-----Action 3 Start-----------
-	var action3 = new Action(2, globalCommonState);
+	var action3 = new Action(0, globalCommonState);
 	var commands = [
-		new Command("new tab", 2)
+		new Command("new tab", 0)
 	];
 	action3.addCommands(commands);
 	action3.act = function () {
 		alert("open new tab")
-		chrome.tabs.create({"url": www.google.com});
+		chrome.tabs.create({"url": "http://www.google.com"});
 	};
 	this.addAction(action3);
 	//-----Action 3 End-----------
