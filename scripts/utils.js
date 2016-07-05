@@ -34,3 +34,11 @@ function notify(message, time = 3000) {
 		}
 	}
 }
+
+/**
+ * write a message into the background page console
+ * string message
+**/
+function log(message) {
+	console.log(message);
+}
