@@ -148,10 +148,7 @@ function State (name) {
 		
 		this.recognition.onend = function(event) {
 			//alert("onend");
-			if (that.recognizing) {
-				//restart
-				that.createWebkitSpeechRecognition();
-			}
+			that.startSpeechRecognition();
 		};
 		
 		this.recognition.start();
