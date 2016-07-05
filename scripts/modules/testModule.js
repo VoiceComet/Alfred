@@ -17,7 +17,7 @@ addModule(new Module("Test", function() {
 	//set act function
 	action1.act = function (arguments) {
 		//add functionality
-		alert("action1: success!");
+		notify("action1: success!");
 	};
 
 	
@@ -33,7 +33,7 @@ addModule(new Module("Test", function() {
 	];
 	action2.addCommands(commands);
 	action2.act = function (arguments) {
-		alert("action2: success!, parameter: " + arguments[0]);
+		notify("action2: success!, parameter: " + arguments[0]);
 	};
 	this.addAction(action2);
 	//-----Action 2 End-----------
@@ -46,7 +46,7 @@ addModule(new Module("Test", function() {
 	var state1 = new State("TestState");
 	state1.init = function () {
 		//some state script (for example: draw lines, show a choose, open a panel,...)
-		alert('say "exit" or "go away"');
+		notify('say "exit" or "go away"');
 	};
 	
 	//action from globalCommonState to state1
@@ -56,7 +56,7 @@ addModule(new Module("Test", function() {
 	];
 	action3.addCommands(commands);
 	action3.act = function (arguments) {
-		alert("action3: state 1 is active!");
+		notify("action3: state 1 is active!");
 	};
 	this.addAction(action3); //<-- from globalCommonState use "this"
 	
@@ -68,7 +68,7 @@ addModule(new Module("Test", function() {
 	];
 	action4.addCommands(commands);
 	action4.act = function (arguments) {
-		alert("action4: globalCommonState is active!");
+		notify("action4: globalCommonState is active!");
 	};
 	state1.addAction(action4); //<--- use "state1" instead of "this"!!
 	//...

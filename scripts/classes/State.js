@@ -34,14 +34,14 @@ function State (name) {
 			this.muteState.init = function() {
 				this.ableToMute = false;
 				this.ableToCancel = false;
-				alert('mute, say "listen"');
+				notify('mute, say "listen"');
 			}
 			this.muteActionIn = new Action(0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
 			this.muteActionOut = new Action(0, this);
 			this.muteActionOut.addCommand(new Command("listen", 0));
 			this.muteActionOut.act = function() {
-				alert("demuted");
+				notify("demuted");
 			}
 			this.muteState.addAction(this.muteActionOut);
 		}
@@ -51,7 +51,7 @@ function State (name) {
 			this.cancelAction = new Action(0, globalCommonState);
 			this.cancelAction.addCommand(new Command("cancel", 0));
 			this.cancelAction.act = function() {
-				alert("cancel");
+				notify("cancel");
 			}
 		}
 	};
@@ -104,7 +104,7 @@ function State (name) {
 				}
 			}
 		}
-		alert("not found: '" + text + "'");
+		notify("not found: '" + text + "'");
 	};
 	
 	this.createWebkitSpeechRecognition = function() {
