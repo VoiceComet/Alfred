@@ -31,6 +31,7 @@ importJsFile("scripts/modules/moduleList.js");
 
 //add listener to browser action
 chrome.browserAction.onClicked.addListener(function () {
+	openSidebar();
 	activeState.recognizing = !activeState.recognizing;
 	if (activeState.recognizing) {
 		//start recognition

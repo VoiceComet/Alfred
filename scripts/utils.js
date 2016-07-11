@@ -42,3 +42,23 @@ function notify(message, time = 3000) {
 function log(message) {
 	console.log(message);
 }
+
+
+/**
+ * open a sidebar in current tab
+ *
+**/
+function openSidebar() {
+	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
+		chrome.tabs.sendRequest(
+			//Selected tab id
+			tabs[0].id,
+			//Params inside a object data
+			{callFunction: "toggleSidebar"},
+			//Optional callback function
+			function(response) {
+				console.log(response);
+			}
+		);
+	});
+}
