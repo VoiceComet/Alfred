@@ -3,7 +3,7 @@ window.addEventListener("load", function() {
 	if (!('webkitSpeechRecognition' in window)) {
 		alert("error");
 	} else {
-		recognition = new webkitSpeechRecognition();
+		var recognition = new webkitSpeechRecognition();
 		
 		recognition.onstart = function(event) {
 			event.target.abort();

@@ -30,18 +30,18 @@ importJsFile("scripts/modules/moduleList.js");
 
 
 //add listener to browser action
-chrome.browserAction.onClicked.addListener(function () {
+chrome.browserAction.onClicked.addListener(function(tab) {
 	openSidebar();
 	activeState.recognizing = !activeState.recognizing;
 	if (activeState.recognizing) {
 		//start recognition
 		activeState.createWebkitSpeechRecognition();
-		//change icon 
+		//change icon
 		chrome.browserAction.setIcon({path:"../images/mic_on.png"});
 	} else {
 		//start recognition
 		activeState.stopSpeechRecognition();
-		//change icon 
+		//change icon
 		chrome.browserAction.setIcon({path:"../images/mic_off.png"});
 	}
 });
