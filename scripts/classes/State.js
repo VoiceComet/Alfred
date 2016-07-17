@@ -209,7 +209,8 @@ function State (name) {
 		this.recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
 		this.recognition.maxAlternatives = this.maxAlternatives;
 		this.recognition.lang = this.lang; //TODO: selectable language? de-DE
-		
+
+		//noinspection SpellCheckingInspection
 		this.recognition.onresult = function(event) {
 			var alternatives = [];
 			for (var i = event.resultIndex; i < event.results.length; i++) {
@@ -225,14 +226,16 @@ function State (name) {
 			
 			that.analyseRecognitionResult(alternatives);
 		};
-		
+
+		//noinspection SpellCheckingInspection
 		this.recognition.onnomatch = function(event) {
 			//alert("onnomatch");
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
-				alert("nomatch: " + event.results[i][0].transcript);
+				alert("no match: " + event.results[i][0].transcript);
 			}
 		};
-		
+
+		//noinspection SpellCheckingInspection
 		this.recognition.onerror = function(event) {
 			//alert("onerror");
 			if (event.error == "not-allowed") {
@@ -249,7 +252,7 @@ function State (name) {
 			}
 		};
 
-		//noinspection JSUnusedLocalSymbols
+		//noinspection JSUnusedLocalSymbols,SpellCheckingInspection
 		this.recognition.onend = function(event) {
 			//alert("onend");
 			that.startSpeechRecognition();
@@ -272,8 +275,10 @@ function State (name) {
 	 * stop the speech recognition
 	 */
 	this.stopSpeechRecognition = function() {
-		//override onend and onerror function to suppress restart at fast switching of this.recognizing
+		//override onEnd and onError function to suppress restart at fast switching of this.recognizing
+		//noinspection SpellCheckingInspection
 		this.recognition.onerror = function(event) {};
+		//noinspection SpellCheckingInspection
 		this.recognition.onend = function(event) {};
 		this.recognition.stop();
 	};

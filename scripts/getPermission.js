@@ -4,7 +4,8 @@ window.addEventListener("load", function() {
 		alert("error");
 	} else {
 		var recognition = new webkitSpeechRecognition();
-		
+
+		//noinspection SpellCheckingInspection
 		recognition.onstart = function(event) {
 			event.target.abort();
 		};
