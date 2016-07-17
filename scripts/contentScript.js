@@ -1,17 +1,17 @@
-/*Handle requests from background.html*/
-function handleRequest(
-	//The object data with the request params
-	request, 
-	//These last two ones isn't important for this example, if you want know more about it visit: http://code.google.com/chrome/extensions/messaging.html
-	sender, sendResponse
-	) {
+//noinspection JSUnusedLocalSymbols
+/**
+ * Handle requests from background.html
+ */
+function handleRequest(request, sender, sendResponse) {
 	if (request.callFunction == "toggleSidebar")
 		toggleSidebar();
 }
-chrome.extension.onRequest.addListener(handleRequest);
+chrome.runtime.onMessage.addListener(handleRequest);
 
-/*Small function wich create a sidebar(just to illustrate my point)*/
 var sidebarOpen = false;
+/**
+ * Small function which create a sidebar(just to illustrate my point)
+ */
 function toggleSidebar() {
 	if(sidebarOpen) {
 		var el = document.getElementById('mySidebar');
