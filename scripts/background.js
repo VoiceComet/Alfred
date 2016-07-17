@@ -30,7 +30,12 @@ importJsFile("scripts/modules/moduleList.js");
 
 
 //add listener to browser action
-chrome.browserAction.onClicked.addListener(function(tab) {
+//noinspection JSUnusedLocalSymbols
+/**
+ * is called when the browser action button is clicked
+ * @param {chrome.tabs.Tab} tab
+ */
+function browserAction(tab) {
 	openSidebar();
 	activeState.recognizing = !activeState.recognizing;
 	if (activeState.recognizing) {
@@ -44,7 +49,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 		//change icon
 		chrome.browserAction.setIcon({path:"../images/mic_off.png"});
 	}
-});
+}
+chrome.browserAction.onClicked.addListener(browserAction);
 
 
 window.addEventListener("load", function() {

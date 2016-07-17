@@ -214,7 +214,7 @@ function State (name) {
 		this.recognition.onresult = function(event) {
 			var alternatives = [];
 			for (var i = event.resultIndex; i < event.results.length; i++) {
-				//all alteratives
+				//all alternatives
 				for (var j = 0; j < event.results[i].length; j++) {
 					if (j in alternatives) {
 						alternatives[j] += event.results[i][j].transcript;
