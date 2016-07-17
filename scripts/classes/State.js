@@ -5,7 +5,7 @@ function State (name) {
     this.name = name;
     this.actions = [];
 	
-	this.recognition;
+	this.recognition = null;
 	this.recognizing = true;
 	this.continuous = false;
 	this.interimResults = false;
@@ -14,29 +14,34 @@ function State (name) {
 	
 	//standard actions
 	this.ableToMute = true;
-	this.muteActionIn;
-	this.muteActionOut;
-	this.muteState;
+	this.muteActionIn = null;
+	this.muteActionOut = null;
+	this.muteState = null;
 	this.ableToCancel = true;
-	this.cancelAction;
-	
+	this.cancelAction = null;
+
 	/**
-	 * action: Action object
-	*/
+	 * add an action to this state
+	 * @param {Action} action
+	 */
     this.addAction = function(action) {
         this.actions.push(action);
     };
-	
-	//generate standard actions
+
+	/**
+	 * generate standard actions
+	 */
 	this.generateStandardActions = function() {
 		//mute
 		if (this.muteState == null) {
 			this.muteState = new State("MuteState of " + this.name);
 			this.muteState.init = function() {
+				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.ableToMute = false;
+				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.ableToCancel = false;
 				notify('mute, say "listen"');
-			}
+			};
 			this.muteActionIn = new Action(0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
 			this.muteActionIn.addCommand(new Command("don't listen", 0));
@@ -44,7 +49,7 @@ function State (name) {
 			this.muteActionOut.addCommand(new Command("listen", 0));
 			this.muteActionOut.act = function() {
 				notify("demuted");
-			}
+			};
 			this.muteState.addAction(this.muteActionOut);
 		}
 		
@@ -57,8 +62,10 @@ function State (name) {
 			}
 		}
 	};
-	
-	//generate standard actions
+
+	/**
+	 * activate standard actions
+	 */
 	this.activateStandardActions = function() {
 		if (this.ableToMute) {
 			this.addAction(this.muteActionIn);
@@ -68,10 +75,19 @@ function State (name) {
 			this.addAction(this.cancelAction);
 		}
 	};
-	
-	//has to override
+
+	/**
+	 * Initialize this state. This method is called in the run method after the activation of the state.
+	 * You can override this function and add actions to this state
+	 *
+	 * You can set the variables: this.ableToMute, this.ableToCancel
+	 * to enable or disable standard actions.
+	 */
 	this.init = function() {};
-	
+
+	/**
+	 * Run the state. This method is called when the state is activated.
+	 */
     this.run = function() {
 		this.generateStandardActions();
 		this.init();
@@ -79,7 +95,15 @@ function State (name) {
 		this.startSpeechRecognition();
     };
 	
-	//you can override this function
+	//
+	/**
+	 * Analyse the speech alternatives after a result of the speech recognition.
+	 * It runs throw all commands of all actions of this state and check if some commands are called.
+	 *
+	 * You can override this function.
+	 *
+	 * @param {[String]} alternatives
+	 */
 	this.analyseRecognitionResult = function(alternatives) {
 		//alert("analyseRecognitionResult");
 		var that = this;
@@ -115,9 +139,11 @@ function State (name) {
 		var actionHitsIndex = 0;
 		
 		//all actions
-		for (var i = 0; i < this.actions.length; i++) {
+		var i;
+		var j;
+		for (i = 0; i < this.actions.length; i++) {
 			//all commands of action
-			for (var j = 0; j < this.actions[i].commands.length; j++) {
+			for (j = 0; j < this.actions[i].commands.length; j++) {
 				var actionAdded = false;
 				//all alternatives
 				for (var k = 0; k < alternatives.length; k++) {
@@ -152,15 +178,15 @@ function State (name) {
 			if (actionHits.length == 1) {
 				//only one action found
 				runHitAction(actionHits[0]); //run first actionHit
-				return;
+				//return;
 			} else {
 				//TODO more than one action
 				notify(actionHits.length + " actions found");
 				
 				var text = "";
 				//no perfect match
-				for (var i = 0; i < actionHits.length; i++) {
-					for (var j = 0; j < actionHits[i].hits.length; j++) {
+				for (i = 0; i < actionHits.length; i++) {
+					for (j = 0; j < actionHits[i].hits.length; j++) {
 						text += actionHits[i].hits[j].alternativeIndex + ": " + alternatives[actionHits[i].hits[j].alternativeIndex] + "\n";
 					}
 				}
@@ -171,10 +197,13 @@ function State (name) {
 			notify("not found: '" + alternatives[0] + "'");
 		}
 	};
-	
+
+	/**
+	 * create a speech recognition object and start the recognition
+	 */
 	this.createWebkitSpeechRecognition = function() {
 		var that = this;
-		
+
 		this.recognition = new webkitSpeechRecognition();
 		this.recognition.continuous = this.continuous;
 		this.recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
@@ -219,7 +248,8 @@ function State (name) {
 				}
 			}
 		};
-		
+
+		//noinspection JSUnusedLocalSymbols
 		this.recognition.onend = function(event) {
 			//alert("onend");
 			that.startSpeechRecognition();
@@ -227,18 +257,24 @@ function State (name) {
 		
 		this.recognition.start();
 		//alert("start");
-	}
-	
+	};
+
+	/**
+	 * start the speech recognition
+	 */
 	this.startSpeechRecognition = function() {
 		if (this.recognizing) {
 			this.createWebkitSpeechRecognition();
 		}
-	}
-	
+	};
+
+	/**
+	 * stop the speech recognition
+	 */
 	this.stopSpeechRecognition = function() {
 		//override onend and onerror function to suppress restart at fast switching of this.recognizing
 		this.recognition.onerror = function(event) {};
 		this.recognition.onend = function(event) {};
 		this.recognition.stop();
-	}
+	};
 }
