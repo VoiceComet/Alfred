@@ -1,5 +1,7 @@
 var globalCommonState = new State("GlobalCommonState");
 globalCommonState.init = function () {
+	this.ableToCancel = false;
+	
 	this.actions = [];
 	//add actions of modules
 	for (var i = 0; i < modules.length; i++) {
@@ -28,20 +30,27 @@ importJsFile("scripts/modules/moduleList.js");
 
 
 //add listener to browser action
-chrome.browserAction.onClicked.addListener(function () {
+//noinspection JSUnusedLocalSymbols
+/**
+ * is called when the browser action button is clicked
+ * @param {chrome.tabs.Tab} tab
+ */
+function browserAction(tab) {
+	openSidebar();
 	activeState.recognizing = !activeState.recognizing;
 	if (activeState.recognizing) {
 		//start recognition
 		activeState.createWebkitSpeechRecognition();
-		//change icon 
+		//change icon
 		chrome.browserAction.setIcon({path:"../images/mic_on.png"});
 	} else {
 		//start recognition
 		activeState.stopSpeechRecognition();
-		//change icon 
+		//change icon
 		chrome.browserAction.setIcon({path:"../images/mic_off.png"});
 	}
-});
+}
+chrome.browserAction.onClicked.addListener(browserAction);
 
 
 window.addEventListener("load", function() {

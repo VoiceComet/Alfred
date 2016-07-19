@@ -6,16 +6,28 @@
 	"version": "1.0",
 
 	"permissions": [
-		"tabs"
+		"tabs",
+		"notifications",
+		"history"
 	],
 
 	"background": {
 		"scripts": [
-			"scripts/utils.js", 
-			"scripts/classes.js", 
+			"scripts/utils.js",
+			"scripts/classes/Module.js",
+			"scripts/classes/State.js",
+			"scripts/classes/Action.js",
+			"scripts/classes/Command.js",
 			"scripts/background.js"
 		]
 	},
+	
+	"content_scripts": [
+		{
+			"matches": ["*://*/*"],
+			"js": ["scripts/contentScript.js"]
+		}
+	],
 	
 	"browser_action": {
 		"default_icon": { "128": "images/mic_on.png" }
