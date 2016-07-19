@@ -11,7 +11,7 @@ function importJsFile(path) {
 /**
  * notifies the user
  * @param {String} message - The shown message
- * @param {Number|undefined} [time]  - (optional) in millisecounds (std. 3000), if time is 0 or smaller: return value is the notification, to close it in another way
+ * @param {Number} [time=3000]  - (optional) in milliseconds (std. 3000), if time is 0 or smaller: return value is the notification, to close it in another way
  * @returns {Notification} Notification object or null
  */
 function notify(message, time) {

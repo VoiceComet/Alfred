@@ -161,7 +161,7 @@ function State (name) {
 						actionHits[actionHitsIndex].hits.push(new Hit(execResult, k));
 						
 						//text not the same than found expression
-						if (execResult[0] == alternatives[k]) { //result.index == 0
+						if (this.actions[i].parameterCount == 0 && execResult[0] == alternatives[k]) {
 							//perfect text match
 							runHitAction(actionHits[actionHitsIndex]);
 							return;
