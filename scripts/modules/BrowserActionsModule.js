@@ -3,10 +3,8 @@
 */
 addModule(new Module("BrowserActionsModule", function() {
 
-	var pages = [];
-	var currPage = 0;
 	/**
- 	 * opens new tab
+ 	 * open new tab
 	 */
 	var newTab = new Action(0, globalCommonState);
 	newTab.addCommand(new Command("new tab", 0));
@@ -16,7 +14,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	this.addAction(newTab);
 
 	/**
-	 * opens new page
+	 * open new page
 	 */
 	var openPage = new Action(1, globalCommonState);
 	openPage.addCommand(new Command("open (.*)", 1));
@@ -41,9 +39,8 @@ addModule(new Module("BrowserActionsModule", function() {
 	this.addAction(openPage);
 
 	/**
- 	 * closes tab(s)/window/panel
+ 	 * close tab(s)/window/panel
 	 */
-	
 	var close = new Action(1, globalCommonState);
 	close.addCommand(new Command("close (.*)", 1));
 	close.act = function(arguments) {
@@ -51,18 +48,18 @@ addModule(new Module("BrowserActionsModule", function() {
 			//closes current tab
 			chrome.tabs.getSelected(null, function(tab) {
 				chrome.tabs.remove(tab.id);
-			});
+			})
 		} else {
 			//closes current window
 			chrome.windows.getCurrent(function(window) {
 				chrome.windows.remove(window.id);
-			});
+			})
 		}
 	};
 	this.addAction(close);
 
 	/**
- 	 * reloads the current tab
+ 	 * reload the current tab
 	 */
 	var reload = new Action(0, globalCommonState);
 	reload.addCommand(new Command("reload", 0));
@@ -72,51 +69,24 @@ addModule(new Module("BrowserActionsModule", function() {
 	this.addAction(reload);
 
 	/**
- 	 * goes back one page
+ 	 * go back one page
 	 */
 	var goBack = new Action(0, globalCommonState);
 	goBack.addCommand(new Command("go back", 0));
 	goBack.act = function() {
 		notify("go back one page");
-		var test = true;
-		chrome.history.search({text: ''}, function(historyItem) {
-			//store first historyItem in backs
-			pages.push(historyItem[0].url);
-			//checks for every page in the history which was the last visited
-			for(var i = 1; i < historyItem.length; i++) {
-				test = true;
-				for(var h = 0; h < pages.length; h++) {
-					if (historyItem[i].url === pages[h]) {
-						test = false;
-					}
-				}
-				//if current page isn't in backs, push it to backs, update current tab, save current i of page
-				if(test === true) {
-					pages.push(historyItem[i].url);
-					chrome.tabs.update({url: historyItem[i].url, active: true});
-					currPage = pages.length - 1;
-					return;
-				}
-			}
-		});
+        sendMessage("goBack", {});
 	};
 	this.addAction(goBack);
 
 	/**
-	 * goes forward one page
+	 * go forward one page
      */
 	var goForward = new Action(0, globalCommonState);
 	goForward.addCommand(new Command("go forward", 0));
 	goForward.act = function() {
 		notify("go forward one page");
-		//updates tab, deletes currentPage in pages, set currPage
-		if(currPage >= 0) {
-			chrome.tabs.update({url: pages[currPage - 1], active: true});
-			pages.slice(currPage);
-			currPage -= 2;
-		} else {
-			alert("going forward isn't possible");
-		}
+        sendMessage("goForward", {});
 	};
 	this.addAction(goForward);
 

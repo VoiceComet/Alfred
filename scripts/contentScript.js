@@ -20,6 +20,10 @@ function handleRequest(request, sender, sendResponse) {
 		toggleSidebar();
 	else if (request.callFunction == "updateMicrophoneIcon")
 		updateMicrophoneIcon(request.params);
+	else if (request.callFunction == "goBack")
+		goBackOne();
+	else if (request.callFunction == "goForward")
+		goForwardOne();
 }
 chrome.runtime.onMessage.addListener(handleRequest);
 
@@ -76,4 +80,18 @@ function updateMicrophoneIcon(params) {
 			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
 		}
 	}
+}
+
+/**
+ * go back one page
+ */
+function goBackOne() {
+	window.history.back();
+}
+
+/**
+ * go forward one page
+ */
+function goForwardOne() {
+	window.history.forward();
 }
