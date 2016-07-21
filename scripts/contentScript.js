@@ -6,12 +6,11 @@ $("<link/>", {
 }).appendTo("head");
 //load ui html
 var ui = document.createElement('div');
-ui.id = "ChromeSpeechControlDIV";
-document.body.appendChild(ui);
-$("#ChromeSpeechControlDIV").load(chrome.extension.getURL("ui.html"), function() {
-	$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
-});
-
+$("<div></div>", {id: "ChromeSpeechControlDIV"})
+	.appendTo($("body"))
+	.load(chrome.extension.getURL("ui.html"), function() {
+		$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
+	});
 
 //noinspection JSUnusedLocalSymbols
 /**
@@ -26,12 +25,13 @@ function handleRequest(request, sender, sendResponse) {
 	} else if (request.callFunction == "updateMicrophoneIcon") {
 		updateMicrophoneIcon(request.params);
 	} else if (request.callFunction == "showMessage") {
-		showMessage(request.params);
+		return showMessage(request.params);
 	} else if (request.callFunction == "goBack") {
 		goBackOne();
 	} else if (request.callFunction == "goForward") {
 		goForwardOne();
 	}
+	return null;
 }
 chrome.runtime.onMessage.addListener(handleRequest);
 
@@ -102,19 +102,18 @@ function showMessage(params) {
 	$(message)
 		.addClass("ChromeSpeechControlMessage")
 		.html("<b>" + params.title + "</b><br/>" + params.content)
-
 		.appendTo($("#ChromeSpeechControlMessagesBox"))
 		.show(400);
 
 	var time = (typeof params.time !== 'undefined') ? params.time : 3000; //set default value to 3000
 	if (time > 0) {
 		setTimeout(function() {
-			//message.fadeOut();
 			$(message).hide(400, function() {
 				$(this).remove();
 			});
 		}, time)
 	}
+	return message;
 }
 
 /**
