@@ -25,11 +25,20 @@
 	"content_scripts": [
 		{
 			"matches": ["*://*/*"],
-			"js": ["scripts/contentScript.js"]
+			"js": ["scripts/jquery-3.1.0.min.js", "scripts/contentScript.js"]
 		}
 	],
 	
 	"browser_action": {
 		"default_icon": { "128": "images/mic_on.png" }
-	}
+	},
+
+	"web_accessible_resources": [
+		"images/mic_both.png",
+		"images/mic_hear.png",
+		"images/mic_work.png",
+		"images/mic_muted.png",
+		"images/mic_normal.png",
+		"ui.html"
+	]
 }

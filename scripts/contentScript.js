@@ -1,13 +1,25 @@
+//load ui html
+window.addEventListener("load", function() {
+	var ui = document.createElement('div');
+	ui.id = "GoogleSpeechControlDIV";
+	document.body.appendChild(ui);
+	$("#GoogleSpeechControlDIV").load(chrome.extension.getURL("ui.html"), function() {
+		$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
+	});
+}, false);
+
 //noinspection JSUnusedLocalSymbols
 /**
  * Handle requests from background.html
- * @param {!{callFunction:String}} request
+ * @param {!{callFunction:String, params:Object}} request
  * @param sender
  * @param sendResponse
  */
 function handleRequest(request, sender, sendResponse) {
 	if (request.callFunction == "toggleSidebar")
 		toggleSidebar();
+	else if (request.callFunction == "updateMicrophoneIcon")
+		updateMicrophoneIcon(request.params);
 }
 chrome.runtime.onMessage.addListener(handleRequest);
 
@@ -40,5 +52,28 @@ function toggleSidebar() {
 		";
 		document.body.appendChild(sidebar);
 		sidebarOpen = true;
+	}
+}
+
+/**
+ * update microphone icon
+ * @param {Object} params
+ * @param {boolean} params.muted - microphone is muted
+ * @param {boolean} params.hearing - microphone is hearing something
+ * @param {boolean} params.working - microphone is working
+ */
+function updateMicrophoneIcon(params) {
+	if (params.muted) {
+		$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_muted.png"));
+	} else {
+		if (params.hearing && params.working) {
+			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_both.png"));
+		} else if (params.hearing) {
+			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_hear.png"));
+		} else if (params.working) {
+			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_work.png"));
+		} else {
+			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
+		}
 	}
 }

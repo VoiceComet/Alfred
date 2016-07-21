@@ -42,6 +42,8 @@ function changeActiveState(newState) {
 	activeState.run();
 }
 
+//import jquery
+importJsFile("scripts/jquery-3.1.0.min.js");
 //import all modules
 importJsFile("scripts/modules/moduleList.js");
 

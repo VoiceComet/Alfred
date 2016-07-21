@@ -47,22 +47,31 @@ function log(message) {
 	console.log(message);
 }
 
+/**
+ * send message to active front
+ * @param {String} callFunction - call a function of content script
+ * @param {Object} params - parameter for the called function
+ * @param {Function} [callback] - optional callback function
+ * @global
+ */
+function sendMessage(callFunction, params, callback) {
+	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
+		chrome.tabs.sendMessage(
+			//Selected tab id
+			tabs[0].id,
+			//Params inside a object data
+			{callFunction: callFunction, params: params},
+			//Optional callback function
+			callback
+		);
+	});
+}
+
 
 /**
  * open a sidebar in current tab
  * @global
  */
 function openSidebar() {
-	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
-		chrome.tabs.sendMessage(
-			//Selected tab id
-			tabs[0].id,
-			//Params inside a object data
-			{callFunction: "toggleSidebar"},
-			//Optional callback function
-			function(response) {
-				log(response);
-			}
-		);
-	});
+	sendMessage("toggleSidebar", {});
 }

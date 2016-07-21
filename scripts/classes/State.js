@@ -6,7 +6,11 @@
 function State (name) {
     this.name = name;
     this.actions = [];
-	
+
+	this.muted = false;
+	this.hearing = false;
+	this.working = false;
+
 	this.recognition = null;
 	this.recognizing = true;
 	this.continuous = false;
@@ -37,7 +41,11 @@ function State (name) {
 		//mute
 		if (this.muteState == null) {
 			this.muteState = new State("MuteState of " + this.name);
+			var that = this;
 			this.muteState.init = function() {
+				//mute state after creation
+				//noinspection JSPotentiallyInvalidUsageOfThis
+				this.muted = true;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.ableToMute = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
@@ -47,10 +55,18 @@ function State (name) {
 			this.muteActionIn = new Action(0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
 			this.muteActionIn.addCommand(new Command("don't listen", 0));
+			this.muteActionIn.act = function() {
+				//mute state
+				that.muted = true;
+				that.updateMicrophoneIcon();
+			};
 			this.muteActionOut = new Action(0, this);
 			this.muteActionOut.addCommand(new Command("listen", 0));
 			this.muteActionOut.act = function() {
 				notify("demuted");
+				that.muteState.muted = false;
+				that.muted = false;
+				that.updateMicrophoneIcon();
 			};
 			this.muteState.addAction(this.muteActionOut);
 		}
@@ -96,6 +112,13 @@ function State (name) {
 		this.activateStandardActions();
 		this.startSpeechRecognition();
     };
+
+	/**
+	 * update Icon on front page
+	 */
+	this.updateMicrophoneIcon = function() {
+		sendMessage("updateMicrophoneIcon", {muted:this.muted, hearing:this.hearing, working:this.working});
+	};
 
 	/**
 	 * Analyse the speech alternatives after a result of the speech recognition.
@@ -213,6 +236,10 @@ function State (name) {
 
 		//noinspection SpellCheckingInspection
 		this.recognition.onresult = function(event) {
+			that.hearing = false;
+			that.working = true;
+			that.updateMicrophoneIcon();
+
 			var alternatives = [];
 			for (var i = event.resultIndex; i < event.results.length; i++) {
 				//all alternatives
@@ -226,6 +253,22 @@ function State (name) {
 			}
 			
 			that.analyseRecognitionResult(alternatives);
+			that.working = false;
+			that.updateMicrophoneIcon();
+		};
+
+
+		//noinspection SpellCheckingInspection
+
+		this.recognition.onsoundstart = function() {
+			that.hearing = true;
+			that.updateMicrophoneIcon();
+		};
+
+		//noinspection SpellCheckingInspection
+		this.recognition.onsoundstop = function() {
+			that.hearing = false;
+			that.updateMicrophoneIcon();
 		};
 
 		//noinspection SpellCheckingInspection
@@ -238,6 +281,8 @@ function State (name) {
 
 		//noinspection SpellCheckingInspection
 		this.recognition.onerror = function(event) {
+			that.hearing = false;
+			that.updateMicrophoneIcon();
 			//alert("onerror");
 			if (event.error == "not-allowed") {
 				//get permission
@@ -255,12 +300,13 @@ function State (name) {
 
 		//noinspection JSUnusedLocalSymbols,SpellCheckingInspection
 		this.recognition.onend = function(event) {
+			that.hearing = false;
+			that.updateMicrophoneIcon();
 			//alert("onend");
 			that.startSpeechRecognition();
 		};
 		
 		this.recognition.start();
-		//alert("start");
 	};
 
 	/**
