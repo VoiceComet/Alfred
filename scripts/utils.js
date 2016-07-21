@@ -18,6 +18,9 @@ function importJsFile(path) {
  */
 function notify(message, time) {
 	time = (typeof time !== 'undefined') ? time : 3000; //set default value to 3000
+	sendMessage("showMessage", {title: "TEST", content: message, time: time});
+
+
 	if (!Notification) {
 		alert('Desktop notifications not available in your browser.');
 		return null;
@@ -35,6 +38,7 @@ function notify(message, time) {
 		}
 		return notification;
 	}
+
 	return null;
 }
 

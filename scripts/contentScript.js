@@ -1,12 +1,17 @@
+//load ui css
+$("<link/>", {
+	rel: "stylesheet",
+	type: "text/css",
+	href: chrome.extension.getURL("ui.css")
+}).appendTo("head");
 //load ui html
-window.addEventListener("load", function() {
-	var ui = document.createElement('div');
-	ui.id = "GoogleSpeechControlDIV";
-	document.body.appendChild(ui);
-	$("#GoogleSpeechControlDIV").load(chrome.extension.getURL("ui.html"), function() {
-		$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
-	});
-}, false);
+var ui = document.createElement('div');
+ui.id = "ChromeSpeechControlDIV";
+document.body.appendChild(ui);
+$("#ChromeSpeechControlDIV").load(chrome.extension.getURL("ui.html"), function() {
+	$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
+});
+
 
 //noinspection JSUnusedLocalSymbols
 /**
@@ -16,10 +21,13 @@ window.addEventListener("load", function() {
  * @param sendResponse
  */
 function handleRequest(request, sender, sendResponse) {
-	if (request.callFunction == "toggleSidebar")
+	if (request.callFunction == "toggleSidebar") {
 		toggleSidebar();
-	else if (request.callFunction == "updateMicrophoneIcon")
+	} else if (request.callFunction == "updateMicrophoneIcon") {
 		updateMicrophoneIcon(request.params);
+	} else if (request.callFunction == "showMessage") {
+		showMessage(request.params);
+	}
 }
 chrome.runtime.onMessage.addListener(handleRequest);
 
@@ -64,16 +72,44 @@ function toggleSidebar() {
  */
 function updateMicrophoneIcon(params) {
 	if (params.muted) {
-		$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_muted.png"));
+		$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_muted.png"));
 	} else {
 		if (params.hearing && params.working) {
-			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_both.png"));
+			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_both.png"));
 		} else if (params.hearing) {
-			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_hear.png"));
+			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_hear.png"));
 		} else if (params.working) {
-			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_work.png"));
+			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_work.png"));
 		} else {
-			$("#GoogleSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
+			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
 		}
 	}
+}
+
+/**
+ * update microphone icon
+ * @param {Object} params
+ * @param {String} params.title - title of message
+ * @param {String} params.content - message content
+ * @param {Number} [params.time=3000] - (optional) time how long the message is shown in milliseconds
+ */
+function showMessage(params) {
+	var message = document.createElement('div');
+	$(message)
+		.addClass("ChromeSpeechControlMessage")
+		.html("<b>" + params.title + "</b><br/>" + params.content)
+
+		.appendTo($("#ChromeSpeechControlMessagesBox"))
+		.show(400);
+
+	var time = (typeof params.time !== 'undefined') ? params.time : 3000; //set default value to 3000
+	if (time > 0) {
+		setTimeout(function() {
+			//message.fadeOut();
+			$(message).hide(400, function() {
+				$(this).remove();
+			});
+		}, time)
+	}
+
 }

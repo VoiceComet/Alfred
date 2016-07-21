@@ -39,6 +39,7 @@
 		"images/mic_work.png",
 		"images/mic_muted.png",
 		"images/mic_normal.png",
-		"ui.html"
+		"ui.html",
+        "ui.css"
 	]
 }
