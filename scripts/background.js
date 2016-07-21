@@ -1,3 +1,7 @@
+/**
+ * global state where all modules are reachable
+ * @global
+ */
 var globalCommonState = new State("GlobalCommonState");
 globalCommonState.init = function () {
 	this.ableToCancel = false;
@@ -11,21 +15,34 @@ globalCommonState.init = function () {
 	}
 };
 
+/** @global */
 var activeState;
+/** @global */
 var modules = [];
+/** @global */
 var permissionGrounded = true;
 
+/**
+ * add a module to this extension
+ * @param {Module} module - Module Object
+ * @global
+ */
 function addModule(module) {
 	module.init();
 	modules.push(module);
 }
 
+/**
+ * change the active state
+ * @param {State} newState - new State
+ * @global
+ */
 function changeActiveState(newState) {
 	activeState = newState;
 	activeState.run();
 }
 
-//import modules
+//import all modules
 importJsFile("scripts/modules/moduleList.js");
 
 

@@ -1,6 +1,7 @@
 /**
  * import js file
  * @param {String} path
+ * @global
  */
 function importJsFile(path) {
 	var imported = document.createElement('script');
@@ -13,6 +14,7 @@ function importJsFile(path) {
  * @param {String} message - The shown message
  * @param {Number} [time=3000]  - (optional) in milliseconds (std. 3000), if time is 0 or smaller: return value is the notification, to close it in another way
  * @returns {Notification} Notification object or null
+ * @global
  */
 function notify(message, time) {
 	time = (typeof time !== 'undefined') ? time : 3000; //set default value to 3000
@@ -39,6 +41,7 @@ function notify(message, time) {
 /**
  * write a message into the background page console
  * @param {String} message
+ * @global
  */
 function log(message) {
 	console.log(message);
@@ -47,6 +50,7 @@ function log(message) {
 
 /**
  * open a sidebar in current tab
+ * @global
  */
 function openSidebar() {
 	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
@@ -57,7 +61,7 @@ function openSidebar() {
 			{callFunction: "toggleSidebar"},
 			//Optional callback function
 			function(response) {
-				console.log(response);
+				log(response);
 			}
 		);
 	});

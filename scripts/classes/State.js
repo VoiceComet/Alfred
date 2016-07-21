@@ -1,6 +1,8 @@
 /**
- * name: str, name of state
-*/
+ * State
+ * @param {String} name
+ * @constructor
+ */
 function State (name) {
     this.name = name;
     this.actions = [];
@@ -9,7 +11,7 @@ function State (name) {
 	this.recognizing = true;
 	this.continuous = false;
 	this.interimResults = false;
-	this.maxAlternatives = 10;
+	this.maxAlternatives = 20;
 	this.lang = 'en';
 	
 	//standard actions
@@ -94,8 +96,7 @@ function State (name) {
 		this.activateStandardActions();
 		this.startSpeechRecognition();
     };
-	
-	//
+
 	/**
 	 * Analyse the speech alternatives after a result of the speech recognition.
 	 * It runs throw all commands of all actions of this state and check if some commands are called.

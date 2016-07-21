@@ -1,6 +1,9 @@
 //noinspection JSUnusedLocalSymbols
 /**
  * Handle requests from background.html
+ * @param {!{callFunction:String}} request
+ * @param sender
+ * @param sendResponse
  */
 function handleRequest(request, sender, sendResponse) {
 	if (request.callFunction == "toggleSidebar")
