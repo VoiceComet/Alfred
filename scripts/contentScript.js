@@ -27,6 +27,10 @@ function handleRequest(request, sender, sendResponse) {
 		updateMicrophoneIcon(request.params);
 	} else if (request.callFunction == "showMessage") {
 		showMessage(request.params);
+	} else if (request.callFunction == "goBack") {
+		goBackOne();
+	} else if (request.callFunction == "goForward") {
+		goForwardOne();
 	}
 }
 chrome.runtime.onMessage.addListener(handleRequest);
@@ -111,5 +115,18 @@ function showMessage(params) {
 			});
 		}, time)
 	}
+}
 
+/**
+ * go back one page
+ */
+function goBackOne() {
+	window.history.back();
+}
+
+/**
+ * go forward one page
+ */
+function goForwardOne() {
+	window.history.forward();
 }
