@@ -33,7 +33,6 @@ function handleRequest(request, sender, sendResponse) {
 	} else if (request.callFunction == "showMessage") {
 		showMessage(request.params);
 	} else {
-		alert(request.callFunction);
 		//look for ContentScriptMethods of modules
 		for (var i = 0; i < contentScriptMethods.length; i++) {
 			if (request.callFunction == contentScriptMethods[i].name) {
