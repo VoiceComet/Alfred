@@ -13,19 +13,27 @@
 
 	"background": {
 		"scripts": [
-			"scripts/utils.js",
+			"scripts/jquery-3.1.0.min.js",
+			"scripts/backgroundUtils.js",
 			"scripts/classes/Module.js",
 			"scripts/classes/State.js",
 			"scripts/classes/Action.js",
 			"scripts/classes/Command.js",
-			"scripts/background.js"
+			"scripts/background.js",
+			"scripts/modules/moduleList.js"
 		]
 	},
-	
+
 	"content_scripts": [
 		{
 			"matches": ["*://*/*"],
-			"js": ["scripts/jquery-3.1.0.min.js", "scripts/contentScript.js"]
+			"css": ["ui.css"],
+			"js": [
+				"scripts/jquery-3.1.0.min.js",
+				"scripts/classes/ContentScriptMethod.js",
+				"scripts/contentScript.js",
+				"scripts/modules/BrowserActionsModule.csm.js"
+			]
 		}
 	],
 	

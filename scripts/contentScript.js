@@ -1,9 +1,17 @@
-//load ui css
-$("<link/>", {
-	rel: "stylesheet",
-	type: "text/css",
-	href: chrome.extension.getURL("ui.css")
-}).appendTo("head");
+//import all modules
+/** @global */
+var contentScriptMethods = [];
+
+/**
+ * add a content script method to front page
+ * @param {ContentScriptMethod} contentScriptMethod - Method which is called on front page
+ * @global
+ */
+function addContentScriptMethod(contentScriptMethod) {
+	contentScriptMethods.push(contentScriptMethod);
+}
+
+
 //load ui html
 var ui = document.createElement('div');
 $("<div></div>", {id: "ChromeSpeechControlDIV"})
@@ -20,25 +28,29 @@ $("<div></div>", {id: "ChromeSpeechControlDIV"})
  * @param sendResponse
  */
 function handleRequest(request, sender, sendResponse) {
-	if (request.callFunction == "toggleSidebar") {
-		toggleSidebar();
-	} else if (request.callFunction == "updateMicrophoneIcon") {
+	if (request.callFunction == "updateMicrophoneIcon") {
 		updateMicrophoneIcon(request.params);
 	} else if (request.callFunction == "showMessage") {
-		return showMessage(request.params);
-	} else if (request.callFunction == "goBack") {
-		goBackOne();
-	} else if (request.callFunction == "goForward") {
-		goForwardOne();
+		showMessage(request.params);
+	} else {
+		alert(request.callFunction);
+		//look for ContentScriptMethods of modules
+		for (var i = 0; i < contentScriptMethods.length; i++) {
+			if (request.callFunction == contentScriptMethods[i].name) {
+				contentScriptMethods[i].method(request.params);
+				return;
+			}
+		}
 	}
-	return null;
 }
 chrome.runtime.onMessage.addListener(handleRequest);
 
-var sidebarOpen = false;
+
+//var sidebarOpen = false;
 /**
  * Small function which create a sidebar(just to illustrate my point)
  */
+/*
 function toggleSidebar() {
 	if(sidebarOpen) {
 		var el = document.getElementById('mySidebar');
@@ -66,6 +78,7 @@ function toggleSidebar() {
 		sidebarOpen = true;
 	}
 }
+*/
 
 /**
  * update microphone icon
@@ -114,18 +127,4 @@ function showMessage(params) {
 		}, time)
 	}
 	return message;
-}
-
-/**
- * go back one page
- */
-function goBackOne() {
-	window.history.back();
-}
-
-/**
- * go forward one page
- */
-function goForwardOne() {
-	window.history.forward();
 }

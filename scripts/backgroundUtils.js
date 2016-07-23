@@ -18,28 +18,28 @@ function importJsFile(path) {
  */
 function notify(message, time) {
 	//time = (typeof time !== 'undefined') ? time : 3000; //set default value to 3000
-	sendMessage("showMessage", {title: "TEST", content: message, time: time});
+	callContentScriptMethod("showMessage", {title: "TEST", content: message, time: time});
 
 	/*
-	if (!Notification) {
-		alert('Desktop notifications not available in your browser.');
-		return null;
-	}
+	 if (!Notification) {
+	 alert('Desktop notifications not available in your browser.');
+	 return null;
+	 }
 
-	if (Notification.permission !== "granted")
-		Notification.requestPermission();
-	else {
-		var notification = new Notification('Chrome Speech Control', {
-			icon: "../images/mic_on.png",
-			body: message
-		});
-		if (time > 0) {
-			setTimeout(function() {notification.close()}, time); // close notification after time millisecounds
-		}
-		return notification;
-	}
+	 if (Notification.permission !== "granted")
+	 Notification.requestPermission();
+	 else {
+	 var notification = new Notification('Chrome Speech Control', {
+	 icon: "../images/mic_on.png",
+	 body: message
+	 });
+	 if (time > 0) {
+	 setTimeout(function() {notification.close()}, time); // close notification after time millisecounds
+	 }
+	 return notification;
+	 }
 
-	*/
+	 */
 	return null;
 }
 
@@ -59,7 +59,7 @@ function log(message) {
  * @param {Function} [callback] - optional callback function
  * @global
  */
-function sendMessage(callFunction, params, callback) {
+function callContentScriptMethod(callFunction, params, callback) {
 	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
 		chrome.tabs.sendMessage(
 			//Selected tab id
@@ -70,13 +70,4 @@ function sendMessage(callFunction, params, callback) {
 			callback
 		);
 	});
-}
-
-
-/**
- * open a sidebar in current tab
- * @global
- */
-function openSidebar() {
-	sendMessage("toggleSidebar", {});
 }

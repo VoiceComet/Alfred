@@ -42,11 +42,6 @@ function changeActiveState(newState) {
 	activeState.run();
 }
 
-//import jquery
-importJsFile("scripts/jquery-3.1.0.min.js");
-//import all modules
-importJsFile("scripts/modules/moduleList.js");
-
 
 //add listener to browser action
 //noinspection JSUnusedLocalSymbols
@@ -55,7 +50,6 @@ importJsFile("scripts/modules/moduleList.js");
  * @param {chrome.tabs.Tab} tab
  */
 function browserAction(tab) {
-	openSidebar();
 	activeState.recognizing = !activeState.recognizing;
 	if (activeState.recognizing) {
 		//start recognition

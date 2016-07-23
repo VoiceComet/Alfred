@@ -117,7 +117,7 @@ function State (name) {
 	 * update Icon on front page
 	 */
 	this.updateMicrophoneIcon = function() {
-		sendMessage("updateMicrophoneIcon", {muted:this.muted, hearing:this.hearing, working:this.working});
+		callContentScriptMethod("updateMicrophoneIcon", {muted:this.muted, hearing:this.hearing, working:this.working});
 	};
 
 	/**

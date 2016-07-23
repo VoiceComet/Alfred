@@ -5,8 +5,13 @@
  * @constructor
  */
 function Module (name, init) {
+	/** @type {String} */
 	this.name = name;
-    this.actions = [];
+	/** @type {Action[]} */
+	this.actions = [];
+
+	/** @type {function()} */
+	this.init = init;
 
 	/**
 	 * add an action to this module, the action list will be loaded in the global common state
@@ -18,13 +23,11 @@ function Module (name, init) {
 
 	/**
 	 * add a list of actions to this module, the action list will be loaded in the global common state
-	 * @param {[Action]} actions
+	 * @param {Action[]} actions
 	 */
 	this.addActions = function(actions) {
 		for (var i = 0; i < actions.length; i++) {
 			this.addAction(actions[i]);
 		}
     };
-	
-	this.init = init;
 }

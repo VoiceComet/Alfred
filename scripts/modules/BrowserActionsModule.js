@@ -75,7 +75,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	goBack.addCommand(new Command("go back", 0));
 	goBack.act = function() {
 		notify("go back one page");
-        sendMessage("goBack", {});
+		callContentScriptMethod("goBack", {});
 	};
 	this.addAction(goBack);
 
@@ -86,7 +86,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	goForward.addCommand(new Command("go forward", 0));
 	goForward.act = function() {
 		notify("go forward one page");
-        sendMessage("goForward", {});
+		callContentScriptMethod("goForward", {});
 	};
 	this.addAction(goForward);
 
