@@ -99,4 +99,80 @@ addModule(new Module("BrowserActionsModule", function() {
 		alert("searched for " + arguments[0]);
 	};
 	this.addAction(search);
+
+    /**
+     * scroll to top of the page
+     */
+    var scrollToTop = new Action(0, globalCommonState);
+    scrollToTop.addCommand(new Command("[^scroll $|^scroll to $]?top", 0));
+    scrollToTop.act = function() {
+        notify("scroll to the top");
+        callContentScriptMethod("scrollToTop", {});
+    };
+    this.addAction(scrollToTop);
+
+    /**
+     * scroll to the bottom of the page
+     */
+    var scrollToBottom = new Action(0, globalCommonState);
+    scrollToBottom.addCommand(new Command("[^scroll $|^scroll to $]?bottom", 0));
+    scrollToBottom.act = function() {
+        notify("scroll to the bottom");
+        callContentScriptMethod("scrollToBottom", {});
+    };
+    this.addAction(scrollToBottom);
+
+    /**
+     * scroll up
+     */
+    var scrollUp = new Action(0, globalCommonState);
+    scrollUp.addCommand(new Command("[^scroll &]?up", 0));
+    scrollUp.act = function() {
+        notify("scroll up");
+        callContentScriptMethod("scrollUp", {});
+    };
+    this.addAction(scrollUp);
+
+    /**
+     * scroll down
+     */
+    var scrollDown = new Action(0, globalCommonState);
+    scrollDown.addCommand(new Command("[^scroll &]?down", 0));
+    scrollDown.act = function() {
+        notify("scroll down");
+        callContentScriptMethod("scrollDown", {});
+    };
+    this.addAction(scrollDown);
+
+    /**
+     * scroll left
+     */
+    var scrollLeft = new Action(0, globalCommonState);
+    scrollLeft.addCommand(new Command("[^scroll &]?left", 0));
+    scrollLeft.act = function() {
+        notify("scroll left");
+        callContentScriptMethod("scrollLeft", {});
+    };
+    this.addAction(scrollLeft);
+
+    /**
+     * scroll right
+     */
+    var scrollRight = new Action(0, globalCommonState);
+    scrollRight.addCommand(new Command("[^scroll &]?right", 0));
+    scrollRight.act = function() {
+        notify("scroll right");
+        callContentScriptMethod("scrollRight", {});
+    };
+    this.addAction(scrollRight);
+
+    /**
+     * scroll to read
+     */
+    var read = new Action(0, globalCommonState);
+    read.addCommand(new Command("read page", 0));
+    read.act = function() {
+        callContentScriptMethod("scrollToRead", {});
+    };
+    this.addAction(read);
 }));
