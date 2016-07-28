@@ -156,15 +156,19 @@ function State (name) {
 			this.action = action;
 			this.hits = [];
 		}
-		
-		//run action of hit
-		function runHitAction(actionHit) {
+
+		/**
+		 * run action of hit
+		 * @param {ActionHit} actionHit
+		 * @param {Number} [hit=0]
+		 */
+		function runHitAction(actionHit, hit) {
+			hit = (typeof hit !== 'undefined') ? hit : 0; //set default value to 3000
 			var arguments = [];
 			for (var i = 1;  i <= actionHit.action.parameterCount; i++) {
-				arguments[i-1] = actionHit.hits[0].execResult[i].trim();
+				arguments[i-1] = actionHit.hits[hit].execResult[i].trim();
 			}
 			actionHit.action.act(arguments);
-			that.changeActiveState(actionHit.action.followingState);
 		}
 		
 		var actionHits = [];
@@ -196,6 +200,7 @@ function State (name) {
 						if (this.actions[i].parameterCount == 0 && execResult[0] == alternatives[k]) {
 							//perfect text match
 							runHitAction(actionHits[actionHitsIndex]);
+							that.changeActiveState(actionHits[actionHitsIndex].action.followingState);
 							return;
 						}
 					}
@@ -210,6 +215,7 @@ function State (name) {
 			if (actionHits.length == 1) {
 				//only one action found
 				runHitAction(actionHits[0]); //run first actionHit
+				that.changeActiveState(actionHits[actionHitsIndex].action.followingState);
 				//return;
 			} else {
 				//TODO more than one action
@@ -219,13 +225,15 @@ function State (name) {
 				var dialogActions = [];
 
 				var dialogState = new State("DialogState");
+
+
+				dialogState.hideDialog = function () {
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					hideDialog(this.messageId);
+				};
 				dialogState.setMessageId = function (messageId) {
 					//noinspection JSPotentiallyInvalidUsageOfThis
 					this.messageId = messageId;
-				};
-				dialogState.getMessageId = function () {
-					//noinspection JSPotentiallyInvalidUsageOfThis
-					return this.messageId;
 				};
 
 				for (i = 0; i < actionHits.length; i++) {
@@ -233,22 +241,25 @@ function State (name) {
 						dialogActions.push({command:dialogActionNumber, description:actionHits[i].action.name + ": " + alternatives[actionHits[i].hits[j].alternativeIndex]});
 						//create dialog action
 						var action = new Action("Dialog " + actionHits[i].action.name, 0, actionHits[i].action.followingState);
+						action.actionHit = actionHits[i];
+						action.hit = j;
+						action.dialogState = dialogState;
 						action.addCommand(new Command(dialogActionNumber+'', 0));
-						action.act = actionHits[i].action.act;
+						//noinspection JSUnusedLocalSymbols
 						action.act = function (arguments) {
-							alert("hallo");
-							//alert(dialogActions.getMessageId());
-							//hideMessage(dialogActions.getMessageId());
-							act(arguments);
-							alert("s");
+							runHitAction(this.actionHit, this.hit);
+							this.dialogState.hideDialog();
 						};
 						dialogState.addAction(action);
 						dialogActionNumber++;
 					}
 				}
+
 				this.changeActiveState(dialogState);
 
-				showDialog('What did you say?', text, dialogActions, dialogState.setMessageId);
+				showDialog('What did you say?', text, dialogActions, function(messageId) {
+					dialogState.setMessageId(messageId);
+				});
 			}
 		} else {
 			//not found
