@@ -143,9 +143,6 @@ function State (name) {
 	 * @param {[String]} alternatives
 	 */
 	this.analyseRecognitionResult = function(alternatives) {
-		//alert("analyseRecognitionResult");
-		var that = this;
-		
 		//simple hit object
 		function Hit(execResult, alternativeIndex) {
 			this.execResult = execResult;
@@ -200,7 +197,7 @@ function State (name) {
 						if (this.actions[i].parameterCount == 0 && execResult[0] == alternatives[k]) {
 							//perfect text match
 							runHitAction(actionHits[actionHitsIndex]);
-							that.changeActiveState(actionHits[actionHitsIndex].action.followingState);
+							this.changeActiveState(actionHits[actionHitsIndex].action.followingState);
 							return;
 						}
 					}
@@ -210,12 +207,12 @@ function State (name) {
 				if (actionAdded) actionHitsIndex++;
 			}
 		}
-		
+
 		if (actionHits.length > 0) {
 			if (actionHits.length == 1) {
 				//only one action found
 				runHitAction(actionHits[0]); //run first actionHit
-				that.changeActiveState(actionHits[actionHitsIndex].action.followingState);
+				this.changeActiveState(actionHits[0].action.followingState);
 				//return;
 			} else {
 				//TODO more than one action
@@ -296,7 +293,7 @@ function State (name) {
 					}
 				}
 			}
-			
+
 			that.analyseRecognitionResult(alternatives);
 			that.working = false;
 			that.updateMicrophoneIcon();
@@ -304,7 +301,6 @@ function State (name) {
 
 
 		//noinspection SpellCheckingInspection
-
 		this.recognition.onsoundstart = function() {
 			that.hearing = true;
 			that.updateMicrophoneIcon();
