@@ -6,7 +6,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	/**
  	 * open new tab
 	 */
-	var newTab = new Action(0, globalCommonState);
+	var newTab = new Action("new Tab", 0, globalCommonState);
 	newTab.addCommand(new Command("new tab", 0));
 	newTab.act = function() {
 		chrome.tabs.create({active: true});
@@ -16,7 +16,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	/**
 	 * open new page
 	 */
-	var openPage = new Action(1, globalCommonState);
+	var openPage = new Action("open new page", 1, globalCommonState);
 	openPage.addCommand(new Command("open (.*)", 1));
 	openPage.act = function(arguments) {
 		var url = "";
@@ -41,7 +41,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	/**
  	 * close tab(s)/window/panel
 	 */
-	var close = new Action(1, globalCommonState);
+	var close = new Action("close", 1, globalCommonState);
 	close.addCommand(new Command("close (.*)", 1));
 	close.act = function(arguments) {
 		if(arguments[0].search(/tab/) != -1) {
@@ -61,7 +61,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	/**
  	 * reload the current tab
 	 */
-	var reload = new Action(0, globalCommonState);
+	var reload = new Action("reload", 0, globalCommonState);
 	reload.addCommand(new Command("reload", 0));
 	reload.act = function() {
 		chrome.tabs.reload();
@@ -71,7 +71,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	/**
  	 * go back one page
 	 */
-	var goBack = new Action(0, globalCommonState);
+	var goBack = new Action("go back one page", 0, globalCommonState);
 	goBack.addCommand(new Command("go back", 0));
 	goBack.act = function() {
 		notify("go back one page");
@@ -82,7 +82,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	/**
 	 * go forward one page
      */
-	var goForward = new Action(0, globalCommonState);
+	var goForward = new Action("go forward one page", 0, globalCommonState);
 	goForward.addCommand(new Command("go forward", 0));
 	goForward.act = function() {
 		notify("go forward one page");
@@ -93,7 +93,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	/**
  	 * search for an expression
 	 */
-	var search = new Action(1, globalCommonState);
+	var search = new Action("search expression", 1, globalCommonState);
 	search.addCommand(new Command("search for (.*)", 1));
 	search.act = function(arguments) {
 		alert("searched for " + arguments[0]);
@@ -103,7 +103,7 @@ addModule(new Module("BrowserActionsModule", function() {
     /**
      * scroll to top of the page
      */
-    var scrollToTop = new Action(0, globalCommonState);
+    var scrollToTop = new Action("scroll to top", 0, globalCommonState);
     scrollToTop.addCommand(new Command("[^scroll $|^scroll to $]?top", 0));
     scrollToTop.act = function() {
         notify("scroll to the top");
@@ -114,7 +114,7 @@ addModule(new Module("BrowserActionsModule", function() {
     /**
      * scroll to the bottom of the page
      */
-    var scrollToBottom = new Action(0, globalCommonState);
+    var scrollToBottom = new Action("scroll to bottom", 0, globalCommonState);
     scrollToBottom.addCommand(new Command("[^scroll $|^scroll to $]?bottom", 0));
     scrollToBottom.act = function() {
         notify("scroll to the bottom");
@@ -125,7 +125,7 @@ addModule(new Module("BrowserActionsModule", function() {
     /**
      * scroll up
      */
-    var scrollUp = new Action(0, globalCommonState);
+    var scrollUp = new Action("scroll up", 0, globalCommonState);
     scrollUp.addCommand(new Command("[^scroll &]?up", 0));
     scrollUp.act = function() {
         notify("scroll up");
@@ -136,7 +136,7 @@ addModule(new Module("BrowserActionsModule", function() {
     /**
      * scroll down
      */
-    var scrollDown = new Action(0, globalCommonState);
+    var scrollDown = new Action("scroll down", 0, globalCommonState);
     scrollDown.addCommand(new Command("[^scroll &]?down", 0));
     scrollDown.act = function() {
         notify("scroll down");
@@ -147,7 +147,7 @@ addModule(new Module("BrowserActionsModule", function() {
     /**
      * scroll left
      */
-    var scrollLeft = new Action(0, globalCommonState);
+    var scrollLeft = new Action("scroll left", 0, globalCommonState);
     scrollLeft.addCommand(new Command("[^scroll &]?left", 0));
     scrollLeft.act = function() {
         notify("scroll left");
@@ -158,7 +158,7 @@ addModule(new Module("BrowserActionsModule", function() {
     /**
      * scroll right
      */
-    var scrollRight = new Action(0, globalCommonState);
+    var scrollRight = new Action("scroll right", 0, globalCommonState);
     scrollRight.addCommand(new Command("[^scroll &]?right", 0));
     scrollRight.act = function() {
         notify("scroll right");
@@ -169,7 +169,7 @@ addModule(new Module("BrowserActionsModule", function() {
     /**
      * scroll to read
      */
-    var read = new Action(0, globalCommonState);
+    var read = new Action("read page", 0, globalCommonState);
     read.addCommand(new Command("read page", 0));
     read.act = function() {
         callContentScriptMethod("scrollToRead", {});
