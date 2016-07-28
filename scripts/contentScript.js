@@ -127,7 +127,7 @@ function updateMicrophoneIcon(params) {
  * @param {String} [params.title] - title of message
  * @param {String} params.content - message content
  * @param {Array} [params.actions] - message actions
- * @param {Number} [params.time=3000] - (optional) time how long the message is shown in milliseconds
+ * @param {Number} [params.time=4000] - (optional) time how long the message is shown in milliseconds
  * @return {String} - id of the message div
  */
 function showMessage(params) {
@@ -137,7 +137,7 @@ function showMessage(params) {
 	}
 	html += params.content + "<br/>";
 	if (typeof params.actions !== 'undefined' && params.actions.length > 0) {
-		html += "<br/>";
+		html += "<br/><b>Say a number:</b><br/>";
 		for (var i = 0; i < params.actions.length; i++) {
 			html += params.actions[i].command + ": " + params.actions[i].description + "<br/>";
 		}
@@ -152,7 +152,7 @@ function showMessage(params) {
 		.appendTo($("#ChromeSpeechControlMessagesBox"))
 		.show(400);
 
-	var time = (typeof params.time !== 'undefined') ? params.time : 3000; //set default value to 3000
+	var time = (typeof params.time !== 'undefined') ? params.time : 4000; //set default value to 4000
 	if (time > 0) {
 		setTimeout(function() {
 			$(message).hide(400, function() {

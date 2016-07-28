@@ -12,7 +12,7 @@ function importJsFile(path) {
 /**
  * notifies the user
  * @param {String} message - The shown message
- * @param {Number} [time=3000]  - (optional) in milliseconds (std. 3000), if time is 0 or smaller: return value is the notification, to close it in another way
+ * @param {Number} [time=4000]  - (optional) in milliseconds (std. 3000), if time is 0 or smaller: return value is the notification, to close it in another way
  * @param {Function} [callback] - function(messageId){}, callback
  * @global
  */
@@ -66,13 +66,15 @@ function log(message) {
  */
 function callContentScriptMethod(callFunction, params, callback) {
 	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
-		chrome.tabs.sendMessage(
-			//Selected tab id
-			tabs[0].id,
-			//Params inside a object data
-			{callFunction: callFunction, params: params},
-			//Optional callback function
-			callback
-		);
+		if (tabs.length > 0) {
+			chrome.tabs.sendMessage(
+				//Selected tab id
+				tabs[0].id,
+				//Params inside a object data
+				{callFunction: callFunction, params: params},
+				//Optional callback function
+				callback
+			);
+		}
 	});
 }
