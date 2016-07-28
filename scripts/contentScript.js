@@ -25,21 +25,28 @@ $("<div></div>", {id: "ChromeSpeechControlDIV"})
  * Handle requests from background.html
  * @param {!{callFunction:String, params:Object}} request
  * @param sender
- * @param sendResponse
+ * @param {Function} sendResponse
  */
 function handleRequest(request, sender, sendResponse) {
+	var response;
 	if (request.callFunction == "updateMicrophoneIcon") {
-		updateMicrophoneIcon(request.params);
+		response = updateMicrophoneIcon(request.params);
 	} else if (request.callFunction == "showMessage") {
-		showMessage(request.params);
+		response = showMessage(request.params);
+	} else if (request.callFunction == "hideMessage") {
+		response = hideMessage(request.params);
 	} else {
 		//look for ContentScriptMethods of modules
 		for (var i = 0; i < contentScriptMethods.length; i++) {
 			if (request.callFunction == contentScriptMethods[i].name) {
-				contentScriptMethods[i].method(request.params);
-				return;
+				response = contentScriptMethods[i].method(request.params);
+				break;
 			}
 		}
+	}
+
+	if (typeof response !== "undefined") {
+	 	sendResponse(response);
 	}
 }
 chrome.runtime.onMessage.addListener(handleRequest);
@@ -80,6 +87,18 @@ function toggleSidebar() {
 */
 
 /**
+ * generate a unique id
+ * @return {String}
+ */
+function getUniqueId() {
+	var generatedId = Math.floor(Math.random() * 26) + Date.now() + '';
+	if (document.getElementById(generatedId) !== null) {
+		return getUniqueId();
+	}
+	return generatedId;
+}
+
+/**
  * update microphone icon
  * @param {Object} params
  * @param {boolean} params.muted - microphone is muted
@@ -103,17 +122,33 @@ function updateMicrophoneIcon(params) {
 }
 
 /**
- * update microphone icon
+ * generate a message div which is "time" milliseconds visible
  * @param {Object} params
- * @param {String} params.title - title of message
+ * @param {String} [params.title] - title of message
  * @param {String} params.content - message content
+ * @param {Array} [params.actions] - message actions
  * @param {Number} [params.time=3000] - (optional) time how long the message is shown in milliseconds
+ * @return {String} - id of the message div
  */
 function showMessage(params) {
+	var html = "";
+	if (typeof params.title !== 'undefined' && params.title != '') {
+		html = "<b>" + params.title + "</b><br/>";
+	}
+	html += params.content + "<br/>";
+	if (typeof params.actions !== 'undefined' && params.actions.length > 0) {
+		html += "<br/>";
+		for (var i = 0; i < params.actions.length; i++) {
+			html += params.actions[i].command + ": " + params.actions[i].description + "<br/>";
+		}
+	}
+
 	var message = document.createElement('div');
+	var id = getUniqueId();
 	$(message)
 		.addClass("ChromeSpeechControlMessage")
-		.html("<b>" + params.title + "</b><br/>" + params.content)
+		.attr("id", id)
+		.html(html)
 		.appendTo($("#ChromeSpeechControlMessagesBox"))
 		.show(400);
 
@@ -125,5 +160,16 @@ function showMessage(params) {
 			});
 		}, time)
 	}
-	return message;
+	return id;
+}
+
+/**
+ * hide a given message div
+ * @param {Object} params
+ * @param {String} params.id - id of message div
+ */
+function hideMessage(params) {
+	$('#'+params.id).hide(400, function() {
+		$(this).remove();
+	});
 }

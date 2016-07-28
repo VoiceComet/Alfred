@@ -52,7 +52,7 @@ function State (name) {
 				this.ableToCancel = false;
 				notify('mute, say "listen"');
 			};
-			this.muteActionIn = new Action(0, this.muteState);
+			this.muteActionIn = new Action("Mute Action", 0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
 			this.muteActionIn.addCommand(new Command("don't listen", 0));
 			this.muteActionIn.act = function() {
@@ -60,7 +60,7 @@ function State (name) {
 				that.muted = true;
 				that.updateMicrophoneIcon();
 			};
-			this.muteActionOut = new Action(0, this);
+			this.muteActionOut = new Action("Mute Action", 0, this);
 			this.muteActionOut.addCommand(new Command("listen", 0));
 			this.muteActionOut.act = function() {
 				notify("demuted");
@@ -73,7 +73,7 @@ function State (name) {
 		
 		//abort
 		if (this.cancelAction == null) {
-			this.cancelAction = new Action(0, globalCommonState);
+			this.cancelAction = new Action("Cancel Action", 0, globalCommonState);
 			this.cancelAction.addCommand(new Command("cancel", 0));
 			this.cancelAction.act = function() {
 				notify("cancel");
@@ -121,6 +121,20 @@ function State (name) {
 	};
 
 	/**
+	 * change the active state
+	 * @param state
+	 */
+	this.changeActiveState = function (state) {
+		this.stopSpeechRecognition();
+		//change state or start new speech recognition
+		if (state != this) {
+			changeActiveState(state);
+		} else {
+			this.startSpeechRecognition();
+		}
+	};
+
+	/**
 	 * Analyse the speech alternatives after a result of the speech recognition.
 	 * It runs throw all commands of all actions of this state and check if some commands are called.
 	 *
@@ -150,13 +164,7 @@ function State (name) {
 				arguments[i-1] = actionHit.hits[0].execResult[i].trim();
 			}
 			actionHit.action.act(arguments);
-			that.stopSpeechRecognition();
-			//change state or start new speech recognition
-			if (actionHit.action.followingState != that) {
-				changeActiveState(actionHit.action.followingState);
-			} else {
-				that.startSpeechRecognition();
-			}
+			that.changeActiveState(actionHit.action.followingState);
 		}
 		
 		var actionHits = [];
@@ -205,16 +213,42 @@ function State (name) {
 				//return;
 			} else {
 				//TODO more than one action
-				notify(actionHits.length + " actions found");
-				
-				var text = "";
+				var text = actionHits.length + " Actions were found<br/>\n";
 				//no perfect match
+				var dialogActionNumber = 1;
+				var dialogActions = [];
+
+				var dialogState = new State("DialogState");
+				dialogState.setMessageId = function (messageId) {
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					this.messageId = messageId;
+				};
+				dialogState.getMessageId = function () {
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					return this.messageId;
+				};
+
 				for (i = 0; i < actionHits.length; i++) {
 					for (j = 0; j < actionHits[i].hits.length; j++) {
-						text += actionHits[i].hits[j].alternativeIndex + ": " + alternatives[actionHits[i].hits[j].alternativeIndex] + "\n";
+						dialogActions.push({command:dialogActionNumber, description:actionHits[i].action.name + ": " + alternatives[actionHits[i].hits[j].alternativeIndex]});
+						//create dialog action
+						var action = new Action("Dialog " + actionHits[i].action.name, 0, actionHits[i].action.followingState);
+						action.addCommand(new Command(dialogActionNumber+'', 0));
+						action.act = actionHits[i].action.act;
+						action.act = function (arguments) {
+							alert("hallo");
+							//alert(dialogActions.getMessageId());
+							//hideMessage(dialogActions.getMessageId());
+							act(arguments);
+							alert("s");
+						};
+						dialogState.addAction(action);
+						dialogActionNumber++;
 					}
 				}
-				notify(text, 5000);
+				this.changeActiveState(dialogState);
+
+				showDialog('What did you say?', text, dialogActions, dialogState.setMessageId);
 			}
 		} else {
 			//not found

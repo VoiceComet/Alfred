@@ -13,34 +13,39 @@ function importJsFile(path) {
  * notifies the user
  * @param {String} message - The shown message
  * @param {Number} [time=3000]  - (optional) in milliseconds (std. 3000), if time is 0 or smaller: return value is the notification, to close it in another way
- * @returns {Notification} Notification object or null
+ * @param {Function} [callback] - function(messageId){}, callback
  * @global
  */
-function notify(message, time) {
-	//time = (typeof time !== 'undefined') ? time : 3000; //set default value to 3000
-	callContentScriptMethod("showMessage", {title: "TEST", content: message, time: time});
+function notify(message, time, callback) {
+	callContentScriptMethod("showMessage", {content: message, time: time}, callback);
+}
 
-	/*
-	 if (!Notification) {
-	 alert('Desktop notifications not available in your browser.');
-	 return null;
-	 }
+/**
+ * hide the given message
+ * @param messageId
+ */
+function hideMessage(messageId) {
+	callContentScriptMethod("hideMessage", {id:messageId});
+}
 
-	 if (Notification.permission !== "granted")
-	 Notification.requestPermission();
-	 else {
-	 var notification = new Notification('Chrome Speech Control', {
-	 icon: "../images/mic_on.png",
-	 body: message
-	 });
-	 if (time > 0) {
-	 setTimeout(function() {notification.close()}, time); // close notification after time millisecounds
-	 }
-	 return notification;
-	 }
+/**
+ * notifies the user
+ * @param {String} title - title of dialog
+ * @param {String} content - content of dialog
+ * @param {Array} actions - shown actions of dialog
+ * @param {Function} callback - function(messageId){}, callback
+ * @global
+ */
+function showDialog(title, content, actions, callback) {
+	callContentScriptMethod("showMessage", {title: title, content: content, actions: actions, time: 0}, callback);
+}
 
-	 */
-	return null;
+/**
+ * hide the given dialog
+ * @param messageId
+ */
+function hideDialog(messageId) {
+	hideMessage(messageId);
 }
 
 /**
