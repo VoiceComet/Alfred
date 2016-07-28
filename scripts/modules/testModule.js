@@ -4,7 +4,7 @@ addModule(new Module("Test", function() {
 
 	//-----Action 1 Start---------
 	//create an action with followed module state (globalCommonState is the global common state)
-	var action1 = new Action(0, globalCommonState);
+	var action1 = new Action("Hello Action", 0, globalCommonState);
 
 	var commands;
 	//create a command list
@@ -28,7 +28,7 @@ addModule(new Module("Test", function() {
 	//-----Action 1 End-----------
 	
 	//-----Action 2 Start---------
-	var action2 = new Action(1, globalCommonState);
+	var action2 = new Action("Hello ? Action", 1, globalCommonState);
 	commands = [
 		new Command("hello\\s(.+)", 1),
 		new Command("hey\\s(.+)", 1)
@@ -53,7 +53,7 @@ addModule(new Module("Test", function() {
 	};
 	
 	//action from globalCommonState to state1
-	var action3 = new Action(0, state1);
+	var action3 = new Action("Change State Action", 0, state1);
 	commands = [
 		new Command("change state", 0)
 	];
@@ -65,7 +65,7 @@ addModule(new Module("Test", function() {
 	this.addAction(action3); //<-- from globalCommonState use "this"
 	
 	//action from state1 to globalCommonState
-	var action4 = new Action(0, globalCommonState);
+	var action4 = new Action("Exit Action", 0, globalCommonState);
 	commands = [
 		new Command("exit", 0),
 		new Command("go away", 0)

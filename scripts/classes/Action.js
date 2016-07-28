@@ -1,11 +1,13 @@
 /**
  * An Action is a state switch. You can define an act method which is called when one of you commands is called
+ * @param {String} name - name of action
  * @param {number} parameterCount - count of parameters
  * @param {State} followingState - state after action run
  * @constructor
  */
-function Action (parameterCount, followingState) {
-    this.commands = [];
+function Action (name, parameterCount, followingState) {
+	this.name = name;
+	this.commands = [];
     this.followingState = followingState;
     this.parameterCount = parameterCount;
 
