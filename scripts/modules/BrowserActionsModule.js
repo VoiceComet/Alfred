@@ -106,7 +106,6 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollToTop = new Action("scroll to top", 0, globalCommonState);
     scrollToTop.addCommand(new Command("[^scroll $|^scroll to $]?top", 0));
     scrollToTop.act = function() {
-        notify("scroll to the top");
         callContentScriptMethod("scrollToTop", {});
     };
     this.addAction(scrollToTop);
@@ -117,7 +116,6 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollToBottom = new Action("scroll to bottom", 0, globalCommonState);
     scrollToBottom.addCommand(new Command("[^scroll $|^scroll to $]?bottom", 0));
     scrollToBottom.act = function() {
-        notify("scroll to the bottom");
         callContentScriptMethod("scrollToBottom", {});
     };
     this.addAction(scrollToBottom);
@@ -128,7 +126,6 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollUp = new Action("scroll up", 0, globalCommonState);
     scrollUp.addCommand(new Command("[^scroll &]?up", 0));
     scrollUp.act = function() {
-        notify("scroll up");
         callContentScriptMethod("scrollUp", {});
     };
     this.addAction(scrollUp);
@@ -139,7 +136,6 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollDown = new Action("scroll down", 0, globalCommonState);
     scrollDown.addCommand(new Command("[^scroll &]?down", 0));
     scrollDown.act = function() {
-        notify("scroll down");
         callContentScriptMethod("scrollDown", {});
     };
     this.addAction(scrollDown);
@@ -150,7 +146,6 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollLeft = new Action("scroll left", 0, globalCommonState);
     scrollLeft.addCommand(new Command("[^scroll &]?left", 0));
     scrollLeft.act = function() {
-        notify("scroll left");
         callContentScriptMethod("scrollLeft", {});
     };
     this.addAction(scrollLeft);
@@ -161,7 +156,6 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollRight = new Action("scroll right", 0, globalCommonState);
     scrollRight.addCommand(new Command("[^scroll &]?right", 0));
     scrollRight.act = function() {
-        notify("scroll right");
         callContentScriptMethod("scrollRight", {});
     };
     this.addAction(scrollRight);
