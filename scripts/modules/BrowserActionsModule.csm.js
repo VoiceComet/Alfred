@@ -30,6 +30,7 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("scrollToBottom", function() { //function(params)
 		//currently not on the bottom of the page -> set scrollPosVertical, set bottom
+		var scrollHeight = window.innerHeight * scrollHeightFactor;
 		var bottom = document.body.scrollHeight - window.innerHeight;
 		var scrollPosVertical = window.scrollY;
 		if(scrollPosVertical < bottom) {
