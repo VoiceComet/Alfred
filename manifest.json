@@ -32,7 +32,8 @@
 				"scripts/jquery-3.1.0.min.js",
 				"scripts/classes/ContentScriptMethod.js",
 				"scripts/contentScript.js",
-				"scripts/modules/BrowserActionsModule.csm.js"
+				"scripts/modules/BrowserActionsModule.csm.js",
+				"scripts/modules/WeatherModule.csm.js"
 			]
 		}
 	],

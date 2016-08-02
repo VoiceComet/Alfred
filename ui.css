@@ -18,9 +18,24 @@ div#ChromeSpeechControlDIV div#ChromeSpeechControlUI {
     bottom: 0;
     left: 0;
     z-index: 19999999999;
+    width: 460px;
 }
 
-div#ChromeSpeechControlDIV img#ChromeSpeechControlIcon {
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
+    display: none;
+    border: 1px solid grey;
+    padding: 15px;
+    margin: 15px;
+    background-color: #f0f0f0;
+    border-radius: 6px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction {
+    height:135px;
+    width:430px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction img#ChromeSpeechControlIcon {
     position: absolute;
     bottom: 15px;
     left: 15px;
@@ -28,19 +43,19 @@ div#ChromeSpeechControlDIV img#ChromeSpeechControlIcon {
     height: 120px;
 }
 
-div#ChromeSpeechControlDIV div#ChromeSpeechControlMessagesBox {
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox {
     position: absolute;
     bottom: 15px;
     left: 145px;
     width: 300px;
 }
 
-div#ChromeSpeechControlDIV div.ChromeSpeechControlMessage {
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.ChromeSpeechControlMessage {
     display: none;
     color: #303030;
     background-color: #f0f0f0;
     padding: 10px;
     margin-top:10px;
     border: 1px solid grey;
-    border-radius: 6px
+    border-radius: 6px;
 }

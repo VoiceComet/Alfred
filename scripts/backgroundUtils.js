@@ -49,15 +49,6 @@ function hideDialog(messageId) {
 }
 
 /**
- * write a message into the background page console
- * @param {String} message
- * @global
- */
-function log(message) {
-	console.log(message);
-}
-
-/**
  * send message to active front
  * @param {String} callFunction - call a function of content script
  * @param {Object} params - parameter for the called function
