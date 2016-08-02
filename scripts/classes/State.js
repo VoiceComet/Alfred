@@ -143,14 +143,29 @@ function State (name) {
 	 * @param {[String]} alternatives
 	 */
 	this.analyseRecognitionResult = function(alternatives) {
-		//simple hit object
+		/**
+		 * simple Hit object
+		 * @param {Array} execResult
+		 * @param {Number} alternativeIndex
+		 * @constructor
+		 */
 		function Hit(execResult, alternativeIndex) {
+			/** @type {Array} */
 			this.execResult = execResult;
+			/** @type {Number} */
 			this.alternativeIndex = alternativeIndex;
+			/** @type {Number} */
+			this.textLengthWeight = execResult[0].length / execResult['input'].length;
 		}
-		//simple ActionHit object
+		/**
+		 * simple ActionHit object
+		 * @param {Action} action
+		 * @constructor
+		 */
 		function ActionHit(action) {
+			/** @type {Action} */
 			this.action = action;
+			/** @type {Array} */
 			this.hits = [];
 		}
 
@@ -215,9 +230,39 @@ function State (name) {
 				this.changeActiveState(actionHits[0].action.followingState);
 				//return;
 			} else {
-				//TODO more than one action
-				var text = actionHits.length + " Actions were found<br/>\n";
 				//no perfect match
+				//filter hits
+				for (i = 0; i < actionHits.length; i++) {
+					//noinspection JSUnusedLocalSymbols
+					actionHits[i].hits = actionHits[i].hits.filter(function(element, index, array) {
+						//best text length weight of one alternative
+						for (j = 0; j < actionHits.length; j++) {
+							if (j == i) continue;
+							//noinspection JSUnusedLocalSymbols
+							var result = actionHits[j].hits.find(function (ele, ind, arr) {
+								return ele.alternativeIndex == element.alternativeIndex
+							});
+							if (typeof result !== 'undefined') {
+								return element.textLengthWeight >= result.textLengthWeight;
+							}
+						}
+						return true;
+					});
+				}
+				//noinspection JSUnusedLocalSymbols
+				actionHits = actionHits.filter(function(element, index, array) {
+					return element.hits.length > 0;
+				});
+
+
+				if (actionHits.length == 1) {
+					//only one action found
+					runHitAction(actionHits[0]); //run first actionHit
+					this.changeActiveState(actionHits[0].action.followingState);
+					return;
+				}
+
+				//ask user
 				var dialogActionNumber = 1;
 				var dialogActions = [];
 
@@ -235,9 +280,13 @@ function State (name) {
 
 				for (i = 0; i < actionHits.length; i++) {
 					for (j = 0; j < actionHits[i].hits.length; j++) {
-						dialogActions.push({command:dialogActionNumber, description:actionHits[i].action.name + ": " + alternatives[actionHits[i].hits[j].alternativeIndex]});
+						dialogActions.push({
+							command: dialogActionNumber,
+							description: actionHits[i].action.name + ": " + alternatives[actionHits[i].hits[j].alternativeIndex] + " (" +
+									actionHits[i].hits[j].alternativeIndex + " " + Number((actionHits[i].hits[j].textLengthWeight).toFixed(2)) + ")"
+						});
 						//create dialog action
-						var action = new Action("Dialog " + actionHits[i].action.name, 0, actionHits[i].action.followingState);
+						var action = new Action("Dialog Action " + dialogActionNumber, 0, actionHits[i].action.followingState);
 						action.actionHit = actionHits[i];
 						action.hit = j;
 						action.dialogState = dialogState;
@@ -254,13 +303,13 @@ function State (name) {
 
 				this.changeActiveState(dialogState);
 
-				showDialog('What did you say?', text, dialogActions, function(messageId) {
+				showDialog('What did you say?', actionHits.length + " Actions were found.", dialogActions, function(messageId) {
 					dialogState.setMessageId(messageId);
 				});
 			}
 		} else {
 			//not found
-			notify("not found: '" + alternatives[0] + "'");
+			notify('I cannot find the command "' + alternatives[0] + '". Please repeat.');
 		}
 	};
 
