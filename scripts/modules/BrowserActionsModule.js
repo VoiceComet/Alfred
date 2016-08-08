@@ -110,6 +110,16 @@ addModule(new Module("BrowserActionsModule", function() {
     };
     this.addAction(scrollToTop);
 
+	/**
+	 * scroll to the middle of the page
+     */
+	var scrollToMiddle = new Action("scroll to middle", 0, globalCommonState);
+	scrollToMiddle.addCommand(new Command("[^scroll $|^scroll to $]?middle", 0));
+	scrollToMiddle.act = function() {
+		callContentScriptMethod("scrollToMiddle", {})
+	};
+	this.addAction(scrollToMiddle);
+
     /**
      * scroll to the bottom of the page
      */
@@ -161,12 +171,13 @@ addModule(new Module("BrowserActionsModule", function() {
     this.addAction(scrollRight);
 
     /**
-     * scroll to read
-     */
-    var read = new Action("read page", 0, globalCommonState);
-    read.addCommand(new Command("read page", 0));
-    read.act = function() {
-        callContentScriptMethod("scrollToRead", {});
+     * zoom in
+	*/
+    var zoomIn = new Action("zoom in", 0, globalCommonState);
+    zoomIn.addCommand(new Command("[^zoom &]?in", 0));
+    zoomIn.act = function() {
+    	notify("zoom in");
+        callContentScriptMethod("zoomIn", {});
     };
-    this.addAction(read);
+    this.addAction(zoomIn);
 }));

@@ -16,8 +16,8 @@ addContentScriptMethod(
 
 addContentScriptMethod(
 	new ContentScriptMethod("scrollToTop", function() { //function(params)
-		//currently not on top of the page -> set scrollPosVertical
 		var scrollPosVertical = window.scrollY;
+		//not on the top of the page
 		if(scrollPosVertical != 0) {
 			showMessage({content: "Scroll to the top"});
 			$("html, body").animate({scrollTop: 0});
@@ -29,11 +29,26 @@ addContentScriptMethod(
 );
 
 addContentScriptMethod(
+	new ContentScriptMethod("scrollToMiddle", function() { //function(params)
+		var middle = Math.floor((document.body.scrollHeight - window.innerHeight) / 2);
+		var scrollPosVertical = window.scrollY;
+		//not in the middle of the page
+		if(scrollPosVertical != middle) {
+			showMessage({content: "Scroll to the middle"});
+			$("html, body").animate({scrollTop: middle});
+		//at the middle of the page
+		} else {
+			showMessage({title: "Attention!", content: "This is the middle of the page"});
+		}
+	})
+);
+
+addContentScriptMethod(
 	new ContentScriptMethod("scrollToBottom", function() { //function(params)
-		//currently not on the bottom of the page -> set scrollPosVertical, set bottom
 		var scrollHeight = window.innerHeight * scrollHeightFactor;
 		var bottom = document.body.scrollHeight - window.innerHeight;
 		var scrollPosVertical = window.scrollY;
+		//not on the bottom of the page
 		if(scrollPosVertical < bottom) {
 			showMessage({content: "Scroll to the bottom"});
 			$("html, body").animate({scrollTop: document.body.scrollHeight - scrollHeight});
@@ -107,8 +122,14 @@ addContentScriptMethod(
 );
 
 addContentScriptMethod(
-	new ContentScriptMethod("scrollToRead", function() { //function(params)
-		$("html, body").animate({ scrollTop: 100}, 30);
+    new ContentScriptMethod("zoomIn", function() { //function(params)
+        var css = chrome.extension.getURL("zoomUI.css");
+	    $("html, head").prepend("<link rel='stylesheet' type='text/css' href='css'>");
+	    $("<div></div>", {id: "zoomUIDIV"})
+	        .appendTo($("body"))
+            .load(chrome.extension.getURL("zoomUI.html"), function() {
+                $("#zoomUIGrid").attr("src",chrome.extension.getURL("images/grid.png"));
+            });
 	})
 );
 
