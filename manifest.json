@@ -21,7 +21,8 @@
 			"scripts/classes/Action.js",
 			"scripts/classes/Command.js",
 			"scripts/background.js",
-			"scripts/modules/moduleList.js"
+			"scripts/modules/moduleList.js",
+			"scripts/states/zoomState.js"
 		]
 	},
 

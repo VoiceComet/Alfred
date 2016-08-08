@@ -7,6 +7,6 @@ zoomState.init = function () {
     this.actions = [];
     //add actions of modules
     for (var i = 0; i < modules[index].actions.length; i++) {
-        this.addAction(modules[index].actions[i]);
+        zoomState.addAction(modules[index].actions[i]);
     }
 };
