@@ -380,10 +380,12 @@ function State (name) {
 					chrome.tabs.create({url: chrome.extension.getURL("getPermission.html")});				
 				}
 				permissionGrounded = false;
+			} else if (event.error == "network") {
+				console.log(event.error + ": " + event.message);
+				notify("Network Error. Please check your network connection.");
 			} else {
-				//TODO: better error handling
 				if (event.error != "no-speech") {
-					alert(event.error + ": " + event.message);
+					console.log(event.error + ": " + event.message);
 				}
 			}
 		};
