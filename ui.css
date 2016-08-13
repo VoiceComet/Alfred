@@ -59,3 +59,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     border: 1px solid grey;
     border-radius: 6px;
 }
+
+.highlight {
+    background-color: yellow;
+}

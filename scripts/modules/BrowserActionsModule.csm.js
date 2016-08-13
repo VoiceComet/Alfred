@@ -121,15 +121,4 @@ addContentScriptMethod(
 	})
 );
 
-addContentScriptMethod(
-    new ContentScriptMethod("zoomIn", function() { //function(params)
-        var css = chrome.extension.getURL("zoomUI.css");
-	    $("html, head").prepend("<link rel='stylesheet' type='text/css' href='css'>");
-	    $("<div></div>", {id: "zoomUIDIV"})
-	        .appendTo($("body"))
-            .load(chrome.extension.getURL("zoomUI.html"), function() {
-                $("#zoomUIGrid").attr("src",chrome.extension.getURL("images/grid.png"));
-            });
-	})
-);
 

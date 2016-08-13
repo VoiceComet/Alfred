@@ -22,13 +22,14 @@ div#zoomUIDIV div#zoomUI {
 }
 
 div#zoomUIDIV div#zoomUI h1 {
-    font-size: 24px;
+    font-size: 200%;
     font-weight: bold;
     border: none;
     font-style: normal;
     color: black;
     margin-top: -12px;
     margin-left: -12px;
+    background-color: transparent;
 }
 
 div#zoomUIDIV div#zoomUI h1#first {

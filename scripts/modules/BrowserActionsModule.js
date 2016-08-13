@@ -90,16 +90,6 @@ addModule(new Module("BrowserActionsModule", function() {
 	};
 	this.addAction(goForward);
 
-	/**
- 	 * search for an expression
-	 */
-	var search = new Action("search expression", 1, globalCommonState);
-	search.addCommand(new Command("search for (.*)", 1));
-	search.act = function(arguments) {
-		alert("searched for " + arguments[0]);
-	};
-	this.addAction(search);
-
     /**
      * scroll to top of the page
      */
@@ -170,14 +160,4 @@ addModule(new Module("BrowserActionsModule", function() {
     };
     this.addAction(scrollRight);
 
-    /**
-     * zoom in
-	*/
-    var zoomIn = new Action("zoom in", 0, globalCommonState);
-    zoomIn.addCommand(new Command("[^zoom &]?in", 0));
-    zoomIn.act = function() {
-    	notify("zoom in");
-        callContentScriptMethod("zoomIn", {});
-    };
-    this.addAction(zoomIn);
 }));

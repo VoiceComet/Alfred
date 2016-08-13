@@ -14,7 +14,7 @@
 	"background": {
 		"scripts": [
 			"scripts/jquery-3.1.0.min.js",
-            "scripts/d3.min.js",
+			"scripts/highlightRegex.min.js",
 			"scripts/backgroundUtils.js",
 			"scripts/classes/Module.js",
 			"scripts/classes/State.js",
@@ -22,7 +22,8 @@
 			"scripts/classes/Command.js",
 			"scripts/background.js",
 			"scripts/modules/moduleList.js",
-			"scripts/states/zoomState.js"
+			"scripts/modules/zoomModule.js",
+			"scripts/modules/searchModule.js"
 		]
 	},
 
@@ -35,11 +36,13 @@
 			],
 			"js": [
 				"scripts/jquery-3.1.0.min.js",
-                "scripts/d3.min.js",
+				"scripts/highlightRegex.min.js",
 				"scripts/classes/ContentScriptMethod.js",
 				"scripts/contentScript.js",
 				"scripts/modules/BrowserActionsModule.csm.js",
-				"scripts/modules/WeatherModule.csm.js"
+				"scripts/modules/WeatherModule.csm.js",
+				"scripts/modules/zoomModule.csm.js",
+				"scripts/modules/searchModule.csm.js"
 			]
 		}
 	],
