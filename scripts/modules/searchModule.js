@@ -20,7 +20,6 @@ addModule(new Module("searchModule", function() {
     var search = new Action("search expression", 1, searchState);
     search.addCommand(new Command("search for (.*)", 1));
     search.act = function (arguments) {
-        notify("search for " + arguments[0]);
         callContentScriptMethod("search", arguments[0]);
     };
     this.addAction(search);
@@ -29,10 +28,20 @@ addModule(new Module("searchModule", function() {
     /**
      * next hit
      */
-    var next = new Action("next", 0, searchState);
+    var next = new Action("nextHit", 0, searchState);
     next.addCommand(new Command("next", 0));
     next.act = function() {
-      notify("next");
+      callContentScriptMethod("next", {});
     };
     searchState.addAction(next);
+
+    /**
+     * previous hit
+     */
+    var prev = new Action("previousHit", 0, searchState);
+    prev.addCommand(new Command("previous", 0));
+    prev.act = function () {
+        callContentScriptMethod("previous", {});
+    };
+    searchState.addAction(prev);
 }));
