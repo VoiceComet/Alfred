@@ -61,6 +61,7 @@
 		"ui.html",
         "ui.css",
 		"zoomUI.html",
-		"zoomUI.css"
+		"zoomUI.css",
+		"scripts/modules/WeatherModule.html"
 	]
 }

@@ -1,22 +1,15 @@
 addContentScriptMethod(
 	new ContentScriptMethod("showWeather", function(params) {
-		if (params.api == "yahoo") {
-			$.getJSON(params.url, function(json) {
-				console.log(json);
-				var text = "No weather result found. Please repeat.";
-				//noinspection JSUnresolvedVariable
-				if (json.query.results != null) {
-					//noinspection JSUnresolvedVariable
-					text = json.query.results.channel.item.description.replace("<![CDATA[", "").replace("]]>", "");
-				}
-
-				$("#" + params.elementId).html(text);
-				setTimeout(function() {
-					$("#" + params.elementId).hide(400, function() {
-						$(this).remove();
-					});
-				}, 5000);
+		console.log(params.weatherObject);
+		//load html
+		$("#ChromeSpeechControlPanel")
+			.attr("style", "display:block")
+			.load(chrome.extension.getURL("scripts/modules/WeatherModule.html"), function() {
+				$("#weatherImage").attr("src", params.weatherObject.image);
+				$("#weatherTitle").html(params.weatherObject.city + " (" + params.weatherObject.country + ")");
+				$("#weatherDate").html(params.weatherObject.date);
+				$("#weatherContent").html(params.weatherObject.conditionText + ", " + params.weatherObject.temp + " " + params.weatherObject.tempUnit + "°");
 			});
-		}
+
 	})
 );
