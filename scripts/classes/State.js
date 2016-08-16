@@ -76,7 +76,7 @@ function State (name) {
 			this.cancelAction = new Action("Cancel Action", 0, globalCommonState);
 			this.cancelAction.addCommand(new Command("cancel", 0));
 			this.cancelAction.act = function() {
-				notify("cancel");
+				notify("canceled");
 			}
 		}
 	};
@@ -276,6 +276,17 @@ function State (name) {
 				dialogState.setMessageId = function (messageId) {
 					//noinspection JSPotentiallyInvalidUsageOfThis
 					this.messageId = messageId;
+				};
+
+				// modify cancel action
+				dialogState.init = function() {
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					this.cancelAction.dialogState = this;
+					//noinspection JSPotentiallyInvalidUsageOfThis,JSUnusedLocalSymbols
+					this.cancelAction.act = function(arguments) {
+						this.dialogState.hideDialog(this.messageId);
+						notify("canceled");
+					};
 				};
 
 				for (i = 0; i < actionHits.length; i++) {
