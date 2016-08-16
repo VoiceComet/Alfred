@@ -21,12 +21,6 @@ $("<div></div>", {id: "ChromeSpeechControlDIV"})
 	});
 
 
-window.onresize = function onResize() {
-	console.log("x: " + window.scrollX + "; y: " + window.scrollY);
-	//TODO
-};
-
-
 //noinspection JSUnusedLocalSymbols
 /**
  * Handle requests from background.html
@@ -38,6 +32,8 @@ function handleRequest(request, sender, sendResponse) {
 	var response;
 	if (request.callFunction == "updateMicrophoneIcon") {
 		response = updateMicrophoneIcon(request.params);
+	} else if (request.callFunction == "setZoomFactor") {
+		response = setZoomFactor(request.params);
 	} else if (request.callFunction == "showMessage") {
 		response = showMessage(request.params);
 	} else if (request.callFunction == "hideMessage") {
@@ -126,6 +122,15 @@ function updateMicrophoneIcon(params) {
 			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
 		}
 	}
+}
+/**
+ * set zoom factor of ui
+ * @param {Object} params
+ * @param {Number} params.zoomFactor - browser zoom factor
+ */
+function setZoomFactor(params) {
+
+	$("#ChromeSpeechControlDIV").attr("style", "zoom: " + 1/params.zoomFactor);
 }
 
 /**

@@ -75,3 +75,18 @@ window.addEventListener("load", function() {
 }, false);
 
 
+/**
+ * resizing ui in dependence to zoom level
+ */
+function resizeUI() {
+	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
+		if (tabs.length > 0) {
+			chrome.tabs.getZoom(tabs[0].id, function(zoomFactor) {
+				callContentScriptMethod("setZoomFactor", {"zoomFactor":zoomFactor});
+				//chrome.tabs.sendMessage(tabs[0].id, {callFunction: "setZoomFactor", params: {"zoomFactor":zoomFactor}});
+			});
+		}
+	});
+}
+chrome.tabs.onZoomChange.addListener(resizeUI);
+chrome.tabs.onUpdated.addListener(resizeUI);
