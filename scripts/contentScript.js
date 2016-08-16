@@ -20,6 +20,13 @@ $("<div></div>", {id: "ChromeSpeechControlDIV"})
 		$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
 	});
 
+
+window.onresize = function onResize() {
+	console.log("x: " + window.scrollX + "; y: " + window.scrollY);
+	//TODO
+};
+
+
 //noinspection JSUnusedLocalSymbols
 /**
  * Handle requests from background.html

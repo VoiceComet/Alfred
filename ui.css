@@ -1,9 +1,21 @@
+div#ChromeSpeechControlDIV {
+    zoom:1;
+}
+
+div#ChromeSpeechControlDIV,
 div#ChromeSpeechControlDIV div,
 div#ChromeSpeechControlDIV img {
+    position: static;
+    top:auto;
+    bottom:auto;
+    left:auto;
+    right:auto;
     padding: 0;
     margin: 0;
     border: 0;
+    background-color:transparent;
 }
+
 div#ChromeSpeechControlDIV div {
     display: block;
     color: black;
