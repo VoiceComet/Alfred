@@ -50,7 +50,7 @@ function State (name) {
 				this.ableToMute = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.ableToCancel = false;
-				notify('mute, say "listen"');
+				notify('muted, say "listen"');
 			};
 			this.muteActionIn = new Action("Mute Action", 0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
@@ -63,7 +63,7 @@ function State (name) {
 			this.muteActionOut = new Action("Mute Action", 0, this);
 			this.muteActionOut.addCommand(new Command("listen", 0));
 			this.muteActionOut.act = function() {
-				notify("demuted");
+				notify("unmuted");
 				that.muteState.muted = false;
 				that.muted = false;
 				that.updateMicrophoneIcon();
@@ -293,8 +293,8 @@ function State (name) {
 					for (j = 0; j < actionHits[i].hits.length; j++) {
 						dialogActions.push({
 							command: dialogActionNumber,
-							description: actionHits[i].action.name + ": " + alternatives[actionHits[i].hits[j].alternativeIndex] + " (" +
-									actionHits[i].hits[j].alternativeIndex + " " + Number((actionHits[i].hits[j].textLengthWeight).toFixed(2)) + ")"
+							description: actionHits[i].action.name + ": " + alternatives[actionHits[i].hits[j].alternativeIndex]
+									/*+ " (" + actionHits[i].hits[j].alternativeIndex + " " + Number((actionHits[i].hits[j].textLengthWeight).toFixed(2)) + ")"*/
 						});
 						//create dialog action
 						var action = new Action("Dialog Action " + dialogActionNumber, 0, actionHits[i].action.followingState);
