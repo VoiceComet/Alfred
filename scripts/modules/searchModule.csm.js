@@ -1,7 +1,7 @@
 /**
  * csm for searching for expressions
  */
-var found = [];
+var result = [];
 var i = 0;
 
 /**
@@ -9,22 +9,49 @@ var i = 0;
  */
 addContentScriptMethod(
     new ContentScriptMethod("search", function (params) {
-        $("body").highlightRegex();
+        $("body").unmark();
         var str = params.toString();
         var searched = new RegExp(str, "gmi");
-        $("body").highlightRegex(searched);
-        $("#ChromeSpeechControlMessagesBox").highlightRegex();
-        //var htmlText = $("body").html().toString();
-        //var result = htmlText.match(searched);
-        found = document.getElementsByClassName("highlight");
-        if(found.length === 0) {
+        $("body").markRegExp(searched, {
+            "className": "highlight",
+            "exclude": [
+                "script",
+                "style",
+                "noscript",
+                "#ChromeSpeechControlDIV *"
+            ]
+        });
+        result = document.getElementsByClassName("highlight");
+        //var test = result[0].parentNode.style.getPropertyValue("overflow");
+        /**var test1 = result[3];
+        while(true) {
+            if (test1.previousSibling.nodeType != 1) {
+                test1 = test1.previousSibling;
+            } else {
+                return;
+            }
+        };
+        alert(result[3].previousSibling.nodeType);
+        var test = window.getComputedStyle(result[3]).getPropertyValue("overflow");
+        alert(test);
+        console.log(test);
+        if (result.length > 0) {
+            result[1].style.overflow = "visible";
+        }*/
+        for (var j = 0; j < result.length; j++) {
+            if (window.getComputedStyle(result[j]).getPropertyValue("overflow") === "hidden") {
+                result.slice(j);
+            }
+        }
+        if(result.length === 0) {
             showMessage({title: "Attention!", content: "couldn't find " + params});
         } else {
             showMessage({content: "search for " + params});
         }
-        found[0].style.backgroundColor = "cornflowerblue";
+        alert(result.length);
         i = 0;
-        $('html, body').animate({ scrollTop: $(found[0]).offset().top - window.innerHeight / 2}, 1000);
+        result[0].style.backgroundColor = "cornflowerblue";
+        $('html, body').animate({ scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000);
     })
 );
 
@@ -34,22 +61,22 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("next", function () {
         //highlights the next match
-        if(found.length > 1) {
-            if (i < found.length - 1) {
-                found[i].style.backgroundColor = "yellow";
-                found[i + 1].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(found[i + 1]).offset().top - window.innerHeight / 2}, 1000);
+        if(result.length > 1) {
+            if (i < result.length - 1) {
+                result[i].style.backgroundColor = "yellow";
+                result[i + 1].style.backgroundColor = "cornflowerblue";
+                $('html, body').animate({scrollTop: $(result[i + 1]).offset().top - window.innerHeight / 2}, 1000);
                 i++;
                 //reached last element -> continue at 0
             } else {
-                found[i].style.backgroundColor = "yellow";
-                found[0].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(found[0]).offset().top - window.innerHeight / 2}, 1000);
+                result[i].style.backgroundColor = "yellow";
+                result[0].style.backgroundColor = "cornflowerblue";
+                $('html, body').animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000);
                 i = 0;
             }
             showMessage({content: "show next hit"});
         } else {
-            showMessage({title: "Attention!", content: "only one match was found"});
+            showMessage({title: "Attention!", content: "no match found"});
         }
     })
 );
@@ -59,22 +86,22 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("previous", function () {
-        if(found.length > 1) {
+        if(result.length > 1) {
             if (i > 0) {
-                found[i].style.backgroundColor = "yellow";
-                found[i - 1].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(found[i - 1]).offset().top - window.innerHeight / 2}, 1000);
+                result[i].style.backgroundColor = "yellow";
+                result[i - 1].style.backgroundColor = "cornflowerblue";
+                $('html, body').animate({scrollTop: $(result[i - 1]).offset().top - window.innerHeight / 2}, 1000);
                 i--;
                 //reached first element -> continue with last
             } else {
-                found[i].style.backgroundColor = "yellow";
-                found[found.length - 1].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(found[found.length - 1]).offset().top - window.innerHeight / 2}, 1000);
-                i = found.length - 1;
+                result[i].style.backgroundColor = "yellow";
+                result[result.length - 1].style.backgroundColor = "cornflowerblue";
+                $('html, body').animate({scrollTop: $(result[result.length - 1]).offset().top - window.innerHeight / 2}, 1000);
+                i = result.length - 1;
             }
-            showMessage({content: "show next hit"});
+            showMessage({content: "show previous hit"});
         } else {
-            showMessage({title: "Attention!", content: "only one match was found"});
+            showMessage({title: "Attention!", content: "no match found"});
         }
     })
 );
@@ -84,6 +111,6 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("cancelSearchState", function () {
-
+        $("body").unmark();
     })
 );

@@ -18,7 +18,7 @@ addModule(new Module("zoomModule", function() {
      * start zooming in
      */
     var zoomIn = new Action("zoom in", 0, zoomState);
-    zoomIn.addCommand(new Command("[^zoom &]?in", 0));
+    zoomIn.addCommand(new Command("zoom in", 0));
     zoomIn.act = function() {
         callContentScriptMethod("zoomIn", {});
     };

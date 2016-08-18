@@ -1,0 +1,33 @@
+/**
+ * css for interacting with videos
+*/
+div#objectUIDIVBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1999999999;
+    height: 100%;
+    width: 100%;
+    background-color: lightgray;
+    opacity: 0.8;
+}
+
+div#objectUIDIV {
+    position: fixed;
+    top: 10%;
+    left: 25%;
+    z-index: 1999999999;
+    height: 80%;
+    width: 50%;
+    background-color: darkgray;
+    opacity: 0.85;
+    overflow-y: auto;
+}
+
+div#objectUIDIV img {
+    margin-left: 10px;
+    margin-top: 10px;
+    opacity: 1;
+    float: left;
+    overflow: visible;
+}

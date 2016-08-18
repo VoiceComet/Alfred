@@ -67,7 +67,7 @@ addContentScriptMethod(
 		if(scrollPosVertical > 0) {
 			showMessage({content: "scroll up"});
 			$("html, body").animate({scrollTop: scrollPosVertical - scrollHeight}, 1000);
-		//Position of scrolling is on top of the page -> set control variables = 0, alert
+		//Position of scrolling is on top of the page -> alert
 		} else {
 			showMessage({title: "Attention!", content: "Scrolling up isn't possible"});
 		}
@@ -83,7 +83,7 @@ addContentScriptMethod(
 		if(scrollPosVertical < bottom) {
 			showMessage({content: "scroll down"});
 			$("html, body").animate({scrollTop: scrollPosVertical + scrollHeight}, 1000);
-		//Position of scrolling is on the bottom of the page -> set control variables = document.body.scrollHeight - window.innerHeight, alert
+		//Position of scrolling is on the bottom of the page -> alert
 		} else {
 			showMessage({title: "Attention!", content: "Scrolling down isn't possible"});
 		}
@@ -98,7 +98,7 @@ addContentScriptMethod(
 		if(scrollPosHorizontal > 0) {
 			showMessage({content: "scroll left"});
 			$("html, body").animate({scrollLeft: scrollPosHorizontal - scrollWidth}, 1000);
-		//Position of scrolling is on the left end of the page -> set control variables = 0, alert
+		//Position of scrolling is on the left end of the page -> alert
 		} else {
 			showMessage({title: "Attention!", content: "Scrolling left isn't possible"});
 		}
@@ -114,7 +114,7 @@ addContentScriptMethod(
 		if(scrollPosHorizontal < rightEnd) {
 			showMessage({content: "scroll right"});
 			$("html, body").animate({scrollLeft: scrollPosHorizontal + scrollWidth}, 1000);
-		//Position of scrolling is on the right end of the page -> set control variables = document.body.scrollWidth, alert
+		//Position of scrolling is on the right end of the page -> alert
 		} else {
 			showMessage({title: "Attention!", content: "Scrolling right isn't possible"});
 		}
