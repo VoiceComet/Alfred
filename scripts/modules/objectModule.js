@@ -37,12 +37,12 @@ addModule(new Module("videoModule", function () {
     objectState.addAction(showImages);
 
     /**
-     * scroll down
+     * show next objects
      */
-    var scrollDownDiv = new Action("scrollDownDiv",0 , objectState);
-    scrollDownDiv.addCommand(new Command("[^scroll &]?down", 0));
-    scrollDownDiv.act = function () {
-        callContentScriptMethod("scrollDownDiv", {});
-    };
-    objectState.addAction(scrollDownDiv);
+    var nextObjects = new Action("nextObjects", 0, objectState);
+    nextObjects.addCommand(new Command("next", 0));
+    nextObjects.act = function () {
+        callContentScriptMethod("nextObjects", {});
+    }
+    objectState.addAction(nextObjects);
 }));

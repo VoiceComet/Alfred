@@ -2,8 +2,8 @@
  * csm for interacting with objects
  */
 //scrolling factors
-var scrollHeightFactor = 0.7;
-var scrollWidthFactor = 0.7;
+var i = 0;
+var images = [];
 
 /**
  * show all videos
@@ -25,37 +25,28 @@ addContentScriptMethod(
         showMessage({content: "show all images"});
         $("body").append("<div id='objectUIDIVBackground'></div>");
         $("body").append("<div id='objectUIDIV'></div>");
-        $("img").clone().appendTo("#objectUIDIV");
-        $("#objectUIDIV").children().last().remove();
-        //var images = document.getElementsByTagName("img");
-        //for (var i = 1; i < images.length; i++) {
-        //    $("#objectUIDIV").append(images[0]);
-        //}
+        var arr = $("img").clone();
+        images = jQuery.makeArray(arr);
+        images.pop();
+        for (i = 0; i < 14; i++) {
+            $("#objectUIDIV").append(images[i].outerHTML);
+        }
     })
 );
 
 /**
- * scroll down
+ * show next objects
  */
 addContentScriptMethod(
-    new ContentScriptMethod("scrollDownDiv", function () {
-        alert($("#objectUIDIV").offsetHeight);
-        alert($("#objectUIDIV").scrollHeight);
-        alert($("#objectUIDIV").scrollTop);
-        var scrollHeight = $("#objectUIDIV").height * scrollHeightFactor;
-        var bottom = $("#objectUIDIV").scrollHeight - $("#objectUIDIV").height;
-        var scrollPosVertical = $("#objectUIDIV").scrollTop;
-        //scrolling position is not at the bottom of the div -> scroll down
-        if(scrollPosVertical < bottom) {
-            showMessage({content: "scroll down"});
-            $("#objectUIDIV").animate({scrollTop: scrollPosVertical + scrollHeight}, 1000);
-        //Position of scrolling is on the bottom of the div -> alert
-        } else {
-            showMessage({title: "Attention!", content: "Scrolling down isn't possible"});
+    new ContentScriptMethod("nextObjects", function () {
+        showMessage({content: "show next hits"});
+        $("objectUIDIV").text("");
+        for (var j = 0; j < 14; j++) {
+            i++;
+            $("#objectUIDIV").append(images[i].outerHTML);
         }
     })
 )
-
 /**
  * cancel object state
 */
