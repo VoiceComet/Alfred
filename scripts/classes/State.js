@@ -5,6 +5,7 @@
  */
 function State (name) {
     this.name = name;
+	this.oldState = globalCommonState;
     this.actions = [];
 
 	this.muted = false;
@@ -50,7 +51,7 @@ function State (name) {
 				this.ableToMute = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.ableToCancel = false;
-				notify('muted, say "listen"');
+				notify('muted, say "Hello Alfred" or "Alfred listen"');
 			};
 			this.muteActionIn = new Action("Mute Action", 0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
@@ -61,7 +62,8 @@ function State (name) {
 				that.updateMicrophoneIcon();
 			};
 			this.muteActionOut = new Action("Mute Action", 0, this);
-			this.muteActionOut.addCommand(new Command("listen", 0));
+			this.muteActionOut.addCommand(new Command("Hello Alfred", 0));
+			this.muteActionOut.addCommand(new Command("Alfred listen", 0));
 			this.muteActionOut.act = function() {
 				notify("unmuted");
 				that.muteState.muted = false;
@@ -73,7 +75,7 @@ function State (name) {
 		
 		//abort
 		if (this.cancelAction == null) {
-			this.cancelAction = new Action("Cancel Action", 0, globalCommonState);
+			this.cancelAction = new Action("Cancel Action", 0, this.oldState);
 			this.cancelAction.addCommand(new Command("cancel", 0));
 			this.cancelAction.act = function() {
 				notify("canceled");
@@ -105,8 +107,10 @@ function State (name) {
 
 	/**
 	 * Run the state. This method is called when the state is activated.
+	 * @param {State} oldState
 	 */
-    this.run = function() {
+    this.run = function(oldState) {
+		this.oldState = oldState;
 		this.generateStandardActions();
 		this.init();
 		this.activateStandardActions();
@@ -122,7 +126,7 @@ function State (name) {
 
 	/**
 	 * change the active state
-	 * @param state
+	 * @param {State} state
 	 */
 	this.changeActiveState = function (state) {
 		this.stopSpeechRecognition();
@@ -248,6 +252,11 @@ function State (name) {
 						}
 						return true;
 					});
+
+					//actions without parameters should only have one hit
+					if (actionHits[i].action.parameterCount <= 0 && actionHits[i].hits.length > 0) {
+						actionHits[i].hits = [actionHits[i].hits[0]];
+					}
 				}
 				//noinspection JSUnusedLocalSymbols
 				actionHits = actionHits.filter(function(element, index, array) {
@@ -259,6 +268,11 @@ function State (name) {
 					//only one action found
 					runHitAction(actionHits[0]); //run first actionHit
 					this.changeActiveState(actionHits[0].action.followingState);
+					return;
+				}
+
+				//if muted, don't show messages
+				if (this.muted) {
 					return;
 				}
 
@@ -320,7 +334,9 @@ function State (name) {
 			}
 		} else {
 			//not found
-			notify('I cannot find the command "' + alternatives[0] + '". Please repeat.');
+			if (!this.muted) {
+				notify('I cannot find the command "' + alternatives[0] + '". Please repeat.');
+			}
 		}
 	};
 

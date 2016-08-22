@@ -21,10 +21,7 @@
 			"scripts/classes/Action.js",
 			"scripts/classes/Command.js",
 			"scripts/background.js",
-			"scripts/modules/moduleList.js",
-			"scripts/modules/zoomModule.js",
-			"scripts/modules/searchModule.js",
-			"scripts/modules/objectModule.js"
+			"scripts/modules/moduleList.js"
 		]
 	},
 

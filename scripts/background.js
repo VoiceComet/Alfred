@@ -38,8 +38,9 @@ function addModule(module) {
  * @global
  */
 function changeActiveState(newState) {
+	var oldState = activeState;
 	activeState = newState;
-	activeState.run();
+	activeState.run(oldState);
 }
 
 
