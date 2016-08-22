@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
 
-	"name": "Chrome Speech Control",
-	"description": "This extension adds a speech control option to your browser.",
-	"version": "1.0",
+	"name": "Alfred - Your personal speech-controlled butler",
+	"description": "Alfred is a Chrome Extension which allows the user to control the browser only by voice commands.",
+	"version": "0.1",
 
 	"permissions": [
 		"tabs",
