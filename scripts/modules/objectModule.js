@@ -43,6 +43,6 @@ addModule(new Module("videoModule", function () {
     nextObjects.addCommand(new Command("next", 0));
     nextObjects.act = function () {
         callContentScriptMethod("nextObjects", {});
-    }
+    };
     objectState.addAction(nextObjects);
 }));
