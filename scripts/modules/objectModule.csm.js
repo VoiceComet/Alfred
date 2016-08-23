@@ -3,7 +3,7 @@
  */
 //current number of image
 var i = 0;
-var images = [];
+var objects = [];
 //control how much images were shown in one next step
 var nexts = 0;
 //control if a previous action was done before
@@ -30,12 +30,12 @@ addContentScriptMethod(
         //layout
         $("body").append("<div id='objectUIDIVBackground'></div>");
         $("body").append("<div id='objectUIDIV'></div>");
-        var divs = $("img:only-of-type").parent().clone();
-        images = jQuery.makeArray(divs);
-        images.pop();
+        var images = $("img:only-of-type").parent().clone();
+        objects = jQuery.makeArray(images);
+        objects.pop();
         //show first 15 images
         for (i = 0; i < 15; i++) {
-            $("#objectUIDIV").append(images[i]);
+            $("#objectUIDIV").append(objects[i]);
         }
     })
 );
@@ -57,17 +57,17 @@ addContentScriptMethod(
                 prevs = false;
                 showMessage({content: "show next hits"});
                 $("#objectUIDIV").empty();
-                $("#objectUIDIV").append(images[i]);
+                $("#objectUIDIV").append(objects[i]);
                 i++;
             } else if (j === 0){
                 nexts++;
                 showMessage({content: "show next hits"});
                 $("#objectUIDIV").empty();
-                $("#objectUIDIV").append(images[i]);
+                $("#objectUIDIV").append(objects[i]);
                 i++;
             } else {
                 nexts++;
-                $("#objectUIDIV").append(images[i]);
+                $("#objectUIDIV").append(objects[i]);
                 i++;
             }
         }
@@ -90,10 +90,10 @@ addContentScriptMethod(
                 prevs = true;
                 showMessage({content: "show previous hits"});
                 $("#objectUIDIV").empty();
-                $("#objectUIDIV").prepend(images[i]);
+                $("#objectUIDIV").prepend(objects[i]);
             } else {
                 i--;
-                $("#objectUIDIV").prepend(images[i]);
+                $("#objectUIDIV").prepend(objects[i]);
             }
         }
     })
