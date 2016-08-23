@@ -47,7 +47,7 @@ addContentScriptMethod(
     new ContentScriptMethod("nextObjects", function () {
         nexts = 0;
         for (var j = 0; j < 15; j++) {
-            if (i >= images.length) {
+            if (i >= objects.length) {
                 showMessage({content: "no further images on this page"});
                 return;
             //if last step was a previous step one has to increase i by 15
