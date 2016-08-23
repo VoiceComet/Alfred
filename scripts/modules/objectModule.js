@@ -45,4 +45,14 @@ addModule(new Module("videoModule", function () {
         callContentScriptMethod("nextObjects", {});
     };
     objectState.addAction(nextObjects);
+
+    /**
+     * show previous objects
+     */
+    var prevObjects = new Action("previousObjects", 0, objectState);
+    prevObjects.addCommand(new Command("previous", 0));
+    prevObjects.act = function () {
+        callContentScriptMethod("previousObjects", {});
+    };
+    objectState.addAction(prevObjects);
 }));
