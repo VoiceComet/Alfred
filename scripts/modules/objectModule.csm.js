@@ -29,7 +29,7 @@ addContentScriptMethod(
         images = jQuery.makeArray(arr);
         images.pop();
         for (i = 0; i < 14; i++) {
-            $("#objectUIDIV").append(images[i].outerHTML);
+            $("#objectUIDIV").append("<div>" + images[i].outerHTML + "</div>");
         }
     })
 );
@@ -40,13 +40,15 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("nextObjects", function () {
         showMessage({content: "show next hits"});
-        $("objectUIDIV").text("");
+        $("#objectUIDIV").empty();
         for (var j = 0; j < 14; j++) {
             i++;
-            $("#objectUIDIV").append(images[i].outerHTML);
+            $("#objectUIDIV").append("<div>" + images[i].outerHTML + "</div>");
         }
     })
-)
+);
+
+
 /**
  * cancel object state
 */
