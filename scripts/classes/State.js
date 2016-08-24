@@ -31,9 +31,19 @@ function State (name) {
 	 * add an action to this state
 	 * @param {Action} action
 	 */
-    this.addAction = function(action) {
-        this.actions.push(action);
-    };
+	this.addAction = function(action) {
+		this.actions.push(action);
+	};
+
+	/**
+	 * reset actions of this state
+	 */
+	this.resetActions = function() {
+		this.actions = [];
+		this.generateStandardActions();
+		this.init();
+		this.activateStandardActions();
+	};
 
 	/**
 	 * generate standard actions

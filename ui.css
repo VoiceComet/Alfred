@@ -16,6 +16,10 @@ div#ChromeSpeechControlDIV img {
     background-color:transparent;
 }
 
+div#ChromeSpeechControlDIV b {
+    font-weight:bold;
+}
+
 div#ChromeSpeechControlDIV div {
     display: block;
     color: black;
@@ -72,7 +76,24 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     border-radius: 6px;
 }
 
+/* text search module */
+
 .highlight {
     background-color: yellow;
     color: black;
+}
+
+/* search engine module */
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultTitle {
+    font-weight: bold;
+    color: blue;
+}
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultUrl {
+    font-size: smaller;
+    color: darkgreen;
+}
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultSnippet {
+    font-size: small;
+    color: #404040;
 }

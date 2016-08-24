@@ -38,6 +38,10 @@ function handleRequest(request, sender, sendResponse) {
 		response = showMessage(request.params);
 	} else if (request.callFunction == "hideMessage") {
 		response = hideMessage(request.params);
+	} else if (request.callFunction == "showPanel") {
+		response = showPanel(request.params);
+	} else if (request.callFunction == "hidePanel") {
+		response = hidePanel();
 	} else {
 		//look for ContentScriptMethods of modules
 		for (var i = 0; i < contentScriptMethods.length; i++) {
@@ -55,40 +59,6 @@ function handleRequest(request, sender, sendResponse) {
 chrome.runtime.onMessage.addListener(handleRequest);
 
 
-//var sidebarOpen = false;
-/**
- * Small function which create a sidebar(just to illustrate my point)
- */
-/*
-function toggleSidebar() {
-	if(sidebarOpen) {
-		var el = document.getElementById('mySidebar');
-		el.parentNode.removeChild(el);
-		sidebarOpen = false;
-	}
-	else {
-		var sidebar = document.createElement('div');
-		sidebar.id = "mySidebar";
-		sidebar.innerHTML = "\
-			<h1>Hello</h1>\
-			World!\
-		";
-		sidebar.style.cssText = "\
-			position:fixed;\
-			top:0px;\
-			right:0px;\
-			width:30%;\
-			height:100%;\
-			background:white;\
-			box-shadow:inset 0 0 1em black;\
-			z-index:999999;\
-		";
-		document.body.appendChild(sidebar);
-		sidebarOpen = true;
-	}
-}
-*/
-
 /**
  * generate a unique id
  * @return {String}
@@ -100,6 +70,7 @@ function getUniqueId() {
 	}
 	return generatedId;
 }
+
 
 /**
  * update microphone icon
@@ -123,15 +94,17 @@ function updateMicrophoneIcon(params) {
 		}
 	}
 }
+
+
 /**
  * set zoom factor of ui
  * @param {Object} params
  * @param {Number} params.zoomFactor - browser zoom factor
  */
 function setZoomFactor(params) {
-
 	$("#ChromeSpeechControlDIV").attr("style", "zoom: " + 1/params.zoomFactor);
 }
+
 
 /**
  * generate a message div which is "time" milliseconds visible
@@ -175,6 +148,7 @@ function showMessage(params) {
 	return id;
 }
 
+
 /**
  * hide a given message div
  * @param {Object} params
@@ -184,4 +158,28 @@ function hideMessage(params) {
 	$('#'+params.id).hide(400, function() {
 		$(this).remove();
 	});
+}
+
+
+/**
+ * open the panel and add content, please use this only from content script methods
+ * @param {Object} params
+ * @param {Boolean} [params.cancelable=true] - show cancel action (true, false)
+ * @param {String} params.html - html content of panel
+ */
+function showPanel(params) {
+	var html = params.html;
+	//TODO cancel action oben rechts anzeigen :)
+	$("#ChromeSpeechControlPanel")
+		.attr("style", "display:block")
+		.html(html);
+}
+
+/**
+ * hide a given message div
+ */
+function hidePanel() {
+	$("#ChromeSpeechControlPanel")
+		.attr("style", "display:none")
+		.html("");
 }
