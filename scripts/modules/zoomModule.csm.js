@@ -29,6 +29,43 @@ addContentScriptMethod(
 );
 
 /**
+ * zoom into the second sector
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("zoomSecondSector", function () {
+        var scrollPosVertical = window.scrollY;
+        var scrollPosHorizontal = window.scrollX;
+        $("html, body").animate({scrollTop: scrollPosVertical}, "slow");
+        $("html, body").animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
+
+    })
+);
+
+/**
+ * zoom into the third sector
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("zoomThirdSector", function () {
+        var scrollPosVertical = window.scrollY;
+        var scrollPosHorizontal = window.scrollX;
+        $("html, body").animate({scrollTop: scrollPosVertical + window.innerHeight / 2}, {scrollLeft: scrollPosHorizontal}, "slow");
+    })
+);
+
+/**
+ * zoom into the fourth sector
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("zoomFourthSector", function () {
+        var scrollPosVertical = window.scrollY;
+        var scrollPosHorizontal = window.scrollX;
+        $("html, body").animate({scrollTop: scrollPosVertical}, "slow");
+        $("html, body").animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
+
+    })
+);
+
+/**
  * zoom out
  */
 addContentScriptMethod(

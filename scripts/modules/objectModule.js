@@ -7,7 +7,7 @@ addModule(new Module("videoModule", function () {
      */
     var objectState = new State("ObjectState");
     objectState.init = function() {
-        notify("entered video state");
+        notify("entered object state");
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelObjectState", {});
             notify("canceled object state");
@@ -43,6 +43,16 @@ addModule(new Module("videoModule", function () {
     nextObjects.addCommand(new Command("next", 0));
     nextObjects.act = function () {
         callContentScriptMethod("nextObjects", {});
-    }
+    };
     objectState.addAction(nextObjects);
+
+    /**
+     * show previous objects
+     */
+    var prevObjects = new Action("previousObjects", 0, objectState);
+    prevObjects.addCommand(new Command("previous", 0));
+    prevObjects.act = function () {
+        callContentScriptMethod("previousObjects", {});
+    };
+    objectState.addAction(prevObjects);
 }));

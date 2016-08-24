@@ -38,11 +38,68 @@ addModule(new Module("zoomModule", function() {
                 notify("zoom into first sector");
                 var newZoom = zoomFactor * 2;
                 chrome.tabs.setZoom(newZoom);
+                callContentScriptMethod("zoomFirstSector", {});
             }
         });
-        callContentScriptMethod("zoomFirstSector", {});
     };
     zoomState.addAction(first);
+
+    /**
+     * zoom in second sector
+     */
+    var second = new Action("second", 0, zoomState);
+    second.addCommand(new Command("2", 0));
+    second.act = function() {
+        chrome.tabs.getZoom(function (zoomFactor) {
+            if(zoomFactor >= 5) {
+                notify("reached max zoom");
+            } else{
+                notify("zoom into second sector");
+                var newZoom = zoomFactor * 2;
+                chrome.tabs.setZoom(newZoom);
+                callContentScriptMethod("zoomSecondSector", {});
+            }
+        });
+    };
+    zoomState.addAction(second);
+
+    /**
+     * zoom in third sector
+     */
+    var third = new Action("third", 0, zoomState);
+    third.addCommand(new Command("3", 0));
+    third.act = function() {
+        chrome.tabs.getZoom(function (zoomFactor) {
+            if(zoomFactor >= 5) {
+                notify("reached max zoom");
+            } else{
+                notify("zoom into third sector");
+                var newZoom = zoomFactor * 2;
+                chrome.tabs.setZoom(newZoom);
+                callContentScriptMethod("zoomThirdSector", {});
+            }
+        });
+    };
+    zoomState.addAction(third);
+
+    /**
+     * zoom in fourth sector
+     */
+    var fourth = new Action("fourth", 0, zoomState);
+    fourth.addCommand(new Command("4", 0));
+    fourth.act = function() {
+        chrome.tabs.getZoom(function (zoomFactor) {
+            if(zoomFactor >= 5) {
+                notify("reached max zoom");
+            } else{
+                notify("zoom into fourth sector");
+                var newZoom = zoomFactor * 2;
+                chrome.tabs.setZoom(newZoom);
+                callContentScriptMethod("zoomFourthSector", {});
+            }
+        });
+    };
+    zoomState.addAction(fourth);
 
     /**
      * zoom out
