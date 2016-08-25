@@ -36,16 +36,6 @@ function State (name) {
 	};
 
 	/**
-	 * reset actions of this state
-	 */
-	this.resetActions = function() {
-		this.actions = [];
-		this.generateStandardActions();
-		this.init();
-		this.activateStandardActions();
-	};
-
-	/**
 	 * generate standard actions
 	 */
 	this.generateStandardActions = function() {
@@ -204,9 +194,9 @@ function State (name) {
 		var i;
 		var j;
 		for (i = 0; i < this.actions.length; i++) {
+			var actionAdded = false;
 			//all commands of action
 			for (j = 0; j < this.actions[i].commands.length; j++) {
-				var actionAdded = false;
 				//all alternatives
 				for (var k = 0; k < alternatives.length; k++) {
 					alternatives[k] = alternatives[k].trim(); //delete spaces at string beginning and ending
@@ -231,10 +221,9 @@ function State (name) {
 						}
 					}
 				}
-				
-				//increment index for each added action
-				if (actionAdded) actionHitsIndex++;
 			}
+			//increment index for each added action
+			if (actionAdded) actionHitsIndex++;
 		}
 
 		if (actionHits.length > 0) {
