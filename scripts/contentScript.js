@@ -161,11 +161,13 @@ function hideMessage(params) {
 }
 
 
+var panelTimeoutId = -1;
 /**
  * open the panel and add content, please use this only from content script methods
  * @param {Object} params
- * @param {Boolean} [params.cancelable=true] - show cancel action (true, false)
  * @param {String} params.html - html content of panel
+ * @param {Number} [params.time=8000] - (optional) time how long the panel is shown in milliseconds (std 8000)
+ * @param {Boolean} [params.cancelable=true] - (optional) show cancel action (std true)
  */
 function showPanel(params) {
 	var html = params.html;
@@ -173,6 +175,20 @@ function showPanel(params) {
 	$("#ChromeSpeechControlPanel")
 		.attr("style", "display:block")
 		.html(html);
+
+	//clear last timeout
+	if (typeof panelTimeoutId !== 'undefined' && panelTimeoutId >= 0) {
+		clearTimeout(panelTimeoutId);
+	}
+
+	//set new timeout
+	var time = (typeof params.time !== 'undefined') ? params.time : 8000; //set default value to 8000
+	if (time > 0) {
+		panelTimeoutId = setTimeout(function() {
+			hidePanel();
+			panelTimeoutId = -1;
+		}, time);
+	}
 }
 
 /**
