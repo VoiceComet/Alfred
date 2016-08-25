@@ -1,27 +1,12 @@
 addContentScriptMethod(
 	new ContentScriptMethod("showWeather", function(params) {
 		//console.log(params.weatherObject);
-		var that = this;
-		//load html
-		$("#ChromeSpeechControlPanel")
-			.attr("style", "display:block")
-			.load(chrome.extension.getURL("scripts/modules/WeatherModule.html"), function() {
-				$("#weatherImage").attr("src", params.weatherObject.image);
-				$("#weatherTitle").html(params.weatherObject.city + " (" + params.weatherObject.country + ")");
-				$("#weatherDate").html(params.weatherObject.date);
-				$("#weatherContent").html(params.weatherObject.conditionText + ", " + params.weatherObject.temp + " " + params.weatherObject.tempUnit + "°");
 
-				//clear last timeout
-				if (typeof that.weatherTimeoutId != 'undefined' && that.weatherTimeoutId >= 0) {
-					clearTimeout(that.weatherTimeoutId);
-				}
+		var html = '<img style="float:left; margin-right:15px;" src="' + params.weatherObject.image + '"/>' +
+			'<span style="font-weight:bold; margin-bottom:2px;">' + params.weatherObject.city + ' (' + params.weatherObject.country + ')</span><br/>' +
+			params.weatherObject.date + '<br/>' +
+			params.weatherObject.conditionText + ', ' + params.weatherObject.temp + ' ' + params.weatherObject.tempUnit + '°';
 
-				//hide after 8 seconds
-				that.weatherTimeoutId = setTimeout(function() {
-					$("#ChromeSpeechControlPanel").attr("style", "display:none");
-					that.weatherTimeoutId = -1;
-				}, 8000);
-			});
-
+		showPanel({"html":html, "time":8000});
 	})
 );

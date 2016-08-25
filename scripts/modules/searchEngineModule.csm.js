@@ -11,6 +11,6 @@ addContentScriptMethod(
 			html += '<span class="SearchEngineResultSnippet">' + params.searchResultObject.items[i].snippet + '</span><br/>';
 		}
 
-		showPanel({"html":html});
+		showPanel({"html":html, "time":0});
 	})
 );
