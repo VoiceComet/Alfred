@@ -21,9 +21,14 @@ addContentScriptMethod(
                 "#ChromeSpeechControlDIV *"
             ]
         });
-        result = document.getElementsByClassName("highlight");
+        result = jQuery.makeArray($(".highlight:visible"));
+        alert(result.length);
+        /** //result = jQuery.makeArray(document.getElementsByClassName("highlight"));
+        //alert(result.length);
+        //var test = jQuery.makeArray($(".highlight:visible"));
+        //alert(test.length);
         //var test = result[0].parentNode.style.getPropertyValue("overflow");
-        /**var test1 = result[3];
+        var test1 = result[3];
         while(true) {
             if (test1.previousSibling.nodeType != 1) {
                 test1 = test1.previousSibling;
@@ -37,18 +42,23 @@ addContentScriptMethod(
         console.log(test);
         if (result.length > 0) {
             result[1].style.overflow = "visible";
-        }*/
+        }
+        var w = 0;
         for (var j = 0; j < result.length; j++) {
-            if (window.getComputedStyle(result[j]).getPropertyValue("overflow") === "hidden") {
-                result.slice(j);
+            for (var k = 0; k < test.length; k++) {
+                if (test[k] == result[j]) {
+                    w++
+                    result.pop();
+                }
             }
         }
+        alert(w);
+        alert(result.length);*/
         if(result.length === 0) {
             showMessage({title: "Attention!", content: "couldn't find " + params});
         } else {
             showMessage({content: "search for " + params});
         }
-        alert(result.length);
         i = 0;
         result[0].style.backgroundColor = "cornflowerblue";
         $('html, body').animate({ scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000);

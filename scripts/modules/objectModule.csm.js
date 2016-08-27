@@ -5,9 +5,9 @@
 var i = 0;
 var objects = [];
 //control how much images were shown in one next step
-var nexts = 0;
+var nextSteps = 0;
 //control if a previous action was done before
-var prevs = false;
+var prevSteps = false;
 
 /**
  * show all videos
@@ -30,12 +30,16 @@ addContentScriptMethod(
         //layout
         $("body").append("<div id='objectUIDIVBackground'></div>");
         $("body").append("<div id='objectUIDIV'></div>");
-        var images = $("img:only-of-type").parent().clone();
-        objects = jQuery.makeArray(images);
+        var images = $("img:only-of-type");
+        var container = $("img:only-of-type").parent().clone();
+        objects = jQuery.makeArray(container);
         objects.pop();
         //show first 15 images
         for (i = 0; i < 15; i++) {
-            $("#objectUIDIV").append(objects[i]);
+            if(images[i].height > 50 && images[i].width > 50) {
+                $("#objectUIDIV").append("<div id='" + i +"'></div>");
+                $("#" + i).append(objects[i]);
+            }
         }
     })
 );
@@ -45,28 +49,28 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("nextObjects", function () {
-        nexts = 0;
+        nextSteps = 0;
         for (var j = 0; j < 15; j++) {
             if (i >= objects.length) {
                 showMessage({content: "no further images on this page"});
                 return;
             //if last step was a previous step one has to increase i by 15
-            } else if (j === 0 && prevs) {
-                nexts++;
+            } else if (j === 0 && prevSteps) {
+                nextSteps++;
                 i += 15;
-                prevs = false;
+                prevSteps = false;
                 showMessage({content: "show next hits"});
                 $("#objectUIDIV").empty();
                 $("#objectUIDIV").append(objects[i]);
                 i++;
             } else if (j === 0){
-                nexts++;
+                nextSteps++;
                 showMessage({content: "show next hits"});
                 $("#objectUIDIV").empty();
                 $("#objectUIDIV").append(objects[i]);
                 i++;
             } else {
-                nexts++;
+                nextSteps++;
                 $("#objectUIDIV").append(objects[i]);
                 i++;
             }
@@ -85,9 +89,9 @@ addContentScriptMethod(
                 showMessage({content: "no previous images"});
                 return;
             } else if (j === 0){
-                i -= nexts + 1;
-                nexts = 0;
-                prevs = true;
+                i -= nextSteps + 1;
+                nextSteps = 0;
+                prevSteps = true;
                 showMessage({content: "show previous hits"});
                 $("#objectUIDIV").empty();
                 $("#objectUIDIV").prepend(objects[i]);
