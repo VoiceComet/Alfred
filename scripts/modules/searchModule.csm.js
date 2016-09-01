@@ -10,10 +10,11 @@ var i = 0;
 addContentScriptMethod(
     new ContentScriptMethod("search", function (params) {
         //unmark elements from last search
-        $("body").unmark();
         var str = params.toString();
         var searched = new RegExp(str, "gmi");
-        $("body").markRegExp(searched, {
+        $("body")
+            .unmark()
+            .markRegExp(searched, {
             "className": "highlight",
             "exclude": [
                 "script",
@@ -39,8 +40,9 @@ addContentScriptMethod(
         }
         i = 0;
         result[0].style.backgroundColor = "cornflowerblue";
-        $('html, body').animate({ scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000);
-        $('html, body').animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
+        $('html, body')
+            .animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000)
+            .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
     })
 );
 
@@ -54,15 +56,17 @@ addContentScriptMethod(
             if (i < result.length - 1) {
                 result[i].style.backgroundColor = "yellow";
                 result[i + 1].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(result[i + 1]).offset().top - window.innerHeight / 2}, 1000);
-                $('html, body').animate({scrollLeft: $(result[i + 1]).offset().left - window.innerWidth / 2}, 1000);
+                $('html, body')
+                    .animate({scrollTop: $(result[i + 1]).offset().top - window.innerHeight / 2}, 1000)
+                    .animate({scrollLeft: $(result[i + 1]).offset().left - window.innerWidth / 2}, 1000);
                 i++;
                 //reached last element -> continue at 0
             } else {
                 result[i].style.backgroundColor = "yellow";
                 result[0].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000);
-                $('html, body').animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
+                $('html, body')
+                    .animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000)
+                    .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
                 i = 0;
             }
             showMessage({content: "show next hit"});
@@ -81,15 +85,17 @@ addContentScriptMethod(
             if (i > 0) {
                 result[i].style.backgroundColor = "yellow";
                 result[i - 1].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(result[i - 1]).offset().top - window.innerHeight / 2}, 1000);
-                $('html, body').animate({scrollLeft: $(result[i - 1]).offset().left - window.innerWidth / 2}, 1000);
+                $('html, body')
+                    .animate({scrollTop: $(result[i - 1]).offset().top - window.innerHeight / 2}, 1000)
+                    .animate({scrollLeft: $(result[i - 1]).offset().left - window.innerWidth / 2}, 1000);
                 i--;
                 //reached first element -> continue with last
             } else {
                 result[i].style.backgroundColor = "yellow";
                 result[result.length - 1].style.backgroundColor = "cornflowerblue";
-                $('html, body').animate({scrollTop: $(result[result.length - 1]).offset().top - window.innerHeight / 2}, 1000);
-                $('html, body').animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
+                $('html, body')
+                    .animate({scrollTop: $(result[result.length - 1]).offset().top - window.innerHeight / 2}, 1000)
+                    .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
                 i = result.length - 1;
             }
             showMessage({content: "show previous hit"});

@@ -35,8 +35,9 @@ addContentScriptMethod(
     new ContentScriptMethod("zoomSecondSector", function () {
         var scrollPosVertical = window.scrollY;
         var scrollPosHorizontal = window.scrollX;
-        $("html, body").animate({scrollTop: scrollPosVertical}, "slow");
-        $("html, body").animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
+        $("html, body")
+            .animate({scrollTop: scrollPosVertical}, "slow")
+            .animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
 
     })
 );
@@ -59,8 +60,9 @@ addContentScriptMethod(
     new ContentScriptMethod("zoomFourthSector", function () {
         var scrollPosVertical = window.scrollY;
         var scrollPosHorizontal = window.scrollX;
-        $("html, body").animate({scrollTop: scrollPosVertical}, "slow");
-        $("html, body").animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
+        $("html, body")
+            .animate({scrollTop: scrollPosVertical}, "slow")
+            .animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
 
     })
 );

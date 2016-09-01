@@ -28,10 +28,11 @@ addContentScriptMethod(
     new ContentScriptMethod("showImages", function () {
         showMessage({content: "show all images"});
         //layout
-        $("body").append("<div id='objectUIDIVBackground'></div>");
-        $("body").append("<div id='objectUIDIV'></div>");
+        $("body")
+            .append("<div id='objectUIDIVBackground'></div>")
+            .append("<div id='objectUIDIV'></div>");
         var images = $("img:only-of-type");
-        var container = $("img:only-of-type").parent().clone();
+        var container = images.parent().clone();
         objects = jQuery.makeArray(container);
         objects.pop();
         //show first 15 images
@@ -60,14 +61,16 @@ addContentScriptMethod(
                 i += 15;
                 prevSteps = false;
                 showMessage({content: "show next hits"});
-                $("#objectUIDIV").empty();
-                $("#objectUIDIV").append(objects[i]);
+                $("#objectUIDIV")
+                    .empty()
+                    .append(objects[i]);
                 i++;
             } else if (j === 0){
                 nextSteps++;
                 showMessage({content: "show next hits"});
-                $("#objectUIDIV").empty();
-                $("#objectUIDIV").append(objects[i]);
+                $("#objectUIDIV")
+                    .empty()
+                    .append(objects[i]);
                 i++;
             } else {
                 nextSteps++;
@@ -93,8 +96,9 @@ addContentScriptMethod(
                 nextSteps = 0;
                 prevSteps = true;
                 showMessage({content: "show previous hits"});
-                $("#objectUIDIV").empty();
-                $("#objectUIDIV").prepend(objects[i]);
+                $("#objectUIDIV")
+                    .empty()
+                    .prepend(objects[i]);
             } else {
                 i--;
                 $("#objectUIDIV").prepend(objects[i]);
