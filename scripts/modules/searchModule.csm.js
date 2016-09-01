@@ -9,6 +9,7 @@ var i = 0;
  */
 addContentScriptMethod(
     new ContentScriptMethod("search", function (params) {
+        //unmark elements from last search
         $("body").unmark();
         var str = params.toString();
         var searched = new RegExp(str, "gmi");
@@ -21,39 +22,16 @@ addContentScriptMethod(
                 "#ChromeSpeechControlDIV *"
             ]
         });
-        result = jQuery.makeArray($(".highlight:visible"));
-        alert(result.length);
-        /** //result = jQuery.makeArray(document.getElementsByClassName("highlight"));
-        //alert(result.length);
-        //var test = jQuery.makeArray($(".highlight:visible"));
-        //alert(test.length);
-        //var test = result[0].parentNode.style.getPropertyValue("overflow");
-        var test1 = result[3];
-        while(true) {
-            if (test1.previousSibling.nodeType != 1) {
-                test1 = test1.previousSibling;
-            } else {
-                return;
+        //if element is hidden on page remove class highlight
+        $(".highlight:hidden").unmark();
+        $(".highlight").each(function () {
+            if (window.getComputedStyle(this).getPropertyValue("visibility") === "hidden") {
+                $(this).unmark();
             }
-        };
-        alert(result[3].previousSibling.nodeType);
-        var test = window.getComputedStyle(result[3]).getPropertyValue("overflow");
-        alert(test);
-        console.log(test);
-        if (result.length > 0) {
-            result[1].style.overflow = "visible";
-        }
-        var w = 0;
-        for (var j = 0; j < result.length; j++) {
-            for (var k = 0; k < test.length; k++) {
-                if (test[k] == result[j]) {
-                    w++
-                    result.pop();
-                }
-            }
-        }
-        alert(w);
-        alert(result.length);*/
+        });
+
+        result = jQuery.makeArray(document.getElementsByClassName("highlight"));
+
         if(result.length === 0) {
             showMessage({title: "Attention!", content: "couldn't find " + params});
         } else {
