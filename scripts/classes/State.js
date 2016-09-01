@@ -350,6 +350,7 @@ function State (name) {
 		this.recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
 		this.recognition.maxAlternatives = this.maxAlternatives;
 		this.recognition.lang = this.lang; //TODO: selectable language? de-DE
+		this.recognition.networkError = false;
 
 		//noinspection SpellCheckingInspection
 		this.recognition.onresult = function(event) {
@@ -407,8 +408,9 @@ function State (name) {
 				}
 				permissionGrounded = false;
 			} else if (event.error == "network") {
+				that.recognition.networkError = true;
 				console.log(event.error + ": " + event.message);
-				notify("Network Error. Please check your network connection.");
+				notify("Network Error. Please check your network connection.", 3000);
 			} else {
 				if (event.error != "no-speech") {
 					console.log(event.error + ": " + event.message);
@@ -418,10 +420,18 @@ function State (name) {
 
 		//noinspection JSUnusedLocalSymbols,SpellCheckingInspection
 		this.recognition.onend = function(event) {
+			//alert("onend");
 			that.hearing = false;
 			that.updateMicrophoneIcon();
-			//alert("onend");
-			that.startSpeechRecognition();
+
+			//if there was a network error, wait until message box is away before restart
+			if (that.recognition.networkError) {
+				setTimeout(function() {
+					that.startSpeechRecognition();
+				}, 3000)
+			} else {
+				that.startSpeechRecognition();
+			}
 		};
 		
 		this.recognition.start();
