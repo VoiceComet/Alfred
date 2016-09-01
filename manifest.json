@@ -8,7 +8,8 @@
 	"permissions": [
 		"tabs",
 		"notifications",
-		"history"
+		"history",
+		"storage"
 	],
 
 	"background": {
@@ -29,9 +30,9 @@
 		{
 			"matches": ["*://*/*"],
 			"css": [
-				"ui.css",
-				"zoomUI.css",
-				"objectUI.css"
+				"styles/ui.css",
+				"styles/zoomUI.css",
+				"styles/objectUI.css"
 			],
 			"js": [
 				"scripts/jquery-3.1.0.min.js",
@@ -60,10 +61,16 @@
 		"images/mic_normal.png",
         "images/grid.png",
 		"ui.html",
-        "ui.css",
+        "styles/ui.css",
 		"zoomUI.html",
-		"zoomUI.css",
-		"objectUI.css",
+		"styles/zoomUI.css",
+		"styles/objectUI.css",
 		"objectUI.html"
-	]
+	],
+
+	"options_page": "options.html",
+	"options_ui": {
+		"page": "options.html",
+		"chrome_style": true
+	}
 }
