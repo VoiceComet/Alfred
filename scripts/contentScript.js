@@ -168,9 +168,28 @@ var panelTimeoutId = -1;
  * @param {String} params.html - html content of panel
  * @param {Number} [params.time=8000] - (optional) time how long the panel is shown in milliseconds (std 8000)
  * @param {Boolean} [params.cancelable=true] - (optional) show cancel action (std true)
+ * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
+ * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
  */
 function showPanel(params) {
-	var html = params.html;
+	//generate html
+	var html = "";
+	if (typeof params.cancelable === 'undefined' || params.cancelable) {
+		html += '<div class="top right">cancel</div>';
+	}
+	html += params.html;
+
+	if (typeof params.commandLeft !== 'undefined' || typeof params.commandRight !== 'undefined') {
+		html += '<div class="bottom">';
+		if (typeof params.commandLeft !== 'undefined') {
+			html += params.commandLeft;
+		}
+		if (typeof params.commandRight !== 'undefined') {
+			html += '&nbsp;<div class="right">' + params.commandRight + '</div>';
+		}
+		html += '</div>';
+	}
+
 	//TODO cancel action oben rechts anzeigen :)
 	$("#ChromeSpeechControlPanel")
 		.attr("style", "display:block")

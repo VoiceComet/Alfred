@@ -1,7 +1,7 @@
 addModule(new Module("WeatherModule", function() {
 
 	//settings
-	var maxResults = 6;
+	var maxResults = 5;
 
 	/**
 	 * special action for initial search action, next & previous action with predefined act function
@@ -59,7 +59,8 @@ addModule(new Module("WeatherModule", function() {
 						if (json.queries.hasOwnProperty('nextPage') && json.queries.nextPage.length > 0) {
 							//noinspection JSUnresolvedVariable
 							searchResultObject.nextPage = {
-								"startIndex" : json.queries.nextPage[0].startIndex
+								"startIndex" : json.queries.nextPage[0].startIndex,
+								"page" : (json.queries.nextPage[0].startIndex - 1) / maxResults
 							};
 						}
 
@@ -68,7 +69,8 @@ addModule(new Module("WeatherModule", function() {
 						if (json.queries.hasOwnProperty('previousPage') && json.queries.previousPage.length > 0) {
 							//noinspection JSUnresolvedVariable
 							searchResultObject.previousPage = {
-								"startIndex" : json.queries.previousPage[0].startIndex
+								"startIndex" : json.queries.previousPage[0].startIndex,
+								"page" : (json.queries.previousPage[0].startIndex - 1) / maxResults
 							};
 						}
 
@@ -78,18 +80,18 @@ addModule(new Module("WeatherModule", function() {
 
 					that.afterLoading(searchResultObject);
 				});
-
-				//generate following state
-				this.followingState = new State("Search State");
-				this.followingState.init = function () {
-					//hide panel with cancel action
-					//noinspection JSUnusedLocalSymbols
-					this.cancelAction.act = function (params) {
-						callContentScriptMethod("hidePanel", {});
-						notify("canceled");
-					};
-				};
 			}
+
+			//generate following state
+			this.followingState = new State("Search State");
+			this.followingState.init = function () {
+				//hide panel with cancel action
+				//noinspection JSUnusedLocalSymbols
+				this.cancelAction.act = function (params) {
+					callContentScriptMethod("hidePanel", {});
+					notify("canceled");
+				};
+			};
 		};
 
 		this.afterLoading = function (searchResultObject) {

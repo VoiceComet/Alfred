@@ -46,6 +46,26 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     border-radius: 6px;
 }
 
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.right,
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.top,
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
+    color: #404040;
+    font-size: medium;
+    font-variant-caps: all-small-caps;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.right {
+    float:right;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.top {
+    padding-bottom: 10px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
+    padding-top: 10px;
+}
+
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction {
     height:135px;
     width:430px;

@@ -11,6 +11,14 @@ addContentScriptMethod(
 			html += '<span class="SearchEngineResultSnippet">' + params.searchResultObject.items[i].snippet + '</span><br/>';
 		}
 
-		showPanel({"html":html, "time":0});
+		//generate panel parameters
+		var panelParams = {"html":html, "time":0};
+		if (params.searchResultObject.hasOwnProperty('nextPage')) {
+			panelParams.commandRight = "next > " + params.searchResultObject.nextPage.page;
+		}
+		if (params.searchResultObject.hasOwnProperty('previousPage')) {
+			panelParams.commandLeft = params.searchResultObject.previousPage.page + " < previous";
+		}
+		showPanel(panelParams);
 	})
 );
