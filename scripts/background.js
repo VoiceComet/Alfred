@@ -115,6 +115,8 @@ window.addEventListener("load", function() {
 function tabActivated(activeInfo) {
 	if (!(activeInfo.tabId in tabStates)) {
 		tabStates[activeInfo.tabId] = globalCommonState;
+	} else {
+		resizeUI();
 	}
 	changeActiveTab(activeInfo.tabId);
 }
