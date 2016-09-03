@@ -13,7 +13,6 @@ function State (name) {
 	this.working = false;
 
 	this.recognition = null;
-	this.recognizing = true;
 	this.continuous = false;
 	this.interimResults = false;
 	this.maxAlternatives = 20;
@@ -351,6 +350,7 @@ function State (name) {
 		this.recognition.maxAlternatives = this.maxAlternatives;
 		this.recognition.lang = this.lang; //TODO: selectable language? de-DE
 		this.recognition.networkError = false;
+		this.recognition.hearingTab = activeTab;
 
 		//noinspection SpellCheckingInspection
 		this.recognition.onresult = function(event) {
@@ -430,7 +430,10 @@ function State (name) {
 					that.startSpeechRecognition();
 				}, 3000)
 			} else {
-				that.startSpeechRecognition();
+				//check if the active tab is the same as the tab at creation
+				if (activeTab == this.hearingTab) {
+					that.startSpeechRecognition();
+				}
 			}
 		};
 		
@@ -441,7 +444,7 @@ function State (name) {
 	 * start the speech recognition
 	 */
 	this.startSpeechRecognition = function() {
-		if (this.recognizing) {
+		if (recognizing) {
 			this.createWebkitSpeechRecognition();
 		}
 	};

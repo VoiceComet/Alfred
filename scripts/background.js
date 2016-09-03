@@ -18,9 +18,24 @@ globalCommonState.init = function () {
 /** @global */
 var activeState;
 /** @global */
+var activeTab;
+/** @global */
 var modules = [];
 /** @global */
 var permissionGrounded = true;
+/** @global */
+var tabStates = [];
+/** @global */
+var recognizing = true;
+
+
+//get active tab
+chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
+	if (tabs.length > 0) {
+		activeTab = tabs[0].id;
+	}
+});
+
 
 /**
  * add a module to this extension
@@ -40,7 +55,24 @@ function addModule(module) {
 function changeActiveState(newState) {
 	var oldState = activeState;
 	activeState = newState;
+	tabStates[activeTab] = activeState;
 	activeState.run(oldState);
+}
+
+/**
+ * change the active tab
+ * @param {Number} newTabId - new tab id
+ * @global
+ */
+function changeActiveTab(newTabId) {
+	activeTab = newTabId;
+
+	//stop recognition
+	if (recognizing) {
+		activeState.stopSpeechRecognition();
+	}
+
+	changeActiveState(tabStates[activeTab]);
 }
 
 
@@ -51,8 +83,8 @@ function changeActiveState(newState) {
  * @param {chrome.tabs.Tab} tab
  */
 function browserAction(tab) {
-	activeState.recognizing = !activeState.recognizing;
-	if (activeState.recognizing) {
+	recognizing = !recognizing;
+	if (recognizing) {
 		//start recognition
 		activeState.createWebkitSpeechRecognition();
 		//change icon
@@ -74,6 +106,31 @@ window.addEventListener("load", function() {
 		changeActiveState(globalCommonState);
 	}
 }, false);
+
+
+/**
+ * activate the correct state of this tab
+ * @param {Object} activeInfo
+ */
+function tabActivated(activeInfo) {
+	if (!(activeInfo.tabId in tabStates)) {
+		tabStates[activeInfo.tabId] = globalCommonState;
+	}
+	changeActiveTab(activeInfo.tabId);
+}
+chrome.tabs.onActivated.addListener(tabActivated);
+
+
+/**
+ * remove remembered state if tab is closed
+ * @param {Number} tabId
+ */
+function tabRemoved(tabId) {
+	if (tabId in tabStates) {
+		delete tabStates[tabId];
+	}
+}
+chrome.tabs.onRemoved.addListener(tabRemoved);
 
 
 /**
