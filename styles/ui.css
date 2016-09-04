@@ -34,16 +34,24 @@ div#ChromeSpeechControlDIV div#ChromeSpeechControlUI {
     bottom: 0;
     left: 0;
     z-index: 19999999999;
-    width: 460px;
+    height:100%;
+    width: 0;
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     display: none;
+    position: absolute;
+    bottom: 135px;
+    left: 0;
     border: 1px solid grey;
     padding: 15px;
     margin: 15px;
     background-color: #f0f0f0;
-    border-radius: 6px;
+    /*border-radius: 6px;*/
+    max-height:calc(100% - 197px);
+    width:398px;
+    overflow-x:hidden;
+    overflow-y:auto;
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.right,

@@ -1,7 +1,7 @@
 addModule(new Module("WeatherModule", function() {
 
 	//settings
-	var maxResults = 5;
+	var maxResults = 10; //google api does not support more than 10 results
 
 	/**
 	 * special action for initial search action, next & previous action with predefined act function
@@ -31,6 +31,7 @@ addModule(new Module("WeatherModule", function() {
 				var url = "https://www.googleapis.com/customsearch/v1?q=" + this.query + "&cx=007862407823870520051%3A9d-mxwotd6i&key=AIzaSyAD-XJsCGm_N1cAfYeuTwgsiFp0iWgcAi0&num=" +
 					this.maxResults + '&start=' + this.start;
 
+				//noinspection JSUnresolvedFunction
 				$.getJSON(url, function(json) {
 					console.log(json);
 
@@ -79,11 +80,15 @@ addModule(new Module("WeatherModule", function() {
 					}
 
 					that.afterLoading(searchResultObject);
+				}).fail(function(jqxhr, textStatus, error ) {
+					var err = textStatus + ", " + error;
+					console.log( "Request Failed: " + err );
+					notify("Search Engine Error: " + err);
 				});
 			}
 
 			//generate following state
-			this.followingState = new State("Search State");
+			this.followingState = new PanelState("Search State");
 			this.followingState.init = function () {
 				//hide panel with cancel action
 				//noinspection JSUnusedLocalSymbols

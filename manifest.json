@@ -19,6 +19,7 @@
 			"scripts/backgroundUtils.js",
 			"scripts/classes/Module.js",
 			"scripts/classes/State.js",
+			"scripts/classes/PanelState.js",
 			"scripts/classes/Action.js",
 			"scripts/classes/Command.js",
 			"scripts/background.js",

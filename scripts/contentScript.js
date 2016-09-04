@@ -42,6 +42,10 @@ function handleRequest(request, sender, sendResponse) {
 		response = showPanel(request.params);
 	} else if (request.callFunction == "hidePanel") {
 		response = hidePanel();
+	} else if (request.callFunction == "elementScrollDown") {
+		response = elementScrollDown(request.params);
+	} else if (request.callFunction == "elementScrollUp") {
+		response = elementScrollUp(request.params);
 	} else {
 		//look for ContentScriptMethods of modules
 		for (var i = 0; i < contentScriptMethods.length; i++) {
@@ -190,7 +194,6 @@ function showPanel(params) {
 		html += '</div>';
 	}
 
-	//TODO cancel action oben rechts anzeigen :)
 	$("#ChromeSpeechControlPanel")
 		.attr("style", "display:block")
 		.html(html);
@@ -217,4 +220,46 @@ function hidePanel() {
 	$("#ChromeSpeechControlPanel")
 		.attr("style", "display:none")
 		.html("");
+}
+
+/**
+ * scroll a element up
+ * @param {Object} params
+ * @param {String} params.id
+ */
+function elementScrollUp(params) {
+	var element = $("#" + params.id);
+
+	var scrollHeight = element[0].clientHeight * 0.7;
+	//noinspection JSValidateTypes
+	var scrollPosVertical = element.scrollTop();
+
+	var scrollTo = scrollPosVertical - scrollHeight;
+	if (scrollTo < 0) scrollTo = 0;
+
+	if(scrollTo < scrollPosVertical) {
+		element.animate({scrollTop: scrollTo}, 1000);
+	} else {
+		showMessage({title: "Attention!", content: "Scrolling up isn't possible"});
+	}
+}
+
+
+function elementScrollDown(params) {
+	var element = $("#" + params.id);
+
+	var scrollHeight = element[0].clientHeight * 0.7;
+	//noinspection JSValidateTypes
+	var scrollPosVertical = element.scrollTop();
+
+	var scrollTo = scrollPosVertical + scrollHeight;
+	var bottom = element[0].scrollHeight - element[0].clientHeight;
+	if (scrollTo > bottom) scrollTo = bottom;
+
+	if (scrollTo > scrollPosVertical) {
+		element.animate({scrollTop: scrollTo}, 1000);
+	} else {
+		showMessage({title: "Attention!", content: "Scrolling down isn't possible"});
+	}
+
 }
