@@ -23,8 +23,10 @@ addContentScriptMethod(
         window.document.body.style.scalable = "no";
         var scrollPosVertical = window.scrollY;
         var scrollPosHorizontal = window.scrollX;
-        $("html, body").animate({scrollTop: scrollPosVertical}, {scrollLeft: scrollPosHorizontal}, "slow");
-        //$("#first").zoomTo({targetsize: 0.085, closeclick: true});
+        $("html, body")
+            .animate({scrollTop: scrollPosVertical}, "slow")
+            .animate({scrollLeft: scrollPosHorizontal}, "slow");
+        showMessage({content: "zoom into first sector"});
     })
 );
 
@@ -37,8 +39,8 @@ addContentScriptMethod(
         var scrollPosHorizontal = window.scrollX;
         $("html, body")
             .animate({scrollTop: scrollPosVertical}, "slow")
-            .animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
-
+            .animate({scrollLeft: scrollPosHorizontal + window.innerWidth}, "slow");
+        showMessage({content: "zoom into second sector"});
     })
 );
 
@@ -49,7 +51,10 @@ addContentScriptMethod(
     new ContentScriptMethod("zoomThirdSector", function () {
         var scrollPosVertical = window.scrollY;
         var scrollPosHorizontal = window.scrollX;
-        $("html, body").animate({scrollTop: scrollPosVertical + window.innerHeight / 2}, {scrollLeft: scrollPosHorizontal}, "slow");
+        $("html, body")
+            .animate({scrollTop: scrollPosVertical + window.innerHeight}, "slow")
+            .animate({scrollLeft: scrollPosHorizontal}, "slow");
+        showMessage({content: "zoom into third sector"});
     })
 );
 
@@ -61,18 +66,9 @@ addContentScriptMethod(
         var scrollPosVertical = window.scrollY;
         var scrollPosHorizontal = window.scrollX;
         $("html, body")
-            .animate({scrollTop: scrollPosVertical}, "slow")
-            .animate({scrollLeft: scrollPosHorizontal + window.innerWidth / 2}, "slow");
-
-    })
-);
-
-/**
- * zoom out
- */
-addContentScriptMethod(
-    new ContentScriptMethod("zoomOut", function () {
-        $("#first").click();
+            .animate({scrollTop: scrollPosVertical + window.innerHeight}, "slow")
+            .animate({scrollLeft: scrollPosHorizontal + window.innerWidth}, "slow");
+        showMessage({content: "zoom into fourth sector"});
     })
 );
 

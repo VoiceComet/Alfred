@@ -15,6 +15,26 @@ addModule(new Module("zoomModule", function() {
     };
 
     /**
+     * function for checking if max zoom level is reached
+     * @param {String} ContentScriptMethod - name of ScriptMethod which should run
+     */
+    var CheckZoomLevel = function (ContentScriptMethod) {
+        chrome.tabs.getZoom(function (zoomFactor) {
+            if(zoomFactor >= 4.9) {
+                notify("reached max zoom");
+            } else if (zoomFactor >= 3.9) {
+                chrome.tabs.setZoom(5);
+                callContentScriptMethod(ContentScriptMethod, {});
+                notify("maximal zoom reached");
+            } else{
+                var newZoom = zoomFactor * 2;
+                chrome.tabs.setZoom(newZoom);
+                callContentScriptMethod(ContentScriptMethod, {});
+            }
+        });
+    };
+
+    /**
      * start zooming in
      */
     var zoomIn = new Action("zoom in", 0, zoomState);
@@ -30,17 +50,8 @@ addModule(new Module("zoomModule", function() {
      */
     var first = new Action("first", 0, zoomState);
     first.addCommand(new Command("1", 0));
-    first.act = function() {
-        chrome.tabs.getZoom(function (zoomFactor) {
-            if(zoomFactor >= 5) {
-                notify("reached max zoom");
-            } else{
-                notify("zoom into first sector");
-                var newZoom = zoomFactor * 2;
-                chrome.tabs.setZoom(newZoom);
-                callContentScriptMethod("zoomFirstSector", {});
-            }
-        });
+    first.act = function () {
+        CheckZoomLevel("zoomFirstSector")
     };
     zoomState.addAction(first);
 
@@ -50,16 +61,7 @@ addModule(new Module("zoomModule", function() {
     var second = new Action("second", 0, zoomState);
     second.addCommand(new Command("2", 0));
     second.act = function() {
-        chrome.tabs.getZoom(function (zoomFactor) {
-            if(zoomFactor >= 5) {
-                notify("reached max zoom");
-            } else{
-                notify("zoom into second sector");
-                var newZoom = zoomFactor * 2;
-                chrome.tabs.setZoom(newZoom);
-                callContentScriptMethod("zoomSecondSector", {});
-            }
-        });
+        CheckZoomLevel("zoomSecondSector")
     };
     zoomState.addAction(second);
 
@@ -69,16 +71,7 @@ addModule(new Module("zoomModule", function() {
     var third = new Action("third", 0, zoomState);
     third.addCommand(new Command("3", 0));
     third.act = function() {
-        chrome.tabs.getZoom(function (zoomFactor) {
-            if(zoomFactor >= 5) {
-                notify("reached max zoom");
-            } else{
-                notify("zoom into third sector");
-                var newZoom = zoomFactor * 2;
-                chrome.tabs.setZoom(newZoom);
-                callContentScriptMethod("zoomThirdSector", {});
-            }
-        });
+        CheckZoomLevel("zoomThirdSector")
     };
     zoomState.addAction(third);
 
@@ -88,16 +81,7 @@ addModule(new Module("zoomModule", function() {
     var fourth = new Action("fourth", 0, zoomState);
     fourth.addCommand(new Command("4", 0));
     fourth.act = function() {
-        chrome.tabs.getZoom(function (zoomFactor) {
-            if(zoomFactor >= 5) {
-                notify("reached max zoom");
-            } else{
-                notify("zoom into fourth sector");
-                var newZoom = zoomFactor * 2;
-                chrome.tabs.setZoom(newZoom);
-                callContentScriptMethod("zoomFourthSector", {});
-            }
-        });
+        CheckZoomLevel("zoomFourthSector")
     };
     zoomState.addAction(fourth);
 
@@ -109,10 +93,13 @@ addModule(new Module("zoomModule", function() {
     out.act = function() {
       notify("zoom out");
       chrome.tabs.getZoom(function (zoomFactor) {
-        var newZoom = zoomFactor * 0.5;
-        chrome.tabs.setZoom(newZoom);
+          if (zoomFactor >= 4.9) {
+              chrome.tabs.setZoom(4);
+          } else {
+              var newZoom = zoomFactor / 2;
+              chrome.tabs.setZoom(newZoom);
+          }
       });
-      callContentScriptMethod("zoomOut", {});
     };
     zoomState.addAction(out);
 
