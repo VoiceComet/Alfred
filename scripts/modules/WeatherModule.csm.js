@@ -7,6 +7,6 @@ addContentScriptMethod(
 			params.weatherObject.date + '<br/>' +
 			params.weatherObject.conditionText + ', ' + params.weatherObject.temp + ' ' + params.weatherObject.tempUnit + '°';
 
-		showPanel({"html":html, "time":8000});
+		showPanel({"html":html, "time":8000, "cancelable":false});
 	})
 );

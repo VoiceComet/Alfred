@@ -29,7 +29,25 @@ function hideMessage(messageId) {
 }
 
 /**
- * notifies the user
+ * show an advanced dialog box next to the microphone with a title, content, actions and other commands in corners
+ * @param {Object} params - parameters
+ * @param {String} params.title - title of dialog
+ * @param {String} params.content - content of dialog
+ * @param {Array} [params.actions] - (optional) shown actions of dialog
+ * @param {Boolean} [params.cancelable=false] - (optional) show cancel action (std true)
+ * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
+ * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
+ * @param {Function} callback - function(messageId){}, callback
+ * @global
+ */
+function showAdvancedDialog(params, callback) {
+	//noinspection JSUndefinedPropertyAssignment
+	params.time = 0;
+	callContentScriptMethod("showMessage", params, callback);
+}
+
+/**
+ * show a dialog box next to the microphone with a title, content and actions
  * @param {String} title - title of dialog
  * @param {String} content - content of dialog
  * @param {Array} actions - shown actions of dialog
@@ -37,7 +55,7 @@ function hideMessage(messageId) {
  * @global
  */
 function showDialog(title, content, actions, callback) {
-	callContentScriptMethod("showMessage", {title: title, content: content, actions: actions, time: 0}, callback);
+	showAdvancedDialog({title: title, content: content, actions: actions}, callback);
 }
 
 /**

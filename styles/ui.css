@@ -54,6 +54,9 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     overflow-y:auto;
 }
 
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.top,
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.right,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.top,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
@@ -62,14 +65,17 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
     font-variant-caps: all-small-caps;
 }
 
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.right {
     float:right;
 }
 
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.top,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.top {
     padding-bottom: 10px;
 }
 
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
     padding-top: 10px;
 }

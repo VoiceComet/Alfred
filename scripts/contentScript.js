@@ -109,7 +109,6 @@ function setZoomFactor(params) {
 	$("#ChromeSpeechControlDIV").attr("style", "zoom: " + 1/params.zoomFactor);
 }
 
-
 /**
  * generate a message div which is "time" milliseconds visible
  * @param {Object} params
@@ -117,20 +116,43 @@ function setZoomFactor(params) {
  * @param {String} params.content - message content
  * @param {Array} [params.actions] - message actions
  * @param {Number} [params.time=4000] - (optional) time how long the message is shown in milliseconds
+ * @param {Boolean} [params.cancelable=false] - (optional) show cancel action (std false)
+ * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
+ * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
  * @return {String} - id of the message div
  */
 function showMessage(params) {
+	//generate html
 	var html = "";
-	if (typeof params.title !== 'undefined' && params.title != '') {
-		html = "<b>" + params.title + "</b><br/>";
+	//add cancel action
+	if (params.hasOwnProperty('cancelable') && params.cancelable) {
+		html += '<div class="top right">cancel</div>';
 	}
+	//add title
+	if (typeof params.title !== 'undefined' && params.title != '') {
+		html += "<b>" + params.title + "</b><br/>";
+	}
+	//add content
 	html += params.content + "<br/>";
+	//add actions
 	if (typeof params.actions !== 'undefined' && params.actions.length > 0) {
 		html += "<br/><b>Say a number:</b><br/>";
 		for (var i = 0; i < params.actions.length; i++) {
 			html += params.actions[i].command + ": " + params.actions[i].description + "<br/>";
 		}
 	}
+	//add commands left and right
+	if (typeof params.commandLeft !== 'undefined' || typeof params.commandRight !== 'undefined') {
+		html += '<div class="bottom">';
+		if (typeof params.commandLeft !== 'undefined') {
+			html += params.commandLeft;
+		}
+		if (typeof params.commandRight !== 'undefined') {
+			html += '&nbsp;<div class="right">' + params.commandRight + '</div>';
+		}
+		html += '</div>';
+	}
+
 
 	var message = document.createElement('div');
 	var id = getUniqueId();
