@@ -23,69 +23,152 @@ addModule(new Module("WeatherModule", function() {
 
 			notify("Searching \"" + this.query + "\" ...");
 
-			var api = "google";
-			var searchResultObject = null;
+			//std value is google
+			chrome.storage.sync.get({
+				searchEngine: 'google'
+			}, function(items) {
+				//noinspection JSUnresolvedVariable
+				var api = items.searchEngine; //get setting
+				var searchResultObject = null;
+				var url;
 
-			//choose api
-			if (api == "google") {
-				var url = "https://www.googleapis.com/customsearch/v1?q=" + this.query + "&cx=007862407823870520051%3A9d-mxwotd6i&key=AIzaSyAD-XJsCGm_N1cAfYeuTwgsiFp0iWgcAi0&num=" +
-					this.maxResults + '&start=' + this.start;
+				//choose api
+				if (api == "google") {
+					url = "https://www.googleapis.com/customsearch/v1" +
+						"?q=" + that.query +
+						"&cx=007862407823870520051%3A9d-mxwotd6i&key=AIzaSyAD-XJsCGm_N1cAfYeuTwgsiFp0iWgcAi0" +
+						"&num=" + that.maxResults +
+						'&start=' + (that.start + 1); //not zero based
 
-				//noinspection JSUnresolvedFunction
-				$.getJSON(url, function(json) {
-					console.log(json);
+					//noinspection JSUnresolvedFunction
+					$.getJSON(url, function(json) {
+						//console.log(json);
 
-					//noinspection JSUnresolvedVariable
-					if (json != null) {
+						//translate google json to alfreds json
 						//noinspection JSUnresolvedVariable
-						searchResultObject = {
-							"searchTerm" : json.queries.request[0].searchTerms,
-							"searchTime" : json.searchInformation.formattedSearchTime,
-							"searchTotalResults" : json.searchInformation.formattedTotalResults,
-							"items" : []
-						};
-
-						for (var i = 0; i < json.items.length; i++) {
+						if (json != null) {
 							//noinspection JSUnresolvedVariable
-							searchResultObject.items[i] = {
-								"link" : json.items[i].link,
-								"formattedUrl" : json.items[i].htmlFormattedUrl,
-								"snippet" : json.items[i].htmlSnippet.replace(new RegExp("<br>", "g"), ""),
-								"title" : json.items[i].htmlTitle
+							searchResultObject = {
+								"searchTerm" : json.queries.request[0].searchTerms,
+								"searchTime" : json.searchInformation.formattedSearchTime,
+								"searchTotalResults" : json.searchInformation.formattedTotalResults,
+								"items" : []
 							};
+
+							for (var i = 0; i < json.items.length; i++) {
+								//noinspection JSUnresolvedVariable
+								searchResultObject.items[i] = {
+									"link" : json.items[i].link,
+									"formattedUrl" : json.items[i].htmlFormattedUrl,
+									"snippet" : json.items[i].htmlSnippet.replace(new RegExp("<br>", "g"), ""),
+									"title" : json.items[i].htmlTitle
+								};
+							}
+
+							//next
+							//noinspection JSUnresolvedVariable
+							if (json.queries.hasOwnProperty('nextPage') && json.queries.nextPage.length > 0) {
+								//noinspection JSUnresolvedVariable
+								searchResultObject.nextPage = {
+									"startIndex" : json.queries.nextPage[0].startIndex  - 1,
+									"page" : (json.queries.nextPage[0].startIndex - 1) / that.maxResults
+								};
+							}
+
+							//previous
+							//noinspection JSUnresolvedVariable
+							if (json.queries.hasOwnProperty('previousPage') && json.queries.previousPage.length > 0) {
+								//noinspection JSUnresolvedVariable
+								searchResultObject.previousPage = {
+									"startIndex" : json.queries.previousPage[0].startIndex - 1,
+									"page" : (json.queries.previousPage[0].startIndex - 1) / that.maxResults
+								};
+							}
+
+						} else {
+							notify("No search results found. Please repeat.");
 						}
 
-						//next
-						//noinspection JSUnresolvedVariable
-						if (json.queries.hasOwnProperty('nextPage') && json.queries.nextPage.length > 0) {
-							//noinspection JSUnresolvedVariable
-							searchResultObject.nextPage = {
-								"startIndex" : json.queries.nextPage[0].startIndex,
-								"page" : (json.queries.nextPage[0].startIndex - 1) / maxResults
-							};
-						}
+						that.afterLoading(searchResultObject);
+					}).fail(function(jqxhr, textStatus, error ) {
+						var err = textStatus + ", " + error;
+						console.log( "Request Failed: " + err );
+						notify("Search Engine Error: " + err);
+					});
+				} else if (api == "bing") {
+					url = "https://api.cognitive.microsoft.com/bing/v5.0/search" +
+						"?q=" + that.query +
+						"&count=" + that.maxResults +
+						"&offset=" + that.start;
 
-						//previous
-						//noinspection JSUnresolvedVariable
-						if (json.queries.hasOwnProperty('previousPage') && json.queries.previousPage.length > 0) {
-							//noinspection JSUnresolvedVariable
-							searchResultObject.previousPage = {
-								"startIndex" : json.queries.previousPage[0].startIndex,
-								"page" : (json.queries.previousPage[0].startIndex - 1) / maxResults
-							};
-						}
+					//getJson cannot set headers
+					$(document).ready(function() {
+						$.ajax({
+							url: url,
+							type: 'GET',
+							dataType: 'json',
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '5f37efca5e0641d884902129d20db859');
+							},
+							success: function(json) {
+								//console.log(json);
 
-					} else {
-						notify("No search results found. Please repeat.");
-					}
+								//translate bing json to alfreds json
+								if (json != null) {
+									//noinspection JSUnresolvedVariable
+									searchResultObject = {
+										"searchTerm" : that.query,
+										"searchTime" : -1,
+										"searchTotalResults" : json.webPages.totalEstimatedMatches,
+										"items" : []
+									};
 
-					that.afterLoading(searchResultObject);
-				}).fail(function(jqxhr, textStatus, error ) {
-					var err = textStatus + ", " + error;
-					console.log( "Request Failed: " + err );
-					notify("Search Engine Error: " + err);
-				});
-			}
+									//noinspection JSUnresolvedVariable
+									for (var i = 0; i < json.webPages.value.length; i++) {
+										//noinspection JSUnresolvedVariable
+										searchResultObject.items[i] = {
+											"link" : json.webPages.value[i].url,
+											"formattedUrl" : json.webPages.value[i].displayUrl,
+											"snippet" : json.webPages.value[i].snippet,
+											"title" : json.webPages.value[i].name
+										};
+									}
+
+									//next
+									//noinspection JSUnresolvedVariable
+									if (that.start + that.maxResults <= json.webPages.totalEstimatedMatches) {
+										searchResultObject.nextPage = {
+											"startIndex" : that.start + that.maxResults,
+											"page" : (that.start + that.maxResults) / that.maxResults
+										};
+									}
+
+									//previous
+									//noinspection JSUnresolvedVariable
+									if (that.start > 1) {
+										//noinspection JSUnresolvedVariable
+										searchResultObject.previousPage = {
+											"startIndex" : that.start - that.maxResults,
+											"page" : (that.start - that.maxResults) / that.maxResults
+										};
+									}
+
+								} else {
+									notify("No search results found. Please repeat.");
+								}
+
+								that.afterLoading(searchResultObject);
+							},
+							error: function(jqXHR, textStatus, error) {
+								var err = textStatus + ", " + error;
+								console.log( "Request Failed: " + err );
+								notify("Search Engine Error: " + err);
+							}
+						});
+					});
+
+				}
+			});
 
 			//generate following state
 			this.followingState = new PanelState("Search State");
@@ -147,9 +230,10 @@ addModule(new Module("WeatherModule", function() {
 
 
 	var searchEngineAction = new SearchAction("Search ?", 1, null); //state is set during act function
+	searchEngineAction.addCommand(new Command("web search (.+)", 1));
 	searchEngineAction.addCommand(new Command("google (.+)", 1));
 	searchEngineAction.maxResults = maxResults;
-	searchEngineAction.start = 1;
+	searchEngineAction.start = 0;
 	searchEngineAction.query = "empty";
 
 	this.addAction(searchEngineAction);
