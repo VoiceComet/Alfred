@@ -196,6 +196,7 @@ var panelTimeoutId = -1;
  * @param {Boolean} [params.cancelable=true] - (optional) show cancel action (std true)
  * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
  * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
+ * @param {Boolean} [params.fullHeight=false] - (optional) set panel height to max size
  */
 function showPanel(params) {
 	//generate html
@@ -216,9 +217,13 @@ function showPanel(params) {
 		html += '</div>';
 	}
 
-	$("#ChromeSpeechControlPanel")
-		.attr("style", "display:block")
-		.html(html);
+	var panel = $("#ChromeSpeechControlPanel");
+	panel.attr("style", "display:block");
+	panel.html(html);
+
+	if (typeof params.fullHeight !== 'undefined' && params.fullHeight) {
+		panel.attr("class", "fullHeight");
+	}
 
 	//clear last timeout
 	if (typeof panelTimeoutId !== 'undefined' && panelTimeoutId >= 0) {
@@ -241,6 +246,7 @@ function showPanel(params) {
 function hidePanel() {
 	$("#ChromeSpeechControlPanel")
 		.attr("style", "display:none")
+		.attr("class", "")
 		.html("");
 }
 

@@ -54,6 +54,10 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     overflow-y:auto;
 }
 
+div#ChromeSpeechControlPanel.fullHeight {
+    height:calc(100% - 197px);
+}
+
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.top,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom,

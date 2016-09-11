@@ -4,7 +4,8 @@ var moduleList = [
 	"zoomModule.js",
 	"searchModule.js",
 	"objectModule.js",
-	"searchEngineModule.js"
+	"searchEngineModule.js",
+	"mapModule.js"
 	//"testModule.js"
 	
 	//add modules here
