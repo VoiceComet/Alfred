@@ -46,7 +46,8 @@
 				"scripts/modules/searchModule.csm.js",
                 "scripts/modules/objectModule.csm.js",
 				"scripts/modules/searchEngineModule.csm.js",
-				"scripts/modules/mapModule.csm.js"
+				"scripts/modules/mapModule.csm.js",
+				"scripts/modules/bookmarkModule.csm.js"
 			]
 		}
 	],

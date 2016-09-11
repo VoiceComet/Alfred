@@ -16,6 +16,7 @@ addContentScriptMethod(
     new ContentScriptMethod("showVideos", function () {
         showMessage({content: "show all videos"});
         $("body").append("<div id='objectUIDIV'></div>");
+
         var html5 = document.getElementsByTagName("video");
         alert(html5.length);
         var youtube = document.getElementsByTagName("iframe");
@@ -46,7 +47,6 @@ addContentScriptMethod(
         showMessage({content: "show all images"});
         //layout
         $("body")
-            .append("<div id='objectUIDIVBackground'></div>")
             .append("<div id='objectUIDIV'></div>");
         var images = $("img:only-of-type");
         var container = images.parent().clone();
