@@ -3,6 +3,7 @@
  */
 var result = [];
 var i = 0;
+var id = "";
 
 /**
  * search for an expression
@@ -23,6 +24,9 @@ addContentScriptMethod(
                 "#ChromeSpeechControlDIV *"
             ]
         });
+        if (id != "") {
+            hideMessage({id: id});
+        }
         //if element is hidden on page remove class highlight
         $(".highlight:hidden").unmark();
         $(".highlight").each(function () {
@@ -36,8 +40,9 @@ addContentScriptMethod(
         if(result.length === 0) {
             showMessage({title: "Attention!", content: "couldn't find " + params});
         } else {
-            showMessage({content: "search for " + params});
+            id = showMessage({content: "search for: <span style='background-color: yellowgreen'>" + params + "</span>", time: 0, cancelable: true, commandLeft: "previous", commandRight: "next"});
         }
+
         i = 0;
         result[0].style.backgroundColor = "cornflowerblue";
         $('html, body')
@@ -111,5 +116,6 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("cancelSearchState", function () {
         $("body").unmark();
+        hideMessage({id: id});
     })
 );

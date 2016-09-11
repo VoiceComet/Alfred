@@ -16,8 +16,25 @@ addContentScriptMethod(
     new ContentScriptMethod("showVideos", function () {
         showMessage({content: "show all videos"});
         $("body").append("<div id='objectUIDIV'></div>");
-        var videos = document.getElementsByTagName("video");
-        alert(videos.length);
+        var html5 = document.getElementsByTagName("video");
+        alert(html5.length);
+        var youtube = document.getElementsByTagName("iframe");
+        alert(youtube.length);
+        var linkWithVideo = jQuery.makeArray($("a:has(video-id)"));
+        alert(linkWithVideo.length);
+        for (var htmlV = 0; htmlV < html5.length; htmlV++) {
+            $("#objectUIDIV").append("<div id='" + htmlV +"'></div>");
+            $("#" + htmlV).append(html5[htmlV]);
+        }
+        for (var iframeV = 0; iframeV < youtube.length; iframeV++) {
+            $("#objectUIDIV").append("<div id='" + iframeV +"'></div>");
+            $("#" + iframeV).append(youtube[iframeV]);
+        }
+        for (var linkV = 0; linkV < linkWithVideo.length; linkV++) {
+            $("#objectUIDIV").append("<div id='" + linkV +"'></div>");
+            $("#" + linkV).append(linkWithVideo[linkV]);
+        }
+
     })
 );
 
@@ -37,7 +54,7 @@ addContentScriptMethod(
         objects.pop();
         //show first 15 images
         for (i = 0; i < 15; i++) {
-            if(images[i].height > 50 && images[i].width > 50) {
+            if(images[i].height > 75 && images[i].width > 75) {
                 $("#objectUIDIV").append("<div id='" + i +"'></div>");
                 $("#" + i).append(objects[i]);
             }
