@@ -317,6 +317,10 @@ function State (name) {
 						//noinspection JSUnusedLocalSymbols
 						action.act = function (arguments) {
 							runHitAction(this.actionHit, this.hit);
+							//for generated following states
+							if (this.followingState == null) {
+								this.followingState = this.actionHit.action.followingState;
+							}
 							this.dialogState.hideDialog();
 						};
 						dialogState.addAction(action);
