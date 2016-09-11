@@ -195,6 +195,7 @@ var panelTimeoutId = -1;
  * @param {Number} [params.time=8000] - (optional) time how long the panel is shown in milliseconds (std 8000)
  * @param {Boolean} [params.cancelable=true] - (optional) show cancel action (std true)
  * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
+ * @param {String} [params.infoCenter] - (optional) information, that shown in the middle of commandLeft & commandRight
  * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
  * @param {Boolean} [params.fullHeight=false] - (optional) set panel height to max size
  */
@@ -206,10 +207,13 @@ function showPanel(params) {
 	}
 	html += params.html;
 
-	if (typeof params.commandLeft !== 'undefined' || typeof params.commandRight !== 'undefined') {
+	if (typeof params.commandLeft !== 'undefined' || typeof params.infoCenter !== 'undefined' || typeof params.commandRight !== 'undefined') {
 		html += '<div class="bottom">';
+		if (typeof params.infoCenter !== 'undefined') {
+			html += params.infoCenter;
+		}
 		if (typeof params.commandLeft !== 'undefined') {
-			html += params.commandLeft;
+			html += '<div class="left">' + params.commandLeft + '</div>&nbsp;';
 		}
 		if (typeof params.commandRight !== 'undefined') {
 			html += '&nbsp;<div class="right">' + params.commandRight + '</div>';

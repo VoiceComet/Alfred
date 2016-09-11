@@ -52,6 +52,7 @@ addModule(new Module("WeatherModule", function() {
 								"searchTerm" : json.queries.request[0].searchTerms,
 								"searchTime" : json.searchInformation.formattedSearchTime,
 								"searchTotalResults" : json.searchInformation.formattedTotalResults,
+								"page" : that.start / that.maxResults,
 								"items" : []
 							};
 
@@ -120,6 +121,7 @@ addModule(new Module("WeatherModule", function() {
 										"searchTerm" : that.query,
 										"searchTime" : -1,
 										"searchTotalResults" : json.webPages.totalEstimatedMatches,
+										"page" : that.start / that.maxResults,
 										"items" : []
 									};
 
