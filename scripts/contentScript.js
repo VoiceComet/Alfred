@@ -118,6 +118,7 @@ function setZoomFactor(params) {
  * @param {Number} [params.time=4000] - (optional) time how long the message is shown in milliseconds
  * @param {Boolean} [params.cancelable=false] - (optional) show cancel action (std false)
  * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
+ * @param {String} [params.infoCenter] - (optional) information, that shown in the middle of commandLeft & commandRight
  * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
  * @return {String} - id of the message div
  */
@@ -141,11 +142,14 @@ function showMessage(params) {
 			html += params.actions[i].command + ": " + params.actions[i].description + "<br/>";
 		}
 	}
-	//add commands left and right
-	if (typeof params.commandLeft !== 'undefined' || typeof params.commandRight !== 'undefined') {
+	//add commands left, right and infoCenter
+	if (typeof params.commandLeft !== 'undefined' || typeof params.infoCenter !== 'undefined' || typeof params.commandRight !== 'undefined') {
 		html += '<div class="bottom">';
+		if (typeof params.infoCenter !== 'undefined') {
+			html += params.infoCenter;
+		}
 		if (typeof params.commandLeft !== 'undefined') {
-			html += params.commandLeft;
+			html += '<div class="left">' + params.commandLeft + '</div>&nbsp;';
 		}
 		if (typeof params.commandRight !== 'undefined') {
 			html += '&nbsp;<div class="right">' + params.commandRight + '</div>';
