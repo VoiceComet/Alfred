@@ -38,7 +38,7 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapZoomToMarker = new Action("mapZoomToMarker", 1, mapState);
-	mapZoomToMarker.addCommand(new Command("zoom to (.)\\b", 1));
+	mapZoomToMarker.addCommand(new Command("zoom to (.)$", 1));
 	mapZoomToMarker.act = function (arguments) {
 		callContentScriptMethod("mapZoomToMarker", {marker:arguments[0]});
 	};
@@ -49,8 +49,9 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapCenterMarker = new Action("mapCenterMarker", 1, mapState);
-	mapCenterMarker.addCommand(new Command("\\b(.)\\b", 1));
-	mapCenterMarker.addCommand(new Command("center (.)\\b", 1));
+	mapCenterMarker.addCommand(new Command("^(.)$", 1));
+	mapCenterMarker.addCommand(new Command("center (.)$", 1));
+	mapCenterMarker.addCommand(new Command("centre (.)$", 1));
 	mapCenterMarker.act = function (arguments) {
 		callContentScriptMethod("mapCenterMarker", {marker:arguments[0]});
 	};

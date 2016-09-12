@@ -3,8 +3,8 @@
 <script type="text/javascript">
 var alfredMap;
 /** @type google.maps.Marker[] */
-var markers = [];
-var markerLabels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; //EIOU difficult to understand?
+var alfredMapMarkers = [];
+var alfredMapMarkerLabels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; //EIOU difficult to understand?
 
 
 //noinspection JSUnusedLocalSymbols
@@ -13,8 +13,8 @@ var markerLabels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; //EIOU difficult to understand?
  */
 function initAlfredMap() {
     alfredMap = new google.maps.Map(document.getElementById("alfredMap"), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8
+        center: {lat: 52.5197, lng: 13.4051},
+        zoom: 10
     });
     //searchLocationOnAlfredMap("Berlin Store");
 }
@@ -24,9 +24,9 @@ function initAlfredMap() {
  * @param {google.maps.places.PlaceResult} place - marker place
  */
 function createMarker(place) {
-    markers.push(new google.maps.Marker({
+    alfredMapMarkers.push(new google.maps.Marker({
         map: alfredMap,
-        label: markerLabels[markers.length % markerLabels.length],
+        label: alfredMapMarkerLabels[alfredMapMarkers.length % alfredMapMarkerLabels.length],
         position: place.geometry.location
     }));
 }
@@ -37,12 +37,6 @@ function createMarker(place) {
  * @param {String} query - search text
  */
 function searchLocationOnAlfredMap(query) {
-    //clear markers
-    markers.forEach(function(marker) {
-        marker.setMap(null);
-    });
-    markers = [];
-
     var service = new google.maps.places.PlacesService(alfredMap);
 
     service.textSearch(
@@ -52,20 +46,35 @@ function searchLocationOnAlfredMap(query) {
 
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 //console.log(results);
-                for (var i = 0; i < results.length; i++) {
-                    createMarker(results[i]);
+                if (results.length > 0) {
+                    //clear markers
+                    alfredMapMarkers.forEach(function(marker) {
+                        marker.setMap(null);
+                    });
+                    alfredMapMarkers = [];
 
-                    //set bounds
-                    if (results[i].geometry.viewport) {
-                        //only for geo codes
-                        bounds.union(results[i].geometry.viewport);
-                    } else {
-                        bounds.extend(results[i].geometry.location);
+                    //create new markers
+                    for (var i = 0; i < results.length; i++) {
+                        createMarker(results[i]);
+
+                        //set bounds
+                        if (results[i].geometry.viewport) {
+                            //only for geo codes
+                            bounds.union(results[i].geometry.viewport);
+                        } else {
+                            bounds.extend(results[i].geometry.location);
+                        }
                     }
+
+                    //arrange map that all results are shown
+                    alfredMap.fitBounds(bounds);
+
+                    showMessage({content: results.length + ' results for "' + query + '"'})
+                } else {
+                    //nothing found
+                    showMessage({content:'"' + query + '" not found'})
                 }
             }
-            //arrange map that all results are shown
-            alfredMap.fitBounds(bounds);
         }
     );
 }

@@ -14,6 +14,13 @@ div#ChromeSpeechControlDIV img {
     margin: 0;
     border: 0;
     background-color:transparent;
+    box-sizing:content-box;
+    width: auto;
+    min-width: unset;
+    max-width: unset;
+    height: auto;
+    max-height: unset;
+    min-height: unset;
 }
 
 div#ChromeSpeechControlDIV b {

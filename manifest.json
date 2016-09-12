@@ -39,6 +39,7 @@
 				"scripts/jquery-3.1.0.min.js",
 				"scripts/jquery.mark.min.js",
 				"scripts/classes/ContentScriptMethod.js",
+				"scripts/frontendMessaging.js",
 				"scripts/contentScript.js",
 				"scripts/modules/BrowserActionsModule.csm.js",
 				"scripts/modules/WeatherModule.csm.js",
@@ -69,6 +70,7 @@
 		"styles/zoomUI.css",
 		"styles/objectUI.css",
 		"objectUI.html",
+		"scripts/frontendMessaging.js",
 		"scripts/modules/mapModule.html"
 	],
 

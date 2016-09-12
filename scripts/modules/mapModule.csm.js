@@ -21,9 +21,12 @@ addContentScriptMethod(
         panelParams.fullHeight = true;
 
 		//add map div and needed javascript to front page
-		jQuery.get(chrome.extension.getURL("scripts/modules/mapModule.html"), function(content) {
-			panelParams.html = content;
-			showPanel(panelParams);
+		jQuery.get(chrome.extension.getURL("scripts/frontendMessaging.js"), function(frontendMessagingContent) {
+			jQuery.get(chrome.extension.getURL("scripts/modules/mapModule.html"), function(mapModuleContent) {
+				panelParams.html = '<script type="text/javascript">\n' + frontendMessagingContent + '\n</script>\n';
+				panelParams.html += mapModuleContent;
+				showPanel(panelParams);
+			});
 		});
 
     })
@@ -40,10 +43,14 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("mapZoomToMarker", function(params) {
 		runMethodOnPage(function(params) {
-			var letterPos = markerLabels.indexOf(params.marker.toUpperCase());
-			if (letterPos >= 0 && letterPos < markerLabels.length && letterPos < markers.length) {
-				alfredMap.setCenter(markers[letterPos].getPosition());
+			var letter = params.marker.toUpperCase();
+			var letterPos = alfredMapMarkerLabels.indexOf(letter);
+			if (letterPos >= 0 && letterPos < alfredMapMarkerLabels.length && letterPos < alfredMapMarkers.length) {
+				alfredMap.setCenter(alfredMapMarkers[letterPos].getPosition());
 				alfredMap.setZoom(alfredMap.getZoom() + 3);
+				showMessage({content:"Zoomed to " + letter});
+			} else {
+				showMessage({content:"Letter " + letter + " not found"});
 			}
 		}, params);
 	})
@@ -52,9 +59,15 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("mapCenterMarker", function(params) {
 		runMethodOnPage(function(params) {
-			var letterPos = markerLabels.indexOf(params.marker.toUpperCase());
-			if (letterPos >= 0 && letterPos < markerLabels.length && letterPos < markers.length) {
-				alfredMap.setCenter(markers[letterPos].getPosition());
+			console.log("params.marker: " + params.marker);
+			var letter = params.marker.toUpperCase();
+			console.log("letter: " + letter);
+			var letterPos = alfredMapMarkerLabels.indexOf(letter);
+			if (letterPos >= 0 && letterPos < alfredMapMarkerLabels.length && letterPos < alfredMapMarkers.length) {
+				alfredMap.setCenter(alfredMapMarkers[letterPos].getPosition());
+				showMessage({content:letter + " centered"});
+			} else {
+				showMessage({content:"Letter " + letter + " not found"});
 			}
 		}, params);
 	})
@@ -63,7 +76,11 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("mapZoomIn", function() {
 		runMethodOnPage(function() {
+			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() + 1);
+			if (oldZoom <= alfredMap.getZoom()) {
+				showMessage({content:"Zooming isn't possible"});
+			}
 		});
 	})
 );
@@ -71,7 +88,11 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("mapZoomOut", function() {
 		runMethodOnPage(function() {
+			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() - 1);
+			if (oldZoom >= alfredMap.getZoom()) {
+				showMessage({content:"Zooming isn't possible"});
+			}
 		});
 	})
 );
@@ -80,6 +101,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollUp", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(0, -200);
+			showMessage({content:"Scrolled up"});
 		});
     })
 );
@@ -88,6 +110,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollDown", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(0, 200);
+			showMessage({content:"Scrolled down"});
 		});
     })
 );
@@ -96,6 +119,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollLeft", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(-150, 0);
+			showMessage({content:"Scrolled left"});
 		});
     })
 );
@@ -104,6 +128,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollRight", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(150, 0);
+			showMessage({content:"Scrolled right"});
 		});
     })
 );
