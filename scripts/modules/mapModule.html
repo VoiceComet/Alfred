@@ -2,30 +2,72 @@
 <div id="alfredMap" style="height:100%"></div>
 <script type="text/javascript">
 var alfredMap;
+/** @type google.maps.Marker[] */
+var markers = [];
+var markerLabels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; //EIOU difficult to understand?
+
 
 //noinspection JSUnusedLocalSymbols
+/**
+ * callback of script loading
+ */
 function initAlfredMap() {
-    console.log(google);
-    //noinspection JSUnresolvedVariable,JSUnresolvedFunction
     alfredMap = new google.maps.Map(document.getElementById("alfredMap"), {
         center: {lat: -34.397, lng: 150.644},
         zoom: 8
     });
-
-    var service = new google.maps.places.PlacesService(alfredMap);
-    service.textSearch({
-        query: "Berlin"
-    }, callback);
+    //searchLocationOnAlfredMap("Berlin Store");
 }
 
-function callback(results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-        console.log(results);
+/**
+ * set a marker on the map
+ * @param {google.maps.places.PlaceResult} place - marker place
+ */
+function createMarker(place) {
+    markers.push(new google.maps.Marker({
+        map: alfredMap,
+        label: markerLabels[markers.length % markerLabels.length],
+        position: place.geometry.location
+    }));
+}
 
-        if (results.length > 0) {
-            alfredMap.panTo(results[0].geometry.location);
+//noinspection JSUnusedLocalSymbols
+/**
+ * search and show locations on the map
+ * @param {String} query - search text
+ */
+function searchLocationOnAlfredMap(query) {
+    //clear markers
+    markers.forEach(function(marker) {
+        marker.setMap(null);
+    });
+    markers = [];
+
+    var service = new google.maps.places.PlacesService(alfredMap);
+
+    service.textSearch(
+        {query: query},
+        function(results, status) {
+            var bounds = new google.maps.LatLngBounds();
+
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                //console.log(results);
+                for (var i = 0; i < results.length; i++) {
+                    createMarker(results[i]);
+
+                    //set bounds
+                    if (results[i].geometry.viewport) {
+                        //only for geo codes
+                        bounds.union(results[i].geometry.viewport);
+                    } else {
+                        bounds.extend(results[i].geometry.location);
+                    }
+                }
+            }
+            //arrange map that all results are shown
+            alfredMap.fitBounds(bounds);
         }
-    }
+    );
 }
 
 </script>

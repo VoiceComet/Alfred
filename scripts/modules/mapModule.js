@@ -22,6 +22,41 @@ addModule(new Module("mapModule", function () {
 	this.addAction(openMap);
 
 	/**
+	 * Search
+	 * @type {Action}
+	 */
+	var mapSearch = new Action("mapSearch", 1, mapState);
+	mapSearch.addCommand(new Command("go to (.+)", 1));
+	mapSearch.addCommand(new Command("search (.+)", 1));
+	mapSearch.act = function (arguments) {
+		callContentScriptMethod("mapSearch", {query:arguments[0]});
+	};
+	mapState.addAction(mapSearch);
+
+	/**
+	 * Zoom to marker
+	 * @type {Action}
+	 */
+	var mapZoomToMarker = new Action("mapZoomToMarker", 1, mapState);
+	mapZoomToMarker.addCommand(new Command("zoom to (.)\\b", 1));
+	mapZoomToMarker.act = function (arguments) {
+		callContentScriptMethod("mapZoomToMarker", {marker:arguments[0]});
+	};
+	mapState.addAction(mapZoomToMarker);
+
+	/**
+	 * center marker
+	 * @type {Action}
+	 */
+	var mapCenterMarker = new Action("mapCenterMarker", 1, mapState);
+	mapCenterMarker.addCommand(new Command("\\b(.)\\b", 1));
+	mapCenterMarker.addCommand(new Command("center (.)\\b", 1));
+	mapCenterMarker.act = function (arguments) {
+		callContentScriptMethod("mapCenterMarker", {marker:arguments[0]});
+	};
+	mapState.addAction(mapCenterMarker);
+
+	/**
 	 * Zoom in
 	 * @type {Action}
 	 */
