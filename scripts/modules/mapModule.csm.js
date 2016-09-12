@@ -1,10 +1,12 @@
 /**
  * runs a given function on front page, you can use the variable map here
  * @param {Function} method
+ * @param {Object} [params={}]
  */
-function runMethodOnPage(method) {
+function runMethodOnPage(method, params) {
 	var script = document.createElement('script');
-	script.appendChild(document.createTextNode('('+ method +')();'));
+	if (params == 'undefined') params = {};
+	script.appendChild(document.createTextNode('('+ method +')(' + JSON.stringify(params) + ');'));
 	(document.body || document.head || document.documentElement).appendChild(script);
 }
 
@@ -28,10 +30,39 @@ addContentScriptMethod(
 );
 
 addContentScriptMethod(
+	new ContentScriptMethod("mapSearch", function(params) {
+		runMethodOnPage(function(params) {
+			searchLocationOnAlfredMap(params.query);
+		}, params);
+	})
+);
+
+addContentScriptMethod(
+	new ContentScriptMethod("mapZoomToMarker", function(params) {
+		runMethodOnPage(function(params) {
+			var letterPos = markerLabels.indexOf(params.marker.toUpperCase());
+			if (letterPos >= 0 && letterPos < markerLabels.length && letterPos < markers.length) {
+				alfredMap.setCenter(markers[letterPos].getPosition());
+				alfredMap.setZoom(alfredMap.getZoom() + 3);
+			}
+		}, params);
+	})
+);
+
+addContentScriptMethod(
+	new ContentScriptMethod("mapCenterMarker", function(params) {
+		runMethodOnPage(function(params) {
+			var letterPos = markerLabels.indexOf(params.marker.toUpperCase());
+			if (letterPos >= 0 && letterPos < markerLabels.length && letterPos < markers.length) {
+				alfredMap.setCenter(markers[letterPos].getPosition());
+			}
+		}, params);
+	})
+);
+
+addContentScriptMethod(
 	new ContentScriptMethod("mapZoomIn", function() {
 		runMethodOnPage(function() {
-			console.log(alfredMap);
-			//noinspection JSUnresolvedVariable
 			alfredMap.setZoom(alfredMap.getZoom() + 1);
 		});
 	})
@@ -40,7 +71,6 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("mapZoomOut", function() {
 		runMethodOnPage(function() {
-			//noinspection JSUnresolvedVariable
 			alfredMap.setZoom(alfredMap.getZoom() - 1);
 		});
 	})
@@ -49,7 +79,6 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollUp", function() {
 		runMethodOnPage(function() {
-			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
 			alfredMap.panBy(0, -200);
 		});
     })
@@ -58,7 +87,6 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollDown", function() {
 		runMethodOnPage(function() {
-			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
 			alfredMap.panBy(0, 200);
 		});
     })
@@ -67,7 +95,6 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollLeft", function() {
 		runMethodOnPage(function() {
-			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
 			alfredMap.panBy(-150, 0);
 		});
     })
@@ -76,7 +103,6 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollRight", function() {
 		runMethodOnPage(function() {
-			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
 			alfredMap.panBy(150, 0);
 		});
     })
