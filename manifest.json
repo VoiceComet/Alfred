@@ -68,7 +68,8 @@
 		"zoomUI.html",
 		"styles/zoomUI.css",
 		"styles/objectUI.css",
-		"objectUI.html"
+		"objectUI.html",
+		"scripts/modules/mapModule.html"
 	],
 
 	"options_page": "options.html",

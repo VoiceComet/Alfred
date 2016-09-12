@@ -1,0 +1,32 @@
+<!--input id="alfredMapInput" type="text" placeholder="Search"-->
+<div id="alfredMap" style="height:100%"></div>
+<script type="text/javascript">
+var alfredMap;
+
+//noinspection JSUnusedLocalSymbols
+function initAlfredMap() {
+    console.log(google);
+    //noinspection JSUnresolvedVariable,JSUnresolvedFunction
+    alfredMap = new google.maps.Map(document.getElementById("alfredMap"), {
+        center: {lat: -34.397, lng: 150.644},
+        zoom: 8
+    });
+
+    var service = new google.maps.places.PlacesService(alfredMap);
+    service.textSearch({
+        query: "Berlin"
+    }, callback);
+}
+
+function callback(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+        console.log(results);
+
+        if (results.length > 0) {
+            alfredMap.panTo(results[0].geometry.location);
+        }
+    }
+}
+
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-XJsCGm_N1cAfYeuTwgsiFp0iWgcAi0&libraries=places&callback=initAlfredMap"></script>

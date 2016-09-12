@@ -19,27 +19,20 @@ addContentScriptMethod(
         panelParams.fullHeight = true;
 
 		//add map div and needed javascript to front page
-		panelParams.html = '<div id="map" style="height:100%"></div>' +
-			'<script type="text/javascript">' +
-			'var map; ' +
-			'function initMap() { ' +
-				'map = new google.maps.Map(document.getElementById("map"), { ' +
-					'center: {lat: -34.397, lng: 150.644}, ' +
-					'zoom: 8 ' +
-				'}); ' +
-			'}'+
-			'</script>' +
-			'<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-XJsCGm_N1cAfYeuTwgsiFp0iWgcAi0&callback=initMap"></script>';
+		jQuery.get(chrome.extension.getURL("scripts/modules/mapModule.html"), function(content) {
+			panelParams.html = content;
+			showPanel(panelParams);
+		});
 
-        showPanel(panelParams);
     })
 );
 
 addContentScriptMethod(
 	new ContentScriptMethod("mapZoomIn", function() {
 		runMethodOnPage(function() {
-			console.log(map);
-			//TODO
+			console.log(alfredMap);
+			//noinspection JSUnresolvedVariable
+			alfredMap.setZoom(alfredMap.getZoom() + 1);
 		});
 	})
 );
@@ -47,8 +40,8 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("mapZoomOut", function() {
 		runMethodOnPage(function() {
-			console.log(map);
-			//TODO
+			//noinspection JSUnresolvedVariable
+			alfredMap.setZoom(alfredMap.getZoom() - 1);
 		});
 	})
 );
@@ -56,8 +49,8 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollUp", function() {
 		runMethodOnPage(function() {
-			console.log(map);
-			//TODO
+			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
+			alfredMap.panBy(0, -200);
 		});
     })
 );
@@ -65,8 +58,8 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollDown", function() {
 		runMethodOnPage(function() {
-			console.log(map);
-			//TODO
+			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
+			alfredMap.panBy(0, 200);
 		});
     })
 );
@@ -74,8 +67,8 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollLeft", function() {
 		runMethodOnPage(function() {
-			console.log(map);
-			//TODO
+			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
+			alfredMap.panBy(-150, 0);
 		});
     })
 );
@@ -83,8 +76,8 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("mapScrollRight", function() {
 		runMethodOnPage(function() {
-			console.log(map);
-			//TODO
+			//noinspection JSUnresolvedVariable,JSUnresolvedFunction
+			alfredMap.panBy(150, 0);
 		});
     })
 );
