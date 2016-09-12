@@ -3,7 +3,8 @@
  */
 //current number of image
 var i = 0;
-var objects = [];
+//var objects = [];
+var images = [];
 //control how much images were shown in one next step
 var nextSteps = 0;
 //control if a previous action was done before
@@ -44,20 +45,29 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("showImages", function () {
-        showMessage({content: "show all images"});
-        //layout
-        $("body")
-            .append("<div id='objectUIDIV'></div>");
-        var images = $("img:only-of-type");
-        var container = images.parent().clone();
-        objects = jQuery.makeArray(container);
-        objects.pop();
-        //show first 15 images
-        for (i = 0; i < 15; i++) {
-            if(images[i].height > 75 && images[i].width > 75) {
-                $("#objectUIDIV").append("<div id='" + i +"'></div>");
-                $("#" + i).append(objects[i]);
+        $("#objectUIDIV").remove();
+        var Test = $("img:only-of-type");
+        for (var j = 0; j < Test.length; j++) {
+            if (Test[j].height > 75 && Test[j].width > 75) {
+                images.push(Test[j]);
             }
+        }
+        images.pop();
+        if (images.length > 0) {
+            showMessage({content: "show all images"});
+            $("body").append("<div id='objectUIDIV'></div>");
+            //var container = images.parent().clone();
+            //objects = jQuery.makeArray(container);
+            //objects.pop();
+            //show first 9 images
+            $("#objectUIDIV").load(chrome.extension.getURL("objectUI.html"), function () {
+                for (i = 0; i < 9; i++) {
+                    $("#objectCell" + i).append(images[i]);
+                }
+            });
+
+        } else {
+            showMessage({content: "no images found on this page"});
         }
     })
 );
@@ -67,33 +77,24 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("nextObjects", function () {
-        nextSteps = 0;
-        for (var j = 0; j < 15; j++) {
-            if (i >= objects.length) {
-                showMessage({content: "no further images on this page"});
-                return;
-            //if last step was a previous step one has to increase i by 15
-            } else if (j === 0 && prevSteps) {
-                nextSteps++;
-                i += 15;
-                prevSteps = false;
-                showMessage({content: "show next hits"});
-                $("#objectUIDIV")
-                    .empty()
-                    .append(objects[i]);
-                i++;
-            } else if (j === 0){
-                nextSteps++;
-                showMessage({content: "show next hits"});
-                $("#objectUIDIV")
-                    .empty()
-                    .append(objects[i]);
-                i++;
-            } else {
-                nextSteps++;
-                $("#objectUIDIV").append(objects[i]);
-                i++;
+        if (i >= images.length) {
+            showMessage({content: "no further images on this page"});
+        } else {
+            if (prevSteps) {
+                i += 9;
             }
+            nextSteps = 0;
+            showMessage({content: "show next images"});
+            $("#objectUIDIV")
+                .empty()
+                .load(chrome.extension.getURL("objectUI.html"), function () {
+                for (var j = 0; j < 9; j++) {
+                    $("#objectCell" + j).append(images[i]);
+                    nextSteps++;
+                    i++;
+                }
+            prevSteps = false;
+            });
         }
     })
 );
@@ -103,23 +104,21 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("previousObjects", function () {
-        for (var j = 0; j < 15; j++) {
-            //in between the first 15 images
-            if (j === 0 && i < 15) {
-                showMessage({content: "no previous images"});
-                return;
-            } else if (j === 0){
-                i -= nextSteps + 1;
-                nextSteps = 0;
-                prevSteps = true;
-                showMessage({content: "show previous hits"});
-                $("#objectUIDIV")
-                    .empty()
-                    .prepend(objects[i]);
-            } else {
-                i--;
-                $("#objectUIDIV").prepend(objects[i]);
-            }
+        if (i < 9 || images.length < 9) {
+            showMessage({content: "no previous images"});
+        } else {
+            i -= nextSteps - 1;
+            showMessage({content: "show previous images"});
+            $("#objectUIDIV")
+                .empty()
+                .load(chrome.extension.getURL("objectUI.html"), function () {
+                for (var j = 9; j > - 1; j--) {
+                    i--;
+                    $("#objectCell" + j).append(images[i]);
+                }
+            nextSteps = 0;
+            prevSteps = true;
+            });
         }
     })
 );
@@ -130,6 +129,5 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("cancelObjectState", function () {
         $("#objectUIDIV").remove();
-        $("#objectUIDIVBackground").remove();
     })
 );
