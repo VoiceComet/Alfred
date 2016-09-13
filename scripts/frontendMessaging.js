@@ -26,6 +26,36 @@ function getUniqueId() {
  * @return {String} - id of the message div
  */
 function showMessage(params) {
+	var messageBox = document.getElementById("ChromeSpeechControlMessagesBox");
+
+	var message = document.createElement('div');
+	var id = getUniqueId();
+	message.setAttribute("id", id);
+	message.setAttribute("class", "ChromeSpeechControlMessage");
+	messageBox.appendChild(message);
+	message.setAttribute("style", "display:block;");
+
+	//noinspection JSUndefinedPropertyAssignment
+	params.id = id;
+	return updateMessage(params);
+}
+
+var messageTimeouts = [];
+/**
+ * update a given message div which is "time" milliseconds visible
+ * @param {Object} params
+ * @param {String} [params.id] - id of message element
+ * @param {String} [params.title] - title of message
+ * @param {String} params.content - message content
+ * @param {Array} [params.actions] - message actions
+ * @param {Number} [params.time=4000] - (optional) time how long the message is shown in milliseconds
+ * @param {Boolean} [params.cancelable=false] - (optional) show cancel action (std false)
+ * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
+ * @param {String} [params.infoCenter] - (optional) information, that shown in the middle of commandLeft & commandRight
+ * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
+ * @return {String} - id of the message div
+ */
+function updateMessage(params) {
 	//generate html
 	var html = "";
 	//add cancel action
@@ -60,23 +90,28 @@ function showMessage(params) {
 		html += '</div>';
 	}
 
+	var messageBox = document.getElementById("ChromeSpeechControlMessagesBox");
+	var message = document.getElementById(params.id);
+	if (message) {
 
-	var message = document.createElement('div');
-	var id = getUniqueId();
-	$(message)
-		.addClass("ChromeSpeechControlMessage")
-		.attr("id", id)
-		.html(html)
-		.appendTo($("#ChromeSpeechControlMessagesBox"))
-		.show(400);
+		message.innerHTML = html;
 
-	var time = (typeof params.time !== 'undefined') ? params.time : 4000; //set default value to 4000
-	if (time > 0) {
-		setTimeout(function() {
-			$(message).hide(400, function() {
-				$(this).remove();
-			});
-		}, time)
+		//clear last timeout
+		if (typeof messageTimeouts[params.id] !== 'undefined' && messageTimeouts[params.id] >= 0) {
+			clearTimeout(messageTimeouts[params.id]);
+		}
+
+		var time = (typeof params.time !== 'undefined') ? params.time : 4000; //set default value to 4000
+		if (time > 0) {
+			messageTimeouts[params.id] = setTimeout(function() {
+				message.setAttribute("style", "display:none;");
+				messageBox.removeChild(message);
+				delete messageTimeouts[params.id];
+			}, time)
+		}
+		return id;
+	} else {
+		console.log("message id " + params.id + " not found");
 	}
-	return id;
+	return null
 }
