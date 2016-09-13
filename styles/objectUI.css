@@ -1,19 +1,23 @@
 /**
  * css for interacting with videos
 */
-div#objectUIDIV {
+div#objectUIDIVBackground, div#objectUIDIV {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1999999999;
     height: 100%;
     width: 100%;
-    background-color: hsl(270, 3%, 12%);
-    opacity: 0.95;
+
 }
 
-div#objectUIDIV img, div {
+div#objectUIDIV{
     opacity: 1;
+}
+
+div#objectUIDIVBackground {
+    background-color: hsl(270, 3%, 12%);
+    opacity: 0.95;
 }
 
 #objectGrid {
@@ -24,20 +28,24 @@ div#objectUIDIV img, div {
     margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
+    table-layout:fixed;
 }
 
 .objectRow {
     display: table-row;
-    height: 20%;
 }
 
 .objectCell {
     display: table-cell;
-    width: 20%;
+    max-height: 20%;
+    max-width: 20%;
+    overflow:hidden;
+    object-fit: scale-down;
 }
 
-.objectCell div, .objectCell img {
+.objectCell img {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    overflow: hidden;
 }

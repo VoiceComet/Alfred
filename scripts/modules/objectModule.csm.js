@@ -9,6 +9,8 @@ var images = [];
 var nextSteps = 0;
 //control if a previous action was done before
 var prevSteps = false;
+var id = "";
+var pages = 1;
 
 /**
  * show all videos
@@ -46,16 +48,18 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("showImages", function () {
         $("#objectUIDIV").remove();
-        var Test = $("img:only-of-type");
-        for (var j = 0; j < Test.length; j++) {
-            if (Test[j].height > 75 && Test[j].width > 75) {
-                images.push(Test[j]);
+        var container = jQuery.makeArray($("img").clone());
+        for (var j = 0; j < container.length; j++) {
+            if (container[j].height > 75 && container[j].width > 75) {
+                images.push(container[j]);
             }
         }
         images.pop();
         if (images.length > 0) {
-            showMessage({content: "show all images"});
-            $("body").append("<div id='objectUIDIV'></div>");
+            id = showMessage({content: "show all images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
+            $("body")
+                .append("<div id='objectUIDIVBackground'></div>")
+                .append("<div id='objectUIDIV'></div>");
             //var container = images.parent().clone();
             //objects = jQuery.makeArray(container);
             //objects.pop();
@@ -93,8 +97,10 @@ addContentScriptMethod(
                     nextSteps++;
                     i++;
                 }
-            prevSteps = false;
             });
+            prevSteps = false;
+            pages++;
+
         }
     })
 );
@@ -116,9 +122,10 @@ addContentScriptMethod(
                     i--;
                     $("#objectCell" + j).append(images[i]);
                 }
+            });
             nextSteps = 0;
             prevSteps = true;
-            });
+            pages--;
         }
     })
 );
@@ -129,5 +136,7 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("cancelObjectState", function () {
         $("#objectUIDIV").remove();
+        $("#objectUIDIVBackground").remove();
+        hideMessage({id: id});
     })
 );
