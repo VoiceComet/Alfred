@@ -38,9 +38,8 @@ div#objectUIDIVBackground {
 }
 
 .objectCell {
-    height: 33%;
-    width: 33%;
-    float: left;
+    display: table-cell;
+    table-layout: fixed;
 }
 .objectCell img {
     height: auto;

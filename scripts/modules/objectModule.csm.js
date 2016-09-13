@@ -97,7 +97,7 @@ addContentScriptMethod(
                 .empty()
                 .load(chrome.extension.getURL("objectUI.html"), function () {
                 for (var j = 0; j < 9; j++) {
-                    $("#objectCell" + j).append(images[i]);
+                    $("#objectCell" + j).append("<img src='" +images[i] + "'>");
                     nextSteps++;
                     i++;
                 }
@@ -124,7 +124,7 @@ addContentScriptMethod(
                 .load(chrome.extension.getURL("objectUI.html"), function () {
                 for (var j = 9; j > - 1; j--) {
                     i--;
-                    $("#objectCell" + j).append(images[i]);
+                    $("#objectCell" + j).append("<img src='" +images[i] + "'>");
                 }
             });
             nextSteps = 0;
