@@ -98,11 +98,6 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
     text-align: center;
 }
 
-div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction {
-    height:135px;
-    width:430px;
-}
-
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction img#ChromeSpeechControlIcon {
     position: absolute;
     bottom: 15px;
