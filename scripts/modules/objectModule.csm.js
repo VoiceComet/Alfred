@@ -48,15 +48,15 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("showImages", function () {
         $("#objectUIDIV").remove();
-        var container = jQuery.makeArray($("img").clone());
+        var container = jQuery.makeArray($("img"));
         for (var j = 0; j < container.length; j++) {
             if (container[j].height > 75 && container[j].width > 75) {
-                images.push(container[j]);
+                images.push(container[j].getAttribute("src"));
             }
         }
         images.pop();
         if (images.length > 0) {
-            id = showMessage({content: "show all images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
+            id = showMessage({content: "show images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
                 .append("<div id='objectUIDIV'></div>");
@@ -66,7 +66,11 @@ addContentScriptMethod(
             //show first 9 images
             $("#objectUIDIV").load(chrome.extension.getURL("objectUI.html"), function () {
                 for (i = 0; i < 9; i++) {
-                    $("#objectCell" + i).append(images[i]);
+                    if (i < images.length) {
+                        $("#objectCell" + i).append("<img src='" +images[i] + "'>");
+                    } else {
+                        return;
+                    }
                 }
             });
 
@@ -100,7 +104,7 @@ addContentScriptMethod(
             });
             prevSteps = false;
             pages++;
-
+            updateMessage({id: id, content: "show images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
         }
     })
 );
@@ -126,6 +130,7 @@ addContentScriptMethod(
             nextSteps = 0;
             prevSteps = true;
             pages--;
+            updateMessage({id: id, content: "show images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
         }
     })
 );
