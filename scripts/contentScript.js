@@ -36,6 +36,8 @@ function handleRequest(request, sender, sendResponse) {
 		response = setZoomFactor(request.params);
 	} else if (request.callFunction == "showMessage") {
 		response = showMessage(request.params);
+	} else if (request.callFunction == "updateMessage") {
+		response = updateMessage(request.params);
 	} else if (request.callFunction == "hideMessage") {
 		response = hideMessage(request.params);
 	} else if (request.callFunction == "showPanel") {

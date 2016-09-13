@@ -37,6 +37,7 @@ function showMessage(params) {
 
 	//noinspection JSUndefinedPropertyAssignment
 	params.id = id;
+	//noinspection JSCheckFunctionSignatures
 	return updateMessage(params);
 }
 
@@ -44,7 +45,7 @@ var messageTimeouts = [];
 /**
  * update a given message div which is "time" milliseconds visible
  * @param {Object} params
- * @param {String} [params.id] - id of message element
+ * @param {String} params.id - id of message element
  * @param {String} [params.title] - title of message
  * @param {String} params.content - message content
  * @param {Array} [params.actions] - message actions
@@ -109,7 +110,7 @@ function updateMessage(params) {
 				delete messageTimeouts[params.id];
 			}, time)
 		}
-		return id;
+		return params.id;
 	} else {
 		console.log("message id " + params.id + " not found");
 	}
