@@ -67,6 +67,7 @@ addContentScriptMethod(
             $("#objectUIDIV").load(chrome.extension.getURL("objectUI.html"), function () {
                 for (i = 0; i < 9; i++) {
                     if (i < images.length) {
+                        var j = i + 1
                         $("#objectCell" + i).append("<img src='" +images[i] + "'>");
                     } else {
                         return;
@@ -97,9 +98,12 @@ addContentScriptMethod(
                 .empty()
                 .load(chrome.extension.getURL("objectUI.html"), function () {
                 for (var j = 0; j < 9; j++) {
-                    $("#objectCell" + j).append("<img src='" +images[i] + "'>");
-                    nextSteps++;
-                    i++;
+                    var k = j + 1;
+                    if (i < images.length) {
+                        $("#objectCell" + j).append("<p>" + k + "</p><img src='" +images[i] + "'>");
+                        nextSteps++;
+                        i++;
+                    }
                 }
             });
             prevSteps = false;
@@ -124,7 +128,8 @@ addContentScriptMethod(
                 .load(chrome.extension.getURL("objectUI.html"), function () {
                 for (var j = 9; j > - 1; j--) {
                     i--;
-                    $("#objectCell" + j).append("<img src='" +images[i] + "'>");
+                    var k = j + 1;
+                    $("#objectCell" + j).append("<p>" + k + "</p><img src='" +images[i] + "'>");
                 }
             });
             nextSteps = 0;

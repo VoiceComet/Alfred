@@ -1,48 +1,44 @@
 /**
  * css for interacting with videos
 */
-div#objectUIDIVBackground, div#objectUIDIV {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1999999999;
-    height: 100%;
-    width: 100%;
-
-}
-
-div#objectUIDIV{
-    opacity: 1;
-}
-
 div#objectUIDIVBackground {
-    background-color: hsl(270, 3%, 12%);
+    background-color: rgb(30, 29, 31);
     opacity: 0.95;
 }
 
+div#objectUIDIV {
+    opacity: 1;
+}
+div#objectUIDIVBackground, div#objectUIDIV {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1999999999;
+    height: 100%;
+    width: 100%;
+}
 #objectGrid {
     z-index: 1999999999;
-    display: table;
     width: 60%;
     height: 60%;
-    margin: auto;
     position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    table-layout: fixed;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    margin: auto;
 }
-
 .objectRow {
-    display: table-row;
     height: 33%;
-    table-layout: fixed;
 }
-
 .objectCell {
-    display: table-cell;
-    table-layout: fixed;
+    float:left;
+    height: 100%;
+    width: 33%;
+    text-align:center;
 }
 .objectCell img {
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
+    margin: 2%;
+    max-width: 96%;
+    max-height: 96%;
 }
