@@ -6,7 +6,8 @@ var moduleList = [
 	"objectModule.js",
 	"searchEngineModule.js",
 	"mapModule.js",
-	"bookmarkModule.js"
+	"bookmarkModule.js",
+	"linkModule.js"
 	//"testModule.js"
 	
 	//add modules here

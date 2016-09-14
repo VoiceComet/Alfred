@@ -81,10 +81,10 @@ addContentScriptMethod(
 );
 
 /**
- * find next match
+ * show next match
  */
 addContentScriptMethod(
-    new ContentScriptMethod("next", function () {
+    new ContentScriptMethod("nextMatch", function () {
         //highlights the next match
         if(result.length > 1) {
             if (i < result.length - 1) {
@@ -103,7 +103,6 @@ addContentScriptMethod(
                     .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
                 i = 0;
             }
-            showMessage({content: "show next match"});
             updateMessage({
                 id: id,
                 content: "search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
@@ -113,6 +112,7 @@ addContentScriptMethod(
                 commandRight: "next",
                 infoCenter:"match " + (i + 1) + " of " + (result.length)
             });
+            showMessage({content: "show next match"});
         } else {
             showMessage({title: "Attention!", content: "no match found"});
         }
@@ -120,10 +120,10 @@ addContentScriptMethod(
 );
 
 /**
- * find previous match
+ * show previous match
  */
 addContentScriptMethod(
-    new ContentScriptMethod("previous", function () {
+    new ContentScriptMethod("previousMatch", function () {
         if(result.length > 1) {
             if (i > 0) {
                 result[i].style.backgroundColor = "yellow";
@@ -161,7 +161,7 @@ addContentScriptMethod(
  * go to certain match
  */
 addContentScriptMethod(
-    new ContentScriptMethod("certain", function (params) {
+    new ContentScriptMethod("certainMatch", function (params) {
         if (params.toString() === "one") {
             params = 1;
         }

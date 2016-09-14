@@ -31,7 +31,7 @@ addModule(new Module("searchModule", function() {
     var next = new Action("nextMatch", 0, searchState);
     next.addCommand(new Command("next", 0));
     next.act = function() {
-      callContentScriptMethod("next", {});
+      callContentScriptMethod("nextMatch", {});
     };
     searchState.addAction(next);
 
@@ -41,7 +41,7 @@ addModule(new Module("searchModule", function() {
     var prev = new Action("previousMatch", 0, searchState);
     prev.addCommand(new Command("previous", 0));
     prev.act = function () {
-        callContentScriptMethod("previous", {});
+        callContentScriptMethod("previousMatch", {});
     };
     searchState.addAction(prev);
 
@@ -51,7 +51,7 @@ addModule(new Module("searchModule", function() {
     var certainMatch = new Action("certainMatch", 1, searchState);
     certainMatch.addCommand(new Command("go to match (.*)", 1));
     certainMatch.act = function () {
-        callContentScriptMethod("certain", arguments[0]);
+        callContentScriptMethod("certainMatch", arguments[0]);
     };
     searchState.addAction(certainMatch);
 }));
