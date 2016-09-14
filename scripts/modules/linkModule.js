@@ -22,11 +22,12 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var showLinks = new Action("showLinks", 0, linkState);
-    showLinks.addCommand(new Command("show links", 0));
+    showLinks.addCommand(new Command("test", 0));
     showLinks.act = function () {
         callContentScriptMethod("showLinks", {})
     };
     this.addAction(showLinks);
+    linkState.addAction(showLinks);
 
     /**
      * show next link
