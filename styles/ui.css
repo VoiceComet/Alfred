@@ -130,6 +130,10 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     color: black;
 }
 
+.topHighlight {
+    background-color: rgb(255, 150, 50);
+}
+
 /* search engine module */
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultTitle {

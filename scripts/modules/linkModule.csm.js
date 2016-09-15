@@ -37,7 +37,9 @@ addContentScriptMethod(
                     window.scrollX <= $(links[i]).offset().left &&
                     $(links[i]).offset().top - window.innerHeight <= window.scrollY &&
                     $(links[i]).offset().left - window.innerWidth <= window.scrollY) {
-                    links[i].style.backgroundColor = "rgb(255, 150, 50)";
+                    $(links[i])
+                        .removeClass("highlight")
+                        .addClass("topHighlight");
                     $('html, body')
                         .animate({scrollTop: $(links[i]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(links[i]).offset().left - window.innerWidth / 2}, 1000);
@@ -53,7 +55,9 @@ addContentScriptMethod(
                     return;
                 } else if (i + 1 >= links.length) {
                     i = 0;
-                    links[0].style.backgroundColor = "rgb(255, 150, 50)";
+                    $(links[0])
+                        .removeClass("highlight")
+                        .addClass("topHighlight");
                     $('html, body')
                         .animate({scrollTop: $(links[0]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(links[0]).offset().left - window.innerWidth / 2}, 1000);
@@ -80,16 +84,24 @@ addContentScriptMethod(
         //highlights the next match
         if(links.length > 1) {
             if (i < links.length - 1) {
-                links[i].style.backgroundColor = "yellow";
-                links[i + 1].style.backgroundColor = "rgb(255, 150, 50)";
+                $(links[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(links[i + 1])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(links[i + 1]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(links[i + 1]).offset().left - window.innerWidth / 2}, 1000);
                 i++;
                 //reached last element -> continue at 0
             } else {
-                links[i].style.backgroundColor = "yellow";
-                links[0].style.backgroundColor = "rgb(255, 150, 50)";
+                $(links[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(links[0])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(links[0]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(links[0]).offset().left - window.innerWidth / 2}, 1000);
@@ -107,16 +119,24 @@ addContentScriptMethod(
             showMessage({content: "show next link"});
         } else if(found.length > 1) {
             if (i < found.length - 1) {
-                found[i].style.backgroundColor = "yellow";
-                found[i + 1].style.backgroundColor = "rgb(255, 150, 50)";
+                $(found[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(found[i + 1])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(found[i + 1]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(found[i + 1]).offset().left - window.innerWidth / 2}, 1000);
                 i++;
                 //reached last element -> continue at 0
             } else {
-                found[i].style.backgroundColor = "yellow";
-                found[0].style.backgroundColor = "rgb(255, 150, 50";
+                $(found[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(found[0])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(found[0]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(found[0]).offset().left - window.innerWidth / 2}, 1000);
@@ -145,20 +165,28 @@ addContentScriptMethod(
     new ContentScriptMethod("previousLink", function () {
         if(links.length > 1) {
             if (i > 0) {
-                links[i].style.backgroundColor = "yellow";
-                links[i - 1].style.backgroundColor = "rgb(255, 150, 50";
+                $(links[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(links[i - 1])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(links[i - 1]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(links[i - 1]).offset().left - window.innerWidth / 2}, 1000);
                 i--;
                 //reached first element -> continue with last
             } else {
-                links[i].style.backgroundColor = "yellow";
-                links[links.length - 1].style.backgroundColor = "rgb(255, 150, 50)";
+                $(links[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(links[links.length - 1])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(links[links.length - 1]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(links[0]).offset().left - window.innerWidth / 2}, 1000);
-                i = result.length - 1;
+                i = links.length - 1;
             }
             updateMessage({
                 id: id,
@@ -172,20 +200,28 @@ addContentScriptMethod(
             showMessage({content: "show previous link"});
         } else if (found.length > 1){
             if (i > 0) {
-                found[i].style.backgroundColor = "yellow";
-                found[i - 1].style.backgroundColor = "rgb(255, 150, 50)";
+                $(found[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(found[i - 1])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(found[i - 1]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(found[i - 1]).offset().left - window.innerWidth / 2}, 1000);
                 i--;
                 //reached first element -> continue with last
             } else {
-                found[i].style.backgroundColor = "yellow";
-                found[links.length - 1].style.backgroundColor = "rgb(255, 150, 50)";
+                $(found[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(found[found.length - 1])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 $('html, body')
                     .animate({scrollTop: $(found[found.length - 1]).offset().top - window.innerHeight / 2}, 1000)
                     .animate({scrollLeft: $(found[0]).offset().left - window.innerWidth / 2}, 1000);
-                i = result.length - 1;
+                i = found.length - 1;
             }
             updateMessage({
                 id: id,
@@ -213,8 +249,12 @@ addContentScriptMethod(
             foundParams = 1;
         }
         if (foundParams <= links.length) {
-            links[i].style.backgroundColor = "yellow";
-            links[foundParams - 1].style.backgroundColor = "rgb(255, 150, 50)";
+            $(links[i])
+                .removeClass("topHighlight")
+                .addClass("highlight");
+            $(links[foundParams - 1])
+                .removeClass("highlight")
+                .addClass("topHighlight");
             $('html, body')
                 .animate({scrollTop: $(links[foundParams - 1]).offset().top - window.innerHeight / 2}, 1000)
                 .animate({scrollLeft: $(links[foundParams - 1]).offset().left - window.innerWidth / 2}, 1000);
@@ -249,8 +289,12 @@ addContentScriptMethod(
                 $(".searched").each(function () {
                     $(this).removeClass("searched");
                 });
-                links[i].style.background = "transparent";
-                found[0].style.backgroundColor = "rgb(255, 150, 50)";
+                $(links[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(found[0])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 links = [];
                 i = 0;
                 $('html, body')
@@ -270,8 +314,12 @@ addContentScriptMethod(
                 $(".searched").each(function () {
                     $(this).removeClass("searched");
                 });
-                links[i].style.backgroundColor = "yellow";
-                links[k].style.backgroundColor = "rgb(255, 150, 50";
+                $(links[i])
+                    .removeClass("topHighlight")
+                    .addClass("highlight");
+                $(links[k])
+                    .removeClass("highlight")
+                    .addClass("topHighlight");
                 i = k;
                 $('html, body')
                     .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
@@ -320,8 +368,9 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("cancelLinkState" , function () {
-        links[i].style.background = "transparent";
-        $("a").removeClass("highlight");
+        $("a")
+            .removeClass("highlight")
+            .removeClass("topHighlight");
         $("img").removeClass("highlight");
         hideMessage({id: id});
     })
