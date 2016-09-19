@@ -36,6 +36,7 @@ addModule(new Module("zoomModule", function() {
 
     /**
      * start zooming in
+     * @type {Action}
      */
     var zoomIn = new Action("zoom in", 0, zoomState);
     zoomIn.addCommand(new Command("zoom in", 0));
@@ -47,16 +48,18 @@ addModule(new Module("zoomModule", function() {
 
     /**
      * zoom in first sector
+     * @type {Action}
      */
     var first = new Action("first", 0, zoomState);
     first.addCommand(new Command("1", 0));
     first.act = function () {
-        CheckZoomLevel("zoomFirstSector")
+        CheckZoomLevel("zoomFirstSector");
     };
     zoomState.addAction(first);
 
     /**
      * zoom in second sector
+     * @type {Action}
      */
     var second = new Action("second", 0, zoomState);
     second.addCommand(new Command("2", 0));
@@ -67,6 +70,7 @@ addModule(new Module("zoomModule", function() {
 
     /**
      * zoom in third sector
+     * @type {Action}
      */
     var third = new Action("third", 0, zoomState);
     third.addCommand(new Command("3", 0));
@@ -77,6 +81,7 @@ addModule(new Module("zoomModule", function() {
 
     /**
      * zoom in fourth sector
+     * @type {Action}
      */
     var fourth = new Action("fourth", 0, zoomState);
     fourth.addCommand(new Command("4", 0));
@@ -87,6 +92,7 @@ addModule(new Module("zoomModule", function() {
 
     /**
      * zoom out
+     * @type {Action}
      */
     var out = new Action("out", 0, zoomState);
     out.addCommand(new Command("zoom out", 0));
@@ -105,6 +111,7 @@ addModule(new Module("zoomModule", function() {
 
     /**
      * reset zoom
+     * @type {Action}
      */
     var reset = new Action("reset", 0, zoomState);
     reset.addCommand(new Command("reset zoom", 0));
@@ -120,4 +127,5 @@ addModule(new Module("zoomModule", function() {
         });
     };
     zoomState.addAction(reset);
+
 }));

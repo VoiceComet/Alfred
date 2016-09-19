@@ -3,14 +3,17 @@
  */
 var links;
 var i = 0;
-var found;
+var found = [];
 var foundParams;
 /**
  * show all links
  */
 addContentScriptMethod(
     new ContentScriptMethod("showLinks", function () {
-        $("a").addClass("highlight");
+        $("a")
+            .removeClass("highlight")
+            .removeClass("topHighlight")
+            .addClass("highlight");
 
         if (id != "") {
             hideMessage({id: id});
@@ -20,7 +23,7 @@ addContentScriptMethod(
         $(".highlight").each(function () {
             if (window.getComputedStyle(this).getPropertyValue("visibility") === "hidden") {
                 $(this).removeClass("highlight");
-            } else if ($(this).find('> img').length) {
+            } else if ($(this).find('> img').length > 0) {
                 var images = $(this).find('> img');
                 $(images[0]).addClass("highlight");
                 $(this).removeClass("highlight");
@@ -51,7 +54,6 @@ addContentScriptMethod(
                         commandRight: "next",
                         infoCenter: "link " + (i + 1) + " of " + (links.length)
                     });
-                    console.log(links[i]);
                     return;
                 } else if (i + 1 >= links.length) {
                     i = 0;
@@ -82,7 +84,7 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("nextLink", function () {
         //highlights the next match
-        if(links.length > 1) {
+        if(found.length < 2) {
             if (i < links.length - 1) {
                 $(links[i])
                     .removeClass("topHighlight")
@@ -163,7 +165,7 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("previousLink", function () {
-        if(links.length > 1) {
+        if(found.length < 2) {
             if (i > 0) {
                 $(links[i])
                     .removeClass("topHighlight")
@@ -240,10 +242,10 @@ addContentScriptMethod(
 );
 
 /**
- * go to certain link
+ * go to certain link by number
  */
 addContentScriptMethod(
-    new ContentScriptMethod("certainLink", function (params) {
+    new ContentScriptMethod("certainLinkByNumber", function (params) {
         foundParams = params;
         if (foundParams.toString() === "one") {
             foundParams = 1;
@@ -266,76 +268,85 @@ addContentScriptMethod(
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
+                infoCenter: "link " + (i + 1) + " of " + (links.length)
+            });
+        } else {
+            showMessage({title: "Attention!", content: "there is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
+        }
+    })
+);
+
+/**
+ * go to certain link by name
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("certainLinkByName", function (params) {
+        foundParams = params;
+        var k;
+        //if a search by Name was done before, reset the founded links
+        if (found.length > 0) {
+            $(found[i]).removeClass("topHighlight");
+        }
+        found = [];
+        for (var j = 0; j < links.length; j++) {
+            if (links[j].innerHTML.toLowerCase().trim() === foundParams.toString().toLowerCase().trim()) {
+                $(links[j]).addClass("searched");
+                found.push(links[j]);
+                k = j;
+            } else {
+                $(links[j]).removeClass("searched");
+            }
+        }
+        if (found.length > 1){
+            $(".highlight").each(function () {
+                if ($(this).hasClass("searched") != true) {
+                    $(this).removeClass("highlight");
+                    $(this).removeClass("topHighlight");
+                }
+            });
+            $(links[i]).removeClass("topHighlight");
+            $(".searched").addClass("highlight");
+            $(found[0])
+                .removeClass("highlight")
+                .addClass("topHighlight");
+            i = 0;
+            $('html, body')
+                .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
+                .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
+            updateMessage({
+                id: id,
+                content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
+                time: 0,
+                cancelable: true,
+                commandLeft: "previous",
+                commandRight: "next",
+                infoCenter:"link " + (i + 1) + " of " + (found.length)
+            });
+        } else if (found.length === 1) {
+            $(".searched").each(function () {
+                $(this).removeClass("searched");
+            });
+            $(links[i])
+                .removeClass("topHighlight")
+                .addClass("highlight");
+            $(links[k])
+                .removeClass("highlight")
+                .addClass("topHighlight");
+            i = k;
+            $('html, body')
+                .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
+                .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
+            updateMessage({
+                id: id,
+                content: "show all links",
+                time: 0,
+                cancelable: true,
+                commandLeft: "previous",
+                commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (links.length)
             });
-            showMessage({content: "show link " + foundParams});
         } else {
-            var k;
-            found = [];
-            $(".searched").removeClass("searched");
-            for (var j = 0; j < links.length; j++) {
-                if (links[j].innerHTML.toLowerCase() === foundParams.toString().toLowerCase()) {
-                    $(links[j]).addClass("searched");
-                    found.push(links[j]);
-                    k = j;
-                }
-            }
-            if (found.length > 1){
-                $(".highlight").each(function () {
-                    if ($(this).hasClass("searched") != true) {
-                        $(this).removeClass("highlight");
-                    }
-                });
-                $(".searched").each(function () {
-                    $(this).removeClass("searched");
-                });
-                $(links[i])
-                    .removeClass("topHighlight")
-                    .addClass("highlight");
-                $(found[0])
-                    .removeClass("highlight")
-                    .addClass("topHighlight");
-                links = [];
-                i = 0;
-                $('html, body')
-                    .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
-                    .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
-                updateMessage({
-                    id: id,
-                    content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
-                    time: 0,
-                    cancelable: true,
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    infoCenter:"link " + (i + 1) + " of " + (found.length)
-                });
-            } else if (found.length === 1) {
-                links[i].style.backgroundColor = "yellow";
-                $(".searched").each(function () {
-                    $(this).removeClass("searched");
-                });
-                $(links[i])
-                    .removeClass("topHighlight")
-                    .addClass("highlight");
-                $(links[k])
-                    .removeClass("highlight")
-                    .addClass("topHighlight");
-                i = k;
-                $('html, body')
-                    .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
-                    .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
-                updateMessage({
-                    id: id,
-                    content: "show all links",
-                    time: 0,
-                    cancelable: true,
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    infoCenter:"link " + (i + 1) + " of " + (links.length)
-                });
-            } else {
-                showMessage({title: "Attention!", content: "there is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
-            }
+            showMessage({title: "Attention!", content: "there is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
         }
     })
 );

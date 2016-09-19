@@ -52,18 +52,31 @@ addModule(new Module("linkModule", function () {
     linkState.addAction(prev);
 
     /**
-     * go to certain link
+     * go to certain link by number
      * @type {Action}
      */
-    var certainMatch = new Action("certainLink", 1, linkState);
-    certainMatch.addCommand(new Command("go to link (.*)", 1));
-    certainMatch.act = function () {
-        callContentScriptMethod("certainLink", arguments[0]);
+    var certainNNumber = new Action("certainLinkByNumber", 1, linkState);
+    certainNNumber.addCommand(new Command("go to number (.*)", 1));
+    certainNNumber.act = function () {
+        callContentScriptMethod("certainLinkByNumber", arguments[0]);
     };
-    linkState.addAction(certainMatch);
+    linkState.addAction(certainNNumber);
+
+    /**
+     * go to certain link by name
+     * @type {Action}
+     */
+    var certainName = new Action("certainLinkByName", 1, linkState);
+    certainName.addCommand(new Command("go to link (.*)", 1));
+    certainName.act = function () {
+        callContentScriptMethod("certainLinkByName", arguments[0]);
+    };
+    linkState.addAction(certainName);
+
 
     /**
      * open link
+     * @type {Action}
      */
     var openLink = new Action("openLink", 0, globalCommonState);
     openLink.addCommand(new Command("open", 0));
