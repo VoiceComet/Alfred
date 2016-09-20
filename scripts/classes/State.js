@@ -330,16 +330,16 @@ function State (name) {
 
 				this.changeActiveState(dialogState);
 
-				showDialog('What did you say?', actionHits.length + " Actions were found.", dialogActions, function(messageId) {
+				showDialog('What do you want to do?', actionHits.length + " Actions were found.", dialogActions, function(messageId) {
 					dialogState.setMessageId(messageId);
 				});
+				say('What do you want to do?');
 			}
 		} else {
 			//not found
 			if (!this.muted) {
-				var text = 'I cannot find the command "' + alternatives[0] + '". Please repeat';
-				notify(text + ".");
-				say(text);
+				notify('I don\'t know what you mean with "' + alternatives[0] + '".');
+				say('Please, repeat you wish');
 			}
 		}
 	};
