@@ -99,6 +99,11 @@ function say(phrase, callback) {
 	chrome.storage.sync.get({
 		speechAssistantVoice: 'Google UK English Male'
 	}, function(items) {
+		//deactivate hearing: against self hearing
+		if (recognizing) {
+			activeState.stopSpeechRecognition();
+		}
+
 		var msg = new SpeechSynthesisUtterance();
 		msg.text = phrase;
 		msg.lang = "en-US";
@@ -112,12 +117,18 @@ function say(phrase, callback) {
 			msg.lang = voices[0].lang;
 		}
 
-		if (callback) {
-			//noinspection SpellCheckingInspection
-			msg.onend = function(e) {
+		//noinspection SpellCheckingInspection
+		msg.onend = function(e) {
+			//reactivate hearing: against self hearing
+			if (recognizing) {
+				activeState.createWebkitSpeechRecognition();
+			}
+
+			if (callback) {
 				callback();
-			};
-		}
+			}
+		};
+
 		speechSynthesis.speak(msg);
 	});
 }

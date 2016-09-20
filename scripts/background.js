@@ -90,7 +90,7 @@ function browserAction(tab) {
 		//change icon
 		chrome.browserAction.setIcon({path:"../images/mic_on.png"});
 	} else {
-		//start recognition
+		//stop recognition
 		activeState.stopSpeechRecognition();
 		//change icon
 		chrome.browserAction.setIcon({path:"../images/mic_off.png"});
