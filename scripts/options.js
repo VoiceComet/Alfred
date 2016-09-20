@@ -2,9 +2,15 @@
 function save_options() {
 	var searchEngine = document.getElementById('searchEngine').value;
 	var speechAssistantVoice = document.getElementById('speechAssistantVoice').value;
+	var speechAssistantUserTitle = document.getElementById('speechAssistantUserTitle').value;
+	var speechAssistantUserName = document.getElementById('speechAssistantUserName').value;
+	var speechAssistantSayTitle = document.getElementById('speechAssistantSayTitle').checked;
 	chrome.storage.sync.set({
 		searchEngine: searchEngine,
-		speechAssistantVoice: speechAssistantVoice
+		speechAssistantVoice: speechAssistantVoice,
+		speechAssistantUserTitle: speechAssistantUserTitle,
+		speechAssistantUserName: speechAssistantUserName,
+		speechAssistantSayTitle: speechAssistantSayTitle
 	}, function() {
 		// Update status to let user know options were saved.
 		var status = document.getElementById('status');
@@ -20,7 +26,10 @@ function save_options() {
 function restore_options() {
 	chrome.storage.sync.get({
 		searchEngine: 'google',
-		speechAssistantVoice: 'Google UK English Male'
+		speechAssistantVoice: 'Google UK English Male',
+		speechAssistantUserTitle: 'Master',
+		speechAssistantUserName: 'Wayne',
+		speechAssistantSayTitle: true
 	}, function(items) {
 		//noinspection JSUnresolvedVariable
 		document.getElementById('searchEngine').value = items.searchEngine;
@@ -44,6 +53,13 @@ function restore_options() {
 			//noinspection JSUnresolvedVariable
 			document.getElementById('speechAssistantVoice').value = items.speechAssistantVoice;
 		};
+
+		//noinspection JSUnresolvedVariable
+		document.getElementById('speechAssistantUserTitle').value = items.speechAssistantUserTitle;
+		//noinspection JSUnresolvedVariable
+		document.getElementById('speechAssistantUserName').value = items.speechAssistantUserName;
+		//noinspection JSUnresolvedVariable
+		document.getElementById('speechAssistantSayTitle').checked = items.speechAssistantSayTitle;
 	});
 }
 document.addEventListener('DOMContentLoaded', restore_options);

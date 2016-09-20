@@ -92,12 +92,18 @@ function callContentScriptMethod(callFunction, params, callback) {
 /**
  * speech assistant says something
  * @param {String} phrase - phrase that speech assistant should say
+ * @param {Boolean} [sayTitle=true] - phrase that speech assistant should say
  * @param {Function} [callback] - optional callback function
  * @global
  */
-function say(phrase, callback) {
+function say(phrase, sayTitle, callback) {
+	sayTitle = (sayTitle === undefined) ? true : sayTitle;
+
 	chrome.storage.sync.get({
-		speechAssistantVoice: 'Google UK English Male'
+		speechAssistantVoice: 'Google UK English Male',
+		speechAssistantUserTitle: 'Master',
+		speechAssistantUserName: 'Wayne',
+		speechAssistantSayTitle: true
 	}, function(items) {
 		//deactivate hearing: against self hearing
 		if (recognizing) {
@@ -105,8 +111,14 @@ function say(phrase, callback) {
 		}
 
 		var msg = new SpeechSynthesisUtterance();
-		msg.text = phrase;
 		msg.lang = "en-US";
+
+		msg.text = phrase;
+		//noinspection JSUnresolvedVariable
+		if (items.speechAssistantSayTitle && sayTitle) {
+			//noinspection JSUnresolvedVariable
+			msg.text += ", " + items.speechAssistantUserTitle + " " + items.speechAssistantUserName;
+		}
 
 		var voices = speechSynthesis.getVoices().filter(function(voice) {
 			//noinspection JSUnresolvedVariable
