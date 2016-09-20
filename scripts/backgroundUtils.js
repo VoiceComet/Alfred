@@ -87,3 +87,38 @@ function callContentScriptMethod(callFunction, params, callback) {
 		}
 	});
 }
+
+
+/**
+ * speech assistant says something
+ * @param {String} phrase - phrase that speech assistant should say
+ * @param {Function} [callback] - optional callback function
+ * @global
+ */
+function say(phrase, callback) {
+	chrome.storage.sync.get({
+		speechAssistantVoice: 'Google UK English Male'
+	}, function(items) {
+		var msg = new SpeechSynthesisUtterance();
+		msg.text = phrase;
+		msg.lang = "en-US";
+
+		var voices = speechSynthesis.getVoices().filter(function(voice) {
+			//noinspection JSUnresolvedVariable
+			return voice.voiceURI == items.speechAssistantVoice;
+		});
+		if (voices.length > 0) {
+			msg.voice = voices[0];
+			msg.lang = voices[0].lang;
+		}
+
+		if (callback) {
+			//noinspection SpellCheckingInspection
+			msg.onend = function(e) {
+				callback();
+			};
+		}
+		speechSynthesis.speak(msg);
+	});
+}
+speechSynthesis.speak(new SpeechSynthesisUtterance("")); //for async load of the voices at beginning

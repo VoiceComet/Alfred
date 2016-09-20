@@ -337,7 +337,9 @@ function State (name) {
 		} else {
 			//not found
 			if (!this.muted) {
-				notify('I cannot find the command "' + alternatives[0] + '". Please repeat.');
+				var text = 'I cannot find the command "' + alternatives[0] + '". Please repeat.';
+				notify(text);
+				say(text);
 			}
 		}
 	};
