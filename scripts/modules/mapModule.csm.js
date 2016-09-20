@@ -46,8 +46,25 @@ addContentScriptMethod(
 			var letter = params.marker.toUpperCase();
 			var letterPos = alfredMapMarkerLabels.indexOf(letter);
 			if (letterPos >= 0 && letterPos < alfredMapMarkerLabels.length && letterPos < alfredMapMarkers.length) {
-				alfredMap.setCenter(alfredMapMarkers[letterPos].getPosition());
-				alfredMap.setZoom(alfredMap.getZoom() + 3);
+
+				// the smooth zoom function
+				function smoothZoom (map, max, cnt) {
+					if (cnt < max) {
+						var z = google.maps.event.addListener(map, 'zoom_changed', function(){
+							google.maps.event.removeListener(z);
+							smoothZoom(map, max, cnt + 1);
+						});
+						map.setZoom(cnt);
+					}
+				}
+
+				//change center
+				var z = google.maps.event.addListener(alfredMap, 'center_changed', function() {
+					google.maps.event.removeListener(z);
+					smoothZoom(alfredMap, alfredMap.getZoom() + 3, alfredMap.getZoom());
+				});
+
+				alfredMap.panTo(alfredMapMarkers[letterPos].getPosition());
 				showMessage({content:"Zoomed to " + letter});
 			} else {
 				showMessage({content:"Letter " + letter + " not found"});
@@ -64,7 +81,7 @@ addContentScriptMethod(
 			console.log("letter: " + letter);
 			var letterPos = alfredMapMarkerLabels.indexOf(letter);
 			if (letterPos >= 0 && letterPos < alfredMapMarkerLabels.length && letterPos < alfredMapMarkers.length) {
-				alfredMap.setCenter(alfredMapMarkers[letterPos].getPosition());
+				alfredMap.panTo(alfredMapMarkers[letterPos].getPosition());
 				showMessage({content:letter + " centered"});
 			} else {
 				showMessage({content:"Letter " + letter + " not found"});
@@ -78,7 +95,7 @@ addContentScriptMethod(
 		runMethodOnPage(function() {
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() + 1);
-			if (oldZoom <= alfredMap.getZoom()) {
+			if (oldZoom >= alfredMap.getZoom()) {
 				showMessage({content:"Zooming isn't possible"});
 			}
 		});
@@ -90,7 +107,7 @@ addContentScriptMethod(
 		runMethodOnPage(function() {
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() - 1);
-			if (oldZoom >= alfredMap.getZoom()) {
+			if (oldZoom <= alfredMap.getZoom()) {
 				showMessage({content:"Zooming isn't possible"});
 			}
 		});
