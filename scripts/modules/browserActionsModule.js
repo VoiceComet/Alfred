@@ -42,7 +42,7 @@ addModule(new Module("BrowserActionsModule", function() {
  	 * close tab(s)/window/panel
 	 */
 	var close = new Action("close", 1, globalCommonState);
-	close.addCommand(new Command("close (.*)", 1));
+	close.addCommands([new Command("close (tab)", 1), new Command("close (window)", 1)]);
 	close.act = function(arguments) {
 		if(arguments[0].search(/tab/) != -1) {
 			//closes current tab
