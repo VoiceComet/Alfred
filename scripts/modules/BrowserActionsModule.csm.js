@@ -23,8 +23,8 @@ addContentScriptMethod(
 			//showMessage({content: "Scroll to the top"});
 		//on top of the page
 		} else {
-			showMessage({title: "Attention!", content: "I can not scroll to the top"});
-			return({content: "I am at the top of the page. I can not scroll to the top"});
+			showMessage({title: "Attention!", content: "I cannot scroll to the top"});
+			return({content: "I am at the top of the page. I cannot scroll to the top"});
 		}
 	})
 );
@@ -39,8 +39,8 @@ addContentScriptMethod(
 			$("html, body").animate({scrollTop: middle}, 1000);
 		//at the middle of the page
 		} else {
-			showMessage({title: "Attention!", content: "I can not scroll to the middle"});
-			return({content: "I am at the middle of the page. I can not scroll to the middle"});
+			showMessage({title: "Attention!", content: "I cannot scroll to the middle"});
+			return({content: "I am at the middle of the page. I cannot scroll to the middle"});
 		}
 	})
 );
@@ -56,8 +56,8 @@ addContentScriptMethod(
 			$("html, body").animate({scrollTop: document.body.scrollHeight - scrollHeight}, 1000);
 		//on the bottom of the page
 		} else {
-			showMessage({title: "Attention!", content: "I can not scroll to the bottom"});
-			return({content: "I am at the bottom of the page. I can not scroll to the bottom"});
+			showMessage({title: "Attention!", content: "I cannot scroll to the bottom"});
+			return({content: "I am at the bottom of the page. I cannot scroll to the bottom"});
 		}
 	})
 );
@@ -72,8 +72,8 @@ addContentScriptMethod(
 			$("html, body").animate({scrollTop: scrollPosVertical - scrollHeight}, 1000);
 		//Position of scrolling is on top of the page -> alert
 		} else {
-			showMessage({title: "Attention!", content: "I can not scroll up"});
-			return({content: "I reached the top of the page. I can not scroll up"});
+			showMessage({title: "Attention!", content: "I cannot scroll up"});
+			return({content: "I reached the top of the page. I cannot scroll up"});
 		}
 	})
 );
@@ -89,8 +89,8 @@ addContentScriptMethod(
 			$("html, body").animate({scrollTop: scrollPosVertical + scrollHeight}, 1000);
 		//Position of scrolling is on the bottom of the page -> alert
 		} else {
-			showMessage({title: "Attention!", content: "I can not scroll down"});
-			return({content: "I reached the bottom of the page. I can not scroll down"});
+			showMessage({title: "Attention!", content: "I cannot scroll down"});
+			return({content: "I reached the bottom of the page. I cannot scroll down"});
 		}
 	})
 );
@@ -105,8 +105,8 @@ addContentScriptMethod(
 			$("html, body").animate({scrollLeft: scrollPosHorizontal - scrollWidth}, 1000);
 		//Position of scrolling is on the left end of the page -> alert
 		} else {
-			showMessage({title: "Attention!", content: "I can not scroll left"});
-			return({content: "I reached the left border of the page. I can not scroll left"});
+			showMessage({title: "Attention!", content: "I cannot scroll left"});
+			return({content: "I reached the left border of the page. I cannot scroll left"});
 		}
 	})
 );
@@ -122,8 +122,8 @@ addContentScriptMethod(
 			$("html, body").animate({scrollLeft: scrollPosHorizontal + scrollWidth}, 1000);
 		//Position of scrolling is on the right end of the page -> alert
 		} else {
-			showMessage({title: "Attention!", content: "I can nor scroll right"});
-			return({content: "I reached the right border of the page. I can not scroll right"});
+			showMessage({title: "Attention!", content: "I cannot scroll right"});
+			return({content: "I reached the right border of the page. I cannot scroll right"});
 		}
 	})
 );

@@ -82,7 +82,7 @@ addModule(new Module("BrowserActionsModule", function() {
 				setTimeout(function () {
 					chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
 						if (curr === tabs[0].url) {
-							say("I am at the first page. I can not go back a page");
+							say("I am at the first page. I cannot go back a page");
 							notify("I can not go back");
 						}
 					});
@@ -106,7 +106,7 @@ addModule(new Module("BrowserActionsModule", function() {
 				setTimeout(function () {
 					chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
 						if (curr === tabs[0].url) {
-							say("I am at the last page. I can not go forward a page");
+							say("I am at the last page. I cannot go forward a page");
 							notify("I can not go forward");
 						}
 					});
