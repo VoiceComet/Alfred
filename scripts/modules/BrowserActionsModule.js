@@ -74,8 +74,21 @@ addModule(new Module("BrowserActionsModule", function() {
 	var goBack = new Action("go back one page", 0, globalCommonState);
 	goBack.addCommand(new Command("go back", 0));
 	goBack.act = function() {
-		notify("go back one page");
-		callContentScriptMethod("goBack", {});
+		var curr = "";
+		chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+			curr = tabs[0].url;
+			callContentScriptMethod("goBack", {}, function() {
+				//wait until new page is loaded
+				setTimeout(function () {
+					chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+						if (curr === tabs[0].url) {
+							say("I am at the first page. I can not go back a page");
+							notify("I can not go back");
+						}
+					});
+				}, 500);
+			});
+		});
 	};
 	this.addAction(goBack);
 
@@ -85,8 +98,21 @@ addModule(new Module("BrowserActionsModule", function() {
 	var goForward = new Action("go forward one page", 0, globalCommonState);
 	goForward.addCommand(new Command("go forward", 0));
 	goForward.act = function() {
-		notify("go forward one page");
-		callContentScriptMethod("goForward", {});
+		var curr = "";
+		chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+			curr = tabs[0].url;
+			callContentScriptMethod("goForward", {}, function() {
+				//wait until new page is loaded
+				setTimeout(function () {
+					chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+						if (curr === tabs[0].url) {
+							say("I am at the last page. I can not go forward a page");
+							notify("I can not go forward");
+						}
+					});
+				}, 500);
+			});
+		});
 	};
 	this.addAction(goForward);
 
@@ -96,7 +122,11 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollToTop = new Action("scroll to top", 0, globalCommonState);
     scrollToTop.addCommand(new Command("[^scroll $|^scroll to $]?top", 0));
     scrollToTop.act = function() {
-        callContentScriptMethod("scrollToTop", {});
+        callContentScriptMethod("scrollToTop", {}, function (params) {
+        	if (params.content) {
+				say(params.content);
+			}
+		});
     };
     this.addAction(scrollToTop);
 
@@ -106,7 +136,11 @@ addModule(new Module("BrowserActionsModule", function() {
 	var scrollToMiddle = new Action("scroll to middle", 0, globalCommonState);
 	scrollToMiddle.addCommand(new Command("[^scroll $|^scroll to $]?middle", 0));
 	scrollToMiddle.act = function() {
-		callContentScriptMethod("scrollToMiddle", {})
+		callContentScriptMethod("scrollToMiddle", {}, function (params) {
+			if (params.content) {
+				say(params.content);
+			}
+		});
 	};
 	this.addAction(scrollToMiddle);
 
@@ -116,8 +150,12 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollToBottom = new Action("scroll to bottom", 0, globalCommonState);
     scrollToBottom.addCommand(new Command("[^scroll $|^scroll to $]?bottom", 0));
     scrollToBottom.act = function() {
-        callContentScriptMethod("scrollToBottom", {});
-    };
+        callContentScriptMethod("scrollToBottom", {}, function (params) {
+			if (params.content) {
+				say(params.content);
+			}
+		});
+	};
     this.addAction(scrollToBottom);
 
     /**
@@ -126,8 +164,12 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollUp = new Action("scroll up", 0, globalCommonState);
     scrollUp.addCommand(new Command("[^scroll &]?up", 0));
     scrollUp.act = function() {
-        callContentScriptMethod("scrollUp", {});
-    };
+        callContentScriptMethod("scrollUp", {}, function (params) {
+			if (params.content) {
+				say(params.content);
+			}
+		});
+	};
     this.addAction(scrollUp);
 
     /**
@@ -136,8 +178,12 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollDown = new Action("scroll down", 0, globalCommonState);
     scrollDown.addCommand(new Command("[^scroll &]?down", 0));
     scrollDown.act = function() {
-        callContentScriptMethod("scrollDown", {});
-    };
+        callContentScriptMethod("scrollDown", {}, function (params) {
+			if (params.content) {
+				say(params.content);
+			}
+		});
+	};
     this.addAction(scrollDown);
 
     /**
@@ -146,8 +192,12 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollLeft = new Action("scroll left", 0, globalCommonState);
     scrollLeft.addCommand(new Command("[^scroll &]?left", 0));
     scrollLeft.act = function() {
-        callContentScriptMethod("scrollLeft", {});
-    };
+        callContentScriptMethod("scrollLeft", {}, function (params) {
+			if (params.content) {
+				say(params.content);
+			}
+		});
+	};
     this.addAction(scrollLeft);
 
     /**
@@ -156,8 +206,12 @@ addModule(new Module("BrowserActionsModule", function() {
     var scrollRight = new Action("scroll right", 0, globalCommonState);
     scrollRight.addCommand(new Command("[^scroll &]?right", 0));
     scrollRight.act = function() {
-        callContentScriptMethod("scrollRight", {});
-    };
+        callContentScriptMethod("scrollRight", {}, function (params) {
+			if (params.content) {
+				say(params.content);
+			}
+		});
+	};
     this.addAction(scrollRight);
 
 }));
