@@ -33,7 +33,8 @@ addContentScriptMethod(
         links = jQuery.makeArray(document.getElementsByClassName("highlight"));
 
         if(links.length === 0) {
-            showMessage({title: "Attention!", content: "couldn't find links"});
+            showMessage({content: "Could not find links"});
+            return({content: "I found no links on this page"});
         } else {
             for (i = 0; i < links.length; i++) {
                 if (window.scrollY <= $(links[i]).offset().top &&
@@ -47,14 +48,14 @@ addContentScriptMethod(
                         .animate({scrollTop: $(links[i]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(links[i]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "show all links",
+                        content: "Show all links",
                         time: 0,
                         cancelable: true,
                         commandLeft: "previous",
                         commandRight: "next",
-                        infoCenter: "link " + (i + 1) + " of " + (links.length)
+                        infoCenter: "link " + (i + 1) + " of " + links.length
                     });
-                    return;
+                    return({content: "I found " + links.length + "links. You are on link " + (i + 1)});
                 } else if (i + 1 >= links.length) {
                     i = 0;
                     $(links[0])
@@ -64,14 +65,14 @@ addContentScriptMethod(
                         .animate({scrollTop: $(links[0]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(links[0]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
+                        content: "Search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
                         time: 0,
                         cancelable: true,
                         commandLeft: "previous",
                         commandRight: "next",
-                        infoCenter: "link " + (i + 1) + " of " + (links.length)
+                        infoCenter: "link " + (i + 1) + " of " + links.length
                     });
-                    return;
+                    return({content: "I found " + links.length + "links. You are on link " + (i + 1)});
                 }
             }
         }
@@ -111,14 +112,14 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "show all links",
+                content: "Show all links",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (links.length)
             });
-            showMessage({content: "show next link"});
+            showMessage({content: "Show next link"});
         } else if(found.length > 1) {
             if (i < found.length - 1) {
                 $(found[i])
@@ -146,16 +147,17 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
+                content: "Show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (found.length)
             });
-            showMessage({content: "show next link"});
+            showMessage({content: "Show next link"});
         } else {
-            showMessage({title: "Attention!", content: "no link found"});
+            showMessage({content: "No link found"});
+            return({content: "There is only one link on this page"});
         }
     })
 );
@@ -192,14 +194,14 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "show all links",
+                content: "Show all links",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (links.length)
             });
-            showMessage({content: "show previous link"});
+            showMessage({content: "Show previous link"});
         } else if (found.length > 1){
             if (i > 0) {
                 $(found[i])
@@ -227,16 +229,17 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
+                content: "Show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (found.length)
             });
-            showMessage({content: "show previous link"});
+            showMessage({content: "Show previous link"});
         } else {
-            showMessage({title: "Attention!", content: "no link found"});
+            showMessage({content: "No link found"});
+            return({content: "I found only one link on this page"});
         }
     })
 );
@@ -271,7 +274,8 @@ addContentScriptMethod(
                 infoCenter: "link " + (i + 1) + " of " + (links.length)
             });
         } else {
-            showMessage({title: "Attention!", content: "there is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
+            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
+            return({content: "I found no link" + foundParams + "on this page"});
         }
     })
 );
@@ -346,7 +350,8 @@ addContentScriptMethod(
                 infoCenter:"link " + (i + 1) + " of " + (links.length)
             });
         } else {
-            showMessage({title: "Attention!", content: "there is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
+            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
+            return({content: "I found no link" + foundParams + "on this page"});
         }
     })
 );
@@ -356,9 +361,10 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("openLink", function () {
-        showMessage({content:"canceled link state"});
+        showMessage({content:"Canceled link state"});
         hideMessage({id: id});
         window.location = links[i];
+        return({content: "I stopped searching"});
     })
 );
 
@@ -367,7 +373,6 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("openLinkNewTab", function () {
-        showMessage({content:"canceled link state"});
         hideMessage({id: id});
         window.open(links[i]);
     })

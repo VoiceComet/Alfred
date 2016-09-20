@@ -14,6 +14,7 @@ addModule(new Module("linkModule", function () {
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelLinkState", {});
             notify("canceled link state");
+            say("I stopped interacting with links");
         };
     };
 
@@ -24,7 +25,11 @@ addModule(new Module("linkModule", function () {
     var showLinks = new Action("showLinks", 0, linkState);
     showLinks.addCommand(new Command("test", 0));
     showLinks.act = function () {
-        callContentScriptMethod("showLinks", {})
+        callContentScriptMethod("showLinks", {}, function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     this.addAction(showLinks);
     linkState.addAction(showLinks);
@@ -36,7 +41,11 @@ addModule(new Module("linkModule", function () {
     var next = new Action("nextLink", 0, linkState);
     next.addCommand(new Command("next", 0));
     next.act = function() {
-        callContentScriptMethod("nextLink", {});
+        callContentScriptMethod("nextLink", {}, function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     linkState.addAction(next);
 
@@ -47,7 +56,11 @@ addModule(new Module("linkModule", function () {
     var prev = new Action("previousLink", 0, linkState);
     prev.addCommand(new Command("previous", 0));
     prev.act = function () {
-        callContentScriptMethod("previousLink", {});
+        callContentScriptMethod("previousLink", {}, function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     linkState.addAction(prev);
 
@@ -58,7 +71,11 @@ addModule(new Module("linkModule", function () {
     var certainNNumber = new Action("certainLinkByNumber", 1, linkState);
     certainNNumber.addCommand(new Command("go to number (.*)", 1));
     certainNNumber.act = function () {
-        callContentScriptMethod("certainLinkByNumber", arguments[0]);
+        callContentScriptMethod("certainLinkByNumber", arguments[0], function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     linkState.addAction(certainNNumber);
 
@@ -69,7 +86,11 @@ addModule(new Module("linkModule", function () {
     var certainName = new Action("certainLinkByName", 1, linkState);
     certainName.addCommand(new Command("go to link (.*)", 1));
     certainName.act = function () {
-        callContentScriptMethod("certainLinkByName", arguments[0]);
+        callContentScriptMethod("certainLinkByName", arguments[0], function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     linkState.addAction(certainName);
 
@@ -81,7 +102,11 @@ addModule(new Module("linkModule", function () {
     var openLink = new Action("openLink", 0, globalCommonState);
     openLink.addCommand(new Command("open", 0));
     openLink.act = function () {
-         callContentScriptMethod("openLink", {});
+         callContentScriptMethod("openLink", {}, function (params) {
+             if (params.content) {
+                 say(params.content);
+             }
+         });
     };
     linkState.addAction(openLink);
 

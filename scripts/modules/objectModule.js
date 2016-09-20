@@ -11,6 +11,7 @@ addModule(new Module("videoModule", function () {
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelObjectState", {});
             notify("canceled object state");
+            say("I stopped interacting with objects");
         };
     };
 
@@ -20,7 +21,11 @@ addModule(new Module("videoModule", function () {
     var showVideos = new Action("showVideos", 0, objectState);
     showVideos.addCommand(new Command("show videos", 0));
     showVideos.act = function () {
-        callContentScriptMethod("showVideos", {});
+        callContentScriptMethod("showVideos", {}, function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     this.addAction(showVideos);
     objectState.addAction(showVideos);
@@ -31,7 +36,11 @@ addModule(new Module("videoModule", function () {
     var showImages = new Action("showImages", 0, objectState);
     showImages.addCommand(new Command("show images", 0));
     showImages.act = function () {
-        callContentScriptMethod("showImages", {});
+        callContentScriptMethod("showImages", {}, function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     this.addAction(showImages);
     objectState.addAction(showImages);
@@ -42,7 +51,11 @@ addModule(new Module("videoModule", function () {
     var nextObjects = new Action("nextObjects", 0, objectState);
     nextObjects.addCommand(new Command("next", 0));
     nextObjects.act = function () {
-        callContentScriptMethod("nextObjects", {});
+        callContentScriptMethod("nextObjects", {}, function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     objectState.addAction(nextObjects);
 
@@ -52,7 +65,11 @@ addModule(new Module("videoModule", function () {
     var prevObjects = new Action("previousObjects", 0, objectState);
     prevObjects.addCommand(new Command("previous", 0));
     prevObjects.act = function () {
-        callContentScriptMethod("previousObjects", {});
+        callContentScriptMethod("previousObjects", {}, function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
     };
     objectState.addAction(prevObjects);
 }));

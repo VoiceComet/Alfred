@@ -11,6 +11,7 @@ addModule(new Module("zoomModule", function() {
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelZoomState", {});
             notify("canceled zoom state");
+            say("I stopped zooming");
         };
     };
 
@@ -22,10 +23,12 @@ addModule(new Module("zoomModule", function() {
         chrome.tabs.getZoom(function (zoomFactor) {
             if(zoomFactor >= 4.9) {
                 notify("reached max zoom");
+                say("The maximal level of zooming is reached");
             } else if (zoomFactor >= 3.9) {
                 chrome.tabs.setZoom(5);
                 callContentScriptMethod(ContentScriptMethod, {});
                 notify("maximal zoom reached");
+                say("The maximal level of zooming is reached");
             } else{
                 var newZoom = zoomFactor * 2;
                 chrome.tabs.setZoom(newZoom);
@@ -120,8 +123,8 @@ addModule(new Module("zoomModule", function() {
             // if zoomfactor is 1 do nothing else reset zoom to 0
             if(zoomFactor === 1.0) {
                 notify("zoom is already reseted");
+                say("The zoom is already reseted");
             } else {
-                notify("reset zoom");
                 chrome.tabs.setZoom(0);
             }
         });

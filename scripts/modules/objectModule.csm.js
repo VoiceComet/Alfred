@@ -17,7 +17,7 @@ var pages = 1;
  */
 addContentScriptMethod(
     new ContentScriptMethod("showVideos", function () {
-        showMessage({content: "show all videos"});
+        showMessage({content: "Show all videos"});
         $("body").append("<div id='objectUIDIV'></div>");
 
         var html5 = document.getElementsByTagName("video");
@@ -56,7 +56,14 @@ addContentScriptMethod(
         }
         images.pop();
         if (images.length > 0) {
-            id = showMessage({content: "show images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
+            id = showMessage({
+                content: "Show images",
+                commandLeft: "previous",
+                commandRight: "next",
+                cancelable: true,
+                infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9),
+                time: 0
+            });
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
                 .append("<div id='objectUIDIV'></div>");
@@ -67,8 +74,7 @@ addContentScriptMethod(
             $("#objectUIDIV").load(chrome.extension.getURL("objectUI.html"), function () {
                 for (i = 0; i < 9; i++) {
                     if (i < images.length) {
-                        var j = i + 1
-                        $("#objectCell" + i).append("<img src='" +images[i] + "'>");
+                        $("#objectCell" + i).append("<img src='" + images[i] + "'>");
                     } else {
                         return;
                     }
@@ -76,7 +82,8 @@ addContentScriptMethod(
             });
 
         } else {
-            showMessage({content: "no images found on this page"});
+            showMessage({content: "No images found on this page"});
+            return({content: "I found no relevant images on this page"});
         }
     })
 );
@@ -87,13 +94,14 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("nextObjects", function () {
         if (i >= images.length) {
-            showMessage({content: "no further images on this page"});
+            showMessage({content: "No further images on this page"});
+            return({content: "There are no further images on this page"});
         } else {
             if (prevSteps) {
                 i += 9;
             }
             nextSteps = 0;
-            showMessage({content: "show next images"});
+            showMessage({content: "Show next images"});
             $("#objectUIDIV")
                 .empty()
                 .load(chrome.extension.getURL("objectUI.html"), function () {
@@ -108,7 +116,16 @@ addContentScriptMethod(
             });
             prevSteps = false;
             pages++;
-            updateMessage({id: id, content: "show images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
+            updateMessage({
+                id: id,
+                content: "Show images",
+                commandLeft: "previous",
+                commandRight: "next",
+                cancelable: true,
+                infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9),
+                time: 0
+            });
+            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
         }
     })
 );
@@ -119,10 +136,11 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("previousObjects", function () {
         if (i < 9 || images.length < 9) {
-            showMessage({content: "no previous images"});
+            showMessage({content: "No previous images"});
+            return({content: "There are no previous images on this page"});
         } else {
             i -= nextSteps - 1;
-            showMessage({content: "show previous images"});
+            showMessage({content: "Show previous images"});
             $("#objectUIDIV")
                 .empty()
                 .load(chrome.extension.getURL("objectUI.html"), function () {
@@ -135,7 +153,16 @@ addContentScriptMethod(
             nextSteps = 0;
             prevSteps = true;
             pages--;
-            updateMessage({id: id, content: "show images", commandLeft: "previous", commandRight: "next", cancelable: true, infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9), time: 0});
+            updateMessage({
+                id: id,
+                content: "Show images",
+                commandLeft: "previous",
+                commandRight: "next",
+                cancelable: true,
+                infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9),
+                time: 0
+            });
+            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
         }
     })
 );

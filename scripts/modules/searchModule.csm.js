@@ -39,7 +39,8 @@ addContentScriptMethod(
         result = jQuery.makeArray(document.getElementsByClassName("highlight"));
 
         if(result.length === 0) {
-            showMessage({title: "Attention!", content: "couldn't find " + parameter});
+            showMessage({content: "Could not find " + parameter});
+            return({content: "I could not find" + parameter});
         } else {
             for (i = 0; i < result.length; i++) {
                 if (window.scrollY <= $(result[i]).offset().top &&
@@ -51,14 +52,14 @@ addContentScriptMethod(
                         .animate({scrollTop: $(result[i]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[i]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
+                        content: "Search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
                         time: 0,
                         cancelable: true,
                         commandLeft: "previous",
                         commandRight: "next",
-                        infoCenter: "match " + (i + 1) + " of " + (result.length)
+                        infoCenter: "match " + (i + 1) + " of " + result.length
                     });
-                    return;
+                    return({content: "I found " + result.length + "matches for" + parameter + ". You are on match " + (i + 1)});
                 } else if (i + 1 >= result.length) {
                     i = 0;
                     result[0].style.backgroundColor = "rgb(255, 150, 50)";
@@ -66,14 +67,14 @@ addContentScriptMethod(
                         .animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
+                        content: "Search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
                         time: 0,
                         cancelable: true,
                         commandLeft: "previous",
                         commandRight: "next",
                         infoCenter: "match " + (i + 1) + " of " + (result.length)
                     });
-                    return;
+                    return({content: "I found " + result.length + "matches for" + parameter + ". You are on match " + (i + 1)})
                 }
             }
         }
@@ -105,16 +106,18 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
+                content: "Search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
-                infoCenter:"match " + (i + 1) + " of " + (result.length)
+                infoCenter:"match " + (i + 1) + " of " + result.length
             });
-            showMessage({content: "show next match"});
+            showMessage({content: "Show next match"});
+            return({content: "You are now on match " + (i + 1) + "of" + result.length});
         } else {
-            showMessage({title: "Attention!", content: "no match found"});
+            showMessage({content: "No match found"});
+            return({content: "I just found 1 match for" + parameter});
         }
     })
 );
@@ -143,16 +146,18 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
+                content: "Search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
-                infoCenter:"match " + (i + 1) + " of " + (result.length)
+                infoCenter:"match " + (i + 1) + " of " + result.length
             });
-            showMessage({content: "show previous match"});
+            showMessage({content: "Show previous match"});
+            return({content: "You are now on match " + (i + 1) + "of" + result.length});
         } else {
-            showMessage({title: "Attention!", content: "no match found"});
+            showMessage({content: "No match found"});
+            return({content: "I just found 1 match for" + parameter});
         }
     })
 );
@@ -174,16 +179,18 @@ addContentScriptMethod(
             i = params - 1;
             updateMessage({
                 id: id,
-                content: "search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
+                content: "Search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
                 commandRight: "next",
-                infoCenter:"match " + (i + 1) + " of " + (result.length)
+                infoCenter:"match " + (i + 1) + " of " + result.length
             });
-            showMessage({content: "show match " + params});
+            showMessage({content: "Show match " + params});
+            return({content: "You are now on match " + (i + 1) + "of" + result.length});
         } else {
-            showMessage({title: "Attention!", content: "there is no match <span style='background-color:lightcoral'>" + params + "</span>"});
+            showMessage({content: "There is no match <span style='background-color:lightcoral'>" + params + "</span>"});
+            return({content: "I cannot find a match " + params + "for" + parameter});
         }
     })
 );
