@@ -29,6 +29,28 @@ var tabStates = [];
 var recognizing = true;
 
 
+//global butler name for better access
+/** @global */
+var butlerName = "Alfred";
+//get butler name from storage
+chrome.storage.sync.get({
+	speechAssistantName: "Alfred"
+}, function(items) {
+	//noinspection JSUnresolvedVariable
+	butlerName = items.speechAssistantName;
+});
+//refresh butler name after option change
+function butlerNameListener(changes) {
+	for (var key in changes)  {
+		if (key == "speechAssistantName" && changes.hasOwnProperty(key)) {
+			butlerName = changes[key].newValue;
+			return;
+		}
+	}
+}
+chrome.storage.onChanged.addListener(butlerNameListener);
+
+
 //get active tab
 chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
 	if (tabs.length > 0) {

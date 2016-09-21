@@ -50,24 +50,33 @@ function State (name) {
 				this.ableToMute = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.ableToCancel = false;
-				notify('muted, say "Hello Alfred" or "Alfred listen"');
+				notify('muted, say "Hello ' + butlerName + '" or "' + butlerName + ' listen"');
 			};
 			this.muteActionIn = new Action("Mute Action", 0, this.muteState);
 			this.muteActionIn.addCommand(new Command("mute", 0));
 			this.muteActionIn.addCommand(new Command("don't listen", 0));
+			this.muteActionIn.addCommand(new Command("go away", 0));
 			this.muteActionIn.act = function() {
 				//mute state
 				that.muted = true;
 				that.updateMicrophoneIcon();
 			};
-			this.muteActionOut = new Action("Mute Action", 0, this);
-			this.muteActionOut.addCommand(new Command("Hello Alfred", 0));
-			this.muteActionOut.addCommand(new Command("Alfred listen", 0));
-			this.muteActionOut.act = function() {
-				notify("unmuted");
-				that.muteState.muted = false;
-				that.muted = false;
-				that.updateMicrophoneIcon();
+			this.muteActionOut = new Action("Mute Action", 1, this);
+			this.muteActionOut.addCommand(new Command("hello (.+)", 1));
+			this.muteActionOut.addCommand(new Command("(.+) listen", 1));
+			this.muteActionOut.act = function(parameter) {
+				if (parameter[0] == butlerName) {
+					notify("Welcome back");
+					say("Welcome back");
+					that.muteState.muted = false;
+					that.muted = false;
+					that.updateMicrophoneIcon();
+					//switch to un muted state
+					this.followingState = that;
+				} else {
+					//stay in mute state
+					this.followingState = that.muteState;
+				}
 			};
 			this.muteState.addAction(this.muteActionOut);
 		}
@@ -200,7 +209,7 @@ function State (name) {
 				for (var k = 0; k < alternatives.length; k++) {
 					alternatives[k] = alternatives[k].trim(); //delete spaces at string beginning and ending
 					//test the regular expression
-					var execResult = this.actions[i].commands[j].expression.exec(alternatives[k]);
+					var execResult = this.actions[i].commands[j].getRegExp().exec(alternatives[k]);
 					if (execResult != null) {
 						//result found
 						if (!actionAdded) {

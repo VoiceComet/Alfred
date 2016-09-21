@@ -6,9 +6,13 @@
  * @constructor
  */
 function Action (name, parameterCount, followingState) {
+	/** @type {String} */
 	this.name = name;
+	/** @type {[Command]} */
 	this.commands = [];
+	/** @type {State} */
     this.followingState = followingState;
+	/** @type {number} */
     this.parameterCount = parameterCount;
 
 	/**

@@ -100,11 +100,17 @@ function say(phrase, sayTitle, callback) {
 	sayTitle = (sayTitle === undefined) ? true : sayTitle;
 
 	chrome.storage.sync.get({
+		speechAssistantSpeechOutput: true,
 		speechAssistantVoice: 'Google UK English Male',
 		speechAssistantUserTitle: 'Master',
 		speechAssistantUserName: 'Wayne',
 		speechAssistantSayTitle: true
 	}, function(items) {
+		//noinspection JSUnresolvedVariable
+		if (!items.speechAssistantSpeechOutput) {
+			return;
+		}
+
 		//deactivate hearing: against self hearing
 		if (recognizing) {
 			activeState.stopSpeechRecognition();

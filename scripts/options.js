@@ -1,12 +1,16 @@
 // Saves options to chrome.storage.sync.
 function save_options() {
 	var searchEngine = document.getElementById('searchEngine').value;
+	var speechAssistantName = document.getElementById('speechAssistantName').value;
+	var speechAssistantSpeechOutput = document.getElementById('speechAssistantSpeechOutput').checked;
 	var speechAssistantVoice = document.getElementById('speechAssistantVoice').value;
 	var speechAssistantUserTitle = document.getElementById('speechAssistantUserTitle').value;
 	var speechAssistantUserName = document.getElementById('speechAssistantUserName').value;
 	var speechAssistantSayTitle = document.getElementById('speechAssistantSayTitle').checked;
 	chrome.storage.sync.set({
 		searchEngine: searchEngine,
+		speechAssistantName: speechAssistantName,
+		speechAssistantSpeechOutput: speechAssistantSpeechOutput,
 		speechAssistantVoice: speechAssistantVoice,
 		speechAssistantUserTitle: speechAssistantUserTitle,
 		speechAssistantUserName: speechAssistantUserName,
@@ -26,6 +30,8 @@ function save_options() {
 function restore_options() {
 	chrome.storage.sync.get({
 		searchEngine: 'google',
+		speechAssistantName: 'Alfred',
+		speechAssistantSpeechOutput: true,
 		speechAssistantVoice: 'Google UK English Male',
 		speechAssistantUserTitle: 'Master',
 		speechAssistantUserName: 'Wayne',
@@ -33,6 +39,10 @@ function restore_options() {
 	}, function(items) {
 		//noinspection JSUnresolvedVariable
 		document.getElementById('searchEngine').value = items.searchEngine;
+		//noinspection JSUnresolvedVariable
+		document.getElementById('speechAssistantName').value = items.speechAssistantName;
+		//noinspection JSUnresolvedVariable
+		document.getElementById('speechAssistantSpeechOutput').checked = items.speechAssistantSpeechOutput;
 
 		//load possible voices
 		//noinspection SpellCheckingInspection
