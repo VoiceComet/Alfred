@@ -44,6 +44,8 @@ function handleRequest(request, sender, sendResponse) {
 		response = showPanel(request.params);
 	} else if (request.callFunction == "hidePanel") {
 		response = hidePanel();
+	} else if (request.callFunction == "elementResetScrolling") {
+		response = elementResetScrolling(request.params);
 	} else if (request.callFunction == "elementScrollDown") {
 		response = elementScrollDown(request.params);
 	} else if (request.callFunction == "elementScrollUp") {
@@ -177,6 +179,17 @@ function hidePanel() {
 		.attr("class", "")
 		.html("");
 }
+
+
+/**
+ * reset the scrolling of an element
+ * @param {Object} params
+ * @param {String} params.id
+ */
+function elementResetScrolling(params) {
+	$("#" + params.id).animate({scrollTop: 0}, 0);
+}
+
 
 /**
  * scroll a element up

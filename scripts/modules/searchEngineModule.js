@@ -1,4 +1,4 @@
-addModule(new Module("WeatherModule", function() {
+addModule(new Module("SearchEngineModule", function() {
 
 	//settings
 	var maxResults = 10; //google api does not support more than 10 results
@@ -210,6 +210,9 @@ addModule(new Module("WeatherModule", function() {
 			if (searchResultObject != null) {
 				//show results
 				callContentScriptMethod("showSearchResults", {"searchResultObject":searchResultObject});
+				//reset scrolling
+				callContentScriptMethod("elementResetScrolling", {"id":"ChromeSpeechControlPanel"});
+
 				if (!(activeState.oldState instanceof PanelState)) {
 					say(searchResultObject.searchTotalResults + " results found");
 				}
