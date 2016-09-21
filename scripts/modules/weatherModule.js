@@ -5,6 +5,25 @@ addModule(new Module("WeatherModule", function() {
 	showWeatherOf.addCommand(new Command("show weather (.+)", 1));
 	showWeatherOf.addCommand(new Command("show weather of (.+)", 1));
 	showWeatherOf.act = function(arguments) {
+
+		/**
+		 * Show a message and say the weather conditions
+		 * @param {Object} weatherObject
+		 */
+		function showWeatherData(weatherObject) {
+			callContentScriptMethod("showWeather", {"weatherObject":weatherObject});
+			say(weatherObject.city + ": " + weatherObject.conditionText + " and " + weatherObject.temp + " °" + weatherObject.tempUnit);
+		}
+
+		/**
+		 * Show a message and say that no weather data found
+		 * @param {String} city
+		 */
+		function showNoWeatherDataFound(city) {
+			notify("I cannot find the weather report of " + city);
+			say("I cannot find the weather report");
+		}
+
 		var city = arguments[0];
 
 		notify("\"" + city + "\" Weather loading...");
@@ -15,11 +34,10 @@ addModule(new Module("WeatherModule", function() {
 
 			$.getJSON(url, function(json) {
 				console.log(json);
-				var weatherObject = null;
 				//noinspection JSUnresolvedVariable
 				if (json.query.results != null) {
 					//noinspection JSUnresolvedVariable
-					weatherObject = {
+					showWeatherData({
 						"city":json.query.results.channel.location.city,
 						"country":json.query.results.channel.location.country,
 						"date":json.query.results.channel.item.condition.date,
@@ -27,11 +45,9 @@ addModule(new Module("WeatherModule", function() {
 						"conditionText":json.query.results.channel.item.condition.text,
 						"temp":json.query.results.channel.item.condition.temp,
 						"tempUnit":json.query.results.channel.units.temperature
-					};
-
-					callContentScriptMethod("showWeather", {"weatherObject":weatherObject});
+					});
 				} else {
-					notify("No weather result found. Please repeat.");
+					showNoWeatherDataFound(city);
 				}
 			});
 		}

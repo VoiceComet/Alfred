@@ -16,12 +16,34 @@ addModule(new Module("WeatherModule", function() {
 		Action.call(this, name, parameterCount, followingState);
 
 		this.act = function(arguments) {
+
+			/**
+			 * Show a message and say that no search results found
+			 * @param query
+			 */
+			function showNoResultsFound(query) {
+				notify("I cannot find " + query);
+				say("I cannot find " + query);
+			}
+
+			/**
+			 * Show a message and say that no search results found
+			 * @param error
+			 */
+			function showSearchEngineError(error) {
+				console.log("Search Engine Request Failed: " + error );
+				notify("The Search Engine does not work.");
+				say("The Search Engine does not work");
+			}
+
 			var that = this;
 			if (arguments.length >= 1) {
 				this.query = arguments[0];
 			}
 
-			notify("Searching \"" + this.query + "\" ...");
+			if (!(activeState.oldState instanceof PanelState)) {
+				notify("Searching \"" + this.query + "\" ...");
+			}
 
 			//std value is google
 			chrome.storage.sync.get({
@@ -87,14 +109,12 @@ addModule(new Module("WeatherModule", function() {
 							}
 
 						} else {
-							notify("No search results found. Please repeat.");
+							showNoResultsFound(query);
 						}
 
 						that.afterLoading(searchResultObject);
 					}).fail(function(jqxhr, textStatus, error ) {
-						var err = textStatus + ", " + error;
-						console.log( "Request Failed: " + err );
-						notify("Search Engine Error: " + err);
+						showSearchEngineError(textStatus + ", " + error);
 					});
 				} else if (api == "bing") {
 					url = "https://api.cognitive.microsoft.com/bing/v5.0/search" +
@@ -156,15 +176,13 @@ addModule(new Module("WeatherModule", function() {
 									}
 
 								} else {
-									notify("No search results found. Please repeat.");
+									showNoResultsFound(query);
 								}
 
 								that.afterLoading(searchResultObject);
 							},
 							error: function(jqXHR, textStatus, error) {
-								var err = textStatus + ", " + error;
-								console.log( "Request Failed: " + err );
-								notify("Search Engine Error: " + err);
+								showSearchEngineError(textStatus + ", " + error);
 							}
 						});
 					});
@@ -180,6 +198,8 @@ addModule(new Module("WeatherModule", function() {
 				this.cancelAction.act = function (params) {
 					callContentScriptMethod("hidePanel", {});
 					notify("canceled");
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					this.followingState = globalCommonState;
 				};
 			};
 		};
@@ -190,6 +210,9 @@ addModule(new Module("WeatherModule", function() {
 			if (searchResultObject != null) {
 				//show results
 				callContentScriptMethod("showSearchResults", {"searchResultObject":searchResultObject});
+				if (!(activeState.oldState instanceof PanelState)) {
+					say(searchResultObject.searchTotalResults + " results found");
+				}
 
 				//create state actions with generated commands
 				for (var i = 0; i < searchResultObject.items.length; i++) {
@@ -232,8 +255,12 @@ addModule(new Module("WeatherModule", function() {
 
 
 	var searchEngineAction = new SearchAction("Search ?", 1, null); //state is set during act function
-	searchEngineAction.addCommand(new Command("web search (.+)", 1));
-	searchEngineAction.addCommand(new Command("google (.+)", 1));
+	searchEngineAction.addCommands([
+		new Command("web search (.+)", 1),
+		new Command("websearch (.+)", 1),
+		new Command("google (.+)", 1),
+		new Command("bing (.+)", 1)
+	]);
 	searchEngineAction.maxResults = maxResults;
 	searchEngineAction.start = 0;
 	searchEngineAction.query = "empty";

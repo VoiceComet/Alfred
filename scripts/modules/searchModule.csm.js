@@ -40,7 +40,7 @@ addContentScriptMethod(
 
         if(result.length === 0) {
             showMessage({content: "Could not find " + parameter});
-            return({content: "I could not find" + parameter});
+            return({content: "I could not find " + parameter});
         } else {
             for (i = 0; i < result.length; i++) {
                 if (window.scrollY <= $(result[i]).offset().top &&
@@ -74,7 +74,7 @@ addContentScriptMethod(
                         commandRight: "next",
                         infoCenter: "match " + (i + 1) + " of " + (result.length)
                     });
-                    return({content: "I found " + result.length + "matches for" + parameter + ". You are on match " + (i + 1)})
+                    return({content: "I found " + result.length + " matches for " + parameter + ". You are on match " + (i + 1)})
                 }
             }
         }
@@ -114,10 +114,10 @@ addContentScriptMethod(
                 infoCenter:"match " + (i + 1) + " of " + result.length
             });
             showMessage({content: "Show next match"});
-            return({content: "You are now on match " + (i + 1) + "of" + result.length});
+            return({content: "You are now on match " + (i + 1) + " of " + result.length});
         } else {
             showMessage({content: "No match found"});
-            return({content: "I just found 1 match for" + parameter});
+            return({content: "I just found 1 match for " + parameter});
         }
     })
 );
@@ -154,10 +154,10 @@ addContentScriptMethod(
                 infoCenter:"match " + (i + 1) + " of " + result.length
             });
             showMessage({content: "Show previous match"});
-            return({content: "You are now on match " + (i + 1) + "of" + result.length});
+            return({content: "You are now on match " + (i + 1) + " of " + result.length});
         } else {
             showMessage({content: "No match found"});
-            return({content: "I just found 1 match for" + parameter});
+            return({content: "I just found 1 match for " + parameter});
         }
     })
 );

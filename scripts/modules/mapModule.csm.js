@@ -65,9 +65,9 @@ addContentScriptMethod(
 				});
 
 				alfredMap.panTo(alfredMapMarkers[letterPos].getPosition());
-				showMessage({content:"Zoomed to " + letter});
+				//showMessage({content:"Zoomed to " + letter});
 			} else {
-				showMessage({content:"Letter " + letter + " not found"});
+				showMessage({content:"Letter " + letter + " does not exist."});
 			}
 		}, params);
 	})
@@ -82,9 +82,9 @@ addContentScriptMethod(
 			var letterPos = alfredMapMarkerLabels.indexOf(letter);
 			if (letterPos >= 0 && letterPos < alfredMapMarkerLabels.length && letterPos < alfredMapMarkers.length) {
 				alfredMap.panTo(alfredMapMarkers[letterPos].getPosition());
-				showMessage({content:letter + " centered"});
+				//showMessage({content:letter + " centered"});
 			} else {
-				showMessage({content:"Letter " + letter + " not found"});
+				showMessage({content:"Letter " + letter + " does not exist."});
 			}
 		}, params);
 	})
@@ -96,7 +96,7 @@ addContentScriptMethod(
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() + 1);
 			if (oldZoom >= alfredMap.getZoom()) {
-				showMessage({content:"Zooming isn't possible"});
+				showMessage({content:"Zooming is not possible."});
 			}
 		});
 	})
@@ -108,7 +108,7 @@ addContentScriptMethod(
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() - 1);
 			if (oldZoom <= alfredMap.getZoom()) {
-				showMessage({content:"Zooming isn't possible"});
+				showMessage({content:"Zooming is not possible."});
 			}
 		});
 	})
@@ -118,7 +118,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollUp", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(0, -200);
-			showMessage({content:"Scrolled up"});
+			//showMessage({content:"Scrolled up"});
 		});
     })
 );
@@ -127,7 +127,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollDown", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(0, 200);
-			showMessage({content:"Scrolled down"});
+			//showMessage({content:"Scrolled down"});
 		});
     })
 );
@@ -136,7 +136,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollLeft", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(-150, 0);
-			showMessage({content:"Scrolled left"});
+			//showMessage({content:"Scrolled left"});
 		});
     })
 );
@@ -145,7 +145,7 @@ addContentScriptMethod(
     new ContentScriptMethod("mapScrollRight", function() {
 		runMethodOnPage(function() {
 			alfredMap.panBy(150, 0);
-			showMessage({content:"Scrolled right"});
+			//showMessage({content:"Scrolled right"});
 		});
     })
 );
