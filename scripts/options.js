@@ -74,7 +74,6 @@ function restore_options() {
 		stdValues[option.id] = option.stdValue;
 	});
 
-	var voiceDefault = "";
 	chrome.storage.sync.get(stdValues, function(items) {
 		options.forEach(function (option) {
 			if (option.id != 'speechAssistantVoice') {
