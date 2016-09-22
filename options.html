@@ -4,46 +4,67 @@
     <title>My Test Extension Options</title>
     <style>
         body { padding: 10px; }
+        section {
+            -webkit-padding-start: 18px;
+            margin-bottom: 24px;
+            margin-top: 8px;
+        }
+        section h3 {
+            -webkit-margin-start: -18px;
+        }
+        section .setting {
+            margin-bottom:6px;
+        }
+        section .setting input {
+            margin-left:7px;
+            margin-right:7px;
+        }
     </style>
 </head>
 
 <body>
+    <section>
+        <h3>Butler</h3>
+        <div class="setting">
+            <label for="speechAssistantName">Butlers name</label>
+            <input id="speechAssistantName" title="Name of your butler" type="text"/>
+        </div>
+        <div class="setting">
+            <label for="speechAssistantSpeechOutput">Speech Output</label>
+            <input id="speechAssistantSpeechOutput" title="Speech Output" type="checkbox"/>
+        </div>
+        <div class="setting">
+            <label for="speechAssistantVoice">Voice</label>
+            <select id="speechAssistantVoice" title="Speech Assistant Voice">
+                <!-- they will be loaded in options.js -->
+            </select>
+        </div>
+        <div class="setting">
+            <label for="speechAssistantUserTitle">Your Title</label>
+            <select id="speechAssistantUserTitle" title="Speech Assistant User Title">
+                <option value="Master">Master</option>
+                <option value="Mistress">Mistress</option>
+                <option value="Sir">Sir</option>
+                <option value="Lady">Lady</option>
+            </select>
+            <input id="speechAssistantUserName" title="Speech Assistant User Name" type="text"/>
+        </div>
+        <div class="setting">
+            <label for="speechAssistantSayTitle">Say Title</label>
+            <input id="speechAssistantSayTitle" title="Say your title after every speech output" type="checkbox"/>
+        </div>
+    </section>
 
-<p>
-Search Engine:
-<select id="searchEngine" title="Search Engine">
-    <option value="google">Google</option>
-    <option value="bing">Bing</option>
-</select>
-</p>
 
-<p>
-    <b>Butler</b><br/>
-    Butlers name:
-    <input id="speechAssistantName" title="Name of your butler" type="text"/>
-    <br/>
-    Speech Output: <input id="speechAssistantSpeechOutput" title="Speech Output" type="checkbox"/>
-    <br/>
-    Voice:
-    <select id="speechAssistantVoice" title="Speech Assistant Voice">
-        <!-- they will be loaded in options.js -->
-    </select>
-    <br/>
-    Your Title:
-    <select id="speechAssistantUserTitle" title="Speech Assistant User Title">
-        <option value="Master">Master</option>
-        <option value="Mistress">Mistress</option>
-        <option value="Sir">Sir</option>
-        <option value="Lady">Lady</option>
-    </select>
-    <input id="speechAssistantUserName" title="Speech Assistant User Name" type="text"/>
-    <br/>
-    Say Title: <input id="speechAssistantSayTitle" title="Say your title after every speech output" type="checkbox"/>
-</p>
+    <section>
+        <h3>APIs</h3>
+        <label for="searchEngine">Search Engine</label>
+        <select id="searchEngine" title="Search Engine">
+            <option value="google">Google</option>
+            <option value="bing">Bing</option>
+        </select>
+    </section>
 
-<div id="status"></div>
-<button id="save">Save</button>
-
-<script src="scripts/options.js"></script>
+    <script src="scripts/options.js"></script>
 </body>
 </html>
