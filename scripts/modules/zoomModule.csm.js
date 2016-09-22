@@ -7,6 +7,7 @@
  */
 addContentScriptMethod(
     new ContentScriptMethod("zoomIn", function() { //function(params)
+        // load grid
         $("<div></div>", {id: "zoomUIDIV"})
             .appendTo($("body"))
             .load(chrome.extension.getURL("zoomUI.html"), function() {
