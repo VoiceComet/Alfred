@@ -22,39 +22,38 @@ div#zoomUIDIV div#zoomUI {
 }
 
 div#zoomUIDIV div#zoomUI h1 {
-    font-size: 200%;
+    font-size: 5vh;
     font-weight: bold;
     border: none;
     font-style: normal;
     color: black;
-    margin-top: -12px;
-    margin-left: -12px;
-    background-color: transparent;
+    margin-top: -2.5vh;
+    margin-left: -2.5vh;
 }
 
 div#zoomUIDIV div#zoomUI h1#first {
     position: fixed;
-    top: 25%;
-    left: 25%;
+    top: 22.5%;
+    left: 25.5%;
 }
 
 div#zoomUIDIV div#zoomUI h1#second {
     position: fixed;
-    top: 25%;
-    right: 25%;
+    top: 22.5%;
+    left: 75.5%;
 
 }
 
 div#zoomUIDIV div#zoomUI h1#third {
     position: fixed;
-    top: 75%;
-    left: 25%;
+    top: 72.5%;
+    left: 25.5%;
 }
 
 div#zoomUIDIV div#zoomUI h1#fourth {
     position: fixed;
-    top: 75%;
-    right: 25%;
+    top: 72.5%;
+    left: 75.5%;
 }
 
 div#zoomUIDIV div#zoomUI img#zoomUIGrid {
