@@ -21,6 +21,7 @@
 			"scripts/classes/State.js",
 			"scripts/classes/PanelState.js",
 			"scripts/classes/Action.js",
+			"scripts/classes/MultilingualAction.js",
 			"scripts/classes/Command.js",
 			"scripts/background.js",
 			"scripts/modules/moduleList.js"

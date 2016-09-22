@@ -34,6 +34,14 @@ addModule(new Module("mapModule", function () {
 	mapState.addAction(mapSearch);
 
 	/**
+	 * multilingual search
+	 * @type {MultilingualAction}
+	 */
+	var mapLanguageSearch = new MultilingualAction("mapLanguageSearch", mapSearch);
+	mapLanguageSearch.addCommand(new Command("language search", 0));
+	mapState.addAction(mapLanguageSearch);
+
+	/**
 	 * Zoom to marker
 	 * @type {Action}
 	 */
