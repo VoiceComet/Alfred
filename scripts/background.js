@@ -39,16 +39,23 @@ chrome.storage.sync.get({
 	//noinspection JSUnresolvedVariable
 	butlerName = items.speechAssistantName;
 });
-//refresh butler name after option change
-function butlerNameListener(changes) {
+/**
+ * function that is called after option changing
+ * @param changes
+ */
+function optionChangeListener(changes) {
 	for (var key in changes)  {
 		if (key == "speechAssistantName" && changes.hasOwnProperty(key)) {
+			//refresh butler name after option change
 			butlerName = changes[key].newValue;
 			return;
+		} else if (key == "speechAssistantVoice" && changes.hasOwnProperty(key)) {
+			//say something with new voice
+			say("This is my new voice");
 		}
 	}
 }
-chrome.storage.onChanged.addListener(butlerNameListener);
+chrome.storage.onChanged.addListener(optionChangeListener);
 
 
 //get active tab

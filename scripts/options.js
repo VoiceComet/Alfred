@@ -1,76 +1,111 @@
-// Saves options to chrome.storage.sync.
-function save_options() {
-	var searchEngine = document.getElementById('searchEngine').value;
-	var speechAssistantName = document.getElementById('speechAssistantName').value;
-	var speechAssistantSpeechOutput = document.getElementById('speechAssistantSpeechOutput').checked;
-	var speechAssistantVoice = document.getElementById('speechAssistantVoice').value;
-	var speechAssistantUserTitle = document.getElementById('speechAssistantUserTitle').value;
-	var speechAssistantUserName = document.getElementById('speechAssistantUserName').value;
-	var speechAssistantSayTitle = document.getElementById('speechAssistantSayTitle').checked;
-	chrome.storage.sync.set({
-		searchEngine: searchEngine,
-		speechAssistantName: speechAssistantName,
-		speechAssistantSpeechOutput: speechAssistantSpeechOutput,
-		speechAssistantVoice: speechAssistantVoice,
-		speechAssistantUserTitle: speechAssistantUserTitle,
-		speechAssistantUserName: speechAssistantUserName,
-		speechAssistantSayTitle: speechAssistantSayTitle
-	}, function() {
-		// Update status to let user know options were saved.
-		var status = document.getElementById('status');
-		status.textContent = 'Options saved.';
-		setTimeout(function() {
-			status.textContent = '';
-		}, 750);
+/**
+ * list of all options
+ * @type {Object[]}
+ */
+var options = [
+	{
+		id : "speechAssistantName",
+		type : "text",
+		stdValue : "Alfred"
+	},
+	{
+		id : "speechAssistantSpeechOutput",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "speechAssistantVoice",
+		type : "select",
+		stdValue : "Google UK English Male"
+	},
+	{
+		id : "speechAssistantUserTitle",
+		type : "select",
+		stdValue : "Master"
+	},
+	{
+		id : "speechAssistantUserName",
+		type : "text",
+		stdValue : "Wayne"
+	},
+	{
+		id : "speechAssistantSayTitle",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "searchEngine",
+		type : "select",
+		stdValue : "google"
+	}
+];
+
+
+//add onChangeListener for saving
+options.forEach(function (option) {
+	var type = 'change';
+	if (option.type == 'text') {
+		type = 'input';
+	}
+
+	document.getElementById(option.id).addEventListener(type, function() {
+		var value;
+		if (option.type == "checkbox") {
+			value = document.getElementById(option.id).checked
+		} else {
+			value = document.getElementById(option.id).value
+		}
+
+		var save = {};
+		save[option.id] = value;
+
+		chrome.storage.sync.set(save, function() {
+			//do nothing after saving
+		});
 	});
-}
+});
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
+/**
+ * restore all saved options after dom loaded
+ */
 function restore_options() {
-	chrome.storage.sync.get({
-		searchEngine: 'google',
-		speechAssistantName: 'Alfred',
-		speechAssistantSpeechOutput: true,
-		speechAssistantVoice: 'Google UK English Male',
-		speechAssistantUserTitle: 'Master',
-		speechAssistantUserName: 'Wayne',
-		speechAssistantSayTitle: true
-	}, function(items) {
-		//noinspection JSUnresolvedVariable
-		document.getElementById('searchEngine').value = items.searchEngine;
-		//noinspection JSUnresolvedVariable
-		document.getElementById('speechAssistantName').value = items.speechAssistantName;
-		//noinspection JSUnresolvedVariable
-		document.getElementById('speechAssistantSpeechOutput').checked = items.speechAssistantSpeechOutput;
+	var stdValues = {};
+	options.forEach(function (option) {
+		stdValues[option.id] = option.stdValue;
+	});
 
-		//load possible voices
-		//noinspection SpellCheckingInspection
-		window.speechSynthesis.onvoiceschanged = function() {
-			var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-				return voice.lang == "en-GB" || voice.lang == "en-US";
-			});
-			var selectElement = document.getElementById("speechAssistantVoice");
-			selectElement.innerHTML = ""; //delete content
-			for (var i = 0; i < voices.length; i++) {
-				var option = document.createElement('option');
-				option.setAttribute("value", voices[i].voiceURI);
-				option.innerHTML = voices[i].name;
-				selectElement.appendChild(option);
+	chrome.storage.sync.get(stdValues, function(items) {
+		options.forEach(function (option) {
+			if (option.id != 'speechAssistantVoice') {
+				//noinspection JSUnresolvedVariable
+				if (option.type == "checkbox") {
+					document.getElementById(option.id).checked = items[option.id];
+				} else {
+					document.getElementById(option.id).value = items[option.id];
+				}
+			} else {
+				//for voice loading
+				//noinspection SpellCheckingInspection
+				window.speechSynthesis.onvoiceschanged = function() {
+					var optionId = 'speechAssistantVoice';
+					var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+						return voice.lang == "en-GB" || voice.lang == "en-US";
+					});
+					var selectElement = document.getElementById(optionId);
+					selectElement.innerHTML = ""; //delete content
+					for (var i = 0; i < voices.length; i++) {
+						var option = document.createElement('option');
+						option.setAttribute("value", voices[i].voiceURI);
+						option.innerHTML = voices[i].name;
+						selectElement.appendChild(option);
+					}
+
+					//set default
+					//noinspection JSUnresolvedVariable
+					document.getElementById(optionId).value = items[optionId];
+				};
 			}
-
-			//set default
-			//noinspection JSUnresolvedVariable
-			document.getElementById('speechAssistantVoice').value = items.speechAssistantVoice;
-		};
-
-		//noinspection JSUnresolvedVariable
-		document.getElementById('speechAssistantUserTitle').value = items.speechAssistantUserTitle;
-		//noinspection JSUnresolvedVariable
-		document.getElementById('speechAssistantUserName').value = items.speechAssistantUserName;
-		//noinspection JSUnresolvedVariable
-		document.getElementById('speechAssistantSayTitle').checked = items.speechAssistantSayTitle;
+		});
 	});
 }
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click', save_options);
