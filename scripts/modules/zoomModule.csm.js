@@ -6,7 +6,7 @@
  * start zooming
  */
 addContentScriptMethod(
-    new ContentScriptMethod("zoomIn", function() { //function(params)
+    new ContentScriptMethod("startZooming", function() { //function(params)
         // load grid
         $("<div></div>", {id: "zoomUIDIV"})
             .appendTo($("body"))
@@ -21,7 +21,6 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("zoomFirstSector", function() {
-        window.document.body.style.scalable = "no";
         var scrollPosVertical = window.scrollY;
         var scrollPosHorizontal = window.scrollX;
         $("html, body")
@@ -72,6 +71,7 @@ addContentScriptMethod(
         showMessage({content: "Zoom into fourth sector"});
     })
 );
+
 
 /**
  * cancel zooming

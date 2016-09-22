@@ -17,48 +17,82 @@ addModule(new Module("zoomModule", function() {
 
     /**
      * function for smooth zooming
-     * @param {number} zoomFactor
-     * @param {number} i
+     * @param {Number} zoomFactor - current zoom
+     * @param {Number} i - start for i
+     * @param {String} operator - (+ or -)
      */
-    function newZoom (zoomFactor, i) {
+    function newZoom (operator, zoomFactor, i) {
         setTimeout(function () {
-            if (zoomFactor + (zoomFactor * i * 0.025) < 5) {
-                chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.025));
+            if (operator === "+") {
+                if (zoomFactor + (zoomFactor * i * 0.025) < 5) {
+                    chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.025));
+                    i++;
+                    if (i < 41) {
+                        newZoom("+", zoomFactor, i);
+                    }
+                }
+            } else {
+                if (zoomFactor >= 4.9) {
+                    i = 30;
+                }
+                chrome.tabs.setZoom(zoomFactor - (zoomFactor * i * 0.025));
                 i++;
                 if (i < 41) {
-                    newZoom(zoomFactor, i);
+                    newZoom("-", zoomFactor, i);
                 }
             }
-        }, 30);
+        }, 25);
     }
 
     /**
      * function for checking if max zoom level is reached
      * @param {String} ContentScriptMethod - name of ScriptMethod which should run
      */
-    var CheckZoomLevel = function (ContentScriptMethod) {
+    var zoomIn = function (ContentScriptMethod) {
         chrome.tabs.getZoom(function (zoomFactor) {
             // check if max zoom is reached
             if(zoomFactor >= 4.9) {
                 notify("reached max zoom");
                 say("The maximal level of zooming is reached");
             } else{
-                newZoom(zoomFactor, 1);
+                setTimeout(newZoom("+", zoomFactor, 1), 1000);
                 callContentScriptMethod(ContentScriptMethod, {});
             }
         });
     };
 
     /**
+     * function to reset zoom
+     * @param {Number} zoomFactor - current zoom
+     * @param {Number} i - start for i
+     */
+    var resetZoom = function (zoomFactor, i) {
+      setTimeout(function () {
+          if (zoomFactor > 1 && zoomFactor - (zoomFactor * i * 0.025) >= 0.9) {
+              chrome.tabs.setZoom(zoomFactor - (zoomFactor * i * 0.025));
+              i++;
+              resetZoom(zoomFactor, i);
+          } else if(zoomFactor < 1 && zoomFactor + (zoomFactor * i * 0.025) <= 1.1) {
+              chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.025));
+              i++;
+              resetZoom(zoomFactor, i);
+          } else {
+              notify("Zoom is already reseted");
+              say("The zoom is already reseted");
+          }
+      }, 25)
+    };
+
+    /**
      * start zooming in
      * @type {Action}
      */
-    var zoomIn = new Action("zoom in", 0, zoomState);
-    zoomIn.addCommand(new Command("zoom in", 0));
-    zoomIn.act = function() {
-        callContentScriptMethod("zoomIn", {});
+    var startZooming = new Action("start zooming", 0, zoomState);
+    startZooming.addCommand(new Command("test", 0));
+    startZooming.act = function() {
+        callContentScriptMethod("startZooming", {});
     };
-    this.addAction(zoomIn);
+    this.addAction(startZooming);
 
 
     /**
@@ -68,7 +102,7 @@ addModule(new Module("zoomModule", function() {
     var first = new Action("first", 0, zoomState);
     first.addCommand(new Command("1", 0));
     first.act = function () {
-        CheckZoomLevel("zoomFirstSector");
+        zoomIn("zoomFirstSector");
     };
     zoomState.addAction(first);
 
@@ -79,7 +113,7 @@ addModule(new Module("zoomModule", function() {
     var second = new Action("second", 0, zoomState);
     second.addCommand(new Command("2", 0));
     second.act = function() {
-        CheckZoomLevel("zoomSecondSector")
+        zoomIn("zoomSecondSector")
     };
     zoomState.addAction(second);
 
@@ -90,7 +124,7 @@ addModule(new Module("zoomModule", function() {
     var third = new Action("third", 0, zoomState);
     third.addCommand(new Command("3", 0));
     third.act = function() {
-        CheckZoomLevel("zoomThirdSector")
+        zoomIn("zoomThirdSector")
     };
     zoomState.addAction(third);
 
@@ -101,7 +135,7 @@ addModule(new Module("zoomModule", function() {
     var fourth = new Action("fourth", 0, zoomState);
     fourth.addCommand(new Command("4", 0));
     fourth.act = function() {
-        CheckZoomLevel("zoomFourthSector")
+        zoomIn("zoomFourthSector")
     };
     zoomState.addAction(fourth);
 
@@ -112,14 +146,8 @@ addModule(new Module("zoomModule", function() {
     var out = new Action("out", 0, zoomState);
     out.addCommand(new Command("zoom out", 0));
     out.act = function() {
-      notify("zoom out");
       chrome.tabs.getZoom(function (zoomFactor) {
-          if (zoomFactor >= 4.9) {
-              chrome.tabs.setZoom(4);
-          } else {
-              var newZoom = zoomFactor / 2;
-              chrome.tabs.setZoom(newZoom);
-          }
+          newZoom("-", zoomFactor, 1);
       });
     };
     zoomState.addAction(out);
@@ -132,13 +160,7 @@ addModule(new Module("zoomModule", function() {
     reset.addCommand(new Command("reset zoom", 0));
     reset.act = function () {
         chrome.tabs.getZoom(function (zoomFactor) {
-            // if zoomfactor is 1 do nothing else reset zoom to 0
-            if(zoomFactor === 1.0) {
-                notify("zoom is already reseted");
-                say("The zoom is already reseted");
-            } else {
-                chrome.tabs.setZoom(0);
-            }
+            resetZoom(zoomFactor, 1);
         });
     };
     zoomState.addAction(reset);
