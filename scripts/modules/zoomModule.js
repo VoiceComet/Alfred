@@ -16,22 +16,34 @@ addModule(new Module("zoomModule", function() {
     };
 
     /**
+     * function for smooth zooming
+     * @param {number} zoomFactor
+     * @param {number} i
+     */
+    function newZoom (zoomFactor, i) {
+        setTimeout(function () {
+            if (zoomFactor + (zoomFactor * i * 0.025) < 5) {
+                chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.025));
+                i++;
+                if (i < 41) {
+                    newZoom(zoomFactor, i);
+                }
+            }
+        }, 30);
+    }
+
+    /**
      * function for checking if max zoom level is reached
      * @param {String} ContentScriptMethod - name of ScriptMethod which should run
      */
     var CheckZoomLevel = function (ContentScriptMethod) {
         chrome.tabs.getZoom(function (zoomFactor) {
+            // check if max zoom is reached
             if(zoomFactor >= 4.9) {
                 notify("reached max zoom");
                 say("The maximal level of zooming is reached");
-            } else if (zoomFactor >= 3.9) {
-                chrome.tabs.setZoom(5);
-                callContentScriptMethod(ContentScriptMethod, {});
-                notify("maximal zoom reached");
-                say("The maximal level of zooming is reached");
             } else{
-                var newZoom = zoomFactor * 2;
-                chrome.tabs.setZoom(newZoom);
+                newZoom(zoomFactor, 1);
                 callContentScriptMethod(ContentScriptMethod, {});
             }
         });
