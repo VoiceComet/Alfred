@@ -5,7 +5,7 @@
 addModule(new Module("bookmarkModule", function () {
 
     /**
-     * State for interacting with modules
+     * state for interacting with modules
      */
     var bookmarkState = new State("bookmarkState");
     bookmarkState.init = function () {
@@ -16,11 +16,28 @@ addModule(new Module("bookmarkModule", function () {
         };
     };
 
-    var addBookmark = new Action("addBookmark", 0, bookmarkState);
+    /**
+     * state which listens for title
+     */
+    var bookmarkListenState = new State("bookmarkListenState");
+
+    /**
+     * add bookmark
+     * @type {Action}
+     */
+    var addBookmark = new Action("addBookmark", 0, bookmarkListenState);
     addBookmark.addCommand(new Command("add bookmark", 0));
     addBookmark.act = function () {
         callContentScriptMethod("addBookmark", {});
     };
     this.addAction(addBookmark);
 
+    /**
+     * say title for bookmark/folder
+     */
+    var sayTitle = new Action("say title", 1, bookmarkState);
+    sayTitle.addCommand(new Command("(.+)" ,1));
+    sayTitle.act = function (params) {
+
+    }
 }));
