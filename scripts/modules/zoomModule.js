@@ -23,25 +23,63 @@ addModule(new Module("zoomModule", function() {
      */
     function newZoom (operator, zoomFactor, i) {
         setTimeout(function () {
+            // zoom in
             if (operator === "+") {
-                if (zoomFactor + (zoomFactor * i * 0.025) < 5) {
-                    chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.025));
+                if (zoomFactor < 1 && zoomFactor >= 0.5) {
+                    if (zoomFactor < 0.75) {
+                        chrome.tabs.setZoom(zoomFactor + ((zoomFactor/ 2) * i * 0.02));
+                        i++;
+                        if (i < 51) {
+                            newZoom("+", zoomFactor, i);
+                        }
+                    } else {
+                        chrome.tabs.setZoom(zoomFactor + ((zoomFactor/ 3) * i * 0.02));
+                        i++;
+                        if (i < 51) {
+                            newZoom("+", zoomFactor, i);
+                        }
+                    }
+                } else if (zoomFactor >= 3.9) {
+                    chrome.tabs.setZoom(zoomFactor + ((zoomFactor /4) * i * 0.02));
                     i++;
-                    if (i < 41) {
+                    if (i < 51) {
+                        newZoom("+", zoomFactor, i);
+                    }
+                } else {
+                    chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.02));
+                    i++;
+                    if (i < 51) {
                         newZoom("+", zoomFactor, i);
                     }
                 }
+            // zoom out
             } else {
-                if (zoomFactor >= 4.9) {
-                    i = 30;
-                }
-                chrome.tabs.setZoom(zoomFactor - (zoomFactor * i * 0.025));
-                i++;
-                if (i < 41) {
-                    newZoom("-", zoomFactor, i);
+                if (zoomFactor > 4) {
+                    chrome.tabs.setZoom(zoomFactor - ((zoomFactor / 5) * i * 0.02));
+                    i++;
+                    if (i < 51) {
+                        newZoom("-", zoomFactor, i);
+                    }
+                } else if (zoomFactor > 0.25) {
+                    if(zoomFactor > 1) {
+                        chrome.tabs.setZoom(zoomFactor - ((zoomFactor / 2) * i * 0.02));
+                        i++;
+                        if (i < 51) {
+                            newZoom("-", zoomFactor, i);
+                        }
+                    } else {
+                        chrome.tabs.setZoom(zoomFactor - (i * 0.00625));
+                        i++;
+                        if (i < 41) {
+                            newZoom("-", zoomFactor, i);
+                        }
+                    }
+                } else {
+                    notify("Zooming out isn't possible");
+                    say("I cannot zoom out");
                 }
             }
-        }, 25);
+        }, 20);
     }
 
     /**
@@ -68,19 +106,19 @@ addModule(new Module("zoomModule", function() {
      */
     var resetZoom = function (zoomFactor, i) {
       setTimeout(function () {
-          if (zoomFactor > 1 && zoomFactor - (zoomFactor * i * 0.025) >= 0.9) {
-              chrome.tabs.setZoom(zoomFactor - (zoomFactor * i * 0.025));
+          if (zoomFactor > 1 && zoomFactor - (zoomFactor * i * 0.02) >= 0.9999) {
+              chrome.tabs.setZoom(zoomFactor - (zoomFactor * i * 0.02));
               i++;
               resetZoom(zoomFactor, i);
-          } else if(zoomFactor < 1 && zoomFactor + (zoomFactor * i * 0.025) <= 1.1) {
-              chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.025));
+          } else if(zoomFactor < 1 && zoomFactor + (zoomFactor * i * 0.02) <= 1.0009) {
+              chrome.tabs.setZoom(zoomFactor + (zoomFactor * i * 0.02));
               i++;
               resetZoom(zoomFactor, i);
           } else {
               notify("Zoom is already reseted");
               say("The zoom is already reseted");
           }
-      }, 25)
+      }, 20)
     };
 
     /**
