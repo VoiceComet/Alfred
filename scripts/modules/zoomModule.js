@@ -126,7 +126,7 @@ addModule(new Module("zoomModule", function() {
      * @type {Action}
      */
     var startZooming = new Action("start zooming", 0, zoomState);
-    startZooming.addCommand(new Command("test", 0));
+    startZooming.addCommand(new Command("zooming", 0));
     startZooming.act = function() {
         callContentScriptMethod("startZooming", {});
     };
