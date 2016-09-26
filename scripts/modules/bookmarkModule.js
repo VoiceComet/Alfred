@@ -5,6 +5,7 @@
 addModule(new Module("bookmarkModule", function () {
 
     var folder = "";
+    var available = 1;
 
     /**
      * state for interacting with modules
@@ -49,35 +50,36 @@ addModule(new Module("bookmarkModule", function () {
      * @param {String} object.url - url of bookmark
      */
     var availability = function (object) {
-        var available = 1;
-        if (object.type = "bookmark") {
-            chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodes) {
-                if (BookmarkTreeNodes.length > 0) {
-                    if (BookmarkTreeNodes[0].url != "") {
-                        available = 0;
-                        say("There is already a bookmark with the same title in your library");
-                        notify("Bookmark title not available");
+        available = 1;
+        if (object.type === "bookmark") {
+            chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodesBookmark) {
+                if (BookmarkTreeNodesBookmark.length > 0) {
+                    for (var i = 0; i < BookmarkTreeNodesBookmark.length; i++) {
+                        if (BookmarkTreeNodesBookmark[i].url != undefined) {
+                            say("There is already a bookmark with the same title in your library");
+                            notify("Bookmark title not available");
+                            available = 0;
+                        }
                     }
                 } else {
                     chrome.bookmarks.search({url: object.url}, function (BookmarkTreeNodesUrl) {
                         if (BookmarkTreeNodesUrl.length > 0) {
-                            available = 0;
                             say("There is already a bookmark with the same url in your library");
                             notify("Bookmark url not available");
+                            available = 0;
                         }
                     });
                 }
             });
         } else {
-            chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodes) {
-                if (BookmarkTreeNodes.length > 0) {
-                    available = 0;
+            chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodesFolder) {
+                if (BookmarkTreeNodesFolder.length > 0) {
                     say("There is already a folder with the same title in your library");
                     notify("Folder title not available");
+                    available = 0;
                 }
             });
         }
-        return available;
     };
 
     /**
@@ -92,17 +94,22 @@ addModule(new Module("bookmarkModule", function () {
                 say("There is no " + object + " " + title + " in your library");
                 notify("No " + object + " " + title + " found");
             } else if (object === "bookmark"){
-                if (action === "open") {
-                    chrome.tabs.update({url: BookmarkTreeNodes[0].url, active: true});
-                } else {
-                    chrome.bookmarks.remove(BookmarkTreeNodes[0].id);
-                    say("I removed the bookmark " + title + " from your library");
+                for (var i = 0; i < BookmarkTreeNodes.length; i++) {
+                    if (BookmarkTreeNodes[i].url != undefined) {
+                        if (action === "open") {
+                            chrome.tabs.update({url: BookmarkTreeNodes[i].url, active: true});
+                        } else {
+                            chrome.bookmarks.remove(BookmarkTreeNodes[i].id);
+                            say("I removed the bookmark " + title + " from your library");
+                        }
+                    }
                 }
             } else {
                 if (action === "open") {
                     callContentScriptMethod("openFolder", {});
                 } else {
                     chrome.bookmarks.removeTree(BookmarkTreeNodes[0].id);
+                    say("I removed the folder " + title + " from your library");
                 }
             }
         });
@@ -124,7 +131,7 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addBookmarkToFolder = new Action("addBookmarkToFolder", 1, bookmarkListenState);
-    addBookmarkToFolder.addCommand(new Command("add bookmark to folder (.*)", 1));
+    addBookmarkToFolder.addCommand(new Command("in (.*) add bookmark", 1));
     addBookmarkToFolder.act = function (params) {
         if (interacting(params[0], "folder", "open")) {
             folder = params[0];
@@ -137,42 +144,37 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var sayTitleBookmark = new Action("sayTitleBookmark", 1, globalCommonState);
-    sayTitleBookmark.addCommand(new Command("(.*)" ,1));
+    sayTitleBookmark.addCommand(new Command("(.+)", 1));
     sayTitleBookmark.act = function (params) {
         chrome.tabs.query({currentWindow: true, active: true}, function(result) {
             var url = result[0].url;
-            var goOn = availability({
+            availability({
                 type: "bookmark",
                 title: params[0],
                 url: url
             });
-            alert(goOn);
-            if (folder != "") {
-                if (goOn != 0) {
-                    chrome.bookmarks.getTree(function () {
-                        chrome.bookmarks.create({
-                            "parentId": folder,
-                            "title": params[0],
-                            "url": url
+            setTimeout(function () {
+                if (available === 1) {
+                    if (folder != "") {
+                        chrome.bookmarks.getTree(function () {
+                            chrome.bookmarks.create({
+                                "parentId": folder,
+                                "title": params[0],
+                                "url": url
+                            });
                         });
-                    });
-                    say("I added the bookmark " + params[0] + " to the folder " + folder);
-                } else {
-                    say("would you like to override it?", false);
-                }
-            } else {
-                if (goOn != 0) {
-                    chrome.bookmarks.getTree(function () {
-                        chrome.bookmarks.create({
-                            "title": params[0],
-                            "url": url
+                        say("I added the bookmark " + params[0] + " to the folder " + folder);
+                    } else {
+                        chrome.bookmarks.getTree(function () {
+                            chrome.bookmarks.create({
+                                "title": params[0],
+                                "url": url
+                            });
                         });
-                    });
-                    say("I added the bookmark " + params[0] + " to your library");
-                } else {
-                    say("would you like to override it?", false);
+                        say("I added the bookmark " + params[0] + " to your library");
+                    }
                 }
-            }
+            }, 10);
         });
     };
     bookmarkListenState.addAction(sayTitleBookmark);
@@ -182,7 +184,7 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var openBookmark = new Action("openBookmark", 1, globalCommonState);
-    openBookmark.addCommand(new Command("open bookmark (.*)", 1));
+    openBookmark.addCommand(new Command("change to (.*)", 1));
     openBookmark.act = function (params) {
         interacting(params[0], "bookmark", "open");
     };
@@ -204,8 +206,8 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addFolder = new Action("addFolder", 0, folderListenState);
-    addFolder.addCommand(new Command("test", 0));
-    //addFolder.act = function () {};
+    addFolder.addCommand(new Command("add new folder", 0));
+    addFolder.act = function () {};
     this.addAction(addFolder);
 
     /**
@@ -215,14 +217,19 @@ addModule(new Module("bookmarkModule", function () {
     var sayTitleFolder = new Action("sayTitleFolder", 1, globalCommonState);
     sayTitleFolder.addCommand(new Command("(.+)", 1));
     sayTitleFolder.act = function (params) {
-        if (availability({type: "folder", title: params[0], url: ""}) != 0) {
-            chrome.bookmarks.create({
-                'title': params[0]
-            });
-            say("I added the folder " + params[0] + " to your library");
-        } else {
-            say("would you like to override it?", false);
-        }
+        availability({
+            type: "folder",
+            title: params[0],
+            url: ""
+        });
+        setTimeout(function () {
+            if (available === 1) {
+                chrome.bookmarks.create({
+                    'title': params[0]
+                });
+                say("I added the folder " + params[0] + " to your library");
+            }
+        }, 5);
     };
     folderListenState.addAction(sayTitleFolder);
 
@@ -231,7 +238,7 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var openFolder = new Action("openFolder", 1, globalCommonState);
-    openFolder.addCommand(new Command("open folder (.*)", 1));
+    openFolder.addCommand(new Command("show folder (.*)", 1));
     openFolder.act = function (params) {
         interacting(params[0], "folder", "open");
     };
