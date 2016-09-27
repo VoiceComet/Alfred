@@ -2,6 +2,7 @@
  * module for searching expressions
  */
 addModule(new Module("searchModule", function() {
+
     /**
      * State for searching an expression
      */
@@ -17,9 +18,13 @@ addModule(new Module("searchModule", function() {
 
     /**
      * search for an expression
+     * @type {Action}
      */
     var search = new Action("search expression", 1, searchState);
-    search.addCommand(new Command("search for (.*)", 1));
+    search.addCommands([
+        new Command("search for (.*)", 1),
+        new Command("search (.*)", 1)
+    ]);
     search.act = function (arguments) {
         callContentScriptMethod("search", arguments[0], function (params) {
             if (params.content) {
@@ -31,7 +36,20 @@ addModule(new Module("searchModule", function() {
     searchState.addAction(search);
 
     /**
+     * change language of expression
+     * @type {Action}
+     */
+    var searchLanguage = new MultilingualAction("searchLanguage", search);
+    searchLanguage.addCommands([
+        new Command("search language", 0),
+        new Command("change search language", 0)
+    ]);
+    this.addAction(searchLanguage);
+    searchState.addAction(searchLanguage);
+
+    /**
      * next match
+     * @type {Action}
      */
     var next = new Action("nextMatch", 0, searchState);
     next.addCommand(new Command("next", 0));
@@ -46,6 +64,7 @@ addModule(new Module("searchModule", function() {
 
     /**
      * previous match
+     * @type {Action}
      */
     var prev = new Action("previousMatch", 0, searchState);
     prev.addCommand(new Command("previous", 0));
@@ -60,6 +79,7 @@ addModule(new Module("searchModule", function() {
 
     /**
      * go to certain match
+     * @type {Action}
      */
     var certainMatch = new Action("certainMatch", 1, searchState);
     certainMatch.addCommand(new Command("go to match (.*)", 1));

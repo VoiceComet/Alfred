@@ -165,6 +165,7 @@ addModule(new Module("bookmarkModule", function () {
                                             "url": url
                                         });
                                         say("I added the bookmark " + params[0] + " to your folder, " + folder);
+                                        notify("Added bookmark" + params[0] + " to folder " + folder);
                                     }
                                 }
                             }
@@ -177,6 +178,7 @@ addModule(new Module("bookmarkModule", function () {
                             });
                         });
                         say("I added the bookmark " + params[0] + " to your library");
+                        notify("Added bookmark" + params[0] + " to library");
                     }
                 }
             }, 10);
