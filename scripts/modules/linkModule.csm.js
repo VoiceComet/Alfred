@@ -1,37 +1,46 @@
 /**
  * csm for interacting with links
  */
+var searched = false;
 var links;
 var i = 0;
 var found = [];
 var foundParams;
+
+/**
+ * find all links
+ */
+var allLinks = function () {
+    $("a")
+        .removeClass("highlight")
+        .removeClass("topHighlight")
+        .addClass("highlight");
+
+    if (id != "") {
+        hideMessage({id: id});
+    }
+    //if link is hidden on page remove class highlight
+    $(".highlight:hidden").removeClass("highlight");
+    $(".highlight").each(function () {
+        if (window.getComputedStyle(this).getPropertyValue("visibility") === "hidden") {
+            $(this).removeClass("highlight");
+        } else if ($(this).find('> img').length > 0) {
+            var images = $(this).find('> img');
+            $(images[0]).addClass("highlight");
+            $(this).removeClass("highlight");
+        }
+    });
+
+    searched = true;
+    links = jQuery.makeArray(document.getElementsByClassName("highlight"));
+};
+
 /**
  * show all links
  */
 addContentScriptMethod(
     new ContentScriptMethod("showLinks", function () {
-        $("a")
-            .removeClass("highlight")
-            .removeClass("topHighlight")
-            .addClass("highlight");
-
-        if (id != "") {
-            hideMessage({id: id});
-        }
-        //if link is hidden on page remove class highlight
-        $(".highlight:hidden").removeClass("highlight");
-        $(".highlight").each(function () {
-            if (window.getComputedStyle(this).getPropertyValue("visibility") === "hidden") {
-                $(this).removeClass("highlight");
-            } else if ($(this).find('> img').length > 0) {
-                var images = $(this).find('> img');
-                $(images[0]).addClass("highlight");
-                $(this).removeClass("highlight");
-            }
-        });
-
-        links = jQuery.makeArray(document.getElementsByClassName("highlight"));
-
+        allLinks();
         if(links.length === 0) {
             showMessage({content: "Could not find links"});
             return({content: "I found no links on this page"});
@@ -285,6 +294,9 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("certainLinkByName", function (params) {
+        if (links.length === 0) {
+
+        }
         foundParams = params;
         var k;
         //if a search by Name was done before, reset the founded links

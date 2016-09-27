@@ -23,7 +23,7 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var showLinks = new Action("showLinks", 0, linkState);
-    showLinks.addCommand(new Command("show links", 0));
+    showLinks.addCommand(new Command("test", 0));
     showLinks.act = function () {
         callContentScriptMethod("showLinks", {}, function (params) {
             if (params.content) {
@@ -93,6 +93,19 @@ addModule(new Module("linkModule", function () {
         });
     };
     linkState.addAction(certainName);
+    this.addAction(certainName);
+
+    /**
+     * change language for link
+     * @type {Action}
+     */
+    var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: "What link shall i got to", say: "What link shall i got to?"}]);
+    searchLanguage.addCommands([
+        new Command("link language", 0),
+        new Command("change link language", 0)
+    ]);
+    linkState.addAction(searchLanguage);
+    this.addAction(searchLanguage);
 
 
     /**

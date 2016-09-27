@@ -39,7 +39,7 @@ addModule(new Module("searchModule", function() {
      * change language of expression
      * @type {Action}
      */
-    var searchLanguage = new MultilingualAction("searchLanguage", search);
+    var searchLanguage = new MultilingualAction("searchLanguage", search, [{notify: "What shall i search for", say: "What shall i search for?"}]);
     searchLanguage.addCommands([
         new Command("search language", 0),
         new Command("change search language", 0)
