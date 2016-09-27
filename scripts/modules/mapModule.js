@@ -37,7 +37,7 @@ addModule(new Module("mapModule", function () {
 	 * multilingual search
 	 * @type {MultilingualAction}
 	 */
-	var mapLanguageSearch = new MultilingualAction("mapLanguageSearch", mapSearch);
+	var mapLanguageSearch = new MultilingualAction("mapLanguageSearch", mapSearch, [{notify:"Say your search query in chosen language", say:"Say your search query in chosen language"}]);
 	mapLanguageSearch.addCommand(new Command("language search", 0));
 	mapState.addAction(mapLanguageSearch);
 

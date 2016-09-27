@@ -3,9 +3,10 @@
  * @extends Action
  * @param {String} name - name of action
  * @param {Action} relatedAction - related action
+ * @param {{notify: String, say: String}[]} settings - for each parameter one element in this array
  * @constructor
  */
-function MultilingualAction(name, relatedAction) {
+function MultilingualAction(name, relatedAction, settings) {
 	/** @type {Action} */
 	this.relatedAction = relatedAction;
 
@@ -76,7 +77,18 @@ function MultilingualAction(name, relatedAction) {
 		};
 		sayParameterState.init = function() {
 			var sayParamState = this;
-			notify("say your parameter in chosen language", 0, function(messageId) {
+
+			var paramText = "say your parameter in chosen language";
+			if (settings.length >= 1) {
+				if (settings[0].hasOwnProperty("notify") && settings[0].notify != "") {
+					paramText = settings[0].notify;
+				}
+
+				if (settings[0].hasOwnProperty("say") && settings[0].say != "") {
+					say(settings[0].say);
+				}
+			}
+			notify(paramText, 0, function(messageId) {
 				sayParamState.setMessageId(messageId);
 			});
 			this.ableToCancel = false;

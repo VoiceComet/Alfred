@@ -277,7 +277,7 @@ addModule(new Module("SearchEngineModule", function() {
 		searchEngineAction.query = "empty";
 		stateOrModule.addAction(searchEngineAction);
 
-		var languageSearchEngineAction = new MultilingualAction("LanguageWebSearch", searchEngineAction);
+		var languageSearchEngineAction = new MultilingualAction("LanguageWebSearch", searchEngineAction, [{notify:"Say your search query in chosen language", say:"Say your search query in chosen language"}]);
 		languageSearchEngineAction.addCommands([
 			new Command("language web search", 0),
 			new Command("language websearch", 0),
