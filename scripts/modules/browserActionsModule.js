@@ -17,7 +17,7 @@ addModule(new Module("BrowserActionsModule", function() {
 	 * open new page
 	 */
 	var openPage = new Action("open new page", 1, globalCommonState);
-	openPage.addCommand(new Command("open (.*)", 1));
+	openPage.addCommand(new Command("open page (.*)", 1));
 	openPage.act = function(arguments) {
 		var url = "";
 		var repWhitespace = "";

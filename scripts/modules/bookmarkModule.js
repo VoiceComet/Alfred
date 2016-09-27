@@ -74,9 +74,13 @@ addModule(new Module("bookmarkModule", function () {
         } else {
             chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodesFolder) {
                 if (BookmarkTreeNodesFolder.length > 0) {
-                    say("There is already a folder with the same title in your library");
-                    notify("Folder title not available");
-                    available = 0;
+                    for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
+                        if (BookmarkTreeNodesFolder[i].url === undefined) {
+                            say("There is already a folder with the same title in your library");
+                            notify("Folder title not available");
+                            available = 0;
+                        }
+                    }
                 }
             });
         }
@@ -101,6 +105,7 @@ addModule(new Module("bookmarkModule", function () {
                         } else {
                             chrome.bookmarks.remove(BookmarkTreeNodes[i].id);
                             say("I removed the bookmark " + title + " from your library");
+                            notify("Removed bookmark " + title + " from library");
                         }
                     }
                 }
@@ -110,6 +115,7 @@ addModule(new Module("bookmarkModule", function () {
                 } else {
                     chrome.bookmarks.removeTree(BookmarkTreeNodes[0].id);
                     say("I removed the folder " + title + " from your library");
+                    notify("Removed folder " + title + " from library");
                 }
             }
         });
@@ -160,25 +166,26 @@ addModule(new Module("bookmarkModule", function () {
                                 for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
                                     if (BookmarkTreeNodesFolder[i].url === undefined) {
                                         chrome.bookmarks.create({
-                                            "parentId": BookmarkTreeNodesFolder[i].id,
-                                            "title": params[0],
-                                            "url": url
+                                            parentId: BookmarkTreeNodesFolder[i].id,
+                                            title: params[0],
+                                            url: url
                                         });
                                         say("I added the bookmark " + params[0] + " to your folder, " + folder);
-                                        notify("Added bookmark" + params[0] + " to folder " + folder);
+                                        notify("Added bookmark " + params[0] + " to folder " + folder);
                                     }
                                 }
                             }
                         });
                     } else {
-                        chrome.bookmarks.getTree(function () {
+                        chrome.bookmarks.getTree(function (results) {
                             chrome.bookmarks.create({
-                                "title": params[0],
-                                "url": url
+                                parentId: results[0].children[0].id,
+                                title: params[0],
+                                url: url
                             });
                         });
                         say("I added the bookmark " + params[0] + " to your library");
-                        notify("Added bookmark" + params[0] + " to library");
+                        notify("Added bookmark " + params[0] + " to library");
                     }
                 }
             }, 10);
@@ -191,7 +198,7 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var openBookmark = new Action("openBookmark", 1, globalCommonState);
-    openBookmark.addCommand(new Command("change to (.*)", 1));
+    openBookmark.addCommand(new Command("open bookmark (.*)", 1));
     openBookmark.act = function (params) {
         interacting(params[0], "bookmark", "open");
     };
@@ -214,8 +221,22 @@ addModule(new Module("bookmarkModule", function () {
      */
     var addFolder = new Action("addFolder", 0, folderListenState);
     addFolder.addCommand(new Command("add new folder", 0));
-    addFolder.act = function () {};
+    addFolder.act = function () {
+        folder = "";
+    };
     this.addAction(addFolder);
+
+    /**
+     * add folder in folder
+     * @type {Action}
+     */
+    var addFolderInFolder = new Action("addFolderInFolder", 1, folderListenState);
+    addFolderInFolder.addCommand(new Command("create new folder in (.*)", 1));
+    addFolderInFolder.act = function (params) {
+        interacting(params[0], "folder", "open");
+        folder = params[0];
+    };
+    this.addAction(addFolderInFolder);
 
     /**
      * say title for folder
@@ -226,17 +247,37 @@ addModule(new Module("bookmarkModule", function () {
     sayTitleFolder.act = function (params) {
         availability({
             type: "folder",
-            title: params[0],
-            url: ""
+            title: params[0]
         });
         setTimeout(function () {
             if (available === 1) {
-                chrome.bookmarks.create({
-                    'title': params[0]
-                });
-                say("I added the folder " + params[0] + " to your library");
+                if (folder != "") {
+                    chrome.bookmarks.search({title: folder}, function (BookmarkTreeNodesFolder) {
+                        if (BookmarkTreeNodesFolder.length > 0) {
+                            for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
+                                if (BookmarkTreeNodesFolder[i].url === undefined) {
+                                    chrome.bookmarks.create({
+                                        parentId: BookmarkTreeNodesFolder[i].id,
+                                        title: params[0]
+                                    });
+                                    say("I added the folder " + params[0] + " to your folder, " + folder);
+                                    notify("Added folder " + params[0] + " to folder " + folder);
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    chrome.bookmarks.getTree(function (results) {
+                        chrome.bookmarks.create({
+                            parentId: results[0].children[0].id,
+                            title: params[0]
+                        });
+                    });
+                    say("I added the folder " + params[0] + " to your library");
+                    notify("Added folder " + params[0] + " to library");
+                }
             }
-        }, 5);
+        }, 10);
     };
     folderListenState.addAction(sayTitleFolder);
 
