@@ -91,7 +91,7 @@ addModule(new Module("bookmarkModule", function () {
     var interacting = function (title, object, action) {
         chrome.bookmarks.search({title: title}, function (BookmarkTreeNodes) {
             if (BookmarkTreeNodes.length === 0) {
-                say("There is no " + object + " " + title + " in your library");
+                say("There is no " + object + ", " + title + " in your library");
                 notify("No " + object + " " + title + " found");
             } else if (object === "bookmark"){
                 for (var i = 0; i < BookmarkTreeNodes.length; i++) {
@@ -131,11 +131,10 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addBookmarkToFolder = new Action("addBookmarkToFolder", 1, bookmarkListenState);
-    addBookmarkToFolder.addCommand(new Command("in (.*) add bookmark", 1));
+    addBookmarkToFolder.addCommand(new Command("create bookmark in (.*)", 1));
     addBookmarkToFolder.act = function (params) {
-        if (interacting(params[0], "folder", "open")) {
-            folder = params[0];
-        }
+        interacting(params[0], "folder", "open");
+        folder = params[0];
     };
     this.addAction(addBookmarkToFolder);
 
@@ -156,14 +155,20 @@ addModule(new Module("bookmarkModule", function () {
             setTimeout(function () {
                 if (available === 1) {
                     if (folder != "") {
-                        chrome.bookmarks.getTree(function () {
-                            chrome.bookmarks.create({
-                                "parentId": folder,
-                                "title": params[0],
-                                "url": url
-                            });
+                        chrome.bookmarks.search({title: folder}, function (BookmarkTreeNodesFolder) {
+                            if (BookmarkTreeNodesFolder.length > 0) {
+                                for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
+                                    if (BookmarkTreeNodesFolder[i].url === undefined) {
+                                        chrome.bookmarks.create({
+                                            "parentId": BookmarkTreeNodesFolder[i].id,
+                                            "title": params[0],
+                                            "url": url
+                                        });
+                                        say("I added the bookmark " + params[0] + " to your folder, " + folder);
+                                    }
+                                }
+                            }
                         });
-                        say("I added the bookmark " + params[0] + " to the folder " + folder);
                     } else {
                         chrome.bookmarks.getTree(function () {
                             chrome.bookmarks.create({
