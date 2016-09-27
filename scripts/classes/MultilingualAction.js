@@ -23,13 +23,14 @@ function MultilingualAction(name, relatedAction) {
 		var languageState = this;
 
 		//show dialog with languages
-		var dialogActions = [];
-		dialogActions.push({command: "english", description: "english Language"});
-		dialogActions.push({command: "german", description: "deutsche Sprache"});
-		dialogActions.push({command: "spanish", description: "idioma español"});
-		dialogActions.push({command: "french", description: "langue française"});
-		dialogActions.push({command: "turkish", description: "türk dili"});
-		dialogActions.push({command: "russian", description: "русский язык"});
+		var dialogActions = [
+			{command: "english", description: "english Language"},
+			{command: "german", description: "deutsche Sprache"},
+			{command: "spanish", description: "idioma español"},
+			{command: "french", description: "langue française"},
+			{command: "turkish", description: "türk dili"},
+			{command: "russian", description: "русский язык"}
+		];
 		showDialog("Choose a Language", "", dialogActions, function (messageId) {
 			languageState.setMessageId(messageId);
 		});
@@ -43,12 +44,14 @@ function MultilingualAction(name, relatedAction) {
 	//create choose language action
 	var chooseLanguageAction = new Action("Choose Language", 1, null);
 	chooseLanguageAction.chooseLanguageState = chooseLanguageState;
-	chooseLanguageAction.addCommand(new Command("(english)", 1));
-	chooseLanguageAction.addCommand(new Command("(german)", 1));
-	chooseLanguageAction.addCommand(new Command("(spanish)", 1));
-	chooseLanguageAction.addCommand(new Command("(french)", 1));
-	chooseLanguageAction.addCommand(new Command("(turkish)", 1));
-	chooseLanguageAction.addCommand(new Command("(russian)", 1));
+	chooseLanguageAction.addCommands([
+		new Command("(english)", 1),
+		new Command("(german)", 1),
+		new Command("(spanish)", 1),
+		new Command("(french)", 1),
+		new Command("(turkish)", 1),
+		new Command("(russian)", 1)
+	]);
 	chooseLanguageAction.act = function(arguments) {
 		this.chooseLanguageState.hideDialog();
 
@@ -85,6 +88,9 @@ function MultilingualAction(name, relatedAction) {
 		sayParameterAction.act = function(arguments) {
 			this.sayParameterState.hideDialog();
 			that.relatedAction.act(arguments);
+			//action can change the following state
+			//noinspection JSPotentiallyInvalidUsageOfThis
+			this.followingState = that.relatedAction.followingState;
 		};
 		sayParameterState.addAction(sayParameterAction);
 

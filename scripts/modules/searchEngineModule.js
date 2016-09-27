@@ -253,20 +253,40 @@ addModule(new Module("SearchEngineModule", function() {
 					this.followingState.addAction(previous);
 				}
 			}
+
+			//add search actions
+			addSearchEngineActions(this.followingState);
 		};
 	}
 
 
-	var searchEngineAction = new SearchAction("Search ?", 1, null); //state is set during act function
-	searchEngineAction.addCommands([
-		new Command("web search (.+)", 1),
-		new Command("websearch (.+)", 1),
-		new Command("google (.+)", 1),
-		new Command("bing (.+)", 1)
-	]);
-	searchEngineAction.maxResults = maxResults;
-	searchEngineAction.start = 0;
-	searchEngineAction.query = "empty";
+	/**
+	 * add web search action and language web search action to given state or module
+	 * @param {Module|State} stateOrModule
+	 */
+	function addSearchEngineActions(stateOrModule) {
+		var searchEngineAction = new SearchAction("WebSearch", 1, null); //state is set during act function
+		searchEngineAction.addCommands([
+			new Command("web search (.+)", 1),
+			new Command("websearch (.+)", 1),
+			new Command("google (.+)", 1),
+			new Command("bing (.+)", 1)
+		]);
+		searchEngineAction.maxResults = maxResults;
+		searchEngineAction.start = 0;
+		searchEngineAction.query = "empty";
+		stateOrModule.addAction(searchEngineAction);
 
-	this.addAction(searchEngineAction);
+		var languageSearchEngineAction = new MultilingualAction("LanguageWebSearch", searchEngineAction);
+		languageSearchEngineAction.addCommands([
+			new Command("language web search", 0),
+			new Command("language websearch", 0),
+			new Command("language google", 0),
+			new Command("language bing", 0)
+		]);
+		stateOrModule.addAction(languageSearchEngineAction);
+	}
+
+	addSearchEngineActions(this);
+
 }));
