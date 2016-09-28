@@ -304,13 +304,7 @@ addContentScriptMethod(
         foundParams = params;
         var k;
         //if a search by Name was done before, reset the founded links
-        if (found.length > 0) {
-            for (var l = 0; l < found.length; l++) {
-                $(found[l])
-                    .removeClass("topHighlight")
-                    .removeClass("highlight");
-            }
-        }
+        var prevFound = found;
         found = [];
         for (var j = 0; j < links.length; j++) {
             if (links[j].innerHTML.toLowerCase().trim() === foundParams.toString().toLowerCase().trim()) {
@@ -319,6 +313,13 @@ addContentScriptMethod(
                 k = j;
             } else {
                 $(links[j]).removeClass("searched");
+            }
+        }
+        if (prevFound.length > 0) {
+            for (var l = 0; l < prevFound.length; l++) {
+                $(prevFound[l])
+                    .removeClass("topHighlight")
+                    .removeClass("highlight");
             }
         }
         if (found.length > 1){
@@ -348,11 +349,6 @@ addContentScriptMethod(
                     commandRight: "next",
                     infoCenter:"link " + (i + 1) + " of " + (found.length)
                 });
-                if (found.length > 1) {
-                    return({content: "I found " + found.length + "links. You are on link " + (i + 1)});
-                } else {
-                    return({content: "I found " + found.length + "link."});
-                }
             } else {
                 updateMessage({
                     id: id,
@@ -364,6 +360,7 @@ addContentScriptMethod(
                     infoCenter: "link " + (i + 1) + " of " + (found.length)
                 });
             }
+            return({content: "I found " + found.length + "links. You are on link " + (i + 1)});
         } else if (found.length === 1) {
             $(".searched").each(function () {
                 $(this).removeClass("searched");
@@ -388,11 +385,6 @@ addContentScriptMethod(
                     commandRight: "next",
                     infoCenter: "link " + (i + 1) + " of " + (links.length)
                 });
-                if (found.length > 1) {
-                    return ({content: "I found " + found.length + "links. You are on link " + (i + 1)});
-                } else {
-                    return ({content: "I found " + found.length + "link."});
-                }
             } else {
                 updateMessage({
                     id: id,
@@ -404,6 +396,7 @@ addContentScriptMethod(
                     infoCenter: "link " + (i + 1) + " of " + (links.length)
                 });
             }
+            return ({content: "I found " + found.length + "link."});
         } else {
             showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
             return({content: "I found no link" + foundParams + "on this page"});

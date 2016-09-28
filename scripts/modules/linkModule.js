@@ -13,7 +13,6 @@ addModule(new Module("linkModule", function () {
         notify("entered link state");
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelLinkState", {});
-            notify("canceled link state");
             say("I stopped interacting with links");
         };
     };
