@@ -1,7 +1,7 @@
 /**
  * csm for interacting with links
  */
-var searched = false;
+var searchedAll = false;
 var links;
 var i = 0;
 var found = [];
@@ -31,7 +31,6 @@ var allLinks = function () {
         }
     });
 
-    searched = true;
     links = jQuery.makeArray(document.getElementsByClassName("highlight"));
 };
 
@@ -41,6 +40,7 @@ var allLinks = function () {
 addContentScriptMethod(
     new ContentScriptMethod("showLinks", function () {
         allLinks();
+        searchedAll = true;
         if(links.length === 0) {
             showMessage({content: "Could not find links"});
             return({content: "I found no links on this page"});
@@ -81,7 +81,11 @@ addContentScriptMethod(
                         commandRight: "next",
                         infoCenter: "link " + (i + 1) + " of " + links.length
                     });
-                    return({content: "I found " + links.length + "links. You are on link " + (i + 1)});
+                    if (links.length > 1) {
+                        return({content: "I found " + links.length + "links. You are on link " + (i + 1)});
+                    } else {
+                        return({content: "I found " + links.length + "link."});
+                    }
                 }
             }
         }
@@ -294,14 +298,18 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("certainLinkByName", function (params) {
-        if (links.length === 0) {
-
+        if (searchedAll != true) {
+            allLinks();
         }
         foundParams = params;
         var k;
         //if a search by Name was done before, reset the founded links
         if (found.length > 0) {
-            $(found[i]).removeClass("topHighlight");
+            for (var l = 0; l < found.length; l++) {
+                $(found[l])
+                    .removeClass("topHighlight")
+                    .removeClass("highlight");
+            }
         }
         found = [];
         for (var j = 0; j < links.length; j++) {
@@ -316,8 +324,9 @@ addContentScriptMethod(
         if (found.length > 1){
             $(".highlight").each(function () {
                 if ($(this).hasClass("searched") != true) {
-                    $(this).removeClass("highlight");
-                    $(this).removeClass("topHighlight");
+                    $(this)
+                        .removeClass("highlight")
+                        .removeClass("topHighlight");
                 }
             });
             $(links[i]).removeClass("topHighlight");
@@ -329,15 +338,32 @@ addContentScriptMethod(
             $('html, body')
                 .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
                 .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
-            updateMessage({
-                id: id,
-                content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"link " + (i + 1) + " of " + (found.length)
-            });
+            if (searchedAll != true) {
+                id = showMessage({
+                    id: id,
+                    content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
+                    time: 0,
+                    cancelable: true,
+                    commandLeft: "previous",
+                    commandRight: "next",
+                    infoCenter:"link " + (i + 1) + " of " + (found.length)
+                });
+                if (found.length > 1) {
+                    return({content: "I found " + found.length + "links. You are on link " + (i + 1)});
+                } else {
+                    return({content: "I found " + found.length + "link."});
+                }
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
+                    time: 0,
+                    cancelable: true,
+                    commandLeft: "previous",
+                    commandRight: "next",
+                    infoCenter: "link " + (i + 1) + " of " + (found.length)
+                });
+            }
         } else if (found.length === 1) {
             $(".searched").each(function () {
                 $(this).removeClass("searched");
@@ -352,15 +378,32 @@ addContentScriptMethod(
             $('html, body')
                 .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
                 .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
-            updateMessage({
-                id: id,
-                content: "show all links",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"link " + (i + 1) + " of " + (links.length)
-            });
+            if (searchedAll != true) {
+                id = showMessage({
+                    id: id,
+                    content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
+                    time: 0,
+                    cancelable: true,
+                    commandLeft: "previous",
+                    commandRight: "next",
+                    infoCenter: "link " + (i + 1) + " of " + (links.length)
+                });
+                if (found.length > 1) {
+                    return ({content: "I found " + found.length + "links. You are on link " + (i + 1)});
+                } else {
+                    return ({content: "I found " + found.length + "link."});
+                }
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "show all links",
+                    time: 0,
+                    cancelable: true,
+                    commandLeft: "previous",
+                    commandRight: "next",
+                    infoCenter: "link " + (i + 1) + " of " + (links.length)
+                });
+            }
         } else {
             showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
             return({content: "I found no link" + foundParams + "on this page"});

@@ -99,7 +99,7 @@ addModule(new Module("linkModule", function () {
      * change language for link
      * @type {Action}
      */
-    var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: "What link shall i got to", say: "What link shall i got to?"}]);
+    var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: "Which link shall i got to", say: "Which link shall i got to?"}]);
     searchLanguage.addCommands([
         new Command("link language", 0),
         new Command("change link language", 0)
