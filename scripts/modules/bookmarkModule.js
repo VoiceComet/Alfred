@@ -6,17 +6,18 @@ addModule(new Module("bookmarkModule", function () {
 
     var folder = "";
     var available = 1;
+    var interact = 1;
 
     /**
-     * state for interacting with modules
+     * state for interacting with folder content
      */
-    var bookmarkState = new State("bookmarkState");
-    bookmarkState.init = function () {
-        notify("entered bookmark state");
+    var folderState = new PanelState("folderState");
+    folderState.init = function () {
+        notify("Entered folder state");
         this.cancelAction.act = function() {
-            callContentScriptMethod("cancelObjectState", {});
-            notify("canceled bookmark state");
-            say("I stopped interacting with your bookmarks");
+            callContentScriptMethod("hidePanel", {});
+            notify("canceled folder state");
+            say("I stopped rummaging in your library");
         };
     };
 
@@ -40,14 +41,18 @@ addModule(new Module("bookmarkModule", function () {
     folderListenState.init = function () {
         notify("Say a title for the new folder");
         say("Which name shall i give the folder");
+        this.cancelAction.act = function () {
+            notify("canceled folder listen state");
+            say("I canceled creating a folder");
+        }
     };
 
     /**
      * function to check if given title or url is taken
      * @param {Object} object
-     * @param {String} object.type - bookmark or folder
+     * @param {String} [object.type] - bookmark or folder
      * @param {String} object.title - title of object
-     * @param {String} object.url - url of bookmark
+     * @param {String} [object.url] - url of bookmark
      */
     var availability = function (object) {
         available = 1;
@@ -93,8 +98,10 @@ addModule(new Module("bookmarkModule", function () {
      * @param {String} action - delete or open object
      */
     var interacting = function (title, object, action) {
+        interact = 1;
         chrome.bookmarks.search({title: title}, function (BookmarkTreeNodes) {
             if (BookmarkTreeNodes.length === 0) {
+                interact = 0;
                 say("There is no " + object + ", " + title + " in your library");
                 notify("No " + object + " " + title + " found");
             } else if (object === "bookmark"){
@@ -137,7 +144,7 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addBookmarkToFolder = new Action("addBookmarkToFolder", 1, bookmarkListenState);
-    addBookmarkToFolder.addCommand(new Command("create bookmark in (.*)", 1));
+    addBookmarkToFolder.addCommand(new Command("create new bookmark in (.*)", 1));
     addBookmarkToFolder.act = function (params) {
         interacting(params[0], "folder", "open");
         folder = params[0];
@@ -203,6 +210,7 @@ addModule(new Module("bookmarkModule", function () {
         interacting(params[0], "bookmark", "open");
     };
     this.addAction(openBookmark);
+    folderState.addAction(openBookmark);
 
     /**
      * delete bookmark
@@ -246,7 +254,6 @@ addModule(new Module("bookmarkModule", function () {
     sayTitleFolder.addCommand(new Command("(.+)", 1));
     sayTitleFolder.act = function (params) {
         availability({
-            type: "folder",
             title: params[0]
         });
         setTimeout(function () {
@@ -285,12 +292,48 @@ addModule(new Module("bookmarkModule", function () {
      * open folder
      * @type {Action}
      */
-    var openFolder = new Action("openFolder", 1, globalCommonState);
-    openFolder.addCommand(new Command("show folder (.*)", 1));
+    var openFolder = new Action("openFolder", 1, folderState);
+    openFolder.addCommand(new Command("show content of (.*)", 1));
     openFolder.act = function (params) {
         interacting(params[0], "folder", "open");
+        setTimeout(function () {
+            if (interact === 1) {
+                chrome.bookmarks.search({title: params[0]}, function (BookmarkTreeNodes) {
+                    for (var i = 0; i < BookmarkTreeNodes.length; i++) {
+                        if (BookmarkTreeNodes[i].url === undefined) {
+                            var kids = "";
+                            chrome.bookmarks.getChildren(BookmarkTreeNodes[i].id, function (children) {
+                                if (children.length > 0) {
+                                    var kidFolder = [];
+                                    var kidBookmark = [];
+                                    for (var i = 0; i < children.length; i++) {
+                                        if (children[i].url === undefined) {
+                                            kidFolder.push(children[i]);
+                                        } else {
+                                            kidBookmark.push(children[i]);
+                                        }
+                                    }
+                                    kids = children;
+                                    var send = {title: params[0], kidFolder: kidFolder, kidBookmark: kidBookmark};
+                                    callContentScriptMethod("showFolder", send);
+                                    if (kidBookmark.length > 1) {
+                                        say("Your folder " + params[0] + " contains " + kidBookmark.length + "bookmarks and " + kidFolder.length + " folder");
+                                    } else {
+                                        say("Your folder " + params[0] + " contains " + kidBookmark.length + "bookmark and " + kidFolder.length + " folder");
+                                    }
+                                } else {
+                                    notify("The folder is empty");
+                                    say("The folder " + params + " is empty");
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }, 10);
     };
     this.addAction(openFolder);
+    folderState.addAction(openFolder);
 
     /**
      * delete folder
