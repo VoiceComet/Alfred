@@ -25,11 +25,12 @@ div#ChromeSpeechControlDIV img {
 
 div#ChromeSpeechControlDIV b {
     font-weight:bold;
+    color: white;
 }
 
 div#ChromeSpeechControlDIV div {
     display: block;
-    color: black;
+    /*color: black;*/
     text-align: left;
     font-family: sans-serif;
     font-size: medium;
@@ -51,18 +52,18 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     bottom: 135px;
     left: 0;
     border: 1px solid grey;
-    padding: 15px;
-    margin: 15px;
-    background-color: #f0f0f0;
-    /*border-radius: 6px;*/
-    max-height:calc(100% - 197px);
+    padding: 5px;
+    margin: 5px;
+    background-color: #036490;
+    border-radius: 6px;
+    max-height:calc(100% - 160px);
     width:398px;
     overflow-x:hidden;
     overflow-y:auto;
 }
 
 div#ChromeSpeechControlPanel.fullHeight {
-    height:calc(100% - 197px);
+    height:calc(100% - 160px);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
@@ -72,7 +73,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.left,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.right,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.top,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
-    color: #404040;
+    color: lightgray;
     font-size: medium;
     font-variant-caps: all-small-caps;
 }
@@ -115,12 +116,26 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.ChromeSpeechControlMessage {
     display: none;
-    color: #303030;
-    background-color: #f0f0f0;
+    color: white;
+    background-color: #036490;
     padding: 10px;
     margin-top:10px;
-    border: 1px solid grey;
-    border-radius: 6px;
+    border: 1px solid #036490;
+    /*border: 1px solid grey;*/
+    border-radius: 6px 6px 6px 0;
+}
+
+/* creates triangle */
+div.ChromeSpeechControlMessage:after {
+    right: 100%;
+    bottom: 0;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border-style: solid;
+    border-width: 5px 20px 5px 0;
+    border-color: transparent #036490;
 }
 
 /* text search module */
@@ -138,13 +153,13 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultTitle {
     font-weight: bold;
-    color: blue;
+    color: white;
 }
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultUrl {
     font-size: smaller;
-    color: darkgreen;
+    color: lightgrey;
 }
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultSnippet {
     font-size: small;
-    color: #404040;
+    color: #a8a8a8;
 }
