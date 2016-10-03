@@ -42,6 +42,17 @@ addModule(new Module("mapModule", function () {
 	mapState.addAction(mapLanguageSearch);
 
 	/**
+	 * search route
+	 * @type {Action}
+	 */
+	var mapSearchRoute = new Action("mapSearchRoute", 2, mapState);
+	mapSearchRoute.addCommand(new Command("from (.+) to (.+)", 2));
+	mapSearchRoute.act = function (arguments) {
+		callContentScriptMethod("mapSearchRoute", {origin:arguments[0], destination:arguments[1]});
+	};
+	mapState.addAction(mapSearchRoute);
+
+	/**
 	 * Zoom to marker
 	 * @type {Action}
 	 */

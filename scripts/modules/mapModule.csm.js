@@ -41,6 +41,14 @@ addContentScriptMethod(
 );
 
 addContentScriptMethod(
+	new ContentScriptMethod("mapSearchRoute", function(params) {
+		runMethodOnPage(function(params) {
+			searchRouteOnAlfredMap(params.origin, params.destination);
+		}, params);
+	})
+);
+
+addContentScriptMethod(
 	new ContentScriptMethod("mapZoomToMarker", function(params) {
 		runMethodOnPage(function(params) {
 			var letter = params.marker.toUpperCase();

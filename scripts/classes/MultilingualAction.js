@@ -25,7 +25,7 @@ function MultilingualAction(name, relatedAction, settings) {
 
 		//show dialog with languages
 		var dialogActions = [
-			{command: "english", description: "english Language"},
+			{command: "english", description: "english language"},
 			{command: "german", description: "deutsche Sprache"},
 			{command: "spanish", description: "idioma español"},
 			{command: "french", description: "langue française"},
