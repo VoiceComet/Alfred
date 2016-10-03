@@ -9,6 +9,7 @@ var alfredMapPlacesService;
 var alfredMapDirectionsService;
 var alfredMapDirectionsRenderer;
 var alfredMapRouteDisplayed = false;
+var alfredMapRouteMessageId = -1;
 
 //noinspection JSUnusedLocalSymbols
 /**
@@ -40,7 +41,6 @@ function createMarker(place) {
  * clear all markers from the map
  */
 function clearMarkers() {
-    console.log(alfredMapMarkers);
     alfredMapMarkers.forEach(function(marker) {
         marker.setMap(null);
     });
@@ -108,6 +108,11 @@ function clearDisplayedRoute() {
     if (alfredMapRouteDisplayed) {
         alfredMapDirectionsRenderer.setMap(null);
         alfredMapRouteDisplayed = false;
+
+        if (alfredMapRouteMessageId >= 0) {
+            hideMessage({id:alfredMapRouteMessageId});
+            alfredMapRouteMessageId = -1;
+        }
     }
 }
 
@@ -129,7 +134,22 @@ function searchRouteOnAlfredMap(origin, destination) {
             alfredMapDirectionsRenderer.setDirections(response);
             alfredMapDirectionsRenderer.setMap(alfredMap);
             alfredMapRouteDisplayed = true;
-            showMessage({content: 'I found a route between "' + origin + '" and "' + destination + '".'});
+
+            //create dummy markers for interaction
+            alfredMapMarkers.push(new google.maps.Marker({
+                label: 'A',
+                position: response.routes[0].legs[0].start_location
+            }));
+            alfredMapMarkers.push(new google.maps.Marker({
+                label: 'B',
+                position: response.routes[0].legs[0].end_location
+            }));
+            alfredMapRouteMessageId = showMessage({
+                content: 'Route between "' + origin + '" and "' + destination + '". <br/><br/>' +
+                    'Time: ' + response.routes[0].legs[0].duration.text + '<br/>' +
+                    'Distance: ' + response.routes[0].legs[0].distance.text,
+                time: 0
+            });
         } else {
             showMessage({content:'I cannot find a route between "' + origin + '" and "' + destination + '"'});
             console.log('Directions request failed due to ' + status);
