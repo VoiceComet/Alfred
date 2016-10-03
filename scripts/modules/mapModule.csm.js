@@ -28,8 +28,16 @@ addContentScriptMethod(
 				showPanel(panelParams);
 			});
 		});
-
     })
+);
+
+addContentScriptMethod(
+	new ContentScriptMethod("closeMap", function(params) {
+		runMethodOnPage(function() {
+			clearMarkers();
+			clearDisplayedRoute();
+		}, params);
+	})
 );
 
 addContentScriptMethod(
@@ -84,9 +92,7 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("mapCenterMarker", function(params) {
 		runMethodOnPage(function(params) {
-			console.log("params.marker: " + params.marker);
 			var letter = params.marker.toUpperCase();
-			console.log("letter: " + letter);
 			var letterPos = alfredMapMarkerLabels.indexOf(letter);
 			if (letterPos >= 0 && letterPos < alfredMapMarkerLabels.length && letterPos < alfredMapMarkers.length) {
 				alfredMap.panTo(alfredMapMarkers[letterPos].getPosition());

@@ -101,18 +101,6 @@ function setZoomFactor(params) {
 }
 
 
-/**
- * hide a given message div
- * @param {Object} params
- * @param {String} params.id - id of message div
- */
-function hideMessage(params) {
-	$('#'+params.id).hide(400, function() {
-		$(this).remove();
-	});
-}
-
-
 var panelTimeoutId = -1;
 /**
  * open the panel and add content, please use this only from content script methods

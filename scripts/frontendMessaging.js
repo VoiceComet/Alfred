@@ -116,3 +116,15 @@ function updateMessage(params) {
 	}
 	return null
 }
+
+
+/**
+ * hide a given message div
+ * @param {Object} params
+ * @param {String} params.id - id of message div
+ */
+function hideMessage(params) {
+	var message = document.getElementById(params.id);
+	message.setAttribute("style", "display:none;");
+	document.getElementById("ChromeSpeechControlMessagesBox").removeChild(message);
+}

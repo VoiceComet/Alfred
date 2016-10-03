@@ -5,6 +5,7 @@ addModule(new Module("mapModule", function () {
 	mapState.init = function() {
 		notify("entered map state");
 		this.cancelAction.act = function() {
+			callContentScriptMethod("closeMap", {});
 			callContentScriptMethod("hidePanel", {});
 			notify("canceled map state");
 		};
