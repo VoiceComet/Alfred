@@ -120,6 +120,7 @@ var panelTimeoutId = -1;
  * @param {String} [params.infoCenter] - (optional) information, that shown in the middle of commandLeft & commandRight
  * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
  * @param {Boolean} [params.fullHeight=false] - (optional) set panel height to max size
+ * @param {Boolean} [params.noPadding=false] - (optional) set panel padding to zero
  */
 function showPanel(params) {
 	//generate html
@@ -147,9 +148,15 @@ function showPanel(params) {
 	panel.attr("style", "display:block");
 	panel.html(html);
 
+	//set class
+	var elementClasses = "";
 	if (typeof params.fullHeight !== 'undefined' && params.fullHeight) {
-		panel.attr("class", "fullHeight");
+		elementClasses += "fullHeight ";
 	}
+	if (typeof params.noPadding !== 'undefined' && params.noPadding) {
+		elementClasses += "noPadding ";
+	}
+	panel.attr("class", elementClasses);
 
 	//clear last timeout
 	if (typeof panelTimeoutId !== 'undefined' && panelTimeoutId >= 0) {

@@ -18,7 +18,8 @@ addContentScriptMethod(
         var panelParams = {};
         panelParams.time = 0;
         panelParams.cancelable = false;
-        panelParams.fullHeight = true;
+		panelParams.fullHeight = true;
+		panelParams.noPadding = true;
 
 		//add map div and needed javascript to front page
 		jQuery.get(chrome.extension.getURL("scripts/frontendMessaging.js"), function(frontendMessagingContent) {

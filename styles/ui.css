@@ -61,9 +61,20 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     overflow-y:auto;
 }
 
-div#ChromeSpeechControlPanel.fullHeight {
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.fullHeight {
     height:calc(100% - 140px);
 }
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.noPadding {
+    padding: 0;
+    width: 410px;
+    max-height:calc(100% - 130px);
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.fullHeight.noPadding {
+    height:calc(100% - 130px);
+}
+
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.top,
