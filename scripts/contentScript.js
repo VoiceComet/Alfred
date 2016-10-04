@@ -17,9 +17,10 @@ var ui = document.createElement('div');
 $("<div></div>", {id: "ChromeSpeechControlDIV"})
 	.appendTo($("body"))
 	.load(chrome.extension.getURL("ui.html"), function() {
-		$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
+		$("#ChromeSpeechControlIconMicrophone").attr("src",chrome.extension.getURL("images/microphone.png"));
+		$("#ChromeSpeechControlIconSpeech").attr("src",chrome.extension.getURL("images/speech.png"));
+		$("#ChromeSpeechControlIconThink").attr("src",chrome.extension.getURL("images/think.png"));
 	});
-
 
 //noinspection JSUnusedLocalSymbols
 /**
@@ -76,16 +77,23 @@ chrome.runtime.onMessage.addListener(handleRequest);
  */
 function updateMicrophoneIcon(params) {
 	if (params.muted) {
-		$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_muted.png"));
+		$("#ChromeSpeechControlIcon").attr("style", "background: #4B4B4B");
+		$("#ChromeSpeechControlIconSpeech").attr("style", "display: none");
+		$("#ChromeSpeechControlIconThink").attr("style", "display: none");
 	} else {
+		$("#ChromeSpeechControlIcon").attr("style", "background: #036490");
 		if (params.hearing && params.working) {
-			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_both.png"));
+			$("#ChromeSpeechControlIconSpeech").attr("style", "display: block");
+			$("#ChromeSpeechControlIconThink").attr("style", "display: block");
 		} else if (params.hearing) {
-			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_hear.png"));
+			$("#ChromeSpeechControlIconSpeech").attr("style", "display: block");
+			$("#ChromeSpeechControlIconThink").attr("style", "display: none");
 		} else if (params.working) {
-			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_work.png"));
+			$("#ChromeSpeechControlIconSpeech").attr("style", "display: none");
+			$("#ChromeSpeechControlIconThink").attr("style", "display: block");
 		} else {
-			$("#ChromeSpeechControlIcon").attr("src",chrome.extension.getURL("images/mic_normal.png"));
+			$("#ChromeSpeechControlIconSpeech").attr("style", "display: none");
+			$("#ChromeSpeechControlIconThink").attr("style", "display: none");
 		}
 	}
 }
