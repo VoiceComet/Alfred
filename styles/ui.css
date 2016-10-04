@@ -1,5 +1,6 @@
 div#ChromeSpeechControlDIV {
     zoom:1;
+    filter: drop-shadow(5px 5px 6px #222);
 }
 
 div#ChromeSpeechControlDIV,
@@ -58,7 +59,6 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     width: 400px;
     overflow-x:hidden;
     overflow-y:auto;
-    box-shadow: 5px 5px 5px #3b3b3b;
 }
 
 div#ChromeSpeechControlPanel.fullHeight {
@@ -116,7 +116,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     border-radius: 0 50px 50px 0;
     border: 2px solid white;
     border-left: 0;
-    filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(3px 3px 3px #222);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlIcon img#ChromeSpeechControlIconSpeech {
@@ -156,7 +156,6 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     padding: 10px;
     margin-top:10px;
     border-radius: 0 6px 6px 0;
-    filter: drop-shadow(5px 5px 5px #222);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.ChromeSpeechControlMessage {
