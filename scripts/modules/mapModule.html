@@ -124,6 +124,7 @@ function clearDisplayedRoute() {
  */
 function searchRouteOnAlfredMap(origin, destination) {
     clearMarkers();
+    clearDisplayedRoute();
 
     alfredMapDirectionsService.route({
         origin: origin,
