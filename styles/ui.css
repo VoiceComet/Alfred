@@ -30,7 +30,6 @@ div#ChromeSpeechControlDIV b {
 
 div#ChromeSpeechControlDIV div {
     display: block;
-    /*color: black;*/
     text-align: left;
     font-family: sans-serif;
     font-size: medium;
@@ -49,21 +48,21 @@ div#ChromeSpeechControlDIV div#ChromeSpeechControlUI {
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     display: none;
     position: absolute;
-    bottom: 135px;
+    bottom: 117px;
     left: 0;
-    border: 2px solid #036490;
-    padding: 2px;
-    margin: 2px;
+    padding: 5px;
     background-color: #036490;
-    border-radius: 6px;
-    max-height:calc(100% - 160px);
-    width:398px;
+    border: 2px solid white;
+    border-left: 0;
+    max-height:calc(100% - 140px);
+    width: 400px;
     overflow-x:hidden;
     overflow-y:auto;
+    box-shadow: 5px 5px 5px #3b3b3b;
 }
 
 div#ChromeSpeechControlPanel.fullHeight {
-    height:calc(100% - 160px);
+    height:calc(100% - 140px);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
@@ -102,7 +101,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction {
     position: absolute;
     bottom: 15px;
-    left: 15px;
+    left: 0;
     width: 100px;
     height: 100px;
 }
@@ -111,40 +110,45 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 100px;
+    width: 90px;
     height: 100px;
     background: #036490;
-    border-radius: 50px;
-    border: 1px solid #030303;
+    border-radius: 0 50px 50px 0;
+    border: 2px solid white;
+    border-left: 0;
+    filter: drop-shadow(5px 5px 5px #222);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlIcon img#ChromeSpeechControlIconSpeech {
     display: none;
     position: absolute;
-    left: 20px;
+    left: 15px;
     top: 19px;
     height: 15px;
+    filter: drop-shadow(5px 5px 5px #222);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlIcon img#ChromeSpeechControlIconMicrophone {
     position: absolute;
-    left: 33px;
+    left: 28px;
     bottom: 19px;
     height: 62px;
+    filter: drop-shadow(5px 5px 5px #222);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlIcon img#ChromeSpeechControlIconThink {
     display: none;
     position: absolute;
-    left: 63px;
+    left: 58px;
     top: 30px;
     height: 15px;
+    filter: drop-shadow(5px 5px 5px #222);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox {
     position: absolute;
     bottom: 0;
-    left: 50px;
+    left: 40px;
     width: 300px;
     height: 80px;
     color: white;
@@ -152,21 +156,22 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     padding: 10px;
     margin-top:10px;
     border-radius: 0 6px 6px 0;
+    filter: drop-shadow(5px 5px 5px #222);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.ChromeSpeechControlMessage {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 280px;
+    width: 298px;
     height: 80px;
     display: none;
     color: white;
     background-color: #036490;
-    padding: 10px;
+    padding: 10px 10px 10px 60px;
     margin-top:10px;
-    border: 1px solid #030303;
-    border-radius: 0 6px 6px 0;
+    border: 2px solid white;
+    text-shadow: 2px 2px 4px #222;
 }
 
 /* text search module */

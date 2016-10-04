@@ -52,7 +52,7 @@ addContentScriptMethod(
                         .animate({scrollTop: $(result[i]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[i]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "Search for: <span style='background-color:yellow; color:black'>" + parameter + "</span>",
+                        content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
                         time: 0,
                         cancelable: true,
                         commandLeft: "previous",
@@ -67,7 +67,7 @@ addContentScriptMethod(
                         .animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "Search for: <span style='background-color:yellow; color:black'>" + parameter + "</span>",
+                        content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
                         time: 0,
                         cancelable: true,
                         commandLeft: "previous",
@@ -106,7 +106,7 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "Search for: <span style='background-color:yellow; color:black'>" + parameter + "</span>",
+                content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
@@ -145,7 +145,7 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "Search for: <span style='background-color:yellow; color:black'>" + parameter + "</span>",
+                content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
@@ -177,7 +177,7 @@ addContentScriptMethod(
             i = params - 1;
             updateMessage({
                 id: id,
-                content: "Search for: <span style='background-color:yellow; color:black'>" + parameter + "</span>",
+                content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
                 time: 0,
                 cancelable: true,
                 commandLeft: "previous",
