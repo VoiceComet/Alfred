@@ -54,6 +54,17 @@ addModule(new Module("mapModule", function () {
 	mapState.addAction(mapSearchRoute);
 
 	/**
+	 * multilingual search route
+	 * @type {MultilingualAction}
+	 */
+	var mapLanguageSearchRoute = new MultilingualAction("mapLanguageSearchRoute", mapSearchRoute, [
+		{notify:"Say your origin in chosen language", say:"Say your origin in chosen language"},
+		{notify:"Say your destination in chosen language", say:"Say your destination in chosen language"}
+	]);
+	mapLanguageSearchRoute.addCommand(new Command("language route", 0));
+	mapState.addAction(mapLanguageSearchRoute);
+
+	/**
 	 * Zoom to marker
 	 * @type {Action}
 	 */
