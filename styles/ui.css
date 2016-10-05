@@ -1,4 +1,6 @@
 div#ChromeSpeechControlDIV {
+    position: fixed;
+    z-index: 199999999999;
     zoom:1;
     filter: drop-shadow(5px 5px 6px #222);
 }
@@ -6,7 +8,6 @@ div#ChromeSpeechControlDIV {
 div#ChromeSpeechControlDIV,
 div#ChromeSpeechControlDIV div,
 div#ChromeSpeechControlDIV img {
-    position: fixed;
     top:auto;
     bottom:auto;
     left:auto;
@@ -23,6 +24,12 @@ div#ChromeSpeechControlDIV img {
     height: auto;
     max-height: unset;
     min-height: unset;
+}
+
+div#ChromeSpeechControlDIV div,
+div#ChromeSpeechControlDIV img {
+    position: static;
+    color: white;
 }
 
 div#ChromeSpeechControlDIV b {
