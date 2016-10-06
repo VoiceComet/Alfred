@@ -145,8 +145,8 @@ function showPanel(params) {
 	}
 
 	var panel = $("#ChromeSpeechControlPanel");
-	panel.attr("style", "display:block");
 	panel.html(html);
+	panel.attr("style", "display:block;");
 
 	//set class
 	var elementClasses = "";
@@ -174,15 +174,22 @@ function showPanel(params) {
 }
 
 /**
- * hide a given message div
+ * hide panel div
  */
 function hidePanel() {
-	$("#ChromeSpeechControlPanel")
-		.attr("style", "display:none")
-		.attr("class", "")
-		.html("");
+	$("#ChromeSpeechControlPanel").animate({
+		opacity: 0, // animate slideUp
+		marginLeft: '-200px'},
+		'500',
+		'linear'
+	);
+	setTimeout(function () {
+		$("#ChromeSpeechControlPanel")
+			.attr("style", "display:none")
+			.attr("class", "")
+			.html("");
+	}, 490);
 }
-
 
 /**
  * reset the scrolling of an element

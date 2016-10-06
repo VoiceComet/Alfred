@@ -29,7 +29,7 @@ addModule(new Module("bookmarkModule", function () {
       notify("Say a title for the new bookmark");
       say("Which name shall i give the bookmark");
       this.cancelAction.act = function () {
-          notify("canceled bookmark listen state");
+          notify("Stopped creating a bookmark");
           say("I canceled creating a bookmark");
       }
     };
@@ -39,7 +39,7 @@ addModule(new Module("bookmarkModule", function () {
      */
     var folderListenState = new State("folderListenState");
     folderListenState.init = function () {
-        notify("Say a title for the new folder");
+        notify("Stopped creating a folder");
         say("Which name shall i give the folder");
         this.cancelAction.act = function () {
             notify("canceled folder listen state");
@@ -62,7 +62,7 @@ addModule(new Module("bookmarkModule", function () {
                     for (var i = 0; i < BookmarkTreeNodesBookmark.length; i++) {
                         if (BookmarkTreeNodesBookmark[i].url != undefined) {
                             say("There is already a bookmark with the same title in your library");
-                            notify("Bookmark title not available");
+                            notify("Bookmark title taken");
                             available = 0;
                         }
                     }
@@ -70,7 +70,7 @@ addModule(new Module("bookmarkModule", function () {
                     chrome.bookmarks.search({url: object.url}, function (BookmarkTreeNodesUrl) {
                         if (BookmarkTreeNodesUrl.length > 0) {
                             say("There is already a bookmark with the same url in your library");
-                            notify("Bookmark url not available");
+                            notify("Bookmark url taken");
                             available = 0;
                         }
                     });
@@ -82,7 +82,7 @@ addModule(new Module("bookmarkModule", function () {
                     for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
                         if (BookmarkTreeNodesFolder[i].url === undefined) {
                             say("There is already a folder with the same title in your library");
-                            notify("Folder title not available");
+                            notify("Folder title taken");
                             available = 0;
                         }
                     }

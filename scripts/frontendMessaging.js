@@ -33,7 +33,6 @@ function showMessage(params) {
 	message.setAttribute("id", id);
 	message.setAttribute("class", "ChromeSpeechControlMessage");
 	messageBox.appendChild(message);
-	message.setAttribute("style", "display:block;");
 
 	//noinspection JSUndefinedPropertyAssignment
 	params.id = id;
@@ -105,8 +104,11 @@ function updateMessage(params) {
 		var time = (typeof params.time !== 'undefined') ? params.time : 4000; //set default value to 4000
 		if (time > 0) {
 			messageTimeouts[params.id] = setTimeout(function() {
-				message.setAttribute("style", "display:none;");
-				messageBox.removeChild(message);
+				message.setAttribute("style", "-webkit-animation: fadeOut 500ms steps(20);");
+				setTimeout(function () {
+					message.setAttribute("style", "display:none;");
+					messageBox.removeChild(message);
+				}, 490);
 				delete messageTimeouts[params.id];
 			}, time)
 		}
@@ -125,6 +127,9 @@ function updateMessage(params) {
  */
 function hideMessage(params) {
 	var message = document.getElementById(params.id);
-	message.setAttribute("style", "display:none;");
-	document.getElementById("ChromeSpeechControlMessagesBox").removeChild(message);
+	message.setAttribute("style", "-webkit-animation: fadeOut 500ms steps(20);");
+	setTimeout(function () {
+		message.setAttribute("style", "display:none;");
+		document.getElementById("ChromeSpeechControlMessagesBox").removeChild(message);
+	}, 490);
 }

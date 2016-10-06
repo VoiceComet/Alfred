@@ -58,7 +58,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     position: absolute;
     bottom: 117px;
     left: 0;
-    padding: 5px;
+    padding: 5px 7px 5px 5px;
     background-color: #036490;
     border: 2px solid white;
     border-left: 0;
@@ -66,6 +66,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
     width: 400px;
     overflow-x:hidden;
     overflow-y:auto;
+    -webkit-animation: fadeInLeft 500ms steps(20);
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.fullHeight {
@@ -74,7 +75,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.fullHeight {
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.noPadding {
     padding: 0;
-    width: 410px;
+    width: 412px;
     max-height:calc(100% - 130px);
 }
 
@@ -112,7 +113,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.top {
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
-    padding-top: 10px;
+    padding-top: 45px;
     text-align: center;
 }
 
@@ -177,18 +178,19 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.ChromeSpeechControlMessage {
+    display: block;
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 298px;
+    width: 300px;
     height: 80px;
-    display: none;
     color: white;
     background-color: #036490;
     padding: 10px 10px 10px 60px;
-    margin-top:10px;
+    margin-top: 10px;
     border: 2px solid white;
     text-shadow: 2px 2px 4px #222;
+    -webkit-animation: fadeInLeft 500ms steps(20);
 }
 
 /* text search module */
@@ -215,4 +217,31 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultUr
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultSnippet {
     font-size: small;
     color: #a8a8a8;
+}
+
+@-webkit-keyframes fadeOut {
+    from { opacity: 1;}
+    to   { opacity: 0;}
+}
+
+@-webkit-keyframes fadeInLeft {
+    from{
+        left: -410px;
+        opacity: 0;
+    }
+    to{
+        left: 0;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOutLeft {
+    from{
+        left: 0;
+        opacity: 1;
+    }
+    to{
+        left: -410px;
+        opacity: 0;
+    }
 }

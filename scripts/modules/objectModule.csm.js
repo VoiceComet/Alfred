@@ -67,9 +67,6 @@ addContentScriptMethod(
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
                 .append("<div id='objectUIDIV'></div>");
-            //var container = images.parent().clone();
-            //objects = jQuery.makeArray(container);
-            //objects.pop();
             //show first 9 images
             $("#objectUIDIV").load(chrome.extension.getURL("objectUI.html"), function () {
                 for (i = 0; i < 9; i++) {
@@ -80,6 +77,7 @@ addContentScriptMethod(
                     }
                 }
             });
+            return({content: "I found " + images.length + " images. You are on page " + Math.ceil(images.length / 9)});
 
         } else {
             showMessage({content: "No images found on this page"});
