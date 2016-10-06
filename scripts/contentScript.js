@@ -179,7 +179,7 @@ function showPanel(params) {
 function hidePanel() {
 	$("#ChromeSpeechControlPanel").animate({
 		opacity: 0, // animate slideUp
-		marginLeft: '-200px'},
+		marginLeft: '-410px'},
 		'500',
 		'linear'
 	);
