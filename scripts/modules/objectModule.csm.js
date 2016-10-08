@@ -48,6 +48,10 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("showImages", function () {
         $("#objectUIDIV").remove();
+        $("#objectUIDIVBackground").remove();
+        if (images.length > 0) {
+            images = [];
+        }
         var container = jQuery.makeArray($("img"));
         for (var j = 0; j < container.length; j++) {
             if (container[j].height > 75 && container[j].width > 75) {
@@ -56,14 +60,45 @@ addContentScriptMethod(
         }
         images.pop();
         if (images.length > 0) {
-            id = showMessage({
-                content: "Show images",
-                commandLeft: "previous",
-                commandRight: "next",
-                cancelable: true,
-                infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9),
-                time: 0
-            });
+            if (Math.ceil(images.length / 9) > 1) {
+                if (id != "") {
+                    pages = 1;
+                    updateMessage({
+                        id: id,
+                        content: "Show images",
+                        commandRight: "next",
+                        cancelable: true,
+                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                        time: 0
+                    });
+                } else {
+                    id = showMessage({
+                        content: "Show images",
+                        commandRight: "next",
+                        cancelable: true,
+                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                        time: 0
+                    });
+                }
+            } else {
+                if (id != "") {
+                    pages = 1;
+                    updateMessage({
+                        id: id,
+                        content: "Show images",
+                        cancelable: true,
+                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                        time: 0
+                    });
+                } else {
+                    id = showMessage({
+                        content: "Show images",
+                        cancelable: true,
+                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                        time: 0
+                    });
+                }
+            }
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
                 .append("<div id='objectUIDIV'></div>");
@@ -77,7 +112,7 @@ addContentScriptMethod(
                     }
                 }
             });
-            return({content: "I found " + images.length + " images. You are on page " + Math.ceil(images.length / 9)});
+            return({content: "I found " + images.length + " images. You are on page one"});
 
         } else {
             showMessage({content: "No images found on this page"});
@@ -99,30 +134,46 @@ addContentScriptMethod(
                 i += 9;
             }
             nextSteps = 0;
-            showMessage({content: "Show next images"});
-            $("#objectUIDIV")
-                .empty()
-                .load(chrome.extension.getURL("objectUI.html"), function () {
-                for (var j = 0; j < 9; j++) {
-                    var k = j + 1;
-                    if (i < images.length) {
-                        $("#objectCell" + j).append("<p>" + k + "</p><img src='" +images[i] + "'>");
-                        nextSteps++;
-                        i++;
-                    }
-                }
-            });
+            $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
+            setTimeout(function () {
+                $("body")
+                    .append("<div id='objectUIDIV'></div>");
+                $("#objectUIDIV")
+                    .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);")
+                    .load(chrome.extension.getURL("objectUI.html"), function () {
+                        for (var j = 0; j < 9; j++) {
+                            var k = j + 1;
+                            if (i < images.length) {
+                                $("#objectCell" + j).append("<p>" + k + "</p><img src='" + images[i] + "'>");
+                                nextSteps++;
+                                i++;
+                            }
+                        }
+                    });
+            }, 650);
+
             prevSteps = false;
             pages++;
-            updateMessage({
-                id: id,
-                content: "Show images",
-                commandLeft: "previous",
-                commandRight: "next",
-                cancelable: true,
-                infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9),
-                time: 0
-            });
+            if (pages < Math.ceil(images.length / 9)) {
+                updateMessage({
+                    id: id,
+                    content: "Show images",
+                    commandLeft: "previous",
+                    commandRight: "next",
+                    cancelable: true,
+                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                    time: 0
+                });
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "Show images",
+                    commandLeft: "previous",
+                    cancelable: true,
+                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                    time: 0
+                });
+            }
             return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
         }
     })
@@ -138,7 +189,6 @@ addContentScriptMethod(
             return({content: "There are no previous images on this page"});
         } else {
             i -= nextSteps - 1;
-            showMessage({content: "Show previous images"});
             $("#objectUIDIV")
                 .empty()
                 .load(chrome.extension.getURL("objectUI.html"), function () {
@@ -151,15 +201,26 @@ addContentScriptMethod(
             nextSteps = 0;
             prevSteps = true;
             pages--;
-            updateMessage({
-                id: id,
-                content: "Show images",
-                commandLeft: "previous",
-                commandRight: "next",
-                cancelable: true,
-                infoCenter:"page " + pages + " of " + Math.ceil(images.length / 9),
-                time: 0
-            });
+            if (pages > 1) {
+                updateMessage({
+                    id: id,
+                    content: "Show images",
+                    commandLeft: "previous",
+                    commandRight: "next",
+                    cancelable: true,
+                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                    time: 0
+                });
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "Show images",
+                    commandRight: "next",
+                    cancelable: true,
+                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                    time: 0
+                });
+            }
             return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
         }
     })
@@ -170,8 +231,12 @@ addContentScriptMethod(
 */
 addContentScriptMethod(
     new ContentScriptMethod("cancelObjectState", function () {
-        $("#objectUIDIV").remove();
-        $("#objectUIDIVBackground").remove();
+        $("#objectUIDIV").attr("style", "-webkit-animation: fadeOut 500ms steps(20);");
+        $("#objectUIDIVBackground").attr("style", "-webkit-animation: fadeOut 500ms steps(20);");
+        setTimeout(function () {
+            $("#objectUIDIV").remove();
+            $("#objectUIDIVBackground").remove();
+        }, 460);
         hideMessage({id: id});
     })
 );

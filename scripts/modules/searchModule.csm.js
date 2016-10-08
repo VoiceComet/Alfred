@@ -5,7 +5,7 @@ var result = [];
 var i = 0;
 var id = "";
 var parameter;
-var oldId = false;
+var oldId = true;
 
 /**
  * search for an expression
@@ -37,7 +37,14 @@ addContentScriptMethod(
         result = jQuery.makeArray(document.getElementsByClassName("highlight"));
 
         if(result.length === 0) {
-            showMessage({content: "Could not find " + parameter});
+            if (oldId) {
+                showMessage({content: "Could not find " + parameter});
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "Could not find " + parameter});
+                oldId = true;
+            }
             return({content: "I could not find " + parameter});
         } else {
             for (i = 0; i < result.length; i++) {

@@ -11,8 +11,8 @@ div#objectUIDIV {
 }
 div#objectUIDIVBackground, div#objectUIDIV {
     position: fixed;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     z-index: 1999999999;
     height: 100%;
     width: 100%;
@@ -22,10 +22,10 @@ div#objectUIDIVBackground, div#objectUIDIV {
     width: 60%;
     height: 60%;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    bottom: 0px;
-    right: 0px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     margin: auto;
 }
 .objectRow {
@@ -41,4 +41,35 @@ div#objectUIDIVBackground, div#objectUIDIV {
     margin: 2%;
     max-width: 96%;
     max-height: 96%;
+}
+
+@-webkit-keyframes fadeInRight {
+    from{
+        left: 200px;
+        opacity: 0;
+    }
+    to{
+        left: 0;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOutLeft {
+    from{
+        left: 0;
+        opacity: 1;
+    }
+    to{
+        left: -200px;
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
 }

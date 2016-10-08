@@ -7,10 +7,8 @@ addModule(new Module("videoModule", function () {
      */
     var objectState = new State("ObjectState");
     objectState.init = function() {
-        notify("entered object state");
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelObjectState", {});
-            notify("canceled object state");
             say("I stopped interacting with objects");
         };
     };
