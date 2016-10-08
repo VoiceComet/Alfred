@@ -178,7 +178,7 @@ function showPanel(params) {
  */
 function hidePanel() {
 	$("#ChromeSpeechControlPanel").animate({
-		opacity: 0, // animate slideUp
+		opacity: 0,
 		marginLeft: '-410px'},
 		'500',
 		'linear'
@@ -188,7 +188,7 @@ function hidePanel() {
 			.attr("style", "display:none")
 			.attr("class", "")
 			.html("");
-	}, 490);
+	}, 450);
 }
 
 /**

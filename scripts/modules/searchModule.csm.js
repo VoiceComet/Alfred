@@ -5,6 +5,7 @@ var result = [];
 var i = 0;
 var id = "";
 var parameter;
+var oldId = false;
 
 /**
  * search for an expression
@@ -25,9 +26,6 @@ addContentScriptMethod(
                 "#ChromeSpeechControlDIV *"
             ]
         });
-        if (id != "") {
-            hideMessage({id: id});
-        }
         //if element is hidden on page remove class highlight
         $(".highlight:hidden").unmark();
         $(".highlight").each(function () {
@@ -51,14 +49,27 @@ addContentScriptMethod(
                     $('html, body')
                         .animate({scrollTop: $(result[i]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[i]).offset().left - window.innerWidth / 2}, 1000);
-                    id = showMessage({
-                        content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                        time: 0,
-                        cancelable: true,
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        infoCenter: "match " + (i + 1) + " of " + result.length
-                    });
+                    if (oldId) {
+                        id = showMessage({
+                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
+                            time: 0,
+                            cancelable: true,
+                            commandLeft: "previous",
+                            commandRight: "next",
+                            infoCenter: "match " + (i + 1) + " of " + result.length
+                        });
+                        oldId = false;
+                    } else {
+                        updateMessage({
+                            id : id,
+                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
+                            time: 0,
+                            cancelable: true,
+                            commandLeft: "previous",
+                            commandRight: "next",
+                            infoCenter: "match " + (i + 1) + " of " + result.length
+                        });
+                    }
                     return({content: "I found " + result.length + "matches for" + parameter + ". You are on match " + (i + 1)});
                 } else if (i + 1 >= result.length) {
                     i = 0;
@@ -66,14 +77,27 @@ addContentScriptMethod(
                     $('html, body')
                         .animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
-                    id = showMessage({
-                        content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                        time: 0,
-                        cancelable: true,
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        infoCenter: "match " + (i + 1) + " of " + (result.length)
-                    });
+                    if (oldId) {
+                        id = showMessage({
+                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
+                            time: 0,
+                            cancelable: true,
+                            commandLeft: "previous",
+                            commandRight: "next",
+                            infoCenter: "match " + (i + 1) + " of " + (result.length)
+                        });
+                        oldId = false;
+                    } else {
+                        updateMessage({
+                            id : id,
+                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
+                            time: 0,
+                            cancelable: true,
+                            commandLeft: "previous",
+                            commandRight: "next",
+                            infoCenter: "match " + (i + 1) + " of " + result.length
+                        });
+                    }
                     return({content: "I found " + result.length + " matches for " + parameter + ". You are on match " + (i + 1)})
                 }
             }
@@ -199,5 +223,6 @@ addContentScriptMethod(
     new ContentScriptMethod("cancelSearchState", function () {
         $("body").unmark();
         hideMessage({id: id});
+        oldId = true;
     })
 );

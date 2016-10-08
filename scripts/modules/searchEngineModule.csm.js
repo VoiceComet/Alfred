@@ -17,11 +17,11 @@ addContentScriptMethod(
 		//generate panel parameters
 		var panelParams = {"html":html, "time":0};
 		if (params.searchResultObject.hasOwnProperty('nextPage')) {
-			panelParams.commandRight = "next > " + params.searchResultObject.nextPage.page;
+			panelParams.commandRight = "next";
 		}
-		panelParams.infoCenter = " - " + params.searchResultObject.page + " - ";
+		panelParams.infoCenter = " - " + (params.searchResultObject.page + 1) + " - ";
 		if (params.searchResultObject.hasOwnProperty('previousPage')) {
-			panelParams.commandLeft = params.searchResultObject.previousPage.page + " < previous";
+			panelParams.commandLeft = "previous";
 		}
 		showPanel(panelParams);
 	})

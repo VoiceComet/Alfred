@@ -32,6 +32,7 @@ function showMessage(params) {
 	var id = getUniqueId();
 	message.setAttribute("id", id);
 	message.setAttribute("class", "ChromeSpeechControlMessage");
+	message.setAttribute("style", "-webkit-animation: fadeInLeft 500ms steps(20);");
 	messageBox.appendChild(message);
 
 	//noinspection JSUndefinedPropertyAssignment
@@ -64,10 +65,13 @@ function updateMessage(params) {
 	}
 	//add title
 	if (typeof params.title !== 'undefined' && params.title != '') {
-		html += "<b>" + params.title + "</b><br/>";
+		html += "<b style='font-weight: normal'>" + params.title + "</b><br/>";
 	}
 	//add content
-	html += params.content + "<br/>";
+	if (typeof params.content !== 'undefined') {
+		html += '<div class="content">' + params.content + '<br/></div>';
+	}
+	//html += params.content + "<br/>";
 	//add actions
 	if (typeof params.actions !== 'undefined' && params.actions.length > 0) {
 		html += "<br/><b>Say a number:</b><br/>";
@@ -78,11 +82,11 @@ function updateMessage(params) {
 	//add commands left, right and infoCenter
 	if (typeof params.commandLeft !== 'undefined' || typeof params.infoCenter !== 'undefined' || typeof params.commandRight !== 'undefined') {
 		html += '<div class="bottom">';
-		if (typeof params.infoCenter !== 'undefined') {
-			html += params.infoCenter;
-		}
 		if (typeof params.commandLeft !== 'undefined') {
 			html += '<div class="left">' + params.commandLeft + '</div>&nbsp;';
+		}
+		if (typeof params.infoCenter !== 'undefined') {
+			html += '<div class="infoCenter">' + params.infoCenter + '</div>&nbsp;';
 		}
 		if (typeof params.commandRight !== 'undefined') {
 			html += '&nbsp;<div class="right">' + params.commandRight + '</div>';

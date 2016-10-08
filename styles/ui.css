@@ -83,8 +83,9 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.fullHeight.noPadding {
     height:calc(100% - 130px);
 }
 
-
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.left,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.infoCenter,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.top,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.left,
@@ -111,10 +112,35 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.top {
     padding-bottom: 10px;
 }
 
-div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel div.bottom {
-    padding-top: 45px;
+    padding-top: 25px;
     text-align: center;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom {
+    position: absolute;
+    bottom: 10px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom div.left {
+    position: absolute;
+    bottom: 0;
+}
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom div.right {
+    position: absolute;
+    bottom: 0;
+    left: 260px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.bottom div.infoCenter {
+    position: absolute;
+    bottom: 0;
+    left: 110px;
+    width: 200px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.content {
+    padding-top: 20px;
 }
 
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction {
@@ -190,7 +216,6 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechCon
     margin-top: 10px;
     border: 2px solid white;
     text-shadow: 2px 2px 4px #222;
-    -webkit-animation: fadeInLeft 500ms steps(20);
 }
 
 /* text search module */
@@ -210,10 +235,12 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultTi
     font-weight: bold;
     color: white;
 }
+
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultUrl {
     font-size: smaller;
     color: lightgrey;
 }
+
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultSnippet {
     font-size: small;
     color: #a8a8a8;
@@ -227,21 +254,10 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultSn
 @-webkit-keyframes fadeInLeft {
     from{
         left: -410px;
-        opacity: 0;
+        opacity: 0.5;
     }
     to{
         left: 0;
         opacity: 1;
-    }
-}
-
-@-webkit-keyframes fadeOutLeft {
-    from{
-        left: 0;
-        opacity: 1;
-    }
-    to{
-        left: -410px;
-        opacity: 0;
     }
 }

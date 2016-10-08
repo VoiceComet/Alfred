@@ -146,7 +146,7 @@ function searchRouteOnAlfredMap(origin, destination) {
                 position: response.routes[0].legs[0].end_location
             }));
             alfredMapRouteMessageId = showMessage({
-                content: 'Route between "' + origin + '" and "' + destination + '". <br/><br/>' +
+                title: 'Route between "' + origin + '" and "' + destination + '". <br/><br/>' +
                     'Time: ' + response.routes[0].legs[0].duration.text + '<br/>' +
                     'Distance: ' + response.routes[0].legs[0].distance.text,
                 time: 0
