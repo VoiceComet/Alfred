@@ -108,14 +108,13 @@ function MultilingualAction(name, relatedAction, settings) {
 			var sayParameterAction = new Action("Say Parameter", 1, null);
 			sayParameterAction.addCommand(new Command("(.+)", 1));
 			sayParameterAction.sayParameterState = sayParameterState;
-			sayParameterAction.generateStatesAndActions = generateStatesAndActions;
 			sayParameterAction.act = function(args) {
 				this.sayParameterState.hideDialog();
 				var actualParams = (typeof spokenParameter === 'undefined') ? [] : spokenParameter;
 				actualParams.push(args[0]);
 				if (parameterNumber < that.relatedAction.parameterCount) {
 					//noinspection JSPotentiallyInvalidUsageOfThis
-					this.followingState = this.generateStatesAndActions(parameterNumber + 1, actualParams);
+					this.followingState = generateStatesAndActions(parameterNumber + 1, actualParams);
 				} else {
 					//only act the related action after last parameter
 					that.relatedAction.act(actualParams);
