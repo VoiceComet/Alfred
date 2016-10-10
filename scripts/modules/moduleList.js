@@ -3,11 +3,12 @@ var moduleList = [
 	"weatherModule.js",
 	"zoomModule.js",
 	"searchModule.js",
-	"objectModule.js",
+	"videoModule.js",
 	"searchEngineModule.js",
 	"mapModule.js",
 	"bookmarkModule.js",
-	"linkModule.js"
+	"linkModule.js",
+	"imageModule.js"
 	//"testModule.js"
 	
 	//add modules here

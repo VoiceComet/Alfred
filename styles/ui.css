@@ -259,7 +259,7 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel span.SearchEngineResultSn
     to   { opacity: 0;}
 }
 
-@-webkit-keyframes fadeInLeft {
+@-webkit-keyframes fadeInLeftMessage {
     from{
         left: -410px;
         opacity: 0.5;

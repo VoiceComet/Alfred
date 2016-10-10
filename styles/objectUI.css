@@ -17,7 +17,7 @@ div#objectUIDIVBackground, div#objectUIDIV {
     height: 100%;
     width: 100%;
 }
-#objectGrid {
+#imagesGrid {
     z-index: 1999999999;
     width: 60%;
     height: 60%;
@@ -28,16 +28,17 @@ div#objectUIDIVBackground, div#objectUIDIV {
     right: 0;
     margin: auto;
 }
-.objectRow {
+.imagesRow {
     height: 33%;
 }
-.objectCell {
+
+.imagesCell {
     float:left;
     height: 100%;
     width: 33%;
     text-align:center;
 }
-.objectCell img {
+.imagesCell img {
     margin: 2%;
     max-width: 96%;
     max-height: 96%;
@@ -54,6 +55,28 @@ div#objectUIDIVBackground, div#objectUIDIV {
     }
 }
 
+@-webkit-keyframes fadeInLeft {
+    from{
+        left: -200px;
+        opacity: 0;
+    }
+    to{
+        left: 0;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOutRight {
+    from{
+        left: 0;
+        opacity: 1;
+    }
+    to{
+        left: 200px;
+        opacity: 0;
+    }
+}
+
 @-webkit-keyframes fadeOutLeft {
     from{
         left: 0;
@@ -66,10 +89,10 @@ div#objectUIDIVBackground, div#objectUIDIV {
 }
 
 @-webkit-keyframes fadeIn {
-    from{
-        opacity: 1;
-    }
-    to{
-        opacity: 0;
-    }
+     from{
+         opacity: 1;
+     }
+     to{
+         opacity: 0;
+     }
 }

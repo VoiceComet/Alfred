@@ -1,56 +1,22 @@
 /**
- * csm for interacting with objects
+ * csm to interact with images
  */
-//current number of image
+
 var i = 0;
-//var objects = [];
 var images = [];
-//control how much images were shown in one next step
-var nextSteps = 0;
-//control if a previous action was done before
-var prevSteps = false;
 var id = "";
 var pages = 1;
-
-/**
- * show all videos
- */
-addContentScriptMethod(
-    new ContentScriptMethod("showVideos", function () {
-        showMessage({content: "Show all videos"});
-        $("body").append("<div id='objectUIDIV'></div>");
-
-        var html5 = document.getElementsByTagName("video");
-        alert(html5.length);
-        var youtube = document.getElementsByTagName("iframe");
-        alert(youtube.length);
-        var linkWithVideo = jQuery.makeArray($("a:has(video-id)"));
-        alert(linkWithVideo.length);
-        for (var htmlV = 0; htmlV < html5.length; htmlV++) {
-            $("#objectUIDIV").append("<div id='" + htmlV +"'></div>");
-            $("#" + htmlV).append(html5[htmlV]);
-        }
-        for (var iframeV = 0; iframeV < youtube.length; iframeV++) {
-            $("#objectUIDIV").append("<div id='" + iframeV +"'></div>");
-            $("#" + iframeV).append(youtube[iframeV]);
-        }
-        for (var linkV = 0; linkV < linkWithVideo.length; linkV++) {
-            $("#objectUIDIV").append("<div id='" + linkV +"'></div>");
-            $("#" + linkV).append(linkWithVideo[linkV]);
-        }
-
-    })
-);
 
 /**
  * show all images
  */
 addContentScriptMethod(
     new ContentScriptMethod("showImages", function () {
-        $("#objectUIDIV").remove();
-        $("#objectUIDIVBackground").remove();
         if (images.length > 0) {
             images = [];
+            pages = 1;
+            $("#objectUIDIVBackground").remove();
+            $("#objectUIDIV").remove();
         }
         var container = jQuery.makeArray($("img"));
         for (var j = 0; j < container.length; j++) {
@@ -103,7 +69,7 @@ addContentScriptMethod(
                 .append("<div id='objectUIDIVBackground'></div>")
                 .append("<div id='objectUIDIV'></div>");
             //show first 9 images
-            $("#objectUIDIV").load(chrome.extension.getURL("objectUI.html"), function () {
+            $("#objectUIDIV").load(chrome.extension.getURL("objectUIImages.html"), function () {
                 for (i = 0; i < 9; i++) {
                     if (i < images.length) {
                         $("#objectCell" + i).append("<img src='" + images[i] + "'>");
@@ -122,38 +88,30 @@ addContentScriptMethod(
 );
 
 /**
- * show next objects
+ * show next images
  */
 addContentScriptMethod(
-    new ContentScriptMethod("nextObjects", function () {
-        if (i >= images.length) {
-            showMessage({content: "No further images on this page"});
-            return({content: "There are no further images on this page"});
+    new ContentScriptMethod("nextImages", function () {
+        if (pages >= Math.ceil(images.length / 9)) {
+            showMessage({content: "No further images on this website"});
+            return({content: "There are no further images on this website"});
         } else {
-            if (prevSteps) {
-                i += 9;
-            }
-            nextSteps = 0;
+            pages++;
+            i = pages * 9 - 9;
             $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
             setTimeout(function () {
-                $("body")
-                    .append("<div id='objectUIDIV'></div>");
+                for (var j = 0; j < 9; j++) {
+                    var k = j + 1;
+                    if (i < images.length) {
+                        $("#objectCell" + j)
+                            .empty()
+                            .append("<p>" + k + "</p><img src='" + images[i] + "'>");
+                        i++;
+                    }
+                }
                 $("#objectUIDIV")
-                    .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);")
-                    .load(chrome.extension.getURL("objectUI.html"), function () {
-                        for (var j = 0; j < 9; j++) {
-                            var k = j + 1;
-                            if (i < images.length) {
-                                $("#objectCell" + j).append("<p>" + k + "</p><img src='" + images[i] + "'>");
-                                nextSteps++;
-                                i++;
-                            }
-                        }
-                    });
+                    .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);");
             }, 650);
-
-            prevSteps = false;
-            pages++;
             if (pages < Math.ceil(images.length / 9)) {
                 updateMessage({
                     id: id,
@@ -183,24 +141,24 @@ addContentScriptMethod(
  * show previous hits
  */
 addContentScriptMethod(
-    new ContentScriptMethod("previousObjects", function () {
-        if (i < 9 || images.length < 9) {
+    new ContentScriptMethod("previousImages", function () {
+        if (pages < 2 || images.length < 9) {
             showMessage({content: "No previous images"});
             return({content: "There are no previous images on this page"});
         } else {
-            i -= nextSteps - 1;
-            $("#objectUIDIV")
-                .empty()
-                .load(chrome.extension.getURL("objectUI.html"), function () {
-                for (var j = 9; j > - 1; j--) {
-                    i--;
-                    var k = j + 1;
-                    $("#objectCell" + j).append("<p>" + k + "</p><img src='" +images[i] + "'>");
-                }
-            });
-            nextSteps = 0;
-            prevSteps = true;
             pages--;
+            i = pages * 9 - 1;
+            $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 700ms steps(20);");
+            setTimeout(function () {
+                for (var j = 8; j > - 1; j--) {
+                    var k = j + 1;
+                    $("#objectCell" + j)
+                        .empty()
+                        .append("<p>" + k + "</p><img src='" + images[i] + "'>");
+                    i--;
+                }
+                $("#objectUIDIV").attr("style", "-webkit-animation: fadeInLeft 700ms steps(40);");
+            }, 650);
             if (pages > 1) {
                 updateMessage({
                     id: id,
@@ -227,10 +185,94 @@ addContentScriptMethod(
 );
 
 /**
- * cancel object state
-*/
+ * go to certain image page
+ */
 addContentScriptMethod(
-    new ContentScriptMethod("cancelObjectState", function () {
+    new ContentScriptMethod("certainImagePage", function (params) {
+        if (params === "one") {
+            params = 1;
+        }
+        if (Math.ceil(images.length / 9) < parseInt(params) || 0 >= parseInt(params) || isNaN(parseInt(params))) {
+            showMessage({content: "There is no page " + params});
+            return ({content: "There is no page " + params});
+        } else if (pages === parseInt(params)) {
+            showMessage({content: "You are still on page " + params});
+            return ({content: "You are still on page " + params});
+        } else {
+            // go to a previous page
+            if (pages > params) {
+                i = params * 9 - 1;
+                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 700ms steps(20);");
+                setTimeout(function () {
+                    for (var j = 8; j > - 1; j--) {
+                        var k = j + 1;
+                        $("#objectCell" + j)
+                            .empty()
+                            .append("<p>" + k + "</p><img src='" + images[i] + "'>");
+                        i--;
+                    }
+                    $("#objectUIDIV").attr("style", "-webkit-animation: fadeInLeft 700ms steps(40);");
+                }, 650);
+                // go to a further page
+            } else {
+                i = params * 9 - 9;
+                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
+                setTimeout(function () {
+                    for (var j = 0; j < 9; j++) {
+                        var k = j + 1;
+                        if (i < images.length) {
+                            $("#objectCell" + j)
+                                .empty()
+                                .append("<p>" + k + "</p><img src='" + images[i] + "'>");
+                            i++;
+                        }
+                    }
+                    $("#objectUIDIV")
+                        .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);");
+                }, 650);
+            }
+            pages = parseInt(params);
+            if (pages > 1) {
+                if (pages < Math.ceil(images.length / 9)) {
+                    updateMessage({
+                        id: id,
+                        content: "Show images",
+                        commandLeft: "previous",
+                        commandRight: "next",
+                        cancelable: true,
+                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                        time: 0
+                    });
+                } else {
+                    updateMessage({
+                        id: id,
+                        content: "Show images",
+                        commandLeft: "previous",
+                        cancelable: true,
+                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
+                        time: 0
+                    });
+                }
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "Show images",
+                    commandRight: "next",
+                    cancelable: true,
+                    infoCenter: "page 1 of " + Math.ceil(images.length / 9),
+                    time: 0
+                });
+            }
+            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
+        }
+    })
+);
+
+/**
+ * cancel image state
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("cancelImageState", function () {
         $("#objectUIDIV").attr("style", "-webkit-animation: fadeOut 500ms steps(20);");
         $("#objectUIDIVBackground").attr("style", "-webkit-animation: fadeOut 500ms steps(20);");
         setTimeout(function () {
@@ -238,5 +280,6 @@ addContentScriptMethod(
             $("#objectUIDIVBackground").remove();
         }, 460);
         hideMessage({id: id});
+        id = "";
     })
 );

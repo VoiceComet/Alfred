@@ -32,7 +32,7 @@ function showMessage(params) {
 	var id = getUniqueId();
 	message.setAttribute("id", id);
 	message.setAttribute("class", "ChromeSpeechControlMessage");
-	message.setAttribute("style", "-webkit-animation: fadeInLeft 500ms steps(20);");
+	message.setAttribute("style", "-webkit-animation: fadeInLeftMessage 500ms steps(20);");
 	messageBox.appendChild(message);
 
 	//noinspection JSUndefinedPropertyAssignment
