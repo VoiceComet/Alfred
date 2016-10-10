@@ -411,7 +411,7 @@ addContentScriptMethod(
     new ContentScriptMethod("openLink", function () {
         showMessage({content:"Canceled link state"});
         hideMessage({id: id});
-        window.location = links[i];
+        window.location = links[i].getAttribute("href") ;
         return({content: "I stopped searching"});
     })
 );
@@ -422,7 +422,7 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("openLinkNewTab", function () {
         hideMessage({id: id});
-        window.open(links[i]);
+        window.open(links[i].getAttribute("href"));
     })
 );
 
