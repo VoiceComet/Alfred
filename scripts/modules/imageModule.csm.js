@@ -72,7 +72,7 @@ addContentScriptMethod(
             $("#objectUIDIV").load(chrome.extension.getURL("objectUIImages.html"), function () {
                 for (i = 0; i < 9; i++) {
                     if (i < images.length) {
-                        $("#objectCell" + i).append("<img src='" + images[i] + "'>");
+                        $("#imagesCell" + i).append("<img src='" + images[i] + "'>");
                     } else {
                         return;
                     }
@@ -100,12 +100,16 @@ addContentScriptMethod(
             i = pages * 9 - 9;
             $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
             setTimeout(function () {
+                var k = 0;
                 for (var j = 0; j < 9; j++) {
-                    var k = j + 1;
+                    k = j + 1;
                     if (i < images.length) {
-                        $("#objectCell" + j)
+                        $("#imagesCell" + j)
                             .empty()
                             .append("<p>" + k + "</p><img src='" + images[i] + "'>");
+                        i++;
+                    } else {
+                        $("#imagesCell" + j).empty();
                         i++;
                     }
                 }
@@ -152,7 +156,7 @@ addContentScriptMethod(
             setTimeout(function () {
                 for (var j = 8; j > - 1; j--) {
                     var k = j + 1;
-                    $("#objectCell" + j)
+                    $("#imagesCell" + j)
                         .empty()
                         .append("<p>" + k + "</p><img src='" + images[i] + "'>");
                     i--;
@@ -206,7 +210,7 @@ addContentScriptMethod(
                 setTimeout(function () {
                     for (var j = 8; j > - 1; j--) {
                         var k = j + 1;
-                        $("#objectCell" + j)
+                        $("#imagesCell" + j)
                             .empty()
                             .append("<p>" + k + "</p><img src='" + images[i] + "'>");
                         i--;
@@ -221,9 +225,12 @@ addContentScriptMethod(
                     for (var j = 0; j < 9; j++) {
                         var k = j + 1;
                         if (i < images.length) {
-                            $("#objectCell" + j)
+                            $("#imagesCell" + j)
                                 .empty()
                                 .append("<p>" + k + "</p><img src='" + images[i] + "'>");
+                            i++;
+                        } else {
+                            $("#imagesCell" + j).empty();
                             i++;
                         }
                     }

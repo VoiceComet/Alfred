@@ -1,7 +1,7 @@
 /**
  * csm for interacting with objects
  */
-//current number of image
+//current number of video
 var i = 0;
 var videos = [];
 var id = "";
@@ -13,10 +13,26 @@ addContentScriptMethod(
     new ContentScriptMethod("showVideos", function () {
         i = 0;
         var html5 = jQuery.makeArray($("video"));
+        for (var j = 0; j < html5.length; j++) {
+            if (html5[j].width > 0 || html5[j].height > 0) {
+                videos.push(html5[j]);
+            }
+        }
         var youtube = jQuery.makeArray($("iframe"));
-        var linkWithVideo = jQuery.makeArray($("a:has(video-id)"));
+        for (var k = 0; k < youtube.length; k++) {
+            if (youtube[k].width > 0 || youtube[k].height > 0) {
+                videos.push(youtube[k]);
+            }
+        }
+        /**var linkWithVideo = jQuery.makeArray($("a:has(video-id)"));
         var clipboard = html5.concat(youtube);
-        videos = clipboard.concat(linkWithVideo);
+        var container = clipboard.concat(linkWithVideo);
+        for (var j = 0; j < container.length; j++) {
+            alert(container[j].width);
+            if (container[j].width > 0 || container[j].height > 0) {
+                    videos.push(container[j]);
+            }
+        }**/
         if (videos.length > 0) {
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
@@ -27,7 +43,7 @@ addContentScriptMethod(
                 content: "Show videos",
                 commandRight: "next",
                 cancelable: true,
-                infoCenter: "video 1 of " + videos.length,
+                infoCenter: "video " + (i + 1) + " of " + videos.length,
                 time: 0
             })
         } else {

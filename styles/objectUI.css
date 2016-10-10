@@ -44,6 +44,15 @@ div#objectUIDIVBackground, div#objectUIDIV {
     max-height: 96%;
 }
 
+#video {
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    left: 30%;
+    top: 30%;
+    background: red;
+}
+
 @-webkit-keyframes fadeInRight {
     from{
         left: 200px;
