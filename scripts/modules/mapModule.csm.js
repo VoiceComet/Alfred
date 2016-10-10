@@ -42,6 +42,16 @@ addContentScriptMethod(
 );
 
 addContentScriptMethod(
+	new ContentScriptMethod("resizeMap", function(params) {
+		runMethodOnPage(function() {
+			var center = alfredMap.getCenter();
+			google.maps.event.trigger(alfredMap, "resize");
+			alfredMap.panTo(center);
+		}, params);
+	})
+);
+
+addContentScriptMethod(
 	new ContentScriptMethod("mapSearch", function(params) {
 		runMethodOnPage(function(params) {
 			searchLocationOnAlfredMap(params.query);

@@ -1,13 +1,27 @@
 
 addModule(new Module("mapModule", function () {
 
-	var mapState = new State("MapState");
+	var mapState = new PanelState("MapState");
+	mapState.scrollable = false;
+	mapState.enlargeable = true;
 	mapState.init = function() {
 		notify("entered map state");
 		this.cancelAction.act = function() {
 			callContentScriptMethod("closeMap", {});
 			callContentScriptMethod("hidePanel", {});
 			notify("canceled map state");
+		};
+
+		this.enlargeAction.oldAct = this.enlargeAction.act;
+		this.enlargeAction.act = function() {
+			this.oldAct();
+			callContentScriptMethod("resizeMap", {});
+		};
+
+		this.reduceAction.oldAct = this.reduceAction.act;
+		this.reduceAction.act = function() {
+			this.oldAct();
+			callContentScriptMethod("resizeMap", {});
 		};
 	};
 

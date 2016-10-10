@@ -83,6 +83,14 @@ div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.fullHeight.noPadding {
     height:calc(100% - 130px);
 }
 
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.expanded {
+    width: 650px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel.expanded.noPadding {
+    width: 662px;
+}
+
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.left,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.right,
 div#ChromeSpeechControlUI div#ChromeSpeechControlInteraction div#ChromeSpeechControlMessagesBox div.infoCenter,

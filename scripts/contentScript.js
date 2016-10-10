@@ -45,6 +45,10 @@ function handleRequest(request, sender, sendResponse) {
 		response = showPanel(request.params);
 	} else if (request.callFunction == "hidePanel") {
 		response = hidePanel();
+	} else if (request.callFunction == "enlargePanel") {
+		response = enlargePanel();
+	} else if (request.callFunction == "reducePanel") {
+		response = reducePanel();
 	} else if (request.callFunction == "elementResetScrolling") {
 		response = elementResetScrolling(request.params);
 	} else if (request.callFunction == "elementScrollDown") {
@@ -192,6 +196,23 @@ function hidePanel() {
 }
 
 /**
+ * enlarge panel
+ */
+function enlargePanel() {
+	var panel = $("#ChromeSpeechControlPanel");
+	panel.attr("class", panel.attr("class") + " expanded");
+}
+
+/**
+ * reduce size of panel
+ */
+function reducePanel() {
+	var panel = $("#ChromeSpeechControlPanel");
+	panel.attr("class", panel.attr("class").replace(" expanded", ""));
+}
+
+
+/**
  * reset the scrolling of an element
  * @param {Object} params
  * @param {String} params.id
@@ -224,6 +245,11 @@ function elementScrollUp(params) {
 }
 
 
+/**
+ * scroll a element down
+ * @param {Object} params
+ * @param {String} params.id
+ */
 function elementScrollDown(params) {
 	var element = $("#" + params.id);
 
@@ -240,5 +266,5 @@ function elementScrollDown(params) {
 	} else {
 		showMessage({title: "Attention!", content: "Scrolling down isn't possible"});
 	}
-
 }
+

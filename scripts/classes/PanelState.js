@@ -12,6 +12,9 @@ function PanelState(name) {
 	this.scrollable = true;
 	this.scrollDownAction = null;
 	this.scrollUpAction = null;
+	this.enlargeable = false;
+	this.enlargeAction = null;
+	this.reduceAction = null;
 
 	var oldGenerateStandardActions = this.generateStandardActions;
 	this.generateStandardActions = function() {
@@ -28,6 +31,25 @@ function PanelState(name) {
 		this.scrollUpAction.act = function() {
 			callContentScriptMethod("elementScrollUp", {"id":"ChromeSpeechControlPanel"});
 		};
+
+		this.enlargeAction = new Action("Enlarge panel action", 0, this);
+		this.enlargeAction.addCommands([
+			new Command("enlarge", 0),
+			new Command("bigger", 0),
+			new Command("larger", 0)
+		]);
+		this.enlargeAction.act = function() {
+			callContentScriptMethod("enlargePanel", {});
+		};
+
+		this.reduceAction = new Action("Reduce panel action", 0, this);
+		this.reduceAction.addCommands([
+			new Command("reduce", 0),
+			new Command("smaller", 0)
+		]);
+		this.reduceAction.act = function() {
+			callContentScriptMethod("reducePanel", {});
+		};
 	};
 
 	var oldActivateStandardActions = this.activateStandardActions;
@@ -37,6 +59,10 @@ function PanelState(name) {
 		if (this.scrollable) {
 			this.addAction(this.scrollDownAction);
 			this.addAction(this.scrollUpAction);
+		}
+		if (this.enlargeable) {
+			this.addAction(this.enlargeAction);
+			this.addAction(this.reduceAction);
 		}
 	}
 }
