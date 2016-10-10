@@ -1,7 +1,7 @@
 <div id="alfredMap" style="height:100%"></div>
 <script type="text/javascript">
 var alfredMap;
-/** @type google.maps.Marker[] */
+/** @type {{marker:google.maps.Marker, name:String, address:String}[]} */
 var alfredMapMarkers = [];
 var alfredMapMarkerLabels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; //EIOU difficult to understand?
 
@@ -30,11 +30,15 @@ function initAlfredMap() {
  * @param {google.maps.places.PlaceResult} place - marker place
  */
 function createMarker(place) {
-    alfredMapMarkers.push(new google.maps.Marker({
-        map: alfredMap,
-        label: alfredMapMarkerLabels[alfredMapMarkers.length % alfredMapMarkerLabels.length],
-        position: place.geometry.location
-    }));
+    alfredMapMarkers.push({
+        marker:new google.maps.Marker({
+            map: alfredMap,
+            label: alfredMapMarkerLabels[alfredMapMarkers.length % alfredMapMarkerLabels.length],
+            position: place.geometry.location
+        }),
+        name: place.name,
+        address: place.formatted_address
+    });
 }
 
 /**
@@ -42,7 +46,7 @@ function createMarker(place) {
  */
 function clearMarkers() {
     alfredMapMarkers.forEach(function(marker) {
-        marker.setMap(null);
+        marker.marker.setMap(null);
     });
     alfredMapMarkers = [];
 }
@@ -137,16 +141,24 @@ function searchRouteOnAlfredMap(origin, destination) {
             alfredMapRouteDisplayed = true;
 
             //create dummy markers for interaction
-            alfredMapMarkers.push(new google.maps.Marker({
-                label: 'A',
-                position: response.routes[0].legs[0].start_location
-            }));
-            alfredMapMarkers.push(new google.maps.Marker({
-                label: 'B',
-                position: response.routes[0].legs[0].end_location
-            }));
+            alfredMapMarkers.push({
+                marker: new google.maps.Marker({
+                    label: 'A',
+                    position: response.routes[0].legs[0].start_location
+                }),
+                name: origin,
+                address: response.routes[0].legs[0].start_address
+            });
+            alfredMapMarkers.push({
+                marker: new google.maps.Marker({
+                    label: 'B',
+                    position: response.routes[0].legs[0].end_location
+                }),
+                name: destination,
+                address: response.routes[0].legs[0].end_address
+            });
             alfredMapRouteMessageId = showMessage({
-                title: 'Route between "' + origin + '" and "' + destination + '". <br/><br/>' +
+                content: 'Route between "' + origin + '" and "' + destination + '". <br/><br/>' +
                     'Time: ' + response.routes[0].legs[0].duration.text + '<br/>' +
                     'Distance: ' + response.routes[0].legs[0].distance.text,
                 time: 0

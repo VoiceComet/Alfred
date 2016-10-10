@@ -75,14 +75,18 @@ addContentScriptMethod(
 					}
 				}
 
-				//change center
-				var z = google.maps.event.addListener(alfredMap, 'center_changed', function() {
-					google.maps.event.removeListener(z);
+				if (alfredMap.getCenter().equals(alfredMapMarkers[letterPos].marker.getPosition())) {
+					//zoom only
 					smoothZoom(alfredMap, alfredMap.getZoom() + 3, alfredMap.getZoom());
-				});
-
-				alfredMap.panTo(alfredMapMarkers[letterPos].getPosition());
-				//showMessage({content:"Zoomed to " + letter});
+				} else {
+					//change center
+					var z = google.maps.event.addListener(alfredMap, 'center_changed', function() {
+						google.maps.event.removeListener(z);
+						smoothZoom(alfredMap, alfredMap.getZoom() + 3, alfredMap.getZoom());
+					});
+					alfredMap.panTo(alfredMapMarkers[letterPos].marker.getPosition());
+				}
+				showMessage({title:alfredMapMarkers[letterPos].name, content:alfredMapMarkers[letterPos].address});
 			} else {
 				showMessage({content:"Letter " + letter + " does not exist."});
 			}
@@ -96,8 +100,8 @@ addContentScriptMethod(
 			var letter = params.marker.toUpperCase();
 			var letterPos = alfredMapMarkerLabels.indexOf(letter);
 			if (letterPos >= 0 && letterPos < alfredMapMarkerLabels.length && letterPos < alfredMapMarkers.length) {
-				alfredMap.panTo(alfredMapMarkers[letterPos].getPosition());
-				//showMessage({content:letter + " centered"});
+				alfredMap.panTo(alfredMapMarkers[letterPos].marker.getPosition());
+				showMessage({title:alfredMapMarkers[letterPos].name, content:alfredMapMarkers[letterPos].address});
 			} else {
 				showMessage({content:"Letter " + letter + " does not exist."});
 			}
