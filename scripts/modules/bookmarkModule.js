@@ -48,13 +48,19 @@ addModule(new Module("bookmarkModule", function () {
      * function to get all combinations of a string
 
     var combinations = function (params) {
-        var inputArray = [];
+        var outputString = [];
+        var inputArrayLowerCase = [];
+        var inputArrayUpperCase = [];
         var inputString = params.toString().toLowerCase();
         for (var j = 0; j < inputString.length; j++) {
-            inputArray.push(inputString.charAt(j));
+            inputArrayLowerCase.push(inputString.charAt(j));
+            inputArrayUpperCase.push(inputString.charAt(j).toUpperCase());
         }
-        var outputString = function (inputArray) {
-
+        var buildString = function (inputArrayLowerCase, inputArrayUpperCase) {
+            for (var k = 0; k < inputArrayLowerCase.length; k++) {
+                outputString.push()
+                buildString()
+            }
         }
     };
 
