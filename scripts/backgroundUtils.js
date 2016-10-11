@@ -17,7 +17,7 @@ function importJsFile(path) {
  * @global
  */
 function notify(message, time, callback) {
-	callContentScriptMethod("showMessage", {content: message, time: time}, callback);
+	callContentScriptMethod("showMessage", {content: message, centered: true, time: time}, callback);
 }
 
 /**

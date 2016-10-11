@@ -38,7 +38,7 @@ addContentScriptMethod(
 
         if(result.length === 0) {
             if (oldId) {
-                showMessage({content: "Could not find " + parameter});
+                showMessage({content: "Could not find " + parameter, centered: true});
             } else {
                 updateMessage({
                     id: id,
@@ -146,7 +146,7 @@ addContentScriptMethod(
             });
             return({content: "You are now on match " + (i + 1) + " of " + result.length});
         } else {
-            showMessage({content: "No match found"});
+            showMessage({content: "No match found", centered: true});
             return({content: "I just found 1 match for " + parameter});
         }
     })
@@ -185,7 +185,7 @@ addContentScriptMethod(
             });
             return({content: "You are now on match " + (i + 1) + " of " + result.length});
         } else {
-            showMessage({content: "No match found"});
+            showMessage({content: "No match found", centered: true});
             return({content: "I just found 1 match for " + parameter});
         }
     })
@@ -217,7 +217,7 @@ addContentScriptMethod(
             });
             return({content: "You are now on match " + (i + 1) + "of" + result.length});
         } else {
-            showMessage({content: "There is no match <span style='background-color:#d61b0e'>" + params + "</span>"});
+            showMessage({content: "There is no match <span style='background-color:#d61b0e'>" + params + "</span>", centered: true});
             return({content: "I cannot find a match " + params + "for" + parameter});
         }
     })
@@ -231,5 +231,6 @@ addContentScriptMethod(
         $("body").unmark();
         hideMessage({id: id});
         oldId = true;
+        id = "";
     })
 );

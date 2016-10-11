@@ -81,7 +81,7 @@ addContentScriptMethod(
             return({content: "I found " + images.length + " images. You are on page one"});
 
         } else {
-            showMessage({content: "No images found on this page"});
+            showMessage({content: "No images found on this page" , centered: true});
             return({content: "I found no relevant images on this page"});
         }
     })
@@ -93,7 +93,7 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("nextImages", function () {
         if (pages >= Math.ceil(images.length / 9)) {
-            showMessage({content: "No further images on this website"});
+            showMessage({content: "No further images on this website", centered: true});
             return({content: "There are no further images on this website"});
         } else {
             pages++;
@@ -147,7 +147,7 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("previousImages", function () {
         if (pages < 2 || images.length < 9) {
-            showMessage({content: "No previous images"});
+            showMessage({content: "No previous images", centered: true});
             return({content: "There are no previous images on this page"});
         } else {
             pages--;
@@ -197,10 +197,10 @@ addContentScriptMethod(
             params = 1;
         }
         if (Math.ceil(images.length / 9) < parseInt(params) || 0 >= parseInt(params) || isNaN(parseInt(params))) {
-            showMessage({content: "There is no page " + params});
+            showMessage({content: "There is no page " + params, centered: true});
             return ({content: "There is no page " + params});
         } else if (pages === parseInt(params)) {
-            showMessage({content: "You are still on page " + params});
+            showMessage({content: "You are still on page " + params, centered: true});
             return ({content: "You are still on page " + params});
         } else {
             // go to a previous page

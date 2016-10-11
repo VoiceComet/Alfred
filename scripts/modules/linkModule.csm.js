@@ -42,7 +42,7 @@ addContentScriptMethod(
         allLinks();
         searchedAll = true;
         if(links.length === 0) {
-            showMessage({content: "Could not find links"});
+            showMessage({content: "Could not find links", centered: true});
             return({content: "I found no links on this page"});
         } else {
             for (i = 0; i < links.length; i++) {
@@ -167,9 +167,8 @@ addContentScriptMethod(
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (found.length)
             });
-            showMessage({content: "Show next link"});
         } else {
-            showMessage({content: "No link found"});
+            showMessage({content: "No link found", centered: true});
             return({content: "There is only one link on this page"});
         }
     })
@@ -249,9 +248,8 @@ addContentScriptMethod(
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (found.length)
             });
-            showMessage({content: "Show previous link"});
         } else {
-            showMessage({content: "No link found"});
+            showMessage({content: "No link found", centered: true});
             return({content: "I found only one link on this page"});
         }
     })
@@ -287,7 +285,7 @@ addContentScriptMethod(
                 infoCenter: "link " + (i + 1) + " of " + (links.length)
             });
         } else {
-            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
+            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>", centered: true});
             return({content: "I found no link" + foundParams + "on this page"});
         }
     })
@@ -398,7 +396,7 @@ addContentScriptMethod(
             }
             return ({content: "I found " + found.length + "link."});
         } else {
-            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>"});
+            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>", centered: true});
             return({content: "I found no link" + foundParams + "on this page"});
         }
     })
@@ -409,9 +407,9 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("openLink", function () {
-        showMessage({content:"Canceled link state"});
         hideMessage({id: id});
         window.location = links[i].getAttribute("href") ;
+        id = "";
         return({content: "I stopped searching"});
     })
 );
@@ -423,6 +421,7 @@ addContentScriptMethod(
     new ContentScriptMethod("openLinkNewTab", function () {
         hideMessage({id: id});
         window.open(links[i].getAttribute("href"));
+        id = "";
     })
 );
 
@@ -437,5 +436,6 @@ addContentScriptMethod(
             .removeClass("topHighlight");
         $("img").removeClass("highlight");
         hideMessage({id: id});
+        id = "";
     })
 );

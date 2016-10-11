@@ -26,7 +26,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical}, "slow")
             .animate({scrollLeft: scrollPosHorizontal}, "slow");
-        showMessage({content: "Zoom into first sector"});
+        showMessage({content: "Zoom into first sector", centered: true});
     })
 );
 
@@ -40,7 +40,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical}, "slow")
             .animate({scrollLeft: scrollPosHorizontal + window.innerWidth}, "slow");
-        showMessage({content: "Zoom into second sector"});
+        showMessage({content: "Zoom into second sector", centered: true});
     })
 );
 
@@ -54,7 +54,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical + window.innerHeight}, "slow")
             .animate({scrollLeft: scrollPosHorizontal}, "slow");
-        showMessage({content: "Zoom into third sector"});
+        showMessage({content: "Zoom into third sector", centered: true});
     })
 );
 
@@ -68,7 +68,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical + window.innerHeight}, "slow")
             .animate({scrollLeft: scrollPosHorizontal + window.innerWidth}, "slow");
-        showMessage({content: "Zoom into fourth sector"});
+        showMessage({content: "Zoom into fourth sector", centered: true});
     })
 );
 

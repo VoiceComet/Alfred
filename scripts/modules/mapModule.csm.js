@@ -98,7 +98,7 @@ addContentScriptMethod(
 				}
 				showMessage({title:alfredMapMarkers[letterPos].name, content:alfredMapMarkers[letterPos].address});
 			} else {
-				showMessage({content:"Letter " + letter + " does not exist."});
+				showMessage({content:"Letter " + letter + " does not exist.", centered: true});
 			}
 		}, params);
 	})
@@ -113,7 +113,7 @@ addContentScriptMethod(
 				alfredMap.panTo(alfredMapMarkers[letterPos].marker.getPosition());
 				showMessage({title:alfredMapMarkers[letterPos].name, content:alfredMapMarkers[letterPos].address});
 			} else {
-				showMessage({content:"Letter " + letter + " does not exist."});
+				showMessage({content:"Letter " + letter + " does not exist.", centered: true});
 			}
 		}, params);
 	})
@@ -125,7 +125,7 @@ addContentScriptMethod(
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() + 1);
 			if (oldZoom >= alfredMap.getZoom()) {
-				showMessage({content:"Zooming is not possible."});
+				showMessage({content:"Zooming is not possible.", centered: true});
 			}
 		});
 	})
@@ -137,7 +137,7 @@ addContentScriptMethod(
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() - 1);
 			if (oldZoom <= alfredMap.getZoom()) {
-				showMessage({content:"Zooming is not possible."});
+				showMessage({content:"Zooming is not possible.", centered: true});
 			}
 		});
 	})

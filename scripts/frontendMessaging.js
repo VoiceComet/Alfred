@@ -20,6 +20,7 @@ function getUniqueId() {
  * @param {Array} [params.actions] - message actions
  * @param {Number} [params.time=4000] - (optional) time how long the message is shown in milliseconds
  * @param {Boolean} [params.cancelable=false] - (optional) show cancel action (std false)
+ * @param {Boolean} [params.centered=false] - (optional) center content (std false)
  * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
  * @param {String} [params.infoCenter] - (optional) information, that shown in the middle of commandLeft & commandRight
  * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
@@ -51,6 +52,7 @@ var messageTimeouts = [];
  * @param {Array} [params.actions] - message actions
  * @param {Number} [params.time=4000] - (optional) time how long the message is shown in milliseconds
  * @param {Boolean} [params.cancelable=false] - (optional) show cancel action (std false)
+ * @param {Boolean} [params.centered=false] - (optional) center content (std false)
  * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
  * @param {String} [params.infoCenter] - (optional) information, that shown in the middle of commandLeft & commandRight
  * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
@@ -59,19 +61,23 @@ var messageTimeouts = [];
 function updateMessage(params) {
 	//generate html
 	var html = "";
-	//add cancel action
-	if (params.hasOwnProperty('cancelable') && params.cancelable) {
-		html += '<div class="top right">cancel</div>';
-	}
-	//add title
-	if (typeof params.title !== 'undefined' && params.title != '') {
-		html += "<b style='font-weight: normal'>" + params.title + "</b><br/>";
+
+	if ((params.hasOwnProperty('cancelable') && params.cancelable) || (typeof params.title !== 'undefined' && params.title != '') || (params.hasOwnProperty('centered') && params.centered)) {
+		html += '<div class="top">';
+		//add title
+		if (typeof params.title !== 'undefined' && params.title != '') {
+			html += '<div class="title">' + params.title + '</div><br/>';
+		} else if (params.hasOwnProperty('centered') && params.centered) {
+			html += '<div class="title"></div><br/>';
+		}
+		//add cancel action
+		if (params.hasOwnProperty('cancelable') && params.cancelable) {
+			html += '<div class="right">cancel</div>';
+		}
+		html += '</div>';
 	}
 	//add content
-	if (typeof params.content !== 'undefined') {
-		html += '<div class="content">' + params.content + '<br/></div>';
-	}
-	//html += params.content + "<br/>";
+	html += params.content + "<br/>";
 	//add actions
 	if (typeof params.actions !== 'undefined' && params.actions.length > 0) {
 		html += "<br/><b>Say a number:</b><br/>";

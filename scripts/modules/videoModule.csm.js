@@ -14,14 +14,14 @@ addContentScriptMethod(
         i = 0;
         var html5 = jQuery.makeArray($("video"));
         for (var j = 0; j < html5.length; j++) {
-            if (html5[j].width > 0 || html5[j].height > 0) {
+            if (html5[j].width > 0 && html5[j].height > 0) {
                 videos.push(html5[j]);
             }
         }
-        var youtube = jQuery.makeArray($("iframe"));
-        for (var k = 0; k < youtube.length; k++) {
-            if (youtube[k].width > 0 || youtube[k].height > 0) {
-                videos.push(youtube[k]);
+        var iframeVideo = jQuery.makeArray($("iframe"));
+        for (var k = 0; k < iframeVideo.length; k++) {
+            if (iframeVideo[k].width > 0 && iframeVideo[k].height > 0) {
+                videos.push(iframeVideo[k]);
             }
         }
         /**var linkWithVideo = jQuery.makeArray($("a:has(video-id)"));
@@ -47,7 +47,7 @@ addContentScriptMethod(
                 time: 0
             })
         } else {
-            showMessage({content: "No videos found on this page"});
+            showMessage({content: "No videos found on this page", centered: true});
             return({content: "I found no videos on this page"});
         }
     })
@@ -89,7 +89,7 @@ addContentScriptMethod(
             }
 
         } else {
-            showMessage({content: "This is the last video"});
+            showMessage({content: "This is the last video", centered: true});
             return({content: "This is the last video"});
         }
     })
@@ -130,7 +130,7 @@ addContentScriptMethod(
                 });
             }
         } else {
-            showMessage({content: "This is the first video"});
+            showMessage({content: "This is the first video", centered: true});
             return({content: "This is the first video"});
         }
     })
