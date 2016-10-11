@@ -7,10 +7,8 @@ addModule(new Module("zoomModule", function() {
      */
     var zoomInState = new State("zoomInState");
     zoomInState.init = function () {
-        notify("entered zoom state");
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelZoomState", {});
-            notify("canceled zoom state");
             say("I stopped zooming");
         };
     };

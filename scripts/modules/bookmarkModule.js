@@ -13,10 +13,8 @@ addModule(new Module("bookmarkModule", function () {
      */
     var folderState = new PanelState("folderState");
     folderState.init = function () {
-        notify("Entered folder state");
         this.cancelAction.act = function() {
             callContentScriptMethod("hidePanel", {});
-            notify("canceled folder state");
             say("I stopped rummaging in your library");
         };
     };
@@ -39,11 +37,24 @@ addModule(new Module("bookmarkModule", function () {
      */
     var folderListenState = new State("folderListenState");
     folderListenState.init = function () {
-        notify("Stopped creating a folder");
         say("Which name shall i give the folder");
         this.cancelAction.act = function () {
             notify("canceled folder listen state");
             say("I canceled creating a folder");
+        }
+    };
+
+    /**
+     * function to get all combinations of a string
+
+    var combinations = function (params) {
+        var inputArray = [];
+        var inputString = params.toString().toLowerCase();
+        for (var j = 0; j < inputString.length; j++) {
+            inputArray.push(inputString.charAt(j));
+        }
+        var outputString = function (inputArray) {
+
         }
     };
 

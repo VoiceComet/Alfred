@@ -77,7 +77,11 @@ addContentScriptMethod(
                             infoCenter: "match " + (i + 1) + " of " + result.length
                         });
                     }
-                    return({content: "I found " + result.length + "matches for" + parameter + ". You are on match " + (i + 1)});
+                    if (result.length > 1) {
+                        return({content: "I found " + result.length + " matches for " + parameter + ". You are on match " + (i + 1)})
+                    } else {
+                        return({content: "I found one match for " + parameter})
+                    }
                 } else if (i + 1 >= result.length) {
                     i = 0;
                     result[0].style.backgroundColor = "rgb(255, 150, 50)";
@@ -105,7 +109,11 @@ addContentScriptMethod(
                             infoCenter: "match " + (i + 1) + " of " + result.length
                         });
                     }
-                    return({content: "I found " + result.length + " matches for " + parameter + ". You are on match " + (i + 1)})
+                    if (result.length > 1) {
+                        return({content: "I found " + result.length + " matches for " + parameter + ". You are on match " + (i + 1)})
+                    } else {
+                        return({content: "I found one match for " + parameter})
+                    }
                 }
             }
         }
@@ -217,7 +225,7 @@ addContentScriptMethod(
             });
             return({content: "You are now on match " + (i + 1) + "of" + result.length});
         } else {
-            showMessage({content: "There is no match <span style='background-color:#d61b0e'>" + params + "</span>", centered: true});
+            showMessage({content: "There is no match " + params , centered: true});
             return({content: "I cannot find a match " + params + "for" + parameter});
         }
     })

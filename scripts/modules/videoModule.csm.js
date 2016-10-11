@@ -37,7 +37,7 @@ addContentScriptMethod(
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
                 .append("<div id='objectUIDIV'></div>");
-            //show first 9 videos
+            //show first video
             $("#objectUIDIV").append(videos[i]);
             id = showMessage({
                 content: "Show videos",
@@ -45,7 +45,12 @@ addContentScriptMethod(
                 cancelable: true,
                 infoCenter: "video " + (i + 1) + " of " + videos.length,
                 time: 0
-            })
+            });
+            if (videos.length > 1) {
+                return({content: "I found " + videos.length + " videos on this page. You watch video one"});
+            } else {
+                return({content: "I found one video on this page"});
+            }
         } else {
             showMessage({content: "No videos found on this page", centered: true});
             return({content: "I found no videos on this page"});
@@ -87,7 +92,7 @@ addContentScriptMethod(
                     time: 0
                 });
             }
-
+            return({content: "You watch video " + (i + 1)});
         } else {
             showMessage({content: "This is the last video", centered: true});
             return({content: "This is the last video"});
@@ -129,9 +134,82 @@ addContentScriptMethod(
                     time: 0
                 });
             }
+            return({content: "You watch video " + (i + 1)});
         } else {
             showMessage({content: "This is the first video", centered: true});
             return({content: "This is the first video"});
+        }
+    })
+);
+
+/**
+ * go to certain video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("certainVideo", function (params) {
+        if (params === "one") {
+            params = 1;
+        }
+        var newVideo = parseInt(params);
+        if (videos.length < newVideo || 0 >= newVideo || isNaN(newVideo)) {
+                showMessage({content: "There is no video " + params, centered: true});
+                return({content: "There is no video " + params});
+        } else if (i === newVideo - 1) {
+            showMessage({content: "You are still on video " + params, centered: true});
+            return ({content: "You are still on video " + params});
+        } else {
+            if (i > newVideo - 1) {
+                i = newVideo - 1;
+                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 700ms steps(20);");
+                setTimeout(function () {
+                    $("#objectUIDIV")
+                        .empty()
+                        .append(videos[i])
+                        .attr("style", "-webkit-animation: fadeInLeft 700ms steps(40);");
+                }, 650);
+            // go to a further video
+            } else {
+                i = newVideo - 1;
+                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
+                setTimeout(function () {
+                    $("#objectUIDIV")
+                        .empty()
+                        .append(videos[i])
+                        .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);");
+                }, 650);
+            }
+            if (i > 0) {
+                if (i < videos.length - 1) {
+                    updateMessage({
+                        id: id,
+                        content: "Show images",
+                        commandLeft: "previous",
+                        commandRight: "next",
+                        cancelable: true,
+                        infoCenter: "page " + (i + 1) + " of " + videos.length,
+                        time: 0
+                    });
+                } else {
+                    updateMessage({
+                        id: id,
+                        content: "Show images",
+                        commandLeft: "previous",
+                        cancelable: true,
+                        infoCenter: "page " + (i + 1) + " of " + videos.length,
+                        time: 0
+                    });
+                }
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "Show images",
+                    commandRight: "next",
+                    cancelable: true,
+                    infoCenter: "page 1 of " + videos.length,
+                    time: 0
+                });
+            }
+            return({content: "You watch video " + (i + 1)});
         }
     })
 );
@@ -141,7 +219,7 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("playVideo", function () {
-        $("#objectUIDIV").trigger("click");
+        $("#objectUIDIV").click();
     })
 );
 

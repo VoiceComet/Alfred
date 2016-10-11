@@ -67,8 +67,23 @@ addModule(new Module("videoModule", function () {
                 say(params.content);
             }
         });
-    }
+    };
     videoState.addAction(playVideo);
+
+    /**
+     * go to certain video
+     */
+    var certainVideo = new Action("certainVideo", 1, videoState);
+    certainVideo.addCommand(new Command("go to video ([0-9]*)", 1));
+    certainVideo.act = function (arguments) {
+        callContentScriptMethod("certainVideo", arguments[0], function (params) {
+            if (params.content) {
+                say(params.content);
+            }
+        });
+    };
+    videoState.addAction(certainVideo);
+
 
 
 }));

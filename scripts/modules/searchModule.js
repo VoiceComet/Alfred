@@ -10,7 +10,6 @@ addModule(new Module("searchModule", function() {
     searchState.init = function () {
         this.cancelAction.act = function() {
             callContentScriptMethod("cancelSearchState", {});
-            notify("canceled search state");
             say("I stopped searching");
         };
     };
