@@ -8,7 +8,8 @@ var moduleList = [
 	"mapModule.js",
 	"bookmarkModule.js",
 	"linkModule.js",
-	"imageModule.js"
+	"imageModule.js",
+	"addressModule.js"
 	//"testModule.js"
 	
 	//add modules here
