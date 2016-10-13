@@ -202,6 +202,10 @@ function State (name) {
 		var i;
 		var j;
 		for (i = 0; i < this.actions.length; i++) {
+			if (this.actions[i].module != null && !this.actions[i].module.active) {
+				//skip actions of inactive modules
+				continue;
+			}
 			var actionAdded = false;
 			//all commands of action
 			for (j = 0; j < this.actions[i].commands.length; j++) {

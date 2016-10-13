@@ -34,6 +34,56 @@ var options = [
 		stdValue : true
 	},
 	{
+		id : "browserActionsModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "weatherModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "zoomModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "searchModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "videoModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "searchEngineModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "mapModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "bookmarkModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "linkModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
+		id : "imageModule",
+		type : "checkbox",
+		stdValue : true
+	},
+	{
 		id : "searchEngine",
 		type : "select",
 		stdValue : "google"
@@ -76,14 +126,7 @@ function restore_options() {
 
 	chrome.storage.sync.get(stdValues, function(items) {
 		options.forEach(function (option) {
-			if (option.id != 'speechAssistantVoice') {
-				//noinspection JSUnresolvedVariable
-				if (option.type == "checkbox") {
-					document.getElementById(option.id).checked = items[option.id];
-				} else {
-					document.getElementById(option.id).value = items[option.id];
-				}
-			} else {
+			if (option.id == 'speechAssistantVoice') {
 				//for voice loading
 				//noinspection SpellCheckingInspection
 				window.speechSynthesis.onvoiceschanged = function() {
@@ -101,9 +144,14 @@ function restore_options() {
 					}
 
 					//set default
-					//noinspection JSUnresolvedVariable
 					document.getElementById(optionId).value = items[optionId];
 				};
+			} else {
+				if (option.type == "checkbox") {
+					document.getElementById(option.id).checked = items[option.id];
+				} else {
+					document.getElementById(option.id).value = items[option.id];
+				}
 			}
 		});
 	});

@@ -14,6 +14,8 @@ function Action (name, parameterCount, followingState) {
     this.followingState = followingState;
 	/** @type {number} */
     this.parameterCount = parameterCount;
+	/** @type {Module} */
+	this.module = null;
 
 	/**
 	 * add a command to this action

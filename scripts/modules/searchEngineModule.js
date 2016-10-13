@@ -1,4 +1,4 @@
-addModule(new Module("SearchEngineModule", function() {
+addModule(new Module("searchEngineModule", function() {
 
 	//settings
 	var maxResults = 10; //google api does not support more than 10 results

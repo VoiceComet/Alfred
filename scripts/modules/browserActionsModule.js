@@ -1,7 +1,7 @@
 /**
  * Browser actions
 */
-addModule(new Module("BrowserActionsModule", function() {
+addModule(new Module("browserActionsModule", function() {
 
 	/**
  	 * open new tab

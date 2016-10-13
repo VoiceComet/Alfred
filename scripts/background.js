@@ -45,13 +45,23 @@ chrome.storage.sync.get({
  */
 function optionChangeListener(changes) {
 	for (var key in changes)  {
-		if (key == "speechAssistantName" && changes.hasOwnProperty(key)) {
-			//refresh butler name after option change
-			butlerName = changes[key].newValue;
-			return;
-		} else if (key == "speechAssistantVoice" && changes.hasOwnProperty(key)) {
-			//say something with new voice
-			say("This is my new voice");
+		if (changes.hasOwnProperty(key)) {
+			if (key == "speechAssistantName") {
+				//refresh butler name after option change
+				butlerName = changes[key].newValue;
+				return;
+			} else if (key == "speechAssistantVoice") {
+				//say something with new voice
+				say("This is my new voice");
+				return;
+			}
+			//refresh active modules
+			for (var i = 0; i < modules.length; i++) {
+				if (key == modules[i].settingName) {
+					modules[i].active = changes[key].newValue;
+					return;
+				}
+			}
 		}
 	}
 }

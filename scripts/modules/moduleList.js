@@ -12,6 +12,7 @@ var moduleList = [
 	//"testModule.js"
 	
 	//add modules here
+	//please add per new module a new entry in options
 ];
 
 

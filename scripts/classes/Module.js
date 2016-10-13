@@ -1,23 +1,34 @@
 /**
  * Module
- * @param {String} name - name of method
+ * @param {String} settingName - setting name of Module
  * @param {function()} init - initialize function which is called when the Module is loaded
  * @constructor
  */
-function Module (name, init) {
+function Module (settingName, init) {
 	/** @type {String} */
-	this.name = name;
+	this.settingName = settingName;
+	/** @type {Boolean} */
+	this.active = true;
 	/** @type {Action[]} */
 	this.actions = [];
 
 	/** @type {function()} */
 	this.init = init;
 
+	//get "is module active"
+	var that = this;
+	var stdValue = {};
+	stdValue[this.settingName] = this.active;
+	chrome.storage.sync.get(stdValue, function(value) {
+		that.active = value[that.settingName];
+	});
+
 	/**
 	 * add an action to this module, the action list will be loaded in the global common state
 	 * @param {Action} action - action
 	 */
     this.addAction = function(action) {
+    	action.module = this;
 		this.actions.push(action);
     };
 

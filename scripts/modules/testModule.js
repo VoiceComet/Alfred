@@ -1,5 +1,5 @@
 /** Create Module **/
-addModule(new Module("Test", function() {
+addModule(new Module("testModule", function() {
 	/** START Create Init Actions **/
 
 	//-----Action 1 Start---------
