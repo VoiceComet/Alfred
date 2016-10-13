@@ -46,22 +46,27 @@ addModule(new Module("bookmarkModule", function () {
 
     /**
      * function to get all combinations of a string
-
+     * @param {String} params
+     */
     var combinations = function (params) {
         var outputString = [];
         var inputArrayLowerCase = [];
         var inputArrayUpperCase = [];
         var inputString = params.toString().toLowerCase();
         for (var j = 0; j < inputString.length; j++) {
-            inputArrayLowerCase.push(inputString.charAt(j));
+            inputArrayLowerCase.push(inputString.charAt(j).toLowerCase());
             inputArrayUpperCase.push(inputString.charAt(j).toUpperCase());
         }
-        var buildString = function (inputArrayLowerCase, inputArrayUpperCase) {
-            for (var k = 0; k < inputArrayLowerCase.length; k++) {
-                outputString.push()
-                buildString()
+        for (var k = 0; k < inputArrayLowerCase.length; k++) {
+            for (var m = 0; m < Math.pow(2, k + 1); m++) {
+                if (m <= k * 2){
+                    outputString[m] = outputString[m] + inputArrayLowerCase[k];
+                } else {
+                    outputString[m] = outputString[m - k * 2] + inputArrayUpperCase[k];
+                }
             }
         }
+        return outputString
     };
 
     /**
@@ -73,6 +78,8 @@ addModule(new Module("bookmarkModule", function () {
      */
     var availability = function (object) {
         available = 1;
+        var result = combinations(title);
+        console.log(result);
         if (object.type === "bookmark") {
             chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodesBookmark) {
                 if (BookmarkTreeNodesBookmark.length > 0) {
@@ -116,6 +123,8 @@ addModule(new Module("bookmarkModule", function () {
      */
     var interacting = function (title, object, action) {
         interact = 1;
+        var result = combinations(title);
+        console.log(result);
         chrome.bookmarks.search({title: title}, function (BookmarkTreeNodes) {
             if (BookmarkTreeNodes.length === 0) {
                 interact = 0;
