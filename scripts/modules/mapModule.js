@@ -5,11 +5,9 @@ addModule(new Module("mapModule", function () {
 	mapState.scrollable = false;
 	mapState.enlargeable = true;
 	mapState.init = function() {
-		notify("entered map state");
 		this.cancelAction.act = function() {
 			callContentScriptMethod("closeMap", {});
 			callContentScriptMethod("hidePanel", {});
-			notify("canceled map state");
 		};
 
 		this.enlargeAction.oldAct = this.enlargeAction.act;

@@ -123,7 +123,7 @@ addModule(new Module("browserActionsModule", function() {
     scrollToTop.addCommand(new Command("[^scroll $|^scroll to $]?top", 0));
     scrollToTop.act = function() {
         callContentScriptMethod("scrollToTop", {}, function (params) {
-        	if (params.content) {
+        	if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
 				say(params.content);
 			}
 		});
@@ -137,7 +137,7 @@ addModule(new Module("browserActionsModule", function() {
 	scrollToMiddle.addCommand(new Command("[^scroll $|^scroll to $]?middle", 0));
 	scrollToMiddle.act = function() {
 		callContentScriptMethod("scrollToMiddle", {}, function (params) {
-			if (params.content) {
+			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
 				say(params.content);
 			}
 		});
@@ -151,7 +151,7 @@ addModule(new Module("browserActionsModule", function() {
     scrollToBottom.addCommand(new Command("[^scroll $|^scroll to $]?bottom", 0));
     scrollToBottom.act = function() {
         callContentScriptMethod("scrollToBottom", {}, function (params) {
-			if (params.content) {
+			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
 				say(params.content);
 			}
 		});
@@ -165,7 +165,7 @@ addModule(new Module("browserActionsModule", function() {
     scrollUp.addCommand(new Command("[^scroll &]?up", 0));
     scrollUp.act = function() {
         callContentScriptMethod("scrollUp", {}, function (params) {
-			if (params.content) {
+			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
 				say(params.content);
 			}
 		});
@@ -179,7 +179,7 @@ addModule(new Module("browserActionsModule", function() {
     scrollDown.addCommand(new Command("[^scroll &]?down", 0));
     scrollDown.act = function() {
         callContentScriptMethod("scrollDown", {}, function (params) {
-			if (params.content) {
+			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
 				say(params.content);
 			}
 		});
@@ -193,7 +193,7 @@ addModule(new Module("browserActionsModule", function() {
     scrollLeft.addCommand(new Command("[^scroll &]?left", 0));
     scrollLeft.act = function() {
         callContentScriptMethod("scrollLeft", {}, function (params) {
-			if (params.content) {
+			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
 				say(params.content);
 			}
 		});
@@ -207,7 +207,7 @@ addModule(new Module("browserActionsModule", function() {
     scrollRight.addCommand(new Command("[^scroll &]?right", 0));
     scrollRight.act = function() {
         callContentScriptMethod("scrollRight", {}, function (params) {
-			if (params.content) {
+			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
 				say(params.content);
 			}
 		});

@@ -189,3 +189,25 @@ function resizeUI() {
 }
 chrome.tabs.onZoomChange.addListener(resizeUI);
 chrome.tabs.onUpdated.addListener(resizeUI);
+
+/**
+ * listener that checks if a tab is hand reloaded or a link is clicked by user
+ * @param {Number} tabId
+ * @param {Object} changeInfo
+ */
+function checkCorrectState(tabId, changeInfo) {
+	if (changeInfo.hasOwnProperty("status") && changeInfo.status == "loading") {
+		if (tabId == activeTab && activeState != globalCommonState) {
+			//console.log("change active state");
+			//stop recognition
+			if (recognizing) {
+				activeState.stopSpeechRecognition();
+			}
+			changeActiveState(globalCommonState);
+		} else if (tabStates[tabId] != globalCommonState) {
+			//console.log("change tab state");
+			tabStates[tabId] = globalCommonState;
+		}
+	}
+}
+chrome.tabs.onUpdated.addListener(checkCorrectState);
