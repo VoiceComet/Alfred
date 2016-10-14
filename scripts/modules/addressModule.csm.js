@@ -139,7 +139,7 @@ addContentScriptMethod(
 		if(addresses.length === 0) {
 			//no addresses found
 			showMessage({content: "Could not find addresses", centered: true});
-			return({content: "I could not find addresses"});
+			return({content: "I could not find addresses", followingState:"globalCommonState"});
 		} else {
 			//addresses found
 			highlightAllAddresses();
@@ -156,6 +156,9 @@ addContentScriptMethod(
 	})
 );
 
+/**
+ * show next address
+ */
 addContentScriptMethod(
 	new ContentScriptMethod("nextAddress", function() {
 		//addresses found
@@ -167,6 +170,9 @@ addContentScriptMethod(
 	})
 );
 
+/**
+ * show previous address
+ */
 addContentScriptMethod(
 	new ContentScriptMethod("previousAddress", function() {
 		//addresses found
@@ -175,5 +181,23 @@ addContentScriptMethod(
 		highlightActiveAddressHighlight();
 		showOrUpdateAddressMessage();
 		scrollToActiveAddress();
+	})
+);
+
+/**
+ * go to certain address
+ */
+addContentScriptMethod(
+	new ContentScriptMethod("certainAddress", function (params) {
+		if (params > 0 && params <= addresses.length) {
+			highlightActiveAddressNormal();
+			activeAddress = params - 1;
+			highlightActiveAddressHighlight();
+			showOrUpdateAddressMessage();
+			scrollToActiveAddress();
+		} else {
+			showMessage({content: "There is no address " + params , centered: true});
+			return({content: "I cannot find a address " + params});
+		}
 	})
 );

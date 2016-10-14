@@ -24,8 +24,16 @@ addModule(new Module("addressModule", function () {
 	]);
 	addressSearch.act = function () {
 		callContentScriptMethod("showAddressResults", {}, function (params) {
-			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
-				say(params.content);
+			if (typeof params !== 'undefined') {
+				if (params.hasOwnProperty("content")) {
+					say(params.content);
+				}
+				if (params.hasOwnProperty("followingState")) {
+					if (params.followingState == "globalCommonState") {
+						if (recognizing) activeState.stopSpeechRecognition();
+						changeActiveState(globalCommonState);
+					}
+				}
 			}
 		});
 	};
@@ -52,5 +60,20 @@ addModule(new Module("addressModule", function () {
 		callContentScriptMethod("previousAddress", {});
 	};
 	addressState.addAction(prev);
+
+	/**
+	 * go to certain match
+	 * @type {Action}
+	 */
+	var certainAddress = new Action("certainAddress", 1, addressState);
+	certainAddress.addCommand(new Command("go to address ([\\d]+)", 1));
+	certainAddress.act = function () {
+		callContentScriptMethod("certainAddress", arguments[0], function (params) {
+			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
+				say(params.content);
+			}
+		});
+	};
+	addressState.addAction(certainAddress);
 
 }));
