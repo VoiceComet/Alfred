@@ -25,7 +25,7 @@ addModule(new Module("searchModule", function() {
     ]);
     search.act = function (arguments) {
         callContentScriptMethod("search", arguments[0], function (params) {
-            if (params.content) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                 say(params.content);
             }
         });
@@ -53,7 +53,7 @@ addModule(new Module("searchModule", function() {
     next.addCommand(new Command("next", 0));
     next.act = function() {
       callContentScriptMethod("nextMatch", {}, function (params) {
-          if (params.content) {
+          if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
               say(params.content);
           }
       });
@@ -68,7 +68,7 @@ addModule(new Module("searchModule", function() {
     prev.addCommand(new Command("previous", 0));
     prev.act = function () {
         callContentScriptMethod("previousMatch", {}, function (params) {
-            if (params.content) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                 say(params.content);
             }
         });
@@ -83,7 +83,7 @@ addModule(new Module("searchModule", function() {
     certainMatch.addCommand(new Command("go to match (.*)", 1));
     certainMatch.act = function () {
         callContentScriptMethod("certainMatch", arguments[0], function (params) {
-            if (params.content) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                 say(params.content);
             }
         });
