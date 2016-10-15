@@ -11,6 +11,11 @@ var alfredMapDirectionsRenderer;
 var alfredMapRouteDisplayed = false;
 var alfredMapRouteMessageId = -1;
 
+//create new event that fires after initializing the map
+var initializedAlfredMapEvent = document.createEvent("HTMLEvents");
+initializedAlfredMapEvent.initEvent("initializedAlfredMap", true, true);
+initializedAlfredMapEvent.eventName = "initializedAlfredMap";
+
 //noinspection JSUnusedLocalSymbols
 /**
  * callback of script loading
@@ -23,6 +28,7 @@ function initAlfredMap() {
     alfredMapPlacesService = new google.maps.places.PlacesService(alfredMap);
     alfredMapDirectionsService = new google.maps.DirectionsService;
     alfredMapDirectionsRenderer = new google.maps.DirectionsRenderer;
+    document.dispatchEvent(initializedAlfredMapEvent);
 }
 
 /**

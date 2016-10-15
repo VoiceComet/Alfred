@@ -208,10 +208,8 @@ addContentScriptMethod(
 addContentScriptMethod(
 	new ContentScriptMethod("showAddressOnMap", function () {
 		handleRequest({callFunction:"openMap", params:{}}, null, null);
-		//TODO with callback?
-		//wait 1 second to load the map
-		setTimeout(function() {
+		document.addEventListener("initializedAlfredMap", function() {
 			handleRequest({callFunction:"mapSearch", params:{query:addresses[activeAddress].readable}}, null, null);
-		}, 1000);
+		});
 	})
 );
