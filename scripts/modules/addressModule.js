@@ -40,7 +40,7 @@ addModule(new Module("addressModule", function () {
 	this.addAction(addressSearch);
 
 	/**
-	 * next match
+	 * next address
 	 * @type {Action}
 	 */
 	var next = new Action("nextAddress", 0, addressState);
@@ -51,7 +51,7 @@ addModule(new Module("addressModule", function () {
 	addressState.addAction(next);
 
 	/**
-	 * previous match
+	 * previous address
 	 * @type {Action}
 	 */
 	var prev = new Action("previousAddress", 0, addressState);
@@ -62,7 +62,7 @@ addModule(new Module("addressModule", function () {
 	addressState.addAction(prev);
 
 	/**
-	 * go to certain match
+	 * go to certain address
 	 * @type {Action}
 	 */
 	var certainAddress = new Action("certainAddress", 1, addressState);
@@ -75,5 +75,23 @@ addModule(new Module("addressModule", function () {
 		});
 	};
 	addressState.addAction(certainAddress);
+
+	/**
+	 * show address on map
+	 * @type {Action}
+	 */
+	var showAddressOnMap = new Action("showAddressOnMap", 0, null); //TODO state?
+	showAddressOnMap.addCommand(new Command("show on map", 0));
+	showAddressOnMap.addCommand(new Command("show address on map", 0));
+	showAddressOnMap.act = function () {
+		this.followingState = getGlobalState("MapState");
+		if (this.followingState == null) {
+			this.followingState = globalCommonState;
+			console.log("following map state not found");
+		} else {
+			callContentScriptMethod("showAddressOnMap", {});
+		}
+	};
+	addressState.addAction(showAddressOnMap);
 
 }));

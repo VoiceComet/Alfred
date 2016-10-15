@@ -201,3 +201,16 @@ addContentScriptMethod(
 		}
 	})
 );
+
+/**
+ * go to certain address
+ */
+addContentScriptMethod(
+	new ContentScriptMethod("showAddressOnMap", function () {
+		handleRequest({callFunction:"openMap", params:{}}, null, null);
+		//wait 1 second to load the map
+		setTimeout(function() {
+			handleRequest({callFunction:"mapSearch", params:{query:addresses[activeAddress].readable}}, null, null);
+		}, 1000);
+	})
+);

@@ -22,6 +22,7 @@ addModule(new Module("mapModule", function () {
 			callContentScriptMethod("resizeMap", {});
 		};
 	};
+	registerGlobalState(mapState);
 
 	/**
 	 * open map in panel

@@ -22,6 +22,8 @@ var activeTab;
 /** @global */
 var modules = [];
 /** @global */
+var globalStates = [];
+/** @global */
 var permissionGrounded = true;
 /** @global */
 var tabStates = [];
@@ -84,6 +86,29 @@ chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
 function addModule(module) {
 	module.init();
 	modules.push(module);
+}
+
+/**
+ * add a state to global states
+ * @param {State} state - State Object
+ * @global
+ */
+function registerGlobalState(state) {
+	globalStates.push(state);
+}
+
+/**
+ * get a state from global states with given name
+ * @param {String} name - name of State object
+ * @global
+ */
+function getGlobalState(name) {
+	for (var i = 0; i < globalStates.length; i++) {
+		if (globalStates[i].name == name) {
+			return globalStates[i];
+		}
+	}
+	return null
 }
 
 /**
