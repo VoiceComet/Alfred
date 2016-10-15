@@ -60,9 +60,9 @@ addModule(new Module("bookmarkModule", function () {
         for (var k = 0; k < inputArrayLowerCase.length; k++) {
             for (var m = 0; m < Math.pow(2, k + 1); m++) {
                 if (m <= k * 2){
-                    outputString[m] = outputString[m] + inputArrayLowerCase[k];
+                    outputString[m] = outputString[m - k * 2].slice(0, -1) + inputArrayLowerCase[k];
                 } else {
-                    outputString[m] = outputString[m - k * 2] + inputArrayUpperCase[k];
+                    outputString[m] = outputString[m - k * 2].slice(0, -1) + inputArrayUpperCase[k];
                 }
             }
         }
