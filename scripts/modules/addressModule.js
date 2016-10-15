@@ -80,7 +80,7 @@ addModule(new Module("addressModule", function () {
 	 * show address on map
 	 * @type {Action}
 	 */
-	var showAddressOnMap = new Action("showAddressOnMap", 0, null); //TODO state?
+	var showAddressOnMap = new Action("showAddressOnMap", 0, null);
 	showAddressOnMap.addCommand(new Command("show on map", 0));
 	showAddressOnMap.addCommand(new Command("show address on map", 0));
 	showAddressOnMap.act = function () {
