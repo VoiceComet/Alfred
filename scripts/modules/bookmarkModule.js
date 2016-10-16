@@ -5,8 +5,8 @@
 addModule(new Module("bookmarkModule", function () {
 
     var folder = "";
-    var available = 1;
-    var interact = 1;
+    var available = true;
+    var interact = true;
 
     /**
      * state for interacting with folder content
@@ -37,6 +37,7 @@ addModule(new Module("bookmarkModule", function () {
      */
     var folderListenState = new State("folderListenState");
     folderListenState.init = function () {
+        notify("Which name shall i give the folder");
         say("Which name shall i give the folder");
         this.cancelAction.act = function () {
             notify("canceled folder listen state");
@@ -52,21 +53,48 @@ addModule(new Module("bookmarkModule", function () {
         var outputString = [];
         var inputArrayLowerCase = [];
         var inputArrayUpperCase = [];
-        var inputString = params.toString().toLowerCase();
+        var inputString = params.toString();
         for (var j = 0; j < inputString.length; j++) {
             inputArrayLowerCase.push(inputString.charAt(j).toLowerCase());
             inputArrayUpperCase.push(inputString.charAt(j).toUpperCase());
         }
         for (var k = 0; k < inputArrayLowerCase.length; k++) {
-            for (var m = 0; m < Math.pow(2, k + 1); m++) {
-                if (m <= k * 2){
-                    outputString[m] = outputString[m - k * 2].slice(0, -1) + inputArrayLowerCase[k];
-                } else {
-                    outputString[m] = outputString[m - k * 2].slice(0, -1) + inputArrayUpperCase[k];
+            if (k === 0) {
+                outputString[0] = inputArrayLowerCase[0];
+                outputString[1] = inputArrayUpperCase[0];
+            } else {
+                for (var m = 0; m < Math.pow(2, k + 1); m++) {
+                    var newString = "";
+                    if (m < Math.pow(2, k)){
+                        newString = outputString[m].substr(0, k) +  inputArrayLowerCase[k] + outputString[m].substr(k + 1);
+                    } else {
+                        newString = outputString[m - Math.pow(2, k)].substr(0, k) +  inputArrayUpperCase[k] + outputString[m - Math.pow(2, k)].substr(k + 1);
+                    }
+                    outputString[m] = newString;
                 }
             }
         }
         return outputString
+    };
+
+    /**
+     * function for all possible folder titles
+     * @param {String} title
+     */
+    var allFolder = function (title) {
+        var result = combinations(title);
+        for (var i = 0; i < result.length; i++) {
+            chrome.bookmarks.search({title: result[i]}, function (BookmarkTreeNodesFolder) {
+                if (BookmarkTreeNodesFolder.length > 0) {
+                    for (var j = 0; j< BookmarkTreeNodesFolder.length; j++) {
+                        if (BookmarkTreeNodesFolder[j].url === undefined) {
+                            folder = BookmarkTreeNodesFolder[j].title;
+                            return;
+                        }
+                    }
+                }
+            });
+        }
     };
 
     /**
@@ -77,41 +105,45 @@ addModule(new Module("bookmarkModule", function () {
      * @param {String} [object.url] - url of bookmark
      */
     var availability = function (object) {
-        available = 1;
-        var result = combinations(title);
-        console.log(result);
-        if (object.type === "bookmark") {
-            chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodesBookmark) {
-                if (BookmarkTreeNodesBookmark.length > 0) {
-                    for (var i = 0; i < BookmarkTreeNodesBookmark.length; i++) {
-                        if (BookmarkTreeNodesBookmark[i].url != undefined) {
-                            say("There is already a bookmark with the same title in your library");
-                            notify("Bookmark title taken");
-                            available = 0;
+        available = true;
+        var result = combinations(object.title);
+        for (var j = 0; j < result.length; j++) {
+            if (object.type === "bookmark") {
+                chrome.bookmarks.search({title: result[j]}, function (BookmarkTreeNodesBookmark) {
+                    if (BookmarkTreeNodesBookmark.length > 0) {
+                        for (var i = 0; i < BookmarkTreeNodesBookmark.length; i++) {
+                            if (BookmarkTreeNodesBookmark[i].url != undefined) {
+                                available = false;
+                                say("There is already a bookmark with the same title in your library");
+                                notify("Bookmark title taken");
+                            }
+                        }
+                    } else {
+                        chrome.bookmarks.search({url: object.url}, function (BookmarkTreeNodesUrl) {
+                            if (BookmarkTreeNodesUrl.length > 0) {
+                                available = false;
+                                say("There is already a bookmark with the same url in your library");
+                                notify("Bookmark url taken");
+                            }
+                        });
+                    }
+                });
+            } else {
+                chrome.bookmarks.search({title: result[j]}, function (BookmarkTreeNodesFolder) {
+                    if (BookmarkTreeNodesFolder.length > 0) {
+                        for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
+                            if (BookmarkTreeNodesFolder[i].url === undefined) {
+                                available = false;
+                                say("There is already a folder with the same title in your library");
+                                notify("Folder title taken");
+                            }
                         }
                     }
-                } else {
-                    chrome.bookmarks.search({url: object.url}, function (BookmarkTreeNodesUrl) {
-                        if (BookmarkTreeNodesUrl.length > 0) {
-                            say("There is already a bookmark with the same url in your library");
-                            notify("Bookmark url taken");
-                            available = 0;
-                        }
-                    });
-                }
-            });
-        } else {
-            chrome.bookmarks.search({title: object.title}, function (BookmarkTreeNodesFolder) {
-                if (BookmarkTreeNodesFolder.length > 0) {
-                    for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
-                        if (BookmarkTreeNodesFolder[i].url === undefined) {
-                            say("There is already a folder with the same title in your library");
-                            notify("Folder title taken");
-                            available = 0;
-                        }
-                    }
-                }
-            });
+                });
+            }
+            if (available != true) {
+                return;
+            }
         }
     };
 
@@ -119,39 +151,53 @@ addModule(new Module("bookmarkModule", function () {
      * function to interact with bookmarks/folders
      * @param {String} title - the title which should be verified
      * @param {String} object - interact with bookmark or folder
-     * @param {String} action - delete or open object
+     * @param {String} action - remove or open object
      */
     var interacting = function (title, object, action) {
-        interact = 1;
+        var hit = 0;
+        interact = true;
         var result = combinations(title);
-        console.log(result);
-        chrome.bookmarks.search({title: title}, function (BookmarkTreeNodes) {
-            if (BookmarkTreeNodes.length === 0) {
-                interact = 0;
-                say("There is no " + object + ", " + title + " in your library");
-                notify("No " + object + " " + title + " found");
-            } else if (object === "bookmark"){
-                for (var i = 0; i < BookmarkTreeNodes.length; i++) {
-                    if (BookmarkTreeNodes[i].url != undefined) {
-                        if (action === "open") {
-                            chrome.tabs.update({url: BookmarkTreeNodes[i].url, active: true});
-                        } else {
-                            chrome.bookmarks.remove(BookmarkTreeNodes[i].id);
-                            say("I removed the bookmark " + title + " from your library");
-                            notify("Removed bookmark " + title + " from library");
+        for (var j = 0; j < result.length; j++) {
+            chrome.bookmarks.search({title: result[j]}, function (BookmarkTreeNodes) {
+                if (object === "bookmark"){
+                    for (var i = 0; i < BookmarkTreeNodes.length; i++) {
+                        if (BookmarkTreeNodes[i].url != undefined) {
+                            hit++;
+                            if (action === "open") {
+                                chrome.tabs.update({url: BookmarkTreeNodes[i].url, active: true});
+                            } else {
+                                chrome.bookmarks.remove(BookmarkTreeNodes[i].id);
+                                say("I removed the bookmark " + BookmarkTreeNodes[i].title + " from your library");
+                                notify("Removed bookmark " + BookmarkTreeNodes[i].title + " from library");
+                            }
+                        }
+                    }
+                } else {
+                    for (var k = 0; k < BookmarkTreeNodes.length; k++) {
+                        if (BookmarkTreeNodes[k].url === undefined) {
+                            hit++;
+                            if (action === "open") {
+
+                            } else {
+                                chrome.bookmarks.removeTree(BookmarkTreeNodes[k].id);
+                                say("I removed the folder " + BookmarkTreeNodes[k].title + " from your library");
+                                notify("Removed folder " + BookmarkTreeNodes[k].title + " from library");
+                            }
                         }
                     }
                 }
-            } else {
-                if (action === "open") {
-                    callContentScriptMethod("openFolder", {});
-                } else {
-                    chrome.bookmarks.removeTree(BookmarkTreeNodes[0].id);
-                    say("I removed the folder " + title + " from your library");
-                    notify("Removed folder " + title + " from library");
-                }
+            });
+            if (hit > 0) {
+                return;
             }
-        });
+        }
+        setTimeout(function () {
+            if (hit <= 0) {
+                interact = false;
+                say("There is no " + object + ", " + title + " in your library");
+                notify("No " + object + " " + title + " found");
+            }
+        }, 10);
     };
 
     /**
@@ -159,7 +205,7 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addBookmark = new Action("addBookmark", 0, bookmarkListenState);
-    addBookmark.addCommand(new Command("add bookmark", 0));
+    addBookmark.addCommand(new Command("add new bookmark", 0));
     addBookmark.act = function () {
         folder = "";
     };
@@ -173,7 +219,11 @@ addModule(new Module("bookmarkModule", function () {
     addBookmarkToFolder.addCommand(new Command("create new bookmark in (.*)", 1));
     addBookmarkToFolder.act = function (params) {
         interacting(params[0], "folder", "open");
-        folder = params[0];
+        setTimeout(function () {
+            if (interact != false) {
+                allFolder(params[0]);
+            }
+        }, 10);
     };
     this.addAction(addBookmarkToFolder);
 
@@ -192,7 +242,7 @@ addModule(new Module("bookmarkModule", function () {
                 url: url
             });
             setTimeout(function () {
-                if (available === 1) {
+                if (available != false) {
                     if (folder != "") {
                         chrome.bookmarks.search({title: folder}, function (BookmarkTreeNodesFolder) {
                             if (BookmarkTreeNodesFolder.length > 0) {
@@ -239,15 +289,15 @@ addModule(new Module("bookmarkModule", function () {
     folderState.addAction(openBookmark);
 
     /**
-     * delete bookmark
+     * remove bookmark
      * @type {Action}
      */
-    var deleteBookmark = new Action("deleteBookmark", 1, globalCommonState);
-    deleteBookmark.addCommand(new Command("delete bookmark (.*)", 1));
-    deleteBookmark.act = function (params) {
-        interacting(params[0], "bookmark", "delete");
+    var removeBookmark = new Action("removeBookmark", 1, globalCommonState);
+    removeBookmark.addCommand(new Command("remove bookmark (.*)", 1));
+    removeBookmark.act = function (params) {
+        interacting(params[0], "bookmark", "remove");
     };
-    this.addAction(deleteBookmark);
+    this.addAction(removeBookmark);
 
     /**
      * add folder
@@ -268,7 +318,11 @@ addModule(new Module("bookmarkModule", function () {
     addFolderInFolder.addCommand(new Command("create new folder in (.*)", 1));
     addFolderInFolder.act = function (params) {
         interacting(params[0], "folder", "open");
-        folder = params[0];
+        setTimeout(function () {
+            if (interact != false) {
+                allFolder(params[0]);
+            }
+        }, 10);
     };
     this.addAction(addFolderInFolder);
 
@@ -283,7 +337,7 @@ addModule(new Module("bookmarkModule", function () {
             title: params[0]
         });
         setTimeout(function () {
-            if (available === 1) {
+            if (available != false) {
                 if (folder != "") {
                     chrome.bookmarks.search({title: folder}, function (BookmarkTreeNodesFolder) {
                         if (BookmarkTreeNodesFolder.length > 0) {
@@ -323,38 +377,41 @@ addModule(new Module("bookmarkModule", function () {
     openFolder.act = function (params) {
         interacting(params[0], "folder", "open");
         setTimeout(function () {
-            if (interact === 1) {
-                chrome.bookmarks.search({title: params[0]}, function (BookmarkTreeNodes) {
-                    for (var i = 0; i < BookmarkTreeNodes.length; i++) {
-                        if (BookmarkTreeNodes[i].url === undefined) {
-                            var kids = "";
-                            chrome.bookmarks.getChildren(BookmarkTreeNodes[i].id, function (children) {
-                                if (children.length > 0) {
-                                    var kidFolder = [];
-                                    var kidBookmark = [];
-                                    for (var i = 0; i < children.length; i++) {
-                                        if (children[i].url === undefined) {
-                                            kidFolder.push(children[i]);
-                                        } else {
-                                            kidBookmark.push(children[i]);
+            if (interact != false) {
+                allFolder(params[0]);
+                setTimeout(function () {
+                    chrome.bookmarks.search({title: folder}, function (BookmarkTreeNodes) {
+                        for (var i = 0; i < BookmarkTreeNodes.length; i++) {
+                            if (BookmarkTreeNodes[i].url === undefined) {
+                                var kids = "";
+                                chrome.bookmarks.getChildren(BookmarkTreeNodes[i].id, function (children) {
+                                    if (children.length > 0) {
+                                        var kidFolder = [];
+                                        var kidBookmark = [];
+                                        for (var i = 0; i < children.length; i++) {
+                                            if (children[i].url === undefined) {
+                                                kidFolder.push(children[i]);
+                                            } else {
+                                                kidBookmark.push(children[i]);
+                                            }
                                         }
-                                    }
-                                    kids = children;
-                                    var send = {title: params[0], kidFolder: kidFolder, kidBookmark: kidBookmark};
-                                    callContentScriptMethod("showFolder", send);
-                                    if (kidBookmark.length > 1) {
-                                        say("Your folder " + params[0] + " contains " + kidBookmark.length + "bookmarks and " + kidFolder.length + " folder");
+                                        kids = children;
+                                        var send = {title: folder, kidFolder: kidFolder, kidBookmark: kidBookmark};
+                                        callContentScriptMethod("showFolder", send);
+                                        if (kidBookmark.length > 1) {
+                                            say("Your folder " + folder + " contains " + kidBookmark.length + "bookmarks and " + kidFolder.length + " folder");
+                                        } else {
+                                            say("Your folder " + folder + " contains " + kidBookmark.length + "bookmark and " + kidFolder.length + " folder");
+                                        }
                                     } else {
-                                        say("Your folder " + params[0] + " contains " + kidBookmark.length + "bookmark and " + kidFolder.length + " folder");
+                                        notify("The folder is empty");
+                                        say("The folder " + folder + " is empty");
                                     }
-                                } else {
-                                    notify("The folder is empty");
-                                    say("The folder " + params + " is empty");
-                                }
-                            });
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                }, 10);
             }
         }, 10);
     };
@@ -362,14 +419,14 @@ addModule(new Module("bookmarkModule", function () {
     folderState.addAction(openFolder);
 
     /**
-     * delete folder
+     * remove folder
      * @type {Action}
      */
-    var deleteFolder = new Action("deleteFolder", 1, globalCommonState);
-    deleteFolder.addCommand(new Command("delete folder (.*)", 1));
-    deleteFolder.act = function (params) {
-        interacting(params[0], "folder", "delete");
+    var removeFolder = new Action("removeFolder", 1, globalCommonState);
+    removeFolder.addCommand(new Command("remove folder (.*)", 1));
+    removeFolder.act = function (params) {
+        interacting(params[0], "folder", "remove");
     };
-    this.addAction(deleteFolder);
+    this.addAction(removeFolder);
 
 }));
