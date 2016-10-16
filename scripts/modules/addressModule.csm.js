@@ -3,7 +3,7 @@
 var addressMessageId = null;
 /** @type {Number} */
 var activeAddress = 0;
-/** @type {{String match, String readable, String[] parts}[], } */
+/** @type {{String match, String readable, String[] parts, Number markCount}[]} */
 var addresses = [];
 /** @type {Object[]}*/
 var marks = [];
@@ -27,13 +27,15 @@ function resetAddressFinder() {
  */
 function searchAddresses() {
 	var bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(document.documentElement.innerHTML)[1];
+	//cut all after div ChromeSpeechControlDIV
+	bodyHtml = bodyHtml.replace(/(<div id="ChromeSpeechControlDIV"[\s\S]*)/g, "");
 
 	/** @type RegExp */
 	var searched = /\b[\w\döÖüÜäÄß. -]{3,51}(?:\s|\n|\r|\t|<br.*?>)+[\d]{1,4}(?:\s|\n|\r|\t|<br.*?>)*(?:[a-zA-Z])?(?:\s|\n|\r|\t|<br.*?>)+(?:[0][1-9]|[1-9][0-9])[0-9]{3}(?:\s|\n|\r|\t|<br.*?>)+[\w\döÖüÜäÄß -]{3,21}/g;
 
 	while ((result = searched.exec(bodyHtml)) != null) {
 		var parts = result[0].split(/<.*?>/g);
-		addresses.push({result:result[0], readable:result[0].replace(/(?:\s\s|\n|\r|\t|<br.*?>)/g, " "), parts:parts});
+		addresses.push({result:result[0], readable:result[0].replace(/(?:\s\s|\n|\r|\t|<br.*?>)/g, " "), parts:parts, markCount:0});
 	}
 }
 
@@ -41,7 +43,9 @@ function searchAddresses() {
  * highlight all addresses and fill the marks array
  */
 function highlightAllAddresses() {
+	var beginningMarkCount = jQuery.makeArray(document.getElementsByClassName("highlight")).length;
 	for (var i = 0; i < addresses.length; i++) {
+		//mark all parts of address
 		for (var j = 0; j < addresses[i].parts.length; j++) {
 			$("body").mark(addresses[i].parts[j], {
 				className: "highlight",
@@ -55,8 +59,11 @@ function highlightAllAddresses() {
 				]
 			});
 		}
+		//get mark count for this address
+		marks = jQuery.makeArray(document.getElementsByClassName("highlight"));
+		addresses[i].markCount = marks.length - beginningMarkCount;
+		beginningMarkCount = marks.length;
 	}
-	marks = jQuery.makeArray(document.getElementsByClassName("highlight"));
 }
 
 /**
@@ -67,7 +74,7 @@ function getFirstActiveMarkId() {
 	//count address parts
 	var activeMarkBeginning = 0;
 	for (var i = 0; i < activeAddress; i++) {
-		activeMarkBeginning += addresses[i].parts.length;
+		activeMarkBeginning += addresses[i].markCount;
 	}
 	return activeMarkBeginning;
 }
@@ -76,9 +83,9 @@ function getFirstActiveMarkId() {
  * highlight active address in given color
  * @param color
  */
-function highlightAddress(color) {
+function highlightActiveAddress(color) {
 	var activeMarkBeginning = getFirstActiveMarkId();
-	for (var j = 0; j < addresses[activeAddress].parts.length; j++) {
+	for (var j = 0; j < addresses[activeAddress].markCount; j++) {
 		marks[activeMarkBeginning + j].style.backgroundColor = color;
 	}
 }
@@ -87,14 +94,14 @@ function highlightAddress(color) {
  * highlight active address yellow
  */
 function highlightActiveAddressNormal() {
-	highlightAddress("yellow")
+	highlightActiveAddress("yellow")
 }
 
 /**
  * highlight active address orange
  */
 function highlightActiveAddressHighlight() {
-	highlightAddress("rgb(255, 150, 50)")
+	highlightActiveAddress("rgb(255, 150, 50)")
 }
 
 /**
@@ -143,8 +150,8 @@ addContentScriptMethod(
 		} else {
 			//addresses found
 			highlightAllAddresses();
-			highlightActiveAddressHighlight();
 			showOrUpdateAddressMessage();
+			highlightActiveAddressHighlight();
 			scrollToActiveAddress();
 		}
 	})

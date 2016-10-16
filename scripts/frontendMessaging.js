@@ -81,9 +81,9 @@ function updateMessage(params) {
 		html += '<div class="top">';
 		//add title
 		if (typeof params.title !== 'undefined' && params.title != '') {
-			html += '<div class="title">' + params.title + '</div>';
+			html += params.title;
 		} else if (params.hasOwnProperty('centered') && params.centered) {
-			html += '<div class="title"></div><br/>';
+			html += '&nbsp;<br/>';
 		}
 		//add cancel action
 		if (params.hasOwnProperty('cancelable') && params.cancelable) {
@@ -160,7 +160,6 @@ function hideMessage(params) {
  * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
  */
 function showDialog(params) {
-	console.log(params);
 	//show extended content
 	var dialogBox = document.getElementById("ChromeSpeechControlDialogs");
 	var dialog = document.createElement('div');

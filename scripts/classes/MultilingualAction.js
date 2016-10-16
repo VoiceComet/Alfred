@@ -48,7 +48,6 @@ function MultilingualAction(name, relatedAction, settings) {
 			//close dialog at cancel
 			this.cancelAction.act = function() {
 				languageState.hideDialog();
-				notify("canceled");
 			};
 		};
 
