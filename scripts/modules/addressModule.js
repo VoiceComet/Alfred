@@ -18,9 +18,9 @@ addModule(new Module("addressModule", function () {
 	 * search for addresses
 	 * @type {Action}
 	 */
-	var addressSearch = new Action("find addresses", 0, addressState);
+	var addressSearch = new Action("show addresses", 0, addressState);
 	addressSearch.addCommands([
-		new Command("addresses", 0)
+		new Command("show addresses", 0)
 	]);
 	addressSearch.act = function () {
 		callContentScriptMethod("showAddressResults", {}, function (params) {
