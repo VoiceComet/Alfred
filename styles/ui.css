@@ -53,19 +53,39 @@ div#ChromeSpeechControlDIV div#ChromeSpeechControlUI {
     width: 0;
 }
 
+div#ChromeSpeechControlUI div#ChromeSpeechControlDialogs div.ChromeSpeechControlDialog {
+    display: block;
+    bottom: 0;
+    left: 0;
+    width: 392px;
+    color: white;
+    background-color: #036490;
+    padding: 10px 10px 10px 10px;
+    border: 2px solid white;
+    border-left: 0;
+    text-shadow: 2px 2px 4px #222;
+}
+div#ChromeSpeechControlUI div#ChromeSpeechControlDialogs {
+    width: 414px;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlDialogs,
 div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
-    display: none;
     position: absolute;
     bottom: 117px;
     left: 0;
-    padding: 5px 7px 5px 5px;
-    background-color: #036490;
-    border: 2px solid white;
-    border-left: 0;
     max-height:calc(100% - 140px);
-    width: 400px;
     overflow-x:hidden;
     overflow-y:auto;
+}
+
+div#ChromeSpeechControlUI div#ChromeSpeechControlPanel {
+    display: none;
+    border: 2px solid white;
+    border-left: 0;
+    width: 400px;
+    padding: 5px 7px 5px 5px;
+    background-color: #036490;
     -webkit-animation: fadeInLeft 500ms steps(20);
 }
 

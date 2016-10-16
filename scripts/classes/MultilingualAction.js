@@ -23,10 +23,11 @@ function MultilingualAction(name, relatedAction, settings) {
 		//create choose language state
 		var chooseLanguageState = new State("Choose Language");
 		chooseLanguageState.hideDialog = function () {
-			hideDialog(this.messageId);
+			hideDialog(this.messageId, this.dialogId);
 		};
-		chooseLanguageState.setMessageId = function (messageId) {
+		chooseLanguageState.setMessageId = function (messageId, dialogId) {
 			this.messageId = messageId;
+			this.dialogId = dialogId;
 		};
 		chooseLanguageState.init = function() {
 			var languageState = this;
@@ -40,8 +41,8 @@ function MultilingualAction(name, relatedAction, settings) {
 				{command: "turkish", description: "türk dili"},
 				{command: "russian", description: "русский язык"}
 			];
-			showDialog("Choose a Language", "", dialogActions, function (messageId) {
-				languageState.setMessageId(messageId);
+			showDialog("Choose a Language", "", "Say a language:", dialogActions, function (ids) {
+				languageState.setMessageId(ids.messageId, ids.dialogId);
 			});
 
 			//close dialog at cancel
@@ -79,7 +80,7 @@ function MultilingualAction(name, relatedAction, settings) {
 			var sayParameterState = new State("Say Parameter");
 			sayParameterState.lang = lang;
 			sayParameterState.hideDialog = function () {
-				hideDialog(this.messageId);
+				hideMessage(this.messageId);
 			};
 			sayParameterState.setMessageId = function (messageId) {
 				this.messageId = messageId;

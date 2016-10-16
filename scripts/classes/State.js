@@ -296,11 +296,13 @@ function State (name) {
 
 				dialogState.hideDialog = function () {
 					//noinspection JSPotentiallyInvalidUsageOfThis
-					hideDialog(this.messageId);
+					hideDialog(this.messageId, this.dialogId);
 				};
-				dialogState.setMessageId = function (messageId) {
+				dialogState.setMessageId = function (messageId, dialogId) {
 					//noinspection JSPotentiallyInvalidUsageOfThis
 					this.messageId = messageId;
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					this.dialogId = dialogId;
 				};
 
 				// modify cancel action
@@ -310,7 +312,6 @@ function State (name) {
 					//noinspection JSPotentiallyInvalidUsageOfThis,JSUnusedLocalSymbols
 					this.cancelAction.act = function(arguments) {
 						this.dialogState.hideDialog(this.messageId);
-						notify("canceled");
 					};
 				};
 
@@ -343,8 +344,8 @@ function State (name) {
 
 				this.changeActiveState(dialogState);
 
-				showDialog('What do you want to do?', actionHits.length + " Actions were found.", dialogActions, function(messageId) {
-					dialogState.setMessageId(messageId);
+				showDialog('What do you want to do?', actionHits.length + " Actions were found.", "Say a number:", dialogActions, function(ids) {
+					dialogState.setMessageId(ids.messageId, ids.dialogId);
 				});
 				say('What do you want to do?');
 			}
@@ -352,7 +353,7 @@ function State (name) {
 			//not found
 			if (!this.muted) {
 				notify('I don\'t know what you mean with "' + alternatives[0] + '".');
-				say('Please, repeat you wish');
+				say('Please, repeat your wish');
 			}
 		}
 	};
@@ -367,7 +368,7 @@ function State (name) {
 		this.recognition.continuous = this.continuous;
 		this.recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
 		this.recognition.maxAlternatives = this.maxAlternatives;
-		this.recognition.lang = this.lang; //TODO: selectable language? de-DE
+		this.recognition.lang = this.lang;
 		this.recognition.networkError = false;
 		this.recognition.hearingTab = activeTab;
 

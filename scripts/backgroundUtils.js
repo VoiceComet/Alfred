@@ -29,41 +29,25 @@ function hideMessage(messageId) {
 }
 
 /**
- * show an advanced dialog box next to the microphone with a title, content, actions and other commands in corners
- * @param {Object} params - parameters
- * @param {String} params.title - title of dialog
- * @param {String} params.content - content of dialog
- * @param {Array} [params.actions] - (optional) shown actions of dialog
- * @param {Boolean} [params.cancelable=false] - (optional) show cancel action (std true)
- * @param {String} [params.commandLeft] - (optional) Command, that shown on bottom left
- * @param {String} [params.commandRight] - (optional) Command, that shown on bottom right
- * @param {Function} callback - function(messageId){}, callback
- * @global
- */
-function showAdvancedDialog(params, callback) {
-	//noinspection JSUndefinedPropertyAssignment
-	params.time = 0;
-	callContentScriptMethod("showMessage", params, callback);
-}
-
-/**
- * show a dialog box next to the microphone with a title, content and actions
+ * show a dialog box and a message box next to the microphone with a title, content, action headline and actions
  * @param {String} title - title of dialog
  * @param {String} content - content of dialog
- * @param {Array} actions - shown actions of dialog
+ * @param {String} actionHeadline - shown headline of actions
+ * @param {String} actions - shown actions of dialog
  * @param {Function} callback - function(messageId){}, callback
  * @global
  */
-function showDialog(title, content, actions, callback) {
-	showAdvancedDialog({title: title, content: content, actions: actions}, callback);
+function showDialog(title, content, actionHeadline, actions, callback) {
+	callContentScriptMethod("showDialog", {title: title, content: content, actionHeadline: actionHeadline, actions: actions, cancelable:true}, callback);
 }
 
 /**
- * hide the given dialog
+ * hide the given dialog and message
  * @param messageId
+ * @param dialogId
  */
-function hideDialog(messageId) {
-	hideMessage(messageId);
+function hideDialog(messageId, dialogId) {
+	callContentScriptMethod("hideDialog", {messageId: messageId, dialogId: dialogId});
 }
 
 /**

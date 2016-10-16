@@ -41,6 +41,10 @@ function handleRequest(request, sender, sendResponse) {
 		response = updateMessage(request.params);
 	} else if (request.callFunction == "hideMessage") {
 		response = hideMessage(request.params);
+	} else if (request.callFunction == "showDialog") {
+		response = showDialog(request.params);
+	} else if (request.callFunction == "hideDialog") {
+		response = hideDialog(request.params);
 	} else if (request.callFunction == "showPanel") {
 		response = showPanel(request.params);
 	} else if (request.callFunction == "hidePanel") {
