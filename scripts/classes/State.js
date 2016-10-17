@@ -284,8 +284,8 @@ function State (name) {
 		}
 
 		if (actionHits.length > 0) {
-			if (actionHits.length == 1) {
-				//only one action found
+			if (actionHits.length == 1 && actionHits[0].hits.length == 1) {
+				//only one action and hit found
 				runHitAction(actionHits[0]); //run first actionHit
 				this.changeActiveState(actionHits[0].action.followingState);
 				//return;
