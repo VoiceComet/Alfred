@@ -105,14 +105,19 @@ addModule(new Module("bookmarkModule", function () {
      * @param {String} [object.url] - url of bookmark
      */
     var availability = function (object) {
+        var hit = 0;
         available = true;
         var result = combinations(object.title);
         for (var j = 0; j < result.length; j++) {
             if (object.type === "bookmark") {
                 chrome.bookmarks.search({title: result[j]}, function (BookmarkTreeNodesBookmark) {
+                    if(hit != 0) {
+                        return;
+                    }
                     if (BookmarkTreeNodesBookmark.length > 0) {
                         for (var i = 0; i < BookmarkTreeNodesBookmark.length; i++) {
                             if (BookmarkTreeNodesBookmark[i].url != undefined) {
+                                hit++;
                                 available = false;
                                 say("There is already a bookmark with the same title in your library");
                                 notify("Bookmark title taken");
@@ -120,7 +125,11 @@ addModule(new Module("bookmarkModule", function () {
                         }
                     } else {
                         chrome.bookmarks.search({url: object.url}, function (BookmarkTreeNodesUrl) {
+                            if (hit != 0) {
+                                return;
+                            }
                             if (BookmarkTreeNodesUrl.length > 0) {
+                                hit++;
                                 available = false;
                                 say("There is already a bookmark with the same url in your library");
                                 notify("Bookmark url taken");
@@ -130,9 +139,13 @@ addModule(new Module("bookmarkModule", function () {
                 });
             } else {
                 chrome.bookmarks.search({title: result[j]}, function (BookmarkTreeNodesFolder) {
+                    if(hit != 0) {
+                        return;
+                    }
                     if (BookmarkTreeNodesFolder.length > 0) {
                         for (var i = 0; i < BookmarkTreeNodesFolder.length; i++) {
                             if (BookmarkTreeNodesFolder[i].url === undefined) {
+                                hit++;
                                 available = false;
                                 say("There is already a folder with the same title in your library");
                                 notify("Folder title taken");
@@ -140,9 +153,6 @@ addModule(new Module("bookmarkModule", function () {
                         }
                     }
                 });
-            }
-            if (available != true) {
-                return;
             }
         }
     };
@@ -159,6 +169,9 @@ addModule(new Module("bookmarkModule", function () {
         var result = combinations(title);
         for (var j = 0; j < result.length; j++) {
             chrome.bookmarks.search({title: result[j]}, function (BookmarkTreeNodes) {
+                if (hit != 0) {
+                    return;
+                }
                 if (object === "bookmark"){
                     for (var i = 0; i < BookmarkTreeNodes.length; i++) {
                         if (BookmarkTreeNodes[i].url != undefined) {
@@ -170,26 +183,27 @@ addModule(new Module("bookmarkModule", function () {
                                 say("I removed the bookmark " + BookmarkTreeNodes[i].title + " from your library");
                                 notify("Removed bookmark " + BookmarkTreeNodes[i].title + " from library");
                             }
+                            if (hit != 0) {
+                                return;
+                            }
                         }
                     }
                 } else {
                     for (var k = 0; k < BookmarkTreeNodes.length; k++) {
                         if (BookmarkTreeNodes[k].url === undefined) {
                             hit++;
-                            if (action === "open") {
-
-                            } else {
+                            if (action != "open") {
                                 chrome.bookmarks.removeTree(BookmarkTreeNodes[k].id);
                                 say("I removed the folder " + BookmarkTreeNodes[k].title + " from your library");
                                 notify("Removed folder " + BookmarkTreeNodes[k].title + " from library");
+                            }
+                            if (hit != 0) {
+                                return;
                             }
                         }
                     }
                 }
             });
-            if (hit > 0) {
-                return;
-            }
         }
         setTimeout(function () {
             if (hit <= 0) {
