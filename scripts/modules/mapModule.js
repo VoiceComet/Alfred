@@ -106,7 +106,7 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapZoomIn = new Action("mapZoomIn", 0, mapState);
-	mapZoomIn.addCommand(new Command("zoom in", 0));
+	mapZoomIn.addCommand(new Command("(?:zoom )?in", 0));
 	mapZoomIn.act = function () {
 		callContentScriptMethod("mapZoomIn", {});
 	};
@@ -117,7 +117,7 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapZoomOut = new Action("mapZoomOut", 0, mapState);
-	mapZoomOut.addCommand(new Command("zoom out", 0));
+	mapZoomOut.addCommand(new Command("(?:zoom )?out", 0));
 	mapZoomOut.act = function () {
 		callContentScriptMethod("mapZoomOut", {});
 	};
@@ -128,7 +128,7 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapScrollUp = new Action("mapScrollUp", 0, mapState);
-	mapScrollUp.addCommand(new Command("scroll up", 0));
+	mapScrollUp.addCommand(new Command("(?:scroll )?up", 0));
 	mapScrollUp.act = function () {
 		callContentScriptMethod("mapScrollUp", {});
 	};
@@ -139,7 +139,7 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapScrollDown = new Action("mapScrollDown", 0, mapState);
-	mapScrollDown.addCommand(new Command("scroll down", 0));
+	mapScrollDown.addCommand(new Command("(?:scroll )?down", 0));
 	mapScrollDown.act = function () {
 		callContentScriptMethod("mapScrollDown", {});
 	};
@@ -150,7 +150,7 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapScrollLeft = new Action("mapScrollLeft", 0, mapState);
-	mapScrollLeft.addCommand(new Command("scroll left", 0));
+	mapScrollLeft.addCommand(new Command("(?:scroll )?left", 0));
 	mapScrollLeft.act = function () {
 		callContentScriptMethod("mapScrollLeft", {});
 	};
@@ -161,7 +161,7 @@ addModule(new Module("mapModule", function () {
 	 * @type {Action}
 	 */
 	var mapScrollRight = new Action("mapScrollRight", 0, mapState);
-	mapScrollRight.addCommand(new Command("scroll right", 0));
+	mapScrollRight.addCommand(new Command("(?:scroll )?right", 0));
 	mapScrollRight.act = function () {
 		callContentScriptMethod("mapScrollRight", {});
 	};
