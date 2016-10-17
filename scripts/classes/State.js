@@ -206,13 +206,13 @@ function State (name) {
 				}
 				/** @type {Number} */
 				var parameterPositionWeight = (i <= 1) ? 1 : weight / (i-1);
+				//console.log("confidenceWeight: " + confidenceWeight + " textLengthWeight: " + textLengthWeight + " parameterPositionWeight: " + parameterPositionWeight);
 
-				this.weight = (confidenceWeight + textLengthWeight + parameterPositionWeight) / 3;
+				this.weight = confidenceWeight * 0.4 + textLengthWeight * 0.4 + parameterPositionWeight * 0.2;
 				return this.weight;
 			};
-			console.log(alternativeIndex + ": " + this.execResult['input'] + " || " + this.execResult[0] + " || " + this.getWeight());
+			//console.log(alternativeIndex + ": " + this.execResult['input'] + " || " + this.execResult[0] + " || " + this.getWeight());
 		}
-		console.log(alternatives);
 
 		/**
 		 * simple ActionHit object
@@ -265,7 +265,6 @@ function State (name) {
 							//add to actionHits array
 							actionHits[actionHitsIndex] = new ActionHit(this.actions[i]);
 							actionAdded = true;
-							console.log(this.actions[i]);
 						}
 						//add hit to actionHit
 						actionHits[actionHitsIndex].hits.push(new Hit(execResult, k));
@@ -292,36 +291,73 @@ function State (name) {
 				//return;
 			} else {
 				//no perfect match
+				var bestActionHitWeight = 0;
 				//filter hits
 				for (i = 0; i < actionHits.length; i++) {
-					//noinspection JSUnusedLocalSymbols
-					actionHits[i].hits = actionHits[i].hits.filter(function(element, index, array) {
-						//best text length weight of one alternative
-						for (j = 0; j < actionHits.length; j++) {
-							if (j == i) continue;
-							//noinspection JSUnusedLocalSymbols
-							var result = actionHits[j].hits.find(function (ele, ind, arr) {
-								return ele.alternativeIndex == element.alternativeIndex
-							});
-							if (typeof result !== 'undefined') {
-								return element.getWeight() >= result.getWeight();
-							}
-						}
-						return true;
+					//sort hits of actionHit
+					actionHits[i].hits = actionHits[i].hits.sort(function(a, b) {
+						return b.getWeight() - a.getWeight();
 					});
 
-					//actions without parameters should only have one hit
-					if (actionHits[i].action.parameterCount <= 0 && actionHits[i].hits.length > 0) {
-						actionHits[i].hits = [actionHits[i].hits[0]];
+					if (actionHits[i].hits.length > 0) {
+						if (actionHits[i].action.parameterCount <= 0) {
+							//actions without parameters should only have one hit
+							actionHits[i].hits = [actionHits[i].hits[0]];
+						} else {
+							//combine hits with same parameters of actions with one or more parameters
+							var newHitList = [];
+							for (var hitId = 0; hitId < actionHits[i].hits.length; hitId++) {
+								var putInNewHitList = true;
+								for (var newHitListId = 0; newHitListId < newHitList.length; newHitListId++) {
+									var sameParameters = true;
+									//check parameters are equal
+									for (var paramId = 1; paramId <= actionHits[i].action.parameterCount; paramId++) {
+										if (newHitList[newHitListId].execResult[paramId] != actionHits[i].hits[hitId].execResult[paramId]) {
+											sameParameters = false;
+											break;
+										}
+									}
+									if (sameParameters) {
+										//a better hit is already in the list
+										putInNewHitList = false;
+										break;
+									}
+								}
+								if (putInNewHitList) {
+									newHitList.push(actionHits[i].hits[hitId]);
+								}
+							}
+							actionHits[i].hits = newHitList;
+						}
+					}
+
+					//get best weight
+					var bestWeight = actionHits[i].hits[0].getWeight();
+					if (bestActionHitWeight < bestWeight) {
+						bestActionHitWeight = bestWeight;
 					}
 				}
+
+				//need of bestActionHitWeight
+				for (i = 0; i < actionHits.length; i++) {
+					//filter too small weights
+					actionHits[i].hits = actionHits[i].hits.filter(function(element) {
+						return element.getWeight() >= bestActionHitWeight * 0.92;
+					});
+
+					//cut hits array
+					var maxHitsPerAction = 5;
+					if (actionHits[i].hits.length > maxHitsPerAction) {
+						actionHits[i].hits = actionHits[i].hits.slice(0, maxHitsPerAction);
+					}
+				}
+
 				//noinspection JSUnusedLocalSymbols
 				actionHits = actionHits.filter(function(element, index, array) {
 					return element.hits.length > 0;
 				});
 
-
-				if (actionHits.length == 1) {
+				if (actionHits.length == 1 && actionHits[0].hits.length == 1) {
 					//only one action found
 					runHitAction(actionHits[0]); //run first actionHit
 					this.changeActiveState(actionHits[0].action.followingState);
@@ -363,11 +399,16 @@ function State (name) {
 
 				for (i = 0; i < actionHits.length; i++) {
 					for (j = 0; j < actionHits[i].hits.length; j++) {
-						dialogActions.push({
+						var dialogAction = {
 							command: dialogActionNumber,
-							description: actionHits[i].action.name + ": " + alternatives[actionHits[i].hits[j].alternativeIndex]
-									/*+ " (" + actionHits[i].hits[j].alternativeIndex + " " + Number((actionHits[i].hits[j].textLengthWeight).toFixed(2)) + ")"*/
-						});
+							description: actionHits[i].action.name
+						};
+						for (k = 0; k < actionHits[i].action.parameterCount; k++) {
+							var before = (k == 0) ? ": " : ", ";
+							dialogAction.description += before + actionHits[i].hits[j].execResult[k+1];
+						}
+						dialogActions.push(dialogAction);
+
 						//create dialog action
 						var action = new Action("Dialog Action " + dialogActionNumber, 0, actionHits[i].action.followingState);
 						action.actionHit = actionHits[i];
@@ -390,10 +431,10 @@ function State (name) {
 
 				this.changeActiveState(dialogState);
 
-				showDialog('What do you want to do?', actionHits.length + " Actions were found.", "Say a number:", dialogActions, function(ids) {
+				showDialog("&nbsp;", "What can I do for you?", "Say a number:", dialogActions, function(ids) {
 					dialogState.setMessageId(ids.messageId, ids.dialogId);
 				});
-				say('What do you want to do?');
+				say('What can I do for you?');
 			}
 		} else {
 			//not found
@@ -435,7 +476,11 @@ function State (name) {
 					}
 				}
 			}
+			//only get the first confidence, because all other alternatives have a confidence of 0
 			var confidence = (alternatives.length > 0) ? event.results[event.resultIndex][0].confidence : 0;
+			if (confidence <= 0) {
+				confidence = 0.8; //std confidence when webspeech api fails with confidence caused by bug
+			}
 
 			that.analyseRecognitionResult(alternatives, confidence);
 			that.working = false;

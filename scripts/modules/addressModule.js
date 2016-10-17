@@ -93,23 +93,4 @@ addModule(new Module("addressModule", function () {
 		}
 	};
 	addressState.addAction(showAddressOnMap);
-
-	var test = new Action("call", 0, globalCommonState);
-	test.addCommand(new Command("call", 0));
-	test.act = function () {
-		console.log("call");
-	};
-	this.addAction(test);
-	var test2 = new Action("call x person", 1, globalCommonState);
-	test2.addCommand(new Command("call ([\\d]+) person", 1));
-	test2.act = function (arguments) {
-		console.log("call " + arguments[0] + " person");
-	};
-	this.addAction(test2);
-	var test3 = new Action("call ??", 1, globalCommonState);
-	test3.addCommand(new Command("call (.+)", 1));
-	test3.act = function () {
-		console.log("call " + arguments[0]);
-	};
-	this.addAction(test3);
 }));
