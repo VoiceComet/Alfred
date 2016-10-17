@@ -153,8 +153,9 @@ function State (name) {
 	 * You can override this function.
 	 *
 	 * @param {[String]} alternatives
+	 * @param {Number} confidence
 	 */
-	this.analyseRecognitionResult = function(alternatives) {
+	this.analyseRecognitionResult = function(alternatives, confidence) {
 		/**
 		 * simple Hit object
 		 * @param {Array} execResult
@@ -166,9 +167,53 @@ function State (name) {
 			this.execResult = execResult;
 			/** @type {Number} */
 			this.alternativeIndex = alternativeIndex;
-			/** @type {Number} */
-			this.textLengthWeight = execResult[0].length / execResult['input'].length;
+
+			/**
+			 * @type {Number}
+			 * @private
+			 */
+			this.weight = -1;
+
+			/**
+			 * calculate weight of this hit
+			 * @return {Number}
+			 */
+			this.getWeight = function() {
+				if (this.weight >= 0) {
+					return this.weight;
+				}
+				//evaluate confidence weight
+				/** @type {Number} */
+				var confidenceWeight = confidence / alternatives.length * (alternatives.length-this.alternativeIndex);
+
+				//evaluate text length weight
+				/** @type {Number} */
+				var textLengthWeight = this.execResult[0].length / this.execResult['input'].length;
+
+				//evaluate parameter position weight
+				function isSubStringAtBorder(subString) {
+					var index = execResult[0].indexOf(subString);
+					return (index <= 0 || index + subString.length >= execResult[0].length);
+				}
+				//for each parameter
+				var weight = 0;
+				var i = 1;
+				while (this.execResult.hasOwnProperty(i + "")) {
+					if (!isSubStringAtBorder(this.execResult[i])) {
+						weight += 1;
+					}
+					i++;
+				}
+				/** @type {Number} */
+				var parameterPositionWeight = (i <= 1) ? 1 : weight / (i-1);
+
+				this.weight = (confidenceWeight + textLengthWeight + parameterPositionWeight) / 3;
+				return this.weight;
+			};
+			console.log(alternativeIndex + ": " + this.execResult['input'] + " || " + this.execResult[0] + " || " + this.getWeight());
 		}
+		console.log(alternatives);
+
 		/**
 		 * simple ActionHit object
 		 * @param {Action} action
@@ -220,6 +265,7 @@ function State (name) {
 							//add to actionHits array
 							actionHits[actionHitsIndex] = new ActionHit(this.actions[i]);
 							actionAdded = true;
+							console.log(this.actions[i]);
 						}
 						//add hit to actionHit
 						actionHits[actionHitsIndex].hits.push(new Hit(execResult, k));
@@ -258,7 +304,7 @@ function State (name) {
 								return ele.alternativeIndex == element.alternativeIndex
 							});
 							if (typeof result !== 'undefined') {
-								return element.textLengthWeight >= result.textLengthWeight;
+								return element.getWeight() >= result.getWeight();
 							}
 						}
 						return true;
@@ -389,8 +435,9 @@ function State (name) {
 					}
 				}
 			}
+			var confidence = (alternatives.length > 0) ? event.results[event.resultIndex][0].confidence : 0;
 
-			that.analyseRecognitionResult(alternatives);
+			that.analyseRecognitionResult(alternatives, confidence);
 			that.working = false;
 			that.updateMicrophoneIcon();
 		};
