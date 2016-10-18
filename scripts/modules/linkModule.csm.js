@@ -43,7 +43,7 @@ addContentScriptMethod(
         searchedAll = true;
         if(links.length === 0) {
             showMessage({content: "Could not find links", centered: true});
-            return({content: "I found no links on this page"});
+            return({content: "I found no links on this page", followingState:"globalCommonState"});
         } else {
             for (i = 0; i < links.length; i++) {
                 if (window.scrollY <= $(links[i]).offset().top &&

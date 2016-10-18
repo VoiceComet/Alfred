@@ -25,8 +25,16 @@ addModule(new Module("searchModule", function() {
     ]);
     search.act = function (arguments) {
         callContentScriptMethod("search", arguments[0], function (params) {
-            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
-                say(params.content);
+            if (typeof params !== 'undefined') {
+                if (params.hasOwnProperty("content")) {
+                    say(params.content);
+                }
+                if (params.hasOwnProperty("followingState")) {
+                    if (params.followingState == "globalCommonState") {
+                        if (recognizing) activeState.stopSpeechRecognition();
+                        changeActiveState(globalCommonState);
+                    }
+                }
             }
         });
     };
