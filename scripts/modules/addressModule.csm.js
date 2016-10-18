@@ -31,11 +31,12 @@ function searchAddresses() {
 	bodyHtml = bodyHtml.replace(/(<div id="ChromeSpeechControlDIV"[\s\S]*)/g, "");
 
 	/** @type RegExp */
-	var searched = /\b[\w\döÖüÜäÄß. -]{3,51}(?:\s|\n|\r|\t|<br.*?>)+[\d]{1,4}(?:\s|\n|\r|\t|<br.*?>)*(?:[a-zA-Z])?(?:\s|\n|\r|\t|<br.*?>)+(?:[0][1-9]|[1-9][0-9])[0-9]{3}(?:\s|\n|\r|\t|<br.*?>)+[\w\döÖüÜäÄß -]{3,21}/g;
+	var searched = /\b[\w\döÖüÜäÄß. -]{3,51}(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+[\d]{1,4}(?:\s|\n|\r|\t|&nbsp;|<br.*?>)*(?:[a-zA-Z])?(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+(?:[0][1-9]|[1-9][0-9])[0-9]{3}(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+[\w\döÖüÜäÄß -]{3,21}/g;
+
 
 	while ((result = searched.exec(bodyHtml)) != null) {
-		var parts = result[0].split(/<.*?>/g);
-		addresses.push({result:result[0], readable:result[0].replace(/(?:\s\s|\n|\r|\t|<br.*?>)/g, " "), parts:parts, markCount:0});
+		var parts = result[0].replace(/(?:\s|\n|\r|\t|&nbsp;)+/g, " ").split(/<.*?>/g);
+		addresses.push({result:result[0], readable:result[0].replace(/(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+/g, " "), parts:parts, markCount:0});
 	}
 }
 
@@ -50,13 +51,21 @@ function highlightAllAddresses() {
 			$("body").mark(addresses[i].parts[j], {
 				className: "highlight",
 				separateWordSearch: false,
-				accuracy: "exactly",
+				acrossElements: true,
+				accuracy: {
+					"value": "exactly",
+					"limiters": ["&nbsp;"]
+				},
 				exclude: [
 					"script",
 					"style",
 					"noscript",
 					"#ChromeSpeechControlDIV *"
-				]
+				],
+				filter: function(node, term, totalCounter, counter){
+					//only mark the first result
+					return (counter <= 0);
+				}
 			});
 		}
 		//get mark count for this address
@@ -174,6 +183,7 @@ addContentScriptMethod(
 		highlightActiveAddressHighlight();
 		showOrUpdateAddressMessage();
 		scrollToActiveAddress();
+		return {address:addresses[activeAddress].readable};
 	})
 );
 
@@ -188,6 +198,7 @@ addContentScriptMethod(
 		highlightActiveAddressHighlight();
 		showOrUpdateAddressMessage();
 		scrollToActiveAddress();
+		return {address:addresses[activeAddress].readable};
 	})
 );
 
