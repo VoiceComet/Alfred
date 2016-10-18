@@ -26,9 +26,12 @@ div#zoomUIDIV div#zoomUI h1 {
     font-weight: bold;
     border: none;
     font-style: normal;
+    font-variant: normal;
     color: black;
     margin-top: -2.5vh;
     margin-left: -2.5vh;
+    padding: 0;
+    background: none;
 }
 
 div#zoomUIDIV div#zoomUI h1#first {
