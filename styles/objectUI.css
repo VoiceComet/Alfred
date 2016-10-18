@@ -17,6 +17,16 @@ div#objectUIDIVBackground, div#objectUIDIV {
     height: 100%;
     width: 100%;
 }
+
+div#videoDIV {
+    position: fixed;
+    top: 30%;
+    left: 30%;
+    z-index: 1999999999;
+    width: 40%;
+    height: 40%;
+}
+
 #imagesGrid {
     z-index: 1999999999;
     width: 60%;

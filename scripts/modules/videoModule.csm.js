@@ -34,11 +34,9 @@ addContentScriptMethod(
             }
         }**/
         if (videos.length > 0) {
-            $("body")
-                .append("<div id='objectUIDIVBackground'></div>")
-                .append("<div id='objectUIDIV'></div>");
-            //show first video
-            $("#objectUIDIV").append(videos[i]);
+            $('html, body')
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
             id = showMessage({
                 content: "Show videos",
                 commandRight: "next",
@@ -65,13 +63,9 @@ addContentScriptMethod(
     new ContentScriptMethod("nextVideo", function () {
         if (i + 1 < videos.length) {
             i++;
-            $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
-            setTimeout(function () {
-                $("#objectUIDIV")
-                    .empty()
-                    .append(videos[i])
-                    .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);");
-            }, 650);
+            $('html, body')
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
             if (i + 1 < videos.length) {
                 updateMessage({
                     id: id,
@@ -107,13 +101,9 @@ addContentScriptMethod(
     new ContentScriptMethod("previousVideo", function () {
         if (i - 1 > -1) {
             i--;
-            $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 700ms steps(20);");
-            setTimeout(function () {
-                $("#objectUIDIV")
-                    .empty()
-                    .append(videos[i])
-                    .attr("style", "-webkit-animation: fadeInLeft 700ms steps(40);");
-            }, 650);
+            $('html, body')
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
             if (i - 1 > -1) {
                 updateMessage({
                     id: id,
@@ -158,26 +148,10 @@ addContentScriptMethod(
             showMessage({content: "You are still on video " + params, centered: true});
             return ({content: "You are still on video " + params});
         } else {
-            if (i > newVideo - 1) {
-                i = newVideo - 1;
-                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 700ms steps(20);");
-                setTimeout(function () {
-                    $("#objectUIDIV")
-                        .empty()
-                        .append(videos[i])
-                        .attr("style", "-webkit-animation: fadeInLeft 700ms steps(40);");
-                }, 650);
+            $('html, body')
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
             // go to a further video
-            } else {
-                i = newVideo - 1;
-                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
-                setTimeout(function () {
-                    $("#objectUIDIV")
-                        .empty()
-                        .append(videos[i])
-                        .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);");
-                }, 650);
-            }
             if (i > 0) {
                 if (i < videos.length - 1) {
                     updateMessage({
@@ -219,7 +193,7 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("playVideo", function () {
-        $("#objectUIDIV").click();
+        videos[i].play();
     })
 );
 
@@ -228,12 +202,6 @@ addContentScriptMethod(
 */
 addContentScriptMethod(
     new ContentScriptMethod("cancelVideoState", function () {
-        $("#objectUIDIV").attr("style", "-webkit-animation: fadeOut 500ms steps(20);");
-        $("#objectUIDIVBackground").attr("style", "-webkit-animation: fadeOut 500ms steps(20);");
-        setTimeout(function () {
-            $("#objectUIDIV").remove();
-            $("#objectUIDIVBackground").remove();
-        }, 460);
         hideMessage({id: id});
         id = "";
     })
