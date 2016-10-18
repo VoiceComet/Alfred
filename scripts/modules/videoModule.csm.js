@@ -10,33 +10,25 @@ var id = "";
  * show all videos
  */
 addContentScriptMethod(
-    new ContentScriptMethod("showVideos", function () {
+    new ContentScriptMethod("watchVideos", function () {
+        videos = [];
         i = 0;
-        var html5 = jQuery.makeArray($("video"));
+        var html5 = jQuery.makeArray(document.getElementsByTagName("video"));
         for (var j = 0; j < html5.length; j++) {
-            if (html5[j].width > 0 && html5[j].height > 0) {
+            if (html5[j].width >= 0 && html5[j].height >= 0) {
                 videos.push(html5[j]);
             }
         }
-        var iframeVideo = jQuery.makeArray($("iframe"));
+        var iframeVideo = jQuery.makeArray(document.getElementsByTagName("iframe"));
         for (var k = 0; k < iframeVideo.length; k++) {
-            if (iframeVideo[k].width > 0 && iframeVideo[k].height > 0) {
+            if (iframeVideo[k].width > 100 && iframeVideo[k].height > 100) {
                 videos.push(iframeVideo[k]);
             }
         }
-        /**var linkWithVideo = jQuery.makeArray($("a:has(video-id)"));
-        var clipboard = html5.concat(youtube);
-        var container = clipboard.concat(linkWithVideo);
-        for (var j = 0; j < container.length; j++) {
-            alert(container[j].width);
-            if (container[j].width > 0 || container[j].height > 0) {
-                    videos.push(container[j]);
-            }
-        }**/
         if (videos.length > 0) {
             $('html, body')
-                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
-                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
             id = showMessage({
                 content: "Show videos",
                 commandRight: "next",
@@ -64,8 +56,8 @@ addContentScriptMethod(
         if (i + 1 < videos.length) {
             i++;
             $('html, body')
-                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
-                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
             if (i + 1 < videos.length) {
                 updateMessage({
                     id: id,
@@ -102,8 +94,8 @@ addContentScriptMethod(
         if (i - 1 > -1) {
             i--;
             $('html, body')
-                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
-                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
             if (i - 1 > -1) {
                 updateMessage({
                     id: id,
@@ -148,38 +140,40 @@ addContentScriptMethod(
             showMessage({content: "You are still on video " + params, centered: true});
             return ({content: "You are still on video " + params});
         } else {
-            $('html, body')
-                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 2}, 1000)
-                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 2}, 1000);
-            // go to a further video
+            i = newVideo - 1;
+            setTimeout(function () {
+                $('html, body')
+                    .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
+                    .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
+            }, 10);
             if (i > 0) {
                 if (i < videos.length - 1) {
                     updateMessage({
                         id: id,
-                        content: "Show images",
+                        content: "Show videos",
                         commandLeft: "previous",
                         commandRight: "next",
                         cancelable: true,
-                        infoCenter: "page " + (i + 1) + " of " + videos.length,
+                        infoCenter: "video " + (i + 1) + " of " + videos.length,
                         time: 0
                     });
                 } else {
                     updateMessage({
                         id: id,
-                        content: "Show images",
+                        content: "Show videos",
                         commandLeft: "previous",
                         cancelable: true,
-                        infoCenter: "page " + (i + 1) + " of " + videos.length,
+                        infoCenter: "video " + (i + 1) + " of " + videos.length,
                         time: 0
                     });
                 }
             } else {
                 updateMessage({
                     id: id,
-                    content: "Show images",
+                    content: "Show videos",
                     commandRight: "next",
                     cancelable: true,
-                    infoCenter: "page 1 of " + videos.length,
+                    infoCenter: "video 1 of " + videos.length,
                     time: 0
                 });
             }
@@ -194,6 +188,226 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("playVideo", function () {
         videos[i].play();
+        updateMessage({
+            id: id,
+            content: "Show videos",
+            cancelable: true,
+            infoCenter: "Volume: " + videos[i].volume,
+            time: 0
+        });
+    })
+);
+
+/**
+ * stop video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("stopVideo", function () {
+        videos[i].pause();
+        if (i > 0) {
+            if (i < videos.length - 1) {
+                updateMessage({
+                    id: id,
+                    content: "Show videos",
+                    commandLeft: "previous",
+                    commandRight: "next",
+                    cancelable: true,
+                    infoCenter: "video " + (i + 1) + " of " + videos.length,
+                    time: 0
+                });
+            } else {
+                updateMessage({
+                    id: id,
+                    content: "Show videos",
+                    commandLeft: "previous",
+                    cancelable: true,
+                    infoCenter: "video " + (i + 1) + " of " + videos.length,
+                    time: 0
+                });
+            }
+        } else {
+            updateMessage({
+                id: id,
+                content: "Show videos",
+                commandRight: "next",
+                cancelable: true,
+                infoCenter: "video 1 of " + videos.length,
+                time: 0
+            });
+        }
+    })
+);
+
+/**
+ * click video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("clickVideo", function () {
+        videos[i].click();
+    })
+);
+
+/**
+ * mute video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("muteVideo", function () {
+        $(videos[i]).prop('muted', true);
+        if (videos[i].play) {
+            updateMessage({
+                id: id,
+                content: "Show videos",
+                cancelable: true,
+                infoCenter: "muted",
+                time: 0
+            });
+        }
+    })
+);
+
+/**
+ * unmute video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("unmuteVideo", function () {
+        $(videos[i]).prop("muted", false);
+        if (videos[i].play) {
+            updateMessage({
+                id: id,
+                content: "Show videos",
+                cancelable: true,
+                infoCenter: "Volume: " + videos[i].volume,
+                time: 0
+            });
+        }
+    })
+);
+
+/**
+ * jump forward in video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("jumpForwardVideo", function () {
+        videos[i].currentTime += 10;
+    })
+);
+
+/**
+ * jump backwards in video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("jumpBackwardsVideo", function () {
+        videos[i].currentTime -= 10;
+    })
+);
+
+/**
+ * jump to certain time
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("jumpCertainVideo", function (params) {
+        var time = [];
+        if (params.toString().indexOf(":") > 0) {
+            time = params.toString().split(":");
+        } else {
+            time = params.toString().split(" ");
+        }
+        if (time[0] > 0) {
+            var minutes = parseInt(time[0] * 60);
+            var seconds = parseInt(time[1]);
+            videos[i].currentTime = minutes + seconds;
+        } else {
+            videos[i].currentTime = time[1];
+        }
+
+    })
+);
+
+/**
+ * increase volume
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("increaseVolume", function () {
+        if (videos[i].muted) {
+            $(videos[i]).prop("muted", false);
+        }
+        if (videos[i].volume + 0.1 <= 1) {
+            videos[i].volume += 0.1;
+        } else {
+            videos[i].volume = 1;
+        }
+        if (videos[i].play) {
+            updateMessage({
+                id: id,
+                content: "Show videos",
+                cancelable: true,
+                infoCenter: "Volume: " + videos[i].volume,
+                time: 0
+            });
+        }
+    })
+);
+
+/**
+ * decrease volume
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("decreaseVolume", function () {
+        if (videos[i].muted) {
+            $(videos[i]).prop("muted", false);
+        }
+        if (videos[i].volume - 0.1 >= 0) {
+            videos[i].volume -= 0.1;
+        } else {
+            videos[i].volume = 0;
+        }
+        if (videos[i].play) {
+            updateMessage({
+                id: id,
+                content: "Show videos",
+                cancelable: true,
+                infoCenter: "Volume: " + videos[i].volume,
+                time: 0
+            });
+        }
+    })
+);
+
+/**
+ * set volume
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("setVolumeVideo", function (params) {
+        if (videos[i].muted) {
+            $(videos[i]).prop("muted", false);
+        }
+        if (params > 0) {
+            if (params > 100) {
+                videos[i].volume = 1;
+            } else {
+                videos[i].volume = parseInt(params) / 100;
+            }
+        } else {
+            videos[i].volume = 0;
+        }
+        if (videos[i].play) {
+            updateMessage({
+                id: id,
+                content: "Show videos",
+                cancelable: true,
+                infoCenter: "Volume: " + videos[i].volume,
+                time: 0
+            });
+        }
+    })
+);
+
+/**
+ * fullscreen video
+ */
+addContentScriptMethod(
+    new ContentScriptMethod("fullscreenVideo", function () {
+
     })
 );
 
