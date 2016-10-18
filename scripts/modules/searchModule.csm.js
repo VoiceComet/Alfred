@@ -45,7 +45,7 @@ addContentScriptMethod(
                     content: "Could not find " + parameter});
                 oldId = true;
             }
-            return({content: "I could not find " + parameter});
+            return({content: "I could not find " + parameter, followingState:"globalCommonState"});
         } else {
             for (i = 0; i < result.length; i++) {
                 if (window.scrollY <= $(result[i]).offset().top &&

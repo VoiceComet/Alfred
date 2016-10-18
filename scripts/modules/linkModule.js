@@ -24,8 +24,16 @@ addModule(new Module("linkModule", function () {
     showLinks.addCommand(new Command("show all links", 0));
     showLinks.act = function () {
         callContentScriptMethod("showLinks", {}, function (params) {
-            if (params.content) {
-                say(params.content);
+            if (typeof params !== 'undefined') {
+                if (params.hasOwnProperty("content")) {
+                    say(params.content);
+                }
+                if (params.hasOwnProperty("followingState")) {
+                    if (params.followingState == "globalCommonState") {
+                        if (recognizing) activeState.stopSpeechRecognition();
+                        changeActiveState(globalCommonState);
+                    }
+                }
             }
         });
     };
@@ -40,7 +48,7 @@ addModule(new Module("linkModule", function () {
     next.addCommand(new Command("next", 0));
     next.act = function() {
         callContentScriptMethod("nextLink", {}, function (params) {
-            if (params.content) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                 say(params.content);
             }
         });
@@ -55,7 +63,7 @@ addModule(new Module("linkModule", function () {
     prev.addCommand(new Command("previous", 0));
     prev.act = function () {
         callContentScriptMethod("previousLink", {}, function (params) {
-            if (params.content) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                 say(params.content);
             }
         });
@@ -70,7 +78,7 @@ addModule(new Module("linkModule", function () {
     certainNNumber.addCommand(new Command("go to number (.*)", 1));
     certainNNumber.act = function () {
         callContentScriptMethod("certainLinkByNumber", arguments[0], function (params) {
-            if (params.content) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                 say(params.content);
             }
         });
@@ -85,7 +93,7 @@ addModule(new Module("linkModule", function () {
     certainName.addCommand(new Command("go to link (.*)", 1));
     certainName.act = function () {
         callContentScriptMethod("certainLinkByName", arguments[0], function (params) {
-            if (params.content) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                 say(params.content);
             }
         });
@@ -114,7 +122,7 @@ addModule(new Module("linkModule", function () {
     openLink.addCommand(new Command("open", 0));
     openLink.act = function () {
          callContentScriptMethod("openLink", {}, function (params) {
-             if (params.content) {
+             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
                  say(params.content);
              }
          });
