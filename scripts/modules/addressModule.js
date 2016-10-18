@@ -84,12 +84,37 @@ addModule(new Module("addressModule", function () {
 	showAddressOnMap.addCommand(new Command("show on map", 0));
 	showAddressOnMap.addCommand(new Command("show address on map", 0));
 	showAddressOnMap.act = function () {
-		this.followingState = getGlobalState("MapState");
-		if (this.followingState == null) {
+		var mapState = getGlobalState("MapState");
+		if (mapState == null) {
 			this.followingState = globalCommonState;
 			console.log("following map state not found");
 		} else {
 			callContentScriptMethod("showAddressOnMap", {});
+
+			//clone map state for avoid additional actions in original map state
+			mapState = jQuery.extend(true, {}, mapState);
+
+			//add next actions to mapState
+			var nextMapAction = new Action("next address", 0, mapState);
+			nextMapAction.addCommand(new Command("next", 0));
+			nextMapAction.act = function () {
+				callContentScriptMethod("nextAddress", {}, function(params) {
+					callContentScriptMethod("mapSearch", {query:params.address});
+				});
+			};
+			mapState.addAction(nextMapAction);
+
+			//add previous actions to mapState
+			var previousMapAction = new Action("previous address", 0, mapState);
+			previousMapAction.addCommand(new Command("previous", 0));
+			previousMapAction.act = function () {
+				callContentScriptMethod("previousAddress", {}, function(params) {
+					callContentScriptMethod("mapSearch", {query:params.address});
+				});
+			};
+			mapState.addAction(previousMapAction);
+
+			this.followingState = mapState;
 		}
 	};
 	addressState.addAction(showAddressOnMap);
