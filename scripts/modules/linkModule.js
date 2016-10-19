@@ -21,7 +21,7 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var showLinks = new Action("showLinks", 0, linkState);
-    showLinks.addCommand(new Command("show all links", 0));
+    showLinks.addCommand(new Command("show (?:all )?links", 0));
     showLinks.act = function () {
         callContentScriptMethod("showLinks", {}, function (params) {
             if (typeof params !== 'undefined') {

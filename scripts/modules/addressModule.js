@@ -18,7 +18,7 @@ addModule(new Module("addressModule", function () {
 	 * search for addresses
 	 * @type {Action}
 	 */
-	var addressSearch = new Action("show addresses", 0, addressState);
+	var addressSearch = new Action("show (?:all )?addresses", 0, addressState);
 	addressSearch.addCommands([
 		new Command("show addresses", 0)
 	]);
@@ -81,8 +81,7 @@ addModule(new Module("addressModule", function () {
 	 * @type {Action}
 	 */
 	var showAddressOnMap = new Action("showAddressOnMap", 0, null);
-	showAddressOnMap.addCommand(new Command("show on map", 0));
-	showAddressOnMap.addCommand(new Command("show address on map", 0));
+	showAddressOnMap.addCommand(new Command("show (?:address )?on map", 0));
 	showAddressOnMap.act = function () {
 		var mapState = getGlobalState("MapState");
 		if (mapState == null) {

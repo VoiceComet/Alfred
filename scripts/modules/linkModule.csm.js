@@ -132,7 +132,6 @@ addContentScriptMethod(
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (links.length)
             });
-            showMessage({content: "Show next link"});
         } else if(found.length > 1) {
             if (i < found.length - 1) {
                 $(found[i])
@@ -213,7 +212,6 @@ addContentScriptMethod(
                 commandRight: "next",
                 infoCenter:"link " + (i + 1) + " of " + (links.length)
             });
-            showMessage({content: "Show previous link"});
         } else if (found.length > 1){
             if (i > 0) {
                 $(found[i])
