@@ -57,7 +57,7 @@ addModule(new Module("videoModule", function () {
     videoState.addAction(previousVideo);
 
     /**
-     * go to certain video
+     * watch certain video
      */
     var certainVideo = new Action("certainVideo", 1, videoState);
     certainVideo.addCommand(new Command("watch video ([0-9]*)", 1));

@@ -21,8 +21,21 @@ addContentScriptMethod(
         }
         var iframeVideo = jQuery.makeArray(document.getElementsByTagName("iframe"));
         for (var k = 0; k < iframeVideo.length; k++) {
-            if (iframeVideo[k].width > 100 && iframeVideo[k].height > 100) {
+            if (iframeVideo[k].width > 0 && iframeVideo[k].height > 0) {
                 videos.push(iframeVideo[k]);
+            }
+        }
+        var objectTag = jQuery.makeArray(document.getElementsByTagName("object"));
+        for (var m = 0; m < objectTag.length; m++) {
+            var objectParams = jQuery.makeArray(objectTag[i].getElementsByTagName("param"));
+            for (var p = 0; p < objectParams.length; p++) {
+                var name = objectParams[p].getAttribute("name").toLowerCase();
+                if (name) {
+                    if (name === "flashvars" || name === "movie") {
+                        videos.push(objectTag[m]);
+                        return;
+                    }
+                }
             }
         }
         if (videos.length > 0) {
@@ -91,7 +104,7 @@ addContentScriptMethod(
  */
 addContentScriptMethod(
     new ContentScriptMethod("previousVideo", function () {
-        if (i - 1 > -1) {
+        if (i - 1 >= 0) {
             i--;
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
@@ -125,7 +138,7 @@ addContentScriptMethod(
 );
 
 /**
- * go to certain video
+ * watch certain video
  */
 addContentScriptMethod(
     new ContentScriptMethod("certainVideo", function (params) {
@@ -141,11 +154,9 @@ addContentScriptMethod(
             return ({content: "You are still on video " + params});
         } else {
             i = newVideo - 1;
-            setTimeout(function () {
-                $('html, body')
-                    .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
-                    .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
-            }, 10);
+            $('html, body')
+                .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
+                .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
             if (i > 0) {
                 if (i < videos.length - 1) {
                     updateMessage({
