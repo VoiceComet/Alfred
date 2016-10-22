@@ -84,12 +84,35 @@ var options = [
 		stdValue : true
 	},
 	{
+		id: "userCommand",
+		type: "text",
+		stdValue: "Add Command"
+	},
+	{
+		id: "chooseAction",
+		type: "select",
+		stdValue: "ReloadPage"
+
+	},
+	{
 		id : "searchEngine",
 		type : "select",
 		stdValue : "google"
 	}
 ];
 
+/**
+ * list of all user actions
+ * @type {Object[]}
+ */
+var userActions = [
+
+];
+
+//add onClickListener for saving
+document.getElementById("AddButton").addEventListener("click", function () {
+	userActions.push({id: "Test", type: "text", stdValue: "Test"});
+});
 
 //add onChangeListener for saving
 options.forEach(function (option) {

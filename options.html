@@ -54,6 +54,7 @@
             <input id="speechAssistantSayTitle" title="Say your title after every speech output" type="checkbox"/>
         </div>
     </section>
+
     <section>
         <h3>Modules</h3>
         <div class="setting">
@@ -98,6 +99,22 @@
         </div>
     </section>
 
+    <section>
+        <h3>User Actions</h3>
+        <div class="setting">
+            <label for="userCommand">Command</label>
+            <input id="userCommand" title="Your own command" type="text"/>
+        </div>
+        <div class="setting">
+            <label for="chooseAction">Choose Action</label>
+            <select id="chooseAction" title="Choose Action">
+                <option value="ReloadPage">Reload Page</option>
+                <option value="GoBack">Go Back</option>
+                <option value="GoForward">Go Forward</option>
+            </select>
+            <button id="AddButton">Add</button>
+        </div>
+    </section>
 
     <section>
         <h3>APIs</h3>

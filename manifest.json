@@ -53,7 +53,8 @@
 				"scripts/modules/bookmarkModule.csm.js",
 				"scripts/modules/linkModule.csm.js",
 				"scripts/modules/imageModule.csm.js",
-				"scripts/modules/addressModule.csm.js"
+				"scripts/modules/addressModule.csm.js",
+				"scripts/modules/ownCommandModule.csm.js"
 			]
 		}
 	],

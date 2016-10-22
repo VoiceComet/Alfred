@@ -31,7 +31,7 @@ addContentScriptMethod(
             for (var p = 0; p < objectParams.length; p++) {
                 var name = objectParams[p].getAttribute("name").toLowerCase();
                 if (name) {
-                    if (name === "flashvars" || name === "movie") {
+                    if (name == "flashvars" || name == "movie") {
                         videos.push(objectTag[m]);
                         return;
                     }
@@ -410,15 +410,6 @@ addContentScriptMethod(
                 time: 0
             });
         }
-    })
-);
-
-/**
- * fullscreen video
- */
-addContentScriptMethod(
-    new ContentScriptMethod("fullscreenVideo", function () {
-
     })
 );
 

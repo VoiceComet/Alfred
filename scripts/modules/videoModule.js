@@ -181,14 +181,4 @@ addModule(new Module("videoModule", function () {
     };
     videoState.addAction(setVolumeVideo);
 
-    /**
-     * fullscreen video
-     */
-    var fullscreenVideo = new Action("fullscreenVideo", 0, videoState);
-    fullscreenVideo.addCommand(new Command("watch in full screen", 0));
-    fullscreenVideo.act = function () {
-        callContentScriptMethod("fullscreenVideo", {});
-    };
-    videoState.addAction(fullscreenVideo);
-
 }));

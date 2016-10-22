@@ -42,7 +42,9 @@ addContentScriptMethod(
             } else {
                 updateMessage({
                     id: id,
-                    content: "Could not find " + parameter});
+                    content: "Could not find " + parameter,
+                    centered: true
+                });
                 oldId = true;
             }
             return({content: "I could not find " + parameter, followingState:"globalCommonState"});
