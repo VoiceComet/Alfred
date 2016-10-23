@@ -106,13 +106,51 @@ var options = [
  * @type {Object[]}
  */
 var userActions = [
-
+	{
+		command: "default",
+		action: "default"
+	}
 ];
 
-//add onClickListener for saving
+//add onClickListener for adding commands
 document.getElementById("AddButton").addEventListener("click", function () {
-	userActions.push({id: "Test", type: "text", stdValue: "Test"});
+	var command = document.getElementById("userCommand").value;
+	var action = document.getElementById("chooseAction").value;
+	var userInteraction = {command: command, action: action};
+	userActions.push(userInteraction);
+	var save = {};
+	save[userActions[command]] = userInteraction;
+	chrome.storage.sync.set(save, function() {
+		var newDiv = document.createElement("div");
+		newDiv.class = "setting";
+		newDiv.id = command;
+		var element = document.createElement("label");
+		element.innerHTML = command + " | " + action + " ";
+		var deleteButton = document.createElement("button");
+		deleteButton.innerHTML = "Delete";
+		deleteButton.class = "deleteButton";
+		deleteButton.id = command;
+		document.getElementById("userInteraction").appendChild(newDiv);
+		document.getElementById(command)
+			.appendChild(element)
+			.appendChild(deleteButton);
+	});
 });
+
+//add OnClickListener for deleting commands
+/**document.getElementsByClassName("deleteButton").addEventListener("click", function () {
+	var id = this.id;
+	var save = {};
+	var settings = document.getElementsByClassName("setting");
+	for (var i = 0; i < settings.length; i++) {
+		if (settings[i].id = id) {
+			var element = settings[i];
+			chrome.storage.sync.set(save, function () {
+				element.remove();
+			})
+		}
+	}
+});*/
 
 //add onChangeListener for saving
 options.forEach(function (option) {
