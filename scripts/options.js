@@ -107,50 +107,74 @@ var options = [
  */
 var userActions = [
 	{
-		command: "default",
-		action: "default"
+		command: "hello",
+		action: "reloadPage"
 	}
 ];
 
+//add OnClickListener for deleting commands
+var deleteUserAction = function (params) {
+	var id = params.slice(0, -6);
+	var save = {};
+	var button = document.getElementById(params);
+	button.addEventListener("click", function () {
+		for (var i = 0; i < userActions.length; i++) {
+			if (userActions[i].command === id) {
+				userActions.splice(i, 1);
+			}
+		}
+		save[userActions] = userActions;
+		chrome.storage.sync.set(save, function () {
+			document.getElementById(id).remove();
+		})
+	});
+};
+
+userActions.forEach(function (params) {
+	var newDiv = document.createElement("div");
+	newDiv.class = "setting";
+	newDiv.id = params.command;
+	var label = document.createElement("label");
+	label.innerHTML = params.command + " | " + params.action + " ";
+	var deleteButton = document.createElement("button");
+	deleteButton.class = "deleteButton";
+	deleteButton.id = params.command + "Delete";
+	deleteButton.innerHTML = "Delete";
+	newDiv
+		.appendChild(label)
+		.appendChild(deleteButton);
+	document.getElementById("userInteraction").appendChild(newDiv);
+	deleteUserAction(deleteButton.id);
+});
+
 //add onClickListener for adding commands
-document.getElementById("AddButton").addEventListener("click", function () {
+document.getElementById("addButton").addEventListener("click", function () {
 	var command = document.getElementById("userCommand").value;
 	var action = document.getElementById("chooseAction").value;
-	var userInteraction = {command: command, action: action};
-	userActions.push(userInteraction);
+	var userInteraction = {
+		command: command,
+		action: action
+	};
 	var save = {};
+	userActions[command] = userInteraction;
 	save[userActions[command]] = userInteraction;
 	chrome.storage.sync.set(save, function() {
 		var newDiv = document.createElement("div");
 		newDiv.class = "setting";
 		newDiv.id = command;
-		var element = document.createElement("label");
-		element.innerHTML = command + " | " + action + " ";
+		var label = document.createElement("label");
+		label.innerHTML = command + " | " + action + " ";
 		var deleteButton = document.createElement("button");
-		deleteButton.innerHTML = "Delete";
 		deleteButton.class = "deleteButton";
-		deleteButton.id = command;
-		document.getElementById("userInteraction").appendChild(newDiv);
-		document.getElementById(command)
-			.appendChild(element)
+		deleteButton.id = command + "Delete";
+		deleteButton.innerHTML = "Delete";
+		newDiv
+			.appendChild(label)
 			.appendChild(deleteButton);
+		document.getElementById("userInteraction").appendChild(newDiv);
+		deleteUserAction(deleteButton.id);
 	});
 });
-
-//add OnClickListener for deleting commands
-/**document.getElementsByClassName("deleteButton").addEventListener("click", function () {
-	var id = this.id;
-	var save = {};
-	var settings = document.getElementsByClassName("setting");
-	for (var i = 0; i < settings.length; i++) {
-		if (settings[i].id = id) {
-			var element = settings[i];
-			chrome.storage.sync.set(save, function () {
-				element.remove();
-			})
-		}
-	}
-});*/
 
 //add onChangeListener for saving
 options.forEach(function (option) {

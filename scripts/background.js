@@ -69,7 +69,6 @@ function optionChangeListener(changes) {
 }
 chrome.storage.onChanged.addListener(optionChangeListener);
 
-
 //get active tab
 chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
 	if (tabs.length > 0) {
