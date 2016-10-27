@@ -91,7 +91,7 @@ var options = [
 	{
 		id: "chooseAction",
 		type: "select",
-		stdValue: "ReloadPage"
+		stdValue: "reloadPage"
 
 	},
 	{
@@ -105,10 +105,10 @@ var options = [
 var deleteUserAction = function (params) {
 	var button = document.getElementById(params);
 	button.addEventListener("click", function () {
-		chrome.storage.sync.get({actions: []}, function (results) {
-			for (var i = 0; i < results.actions.length; i++) {
-				if (results.actions[i].command === params) {
-					results.actions.splice(i, 1);
+		chrome.storage.sync.get({ownCommands: []}, function (results) {
+			for (var i = 0; i < results.ownCommands.length; i++) {
+				if (results.ownCommands[i].command === params) {
+					results.ownCommands.splice(i, 1);
 				}
 			}
 			chrome.storage.sync.set(results, function () {
@@ -122,29 +122,36 @@ var deleteUserAction = function (params) {
 document.getElementById("addButton").addEventListener("click", function () {
 	var command = document.getElementById("userCommand").value;
 	var action = document.getElementById("chooseAction").value;
-	var newDiv = document.createElement("div");
-	newDiv.class = "setting";
-	newDiv.id = command;
-	var label = document.createElement("label");
-	label.innerHTML = command + " | " + action + " ";
-	var deleteButton = document.createElement("button");
-	deleteButton.class = "deleteButton";
-	deleteButton.innerHTML = "Delete";
-	newDiv
-		.appendChild(label)
-		.appendChild(deleteButton);
-	document.getElementById("userInteraction").appendChild(newDiv);
-	deleteUserAction(newDiv.id);
-	chrome.storage.sync.get({actions: []}, function (results) {
-		results.actions.push({
-			command: command,
-			action: action
+	if (document.getElementById(command)) {
+		var warning = document.createElement("p");
+		warning.id = "warning";
+		warning.innerHTML = "This command already exists";
+		warning.setAttribute("color", "red");
+		document.getElementById("addActions").appendChild(warning);
+	} else {
+		var newDiv = document.createElement("div");
+		newDiv.class = "setting";
+		newDiv.id = command;
+		var label = document.createElement("label");
+		label.innerHTML = command + " | " + action + " ";
+		var deleteButton = document.createElement("button");
+		deleteButton.class = "deleteButton";
+		deleteButton.innerHTML = "Delete";
+		newDiv
+			.appendChild(label)
+			.appendChild(deleteButton);
+		document.getElementById("userCommands").appendChild(newDiv);
+		deleteUserAction(newDiv.id);
+		chrome.storage.sync.get({ownCommands: []}, function (results) {
+			results.ownCommands.push({
+				command: command,
+				action: action
+			});
+			chrome.storage.sync.set(results, function() {
+				//do nothing after saving
+			});
 		});
-		chrome.storage.sync.set(results, function() {
-
-		});
-	});
-
+	}
 });
 
 //add onChangeListener for saving
@@ -212,8 +219,8 @@ function restore_options() {
 		});
 	});
 
-	chrome.storage.sync.get({actions: []}, function (result) {
-		result.actions.forEach(function (params) {
+	chrome.storage.sync.get({ownCommands: []}, function (result) {
+		result.ownCommands.forEach(function (params) {
 			var newDiv = document.createElement("div");
 			newDiv.class = "setting";
 			newDiv.id = params.command;
@@ -225,7 +232,7 @@ function restore_options() {
 			newDiv
 				.appendChild(label)
 				.appendChild(deleteButton);
-			document.getElementById("userInteraction").appendChild(newDiv);
+			document.getElementById("userCommands").appendChild(newDiv);
 			deleteUserAction(newDiv.id);
 		});
 	})
