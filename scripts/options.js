@@ -101,79 +101,50 @@ var options = [
 	}
 ];
 
-/**
- * list of all user actions
- * @type {Object[]}
- */
-var userActions = [
-	{
-		command: "hello",
-		action: "reloadPage"
-	}
-];
-
 //add OnClickListener for deleting commands
 var deleteUserAction = function (params) {
-	var id = params.slice(0, -6);
-	var save = {};
 	var button = document.getElementById(params);
 	button.addEventListener("click", function () {
-		for (var i = 0; i < userActions.length; i++) {
-			if (userActions[i].command === id) {
-				userActions.splice(i, 1);
+		chrome.storage.sync.get({actions: []}, function (results) {
+			for (var i = 0; i < results.actions.length; i++) {
+				if (results.actions[i].command === params) {
+					results.actions.splice(i, 1);
+				}
 			}
-		}
-		save[userActions] = userActions;
-		chrome.storage.sync.set(save, function () {
-			document.getElementById(id).remove();
-		})
+			chrome.storage.sync.set(results, function () {
+				document.getElementById(params).remove();
+			})
+		});
 	});
 };
-
-userActions.forEach(function (params) {
-	var newDiv = document.createElement("div");
-	newDiv.class = "setting";
-	newDiv.id = params.command;
-	var label = document.createElement("label");
-	label.innerHTML = params.command + " | " + params.action + " ";
-	var deleteButton = document.createElement("button");
-	deleteButton.class = "deleteButton";
-	deleteButton.id = params.command + "Delete";
-	deleteButton.innerHTML = "Delete";
-	newDiv
-		.appendChild(label)
-		.appendChild(deleteButton);
-	document.getElementById("userInteraction").appendChild(newDiv);
-	deleteUserAction(deleteButton.id);
-});
 
 //add onClickListener for adding commands
 document.getElementById("addButton").addEventListener("click", function () {
 	var command = document.getElementById("userCommand").value;
 	var action = document.getElementById("chooseAction").value;
-	var userInteraction = {
-		command: command,
-		action: action
-	};
-	var save = {};
-	userActions[command] = userInteraction;
-	save[userActions[command]] = userInteraction;
-	chrome.storage.sync.set(save, function() {
-		var newDiv = document.createElement("div");
-		newDiv.class = "setting";
-		newDiv.id = command;
-		var label = document.createElement("label");
-		label.innerHTML = command + " | " + action + " ";
-		var deleteButton = document.createElement("button");
-		deleteButton.class = "deleteButton";
-		deleteButton.id = command + "Delete";
-		deleteButton.innerHTML = "Delete";
-		newDiv
-			.appendChild(label)
-			.appendChild(deleteButton);
-		document.getElementById("userInteraction").appendChild(newDiv);
-		deleteUserAction(deleteButton.id);
+	var newDiv = document.createElement("div");
+	newDiv.class = "setting";
+	newDiv.id = command;
+	var label = document.createElement("label");
+	label.innerHTML = command + " | " + action + " ";
+	var deleteButton = document.createElement("button");
+	deleteButton.class = "deleteButton";
+	deleteButton.innerHTML = "Delete";
+	newDiv
+		.appendChild(label)
+		.appendChild(deleteButton);
+	document.getElementById("userInteraction").appendChild(newDiv);
+	deleteUserAction(newDiv.id);
+	chrome.storage.sync.get({actions: []}, function (results) {
+		results.actions.push({
+			command: command,
+			action: action
+		});
+		chrome.storage.sync.set(results, function() {
+
+		});
 	});
+
 });
 
 //add onChangeListener for saving
@@ -240,5 +211,23 @@ function restore_options() {
 			}
 		});
 	});
+
+	chrome.storage.sync.get({actions: []}, function (result) {
+		result.actions.forEach(function (params) {
+			var newDiv = document.createElement("div");
+			newDiv.class = "setting";
+			newDiv.id = params.command;
+			var label = document.createElement("label");
+			label.innerHTML = params.command + " | " + params.action + " ";
+			var deleteButton = document.createElement("button");
+			deleteButton.class = "deleteButton";
+			deleteButton.innerHTML = "Delete";
+			newDiv
+				.appendChild(label)
+				.appendChild(deleteButton);
+			document.getElementById("userInteraction").appendChild(newDiv);
+			deleteUserAction(newDiv.id);
+		});
+	})
 }
 document.addEventListener('DOMContentLoaded', restore_options);
