@@ -126,8 +126,11 @@ document.getElementById("addButton").addEventListener("click", function () {
 		var warning = document.createElement("p");
 		warning.id = "warning";
 		warning.innerHTML = "This command already exists";
-		warning.setAttribute("color", "red");
+		warning.setAttribute("style", "color: red");
 		document.getElementById("addActions").appendChild(warning);
+		setTimeout(function () {
+			warning.remove();
+		}, 2500);
 	} else {
 		var newDiv = document.createElement("div");
 		newDiv.class = "setting";

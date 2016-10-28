@@ -3,6 +3,8 @@
  */
 addModule(new Module("ownCommandModule", function() {
 
+    var that = this;
+
     /**
      * reload the current tab
      */
@@ -197,15 +199,11 @@ addModule(new Module("ownCommandModule", function() {
     function ownCommandChangeListener(changes) {
         for (var key in changes)  {
             if (changes.hasOwnProperty(key)) {
-                if (key == "actions") {
-                    generateCommands();
-                }
-                //refresh active modules
-                for (var i = 0; i < modules.length; i++) {
-                    if (key == modules[i].settingName) {
-                        modules[i].active = changes[key].newValue;
-                        return;
+                if (key == "ownCommands") {
+                    for(var j = 0; j < that.actions.length; j++) {
+                        that.actions[j].commands = [];
                     }
+                    generateCommands();
                 }
             }
         }
