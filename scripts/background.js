@@ -28,6 +28,8 @@ var permissionGrounded = true;
 /** @global */
 var tabStates = [];
 /** @global */
+var tabCancelStacks = [];
+/** @global */
 var recognizing = true;
 
 
@@ -111,14 +113,61 @@ function getGlobalState(name) {
 }
 
 /**
- * change the active state
- * @param {State} newState - new State
+ * get state that should run after a cancel action
  * @global
  */
-function changeActiveState(newState) {
+function getNextCancelState() {
+	if (typeof tabCancelStacks[activeTab] === 'undefined') {
+		tabCancelStacks[activeTab] = [];
+	}
+
+	if (tabCancelStacks[activeTab].length > 0) {
+		var lastPos = tabCancelStacks[activeTab].length - 1;
+		var newState = tabCancelStacks[activeTab][lastPos];
+		tabCancelStacks[activeTab].splice(lastPos, 1);
+		return newState;
+	}
+	console.log("cancel error: stack is empty");
+	console.log(tabCancelStacks[activeTab]);
+	return null;
+}
+
+/**
+ * change the active state
+ * @param {State} newState - new State
+ * @param {Boolean} [cancelStack=true] - true, if the cancel stack should be filled
+ * @global
+ */
+function changeActiveState(newState, cancelStack) {
+	if (typeof tabCancelStacks[activeTab] === 'undefined') {
+		tabCancelStacks[activeTab] = [];
+	}
+	if (typeof cancelStack === 'undefined' || cancelStack === true) {
+		if (activeState != null) {
+			if (tabCancelStacks[activeTab].length > 0) {
+				//push to stack only if the last one is not the same state
+				var lastPos = tabCancelStacks[activeTab].length - 1;
+				var lastState = tabCancelStacks[activeTab][lastPos];
+				if (lastState.name == newState.name) {
+					//come to the last state of stack because of a circle, remove
+					tabCancelStacks[activeTab].splice(lastPos, 1);
+				} else if (newState.name != activeState.name) {
+					//otherwise if it is different to active state, add to stack
+					if (activeState.accessibleWithCancelAction)
+						tabCancelStacks[activeTab].push(activeState);
+				}
+			} else {
+				if (activeState.accessibleWithCancelAction)
+					tabCancelStacks[activeTab].push(activeState);
+			}
+		}
+	}
+	//console.log(tabCancelStacks[activeTab]);
+
 	var oldState = activeState;
 	activeState = newState;
 	tabStates[activeTab] = activeState;
+	//console.log("run " + activeState.name + " (alt: " + ((oldState != null) ? oldState.name : "null") + ")");
 	activeState.run(oldState);
 }
 
@@ -135,7 +184,7 @@ function changeActiveTab(newTabId) {
 		activeState.stopSpeechRecognition();
 	}
 
-	changeActiveState(tabStates[activeTab]);
+	changeActiveState(tabStates[activeTab], false);
 }
 
 

@@ -9,7 +9,7 @@ addModule(new Module("addressModule", function () {
 	 */
 	var addressState = new State("addressState");
 	addressState.init = function () {
-		this.cancelAction.act = function() {
+		this.cancelAction.cancelAct = function() {
 			callContentScriptMethod("cancelAddressState", {});
 		};
 	};
@@ -92,26 +92,39 @@ addModule(new Module("addressModule", function () {
 
 			//clone map state for avoid additional actions in original map state
 			mapState = jQuery.extend(true, {}, mapState);
+			//reset cloned state
+			mapState.actions = [];
+			mapState.initialized = false;
+			//extend init method
+			mapState.oldInit = mapState.init;
+			mapState.init = function () {
+				//this.oldState = addressState;
+				this.oldInit();
 
-			//add next actions to mapState
-			var nextMapAction = new Action("next address", 0, mapState);
-			nextMapAction.addCommand(new Command("next", 0));
-			nextMapAction.act = function () {
-				callContentScriptMethod("nextAddress", {}, function(params) {
-					callContentScriptMethod("mapSearch", {query:params.address});
-				});
-			};
-			mapState.addAction(nextMapAction);
+				//add next actions to mapState
+				//noinspection JSCheckFunctionSignatures
+				var nextMapAction = new Action("next address", 0, this);
+				nextMapAction.addCommand(new Command("next", 0));
+				nextMapAction.act = function () {
+					callContentScriptMethod("nextAddress", {}, function(params) {
+						callContentScriptMethod("mapSearch", {query:params.address});
+					});
+				};
+				//noinspection JSPotentiallyInvalidUsageOfThis
+				this.addAction(nextMapAction);
 
-			//add previous actions to mapState
-			var previousMapAction = new Action("previous address", 0, mapState);
-			previousMapAction.addCommand(new Command("previous", 0));
-			previousMapAction.act = function () {
-				callContentScriptMethod("previousAddress", {}, function(params) {
-					callContentScriptMethod("mapSearch", {query:params.address});
-				});
+				//add previous actions to mapState
+				//noinspection JSCheckFunctionSignatures
+				var previousMapAction = new Action("previous address", 0, this);
+				previousMapAction.addCommand(new Command("previous", 0));
+				previousMapAction.act = function () {
+					callContentScriptMethod("previousAddress", {}, function(params) {
+						callContentScriptMethod("mapSearch", {query:params.address});
+					});
+				};
+				//noinspection JSPotentiallyInvalidUsageOfThis
+				this.addAction(previousMapAction);
 			};
-			mapState.addAction(previousMapAction);
 
 			this.followingState = mapState;
 		}

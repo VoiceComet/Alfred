@@ -8,7 +8,7 @@ addModule(new Module("imageModule", function () {
      */
     var galleryState = new State("galleryState");
     galleryState.init = function () {
-        this.cancelAction.act = function () {
+        this.cancelAction.cancelAct = function () {
             callContentScriptMethod("cancelGalleryState", {});
             say("I stopped interacting with images");
         };
@@ -19,7 +19,7 @@ addModule(new Module("imageModule", function () {
      */
     var slideState = new State("slideState");
     slideState.init = function () {
-        this.cancelAction.act = function () {
+        this.cancelAction.cancelAct = function () {
             callContentScriptMethod("cancelSlideState", {});
             say("I stopped interacting with images");
         };

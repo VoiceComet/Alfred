@@ -10,7 +10,7 @@ addModule(new Module("linkModule", function () {
      */
     var linkState = new State("linkState");
     linkState.init = function () {
-        this.cancelAction.act = function() {
+        this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelLinkState", {});
             say("I stopped interacting with links");
         };

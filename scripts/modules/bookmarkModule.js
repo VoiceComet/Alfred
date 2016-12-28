@@ -13,7 +13,7 @@ addModule(new Module("bookmarkModule", function () {
      */
     var folderState = new PanelState("folderState");
     folderState.init = function () {
-        this.cancelAction.act = function() {
+        this.cancelAction.cancelAct = function() {
             callContentScriptMethod("hidePanel", {});
             say("I stopped rummaging in your library");
         };
@@ -26,7 +26,7 @@ addModule(new Module("bookmarkModule", function () {
     bookmarkListenState.init = function () {
       notify("Say a title for the new bookmark");
       say("Which name shall i give the bookmark");
-      this.cancelAction.act = function () {
+      this.cancelAction.cancelAct = function () {
           notify("Stopped creating a bookmark");
           say("I canceled creating a bookmark");
       }
@@ -39,7 +39,7 @@ addModule(new Module("bookmarkModule", function () {
     folderListenState.init = function () {
         notify("Which name shall i give the folder");
         say("Which name shall i give the folder");
-        this.cancelAction.act = function () {
+        this.cancelAction.cancelAct = function () {
             notify("canceled folder listen state");
             say("I canceled creating a folder");
         }

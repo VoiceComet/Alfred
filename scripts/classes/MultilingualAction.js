@@ -30,6 +30,7 @@ function MultilingualAction(name, relatedAction, settings) {
 			this.dialogId = dialogId;
 		};
 		chooseLanguageState.init = function() {
+			this.accessibleWithCancelAction = false;
 			var languageState = this;
 
 			//show dialog with languages
@@ -46,7 +47,7 @@ function MultilingualAction(name, relatedAction, settings) {
 			});
 
 			//close dialog at cancel
-			this.cancelAction.act = function() {
+			this.cancelAction.cancelAct = function() {
 				languageState.hideDialog();
 			};
 		};
@@ -85,6 +86,7 @@ function MultilingualAction(name, relatedAction, settings) {
 				this.messageId = messageId;
 			};
 			sayParameterState.init = function() {
+				this.accessibleWithCancelAction = false;
 				var sayParamState = this;
 
 				var paramText = "say your parameter in chosen language";
@@ -132,5 +134,5 @@ function MultilingualAction(name, relatedAction, settings) {
 	}
 
 	// Call the parent constructor
-	Action.call(this, name, 0, generateStatesAndActions(1));
+	Action.call(this, name, 0, generateStatesAndActions(this.relatedAction.parameterCount));
 }

@@ -19,13 +19,15 @@ function getUniqueId() {
  */
 function hideAlfredElement(params) {
 	var element = document.getElementById(params.elementId);
-	element.setAttribute("style", "-webkit-animation: fadeOut 500ms steps(20);");
-	setTimeout(function () {
-		element.setAttribute("style", "display:none;");
-		if (params.hasOwnProperty("parentId")) {
-			document.getElementById(params.parentId).removeChild(element);
-		}
-	}, 490);
+	if (element != null) {
+		element.setAttribute("style", "-webkit-animation: fadeOut 500ms steps(20);");
+		setTimeout(function () {
+			element.setAttribute("style", "display:none;");
+			if (params.hasOwnProperty("parentId")) {
+				document.getElementById(params.parentId).removeChild(element);
+			}
+		}, 490);
+	}
 }
 
 /**

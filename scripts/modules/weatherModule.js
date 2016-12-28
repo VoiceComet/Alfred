@@ -1,9 +1,6 @@
 addModule(new Module("weatherModule", function() {
 	var showWeatherOf = new Action("Show Weather of ?", 1, globalCommonState);
-	showWeatherOf.addCommand(new Command("weather (.+)", 1));
-	showWeatherOf.addCommand(new Command("weather of (.+)", 1));
-	showWeatherOf.addCommand(new Command("show weather (.+)", 1));
-	showWeatherOf.addCommand(new Command("show weather of (.+)", 1));
+	showWeatherOf.addCommand(new Command("(?:show )?weather (?:of )?(.+)", 1));
 	showWeatherOf.act = function(arguments) {
 
 		/**

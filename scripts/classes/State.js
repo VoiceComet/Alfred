@@ -7,6 +7,9 @@ function State (name) {
     this.name = name;
 	this.oldState = globalCommonState;
     this.actions = [];
+	/** @private */
+	this.initialized = false;
+	this.accessibleWithCancelAction = true;
 
 	this.muted = false;
 	this.hearing = false;
@@ -50,6 +53,8 @@ function State (name) {
 				this.ableToMute = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.ableToCancel = false;
+				//noinspection JSPotentiallyInvalidUsageOfThis
+				this.accessibleWithCancelAction = false;
 				notify('muted, say "Hello ' + butlerName + '" or "' + butlerName + ' listen"');
 			};
 			this.muteActionIn = new Action("Mute Action", 0, this.muteState);
@@ -83,10 +88,13 @@ function State (name) {
 		
 		//abort
 		if (this.cancelAction == null) {
-			this.cancelAction = new Action("Cancel Action", 0, this.oldState);
+			this.cancelAction = new Action("Cancel Action", 0, null);
 			this.cancelAction.addCommand(new Command("cancel", 0));
+			//can be override
+			this.cancelAction.cancelAct = function() {};
 			this.cancelAction.act = function() {
-				notify("canceled");
+				this.followingState = getNextCancelState();
+				this.cancelAct();
 			}
 		}
 	};
@@ -119,9 +127,12 @@ function State (name) {
 	 */
     this.run = function(oldState) {
 		this.oldState = oldState;
-		this.generateStandardActions();
-		this.init();
-		this.activateStandardActions();
+		if (!this.initialized) {
+			this.generateStandardActions();
+			this.init();
+			this.activateStandardActions();
+			this.initialized = true;
+		}
 		this.startSpeechRecognition();
     };
 
@@ -135,12 +146,13 @@ function State (name) {
 	/**
 	 * change the active state
 	 * @param {State} state
+	 * @param {Boolean} [cancelStack=true] - true, if the cancel stack should be filled
 	 */
-	this.changeActiveState = function (state) {
+	this.changeActiveState = function (state, cancelStack) {
 		this.stopSpeechRecognition();
 		//change state or start new speech recognition
 		if (state != this) {
-			changeActiveState(state);
+			changeActiveState(state, (typeof cancelStack === 'undefined' || cancelStack === true));
 		} else {
 			this.startSpeechRecognition();
 		}
@@ -273,7 +285,7 @@ function State (name) {
 						if (this.actions[i].parameterCount == 0 && execResult[0] == alternatives[k]) {
 							//perfect text match
 							runHitAction(actionHits[actionHitsIndex]);
-							this.changeActiveState(actionHits[actionHitsIndex].action.followingState);
+							this.changeActiveState(actionHits[actionHitsIndex].action.followingState, actionHits[actionHitsIndex].action != this.cancelAction);
 							return;
 						}
 					}
@@ -287,7 +299,7 @@ function State (name) {
 			if (actionHits.length == 1 && actionHits[0].hits.length == 1) {
 				//only one action and hit found
 				runHitAction(actionHits[0]); //run first actionHit
-				this.changeActiveState(actionHits[0].action.followingState);
+				this.changeActiveState(actionHits[0].action.followingState, actionHits[0].action != this.cancelAction);
 				//return;
 			} else {
 				//no perfect match
@@ -360,7 +372,7 @@ function State (name) {
 				if (actionHits.length == 1 && actionHits[0].hits.length == 1) {
 					//only one action found
 					runHitAction(actionHits[0]); //run first actionHit
-					this.changeActiveState(actionHits[0].action.followingState);
+					this.changeActiveState(actionHits[0].action.followingState, actionHits[0].action != this.cancelAction);
 					return;
 				}
 
@@ -389,6 +401,8 @@ function State (name) {
 
 				// modify cancel action
 				dialogState.init = function() {
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					this.accessibleWithCancelAction = false;
 					//noinspection JSPotentiallyInvalidUsageOfThis
 					this.cancelAction.dialogState = this;
 					//noinspection JSPotentiallyInvalidUsageOfThis,JSUnusedLocalSymbols

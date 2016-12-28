@@ -8,7 +8,7 @@ addModule(new Module("searchModule", function() {
      */
     var searchState = new State("searchState");
     searchState.init = function () {
-        this.cancelAction.act = function() {
+        this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelSearchState", {});
             say("I stopped searching");
         };

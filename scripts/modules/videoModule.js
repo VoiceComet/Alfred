@@ -7,7 +7,7 @@ addModule(new Module("videoModule", function () {
      */
     var videoState = new State("videoState");
     videoState.init = function() {
-        this.cancelAction.act = function() {
+        this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelVideoState", {});
             say("I stopped interacting with videos");
         };

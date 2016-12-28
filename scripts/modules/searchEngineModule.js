@@ -195,10 +195,8 @@ addModule(new Module("searchEngineModule", function() {
 			this.followingState.init = function () {
 				//hide panel with cancel action
 				//noinspection JSUnusedLocalSymbols
-				this.cancelAction.act = function (params) {
+				this.cancelAction.cancelAct = function (params) {
 					callContentScriptMethod("hidePanel", {});
-					//noinspection JSPotentiallyInvalidUsageOfThis
-					this.followingState = globalCommonState;
 				};
 			};
 		};
