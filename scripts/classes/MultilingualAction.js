@@ -29,10 +29,94 @@ function MultilingualAction(name, relatedAction, settings) {
 			this.messageId = messageId;
 			this.dialogId = dialogId;
 		};
+
 		chooseLanguageState.init = function() {
 			this.accessibleWithCancelAction = false;
-			var languageState = this;
 
+			//create choose language action
+			var chooseLanguageAction = new Action("Choose Language", 1, null);
+			chooseLanguageAction.chooseLanguageState = this;
+			chooseLanguageAction.addCommands([
+				new Command("(english)", 1),
+				new Command("(german)", 1),
+				new Command("(spanish)", 1),
+				new Command("(french)", 1),
+				new Command("(turkish)", 1),
+				new Command("(russian)", 1)
+			]);
+			chooseLanguageAction.act = function(arguments) {
+				this.chooseLanguageState.hideDialog();
+
+				var lang;
+				switch(arguments[0].toLowerCase()) {
+					case "english": lang = "en"; break;
+					case "german": lang = "de"; break;
+					case "spanish": lang = "es"; break;
+					case "french": lang = "fr"; break;
+					case "turkish": lang = "tr"; break;
+					case "russian": lang = "ru"; break;
+					default: lang = "en"
+				}
+				//create following state and action
+				var sayParameterState = new State("Say Parameter");
+				sayParameterState.lang = lang;
+				sayParameterState.hideDialog = function () {
+					hideMessage(this.messageId);
+				};
+				sayParameterState.setMessageId = function (messageId) {
+					this.messageId = messageId;
+				};
+				sayParameterState.init = function() {
+					//noinspection JSPotentiallyInvalidUsageOfThis
+					this.accessibleWithCancelAction = false;
+					this.ableToCancel = false;
+					this.ableToMute = false;
+				};
+				sayParameterState.runAtEntrance = function() {
+					var sayParamState = this;
+
+					var paramText = "say your parameter in chosen language";
+					if (settings.length >= 1) {
+						var pos = parameterNumber - 1;
+						if (settings[pos].hasOwnProperty("notify") && settings[pos].notify != "") {
+							paramText = settings[pos].notify;
+						}
+
+						if (settings[pos].hasOwnProperty("say") && settings[pos].say != "") {
+							say(settings[pos].say);
+						}
+					}
+					notify(paramText, 0, function(messageId) {
+						sayParamState.setMessageId(messageId);
+					});
+				};
+
+				var sayParameterAction = new Action("Say Parameter", 1, null);
+				sayParameterAction.addCommand(new Command("(.+)", 1));
+				sayParameterAction.sayParameterState = sayParameterState;
+				sayParameterAction.act = function(args) {
+					this.sayParameterState.hideDialog();
+					var actualParams = (typeof spokenParameter === 'undefined') ? [] : spokenParameter;
+					actualParams.push(args[0]);
+					if (parameterNumber < that.relatedAction.parameterCount) {
+						//noinspection JSPotentiallyInvalidUsageOfThis
+						this.followingState = generateStatesAndActions(parameterNumber + 1, actualParams);
+					} else {
+						//only act the related action after last parameter
+						that.relatedAction.act(actualParams);
+						//action can change the following state
+						//noinspection JSPotentiallyInvalidUsageOfThis
+						this.followingState = that.relatedAction.followingState;
+					}
+				};
+				sayParameterState.addAction(sayParameterAction);
+
+				this.followingState = sayParameterState;
+			};
+			this.addAction(chooseLanguageAction);
+		};
+		chooseLanguageState.runAtEntrance = function() {
+			var languageState = this;
 			//show dialog with languages
 			var dialogActions = [
 				{command: "english", description: "english language"},
@@ -45,91 +129,12 @@ function MultilingualAction(name, relatedAction, settings) {
 			showDialog("Choose a Language", "", "Say a language:", dialogActions, function (ids) {
 				languageState.setMessageId(ids.messageId, ids.dialogId);
 			});
-
 			//close dialog at cancel
 			this.cancelAction.cancelAct = function() {
 				languageState.hideDialog();
 			};
 		};
 
-		//create choose language action
-		var chooseLanguageAction = new Action("Choose Language", 1, null);
-		chooseLanguageAction.chooseLanguageState = chooseLanguageState;
-		chooseLanguageAction.addCommands([
-			new Command("(english)", 1),
-			new Command("(german)", 1),
-			new Command("(spanish)", 1),
-			new Command("(french)", 1),
-			new Command("(turkish)", 1),
-			new Command("(russian)", 1)
-		]);
-		chooseLanguageAction.act = function(arguments) {
-			this.chooseLanguageState.hideDialog();
-
-			var lang;
-			switch(arguments[0].toLowerCase()) {
-				case "english": lang = "en"; break;
-				case "german": lang = "de"; break;
-				case "spanish": lang = "es"; break;
-				case "french": lang = "fr"; break;
-				case "turkish": lang = "tr"; break;
-				case "russian": lang = "ru"; break;
-				default: lang = "en"
-			}
-			//create following state and action
-			var sayParameterState = new State("Say Parameter");
-			sayParameterState.lang = lang;
-			sayParameterState.hideDialog = function () {
-				hideMessage(this.messageId);
-			};
-			sayParameterState.setMessageId = function (messageId) {
-				this.messageId = messageId;
-			};
-			sayParameterState.init = function() {
-				this.accessibleWithCancelAction = false;
-				var sayParamState = this;
-
-				var paramText = "say your parameter in chosen language";
-				if (settings.length >= 1) {
-					var pos = parameterNumber - 1;
-					if (settings[pos].hasOwnProperty("notify") && settings[pos].notify != "") {
-						paramText = settings[pos].notify;
-					}
-
-					if (settings[pos].hasOwnProperty("say") && settings[pos].say != "") {
-						say(settings[pos].say);
-					}
-				}
-				notify(paramText, 0, function(messageId) {
-					sayParamState.setMessageId(messageId);
-				});
-				this.ableToCancel = false;
-				this.ableToMute = false;
-			};
-
-			var sayParameterAction = new Action("Say Parameter", 1, null);
-			sayParameterAction.addCommand(new Command("(.+)", 1));
-			sayParameterAction.sayParameterState = sayParameterState;
-			sayParameterAction.act = function(args) {
-				this.sayParameterState.hideDialog();
-				var actualParams = (typeof spokenParameter === 'undefined') ? [] : spokenParameter;
-				actualParams.push(args[0]);
-				if (parameterNumber < that.relatedAction.parameterCount) {
-					//noinspection JSPotentiallyInvalidUsageOfThis
-					this.followingState = generateStatesAndActions(parameterNumber + 1, actualParams);
-				} else {
-					//only act the related action after last parameter
-					that.relatedAction.act(actualParams);
-					//action can change the following state
-					//noinspection JSPotentiallyInvalidUsageOfThis
-					this.followingState = that.relatedAction.followingState;
-				}
-			};
-			sayParameterState.addAction(sayParameterAction);
-
-			this.followingState = sayParameterState;
-		};
-		chooseLanguageState.addAction(chooseLanguageAction);
 		return chooseLanguageState;
 	}
 

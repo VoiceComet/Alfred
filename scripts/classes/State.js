@@ -113,13 +113,20 @@ function State (name) {
 	};
 
 	/**
-	 * Initialize this state. This method is called in the run method after the activation of the state.
+	 * Initialize this state. This method is called in the run method for initialization of the state.
+	 * It runs only at the first time of entrance to this state
 	 * You can override this function and add actions to this state
 	 *
 	 * You can set the variables: this.ableToMute, this.ableToCancel
 	 * to enable or disable standard actions.
 	 */
 	this.init = function() {};
+
+	/**
+	 * This method runs after every entrance to this state
+	 * You can override this function and add procedures
+	 */
+	this.runAtEntrance = function() {};
 
 	/**
 	 * Run the state. This method is called when the state is activated.
@@ -133,6 +140,7 @@ function State (name) {
 			this.activateStandardActions();
 			this.initialized = true;
 		}
+		this.runAtEntrance();
 		this.startSpeechRecognition();
     };
 
