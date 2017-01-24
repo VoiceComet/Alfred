@@ -2,7 +2,7 @@
 
 /*
 var contentScriptMethodList = [
-	"browserActionsModule.csm.js"
+	"tabHandleModule.js"
 	//add more here
 ];
 

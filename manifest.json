@@ -43,7 +43,7 @@
 				"scripts/classes/ContentScriptMethod.js",
 				"scripts/frontendMessaging.js",
 				"scripts/contentScript.js",
-				"scripts/modules/browserActionsModule.csm.js",
+				"scripts/modules/tabHandleModule.csm.js",
 				"scripts/modules/weatherModule.csm.js",
 				"scripts/modules/zoomModule.csm.js",
 				"scripts/modules/searchModule.csm.js",
@@ -54,7 +54,8 @@
 				"scripts/modules/linkModule.csm.js",
 				"scripts/modules/imageModule.csm.js",
 				"scripts/modules/addressModule.csm.js",
-				"scripts/modules/ownCommandModule.csm.js"
+				"scripts/modules/ownCommandModule.csm.js",
+				"scripts/modules/scrollModule.csm.js"
 			]
 		}
 	],

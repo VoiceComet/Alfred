@@ -1,5 +1,6 @@
 var moduleList = [
-	"browserActionsModule.js",
+	"tabHandleModule.js",
+	"scrollModule.js",
 	"weatherModule.js",
 	"zoomModule.js",
 	"searchModule.js",

@@ -9,6 +9,69 @@ var id = "";
 var pages = 1;
 
 /**
+ * fade out right
+ */
+function fadeOutRight() {
+    $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 500ms steps(20);");
+    setTimeout(function () {
+        for (var j = 8; j > - 1; j--) {
+            $("#imagesCell" + j)
+                .empty()
+                .append("<img src='" + images[i] + "'>");
+            i--;
+        }
+        $("#objectUIDIV").attr("style", "-webkit-animation: fadeInLeft 500ms steps(40);");
+    }, 460);
+}
+
+/**
+ * fade out left
+ */
+function fadeOutLeft() {
+    $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 500ms steps(20);");
+    setTimeout(function () {
+        for (var j = 8; j > - 1; j--) {
+            if (i < images.length) {
+                $("#imagesCell" + j)
+                    .empty()
+                    .append("<img src='" + images[i] + "'>");
+                i--;
+            } else {
+                $("#imagesCell" + j).empty();
+                i--;
+            }
+        }
+        $("#objectUIDIV").attr("style", "-webkit-animation: fadeInRight 500ms steps(40);");
+    }, 460);
+}
+
+/**
+ * fade out right slide
+ */
+function fadeOutRightSlide() {
+    $("#slideDIV").attr("style", "-webkit-animation: fadeOutRight 500ms steps(20);");
+    setTimeout(function () {
+        $("#slideDIV")
+            .empty()
+            .append("<img src='" + images[i] + "'>")
+            .attr("style", "-webkit-animation: fadeInLeft 500ms steps(20);");
+    }, 460);
+}
+
+/**
+ * fade out left
+ */
+function fadeOutLeftSlide() {
+    $("#slideDIV").attr("style", "-webkit-animation: fadeOutLeft 500ms steps(20);");
+    setTimeout(function () {
+        $("#slideDIV")
+            .empty()
+            .append("<img src='" + images[i] + "'>")
+            .attr("style", "-webkit-animation: fadeInRight 500ms steps(20);");
+    }, 460);
+}
+
+/**
  * show all images
  */
 addContentScriptMethod(
@@ -101,21 +164,7 @@ addContentScriptMethod(
         } else {
             pages++;
             i = pages * 9 - 1;
-            $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
-            setTimeout(function () {
-                for (var j = 8; j > - 1; j--) {
-                    if (i < images.length) {
-                        $("#imagesCell" + j)
-                            .empty()
-                            .append("<img src='" + images[i] + "'>");
-                        i--;
-                    } else {
-                        $("#imagesCell" + j).empty();
-                        i--;
-                    }
-                }
-                $("#objectUIDIV").attr("style", "-webkit-animation: fadeInRight 700ms steps(40);");
-            }, 650);
+            fadeOutLeft();
             if (pages < Math.ceil(images.length / 9)) {
                 updateMessage({
                     id: id,
@@ -152,16 +201,7 @@ addContentScriptMethod(
         } else {
             pages--;
             i = pages * 9 - 1;
-            $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 700ms steps(20);");
-            setTimeout(function () {
-                for (var j = 8; j > - 1; j--) {
-                    $("#imagesCell" + j)
-                        .empty()
-                        .append("<img src='" + images[i] + "'>");
-                    i--;
-                }
-                $("#objectUIDIV").attr("style", "-webkit-animation: fadeInLeft 700ms steps(40);");
-            }, 650);
+            fadeOutRight();
             if (pages > 1) {
                 updateMessage({
                     id: id,
@@ -205,35 +245,10 @@ addContentScriptMethod(
             // go to a previous page
             if (pages > params) {
                 i = params * 9 - 1;
-                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutRight 700ms steps(20);");
-                setTimeout(function () {
-                    for (var j = 8; j > - 1; j--) {
-                        $("#imagesCell" + j)
-                            .empty()
-                            .append("<img src='" + images[i] + "'>");
-                        i--;
-                    }
-                    $("#objectUIDIV").attr("style", "-webkit-animation: fadeInLeft 700ms steps(40);");
-                }, 650);
+                fadeOutRight();
                 // go to a further page
             } else {
-                i = params * 9 - 9;
-                $("#objectUIDIV").attr("style", "-webkit-animation: fadeOutLeft 700ms steps(20);");
-                setTimeout(function () {
-                    for (var j = 0; j < 9; j++) {
-                        if (i < images.length) {
-                            $("#imagesCell" + j)
-                                .empty()
-                                .append("<img src='" + images[i] + "'>");
-                            i++;
-                        } else {
-                            $("#imagesCell" + j).empty();
-                            i++;
-                        }
-                    }
-                    $("#objectUIDIV")
-                        .attr("style", "-webkit-animation: fadeInRight 700ms steps(40);");
-                }, 650);
+                fadeOutLeft();
             }
             pages = parseInt(params);
             if (pages > 1) {
@@ -331,13 +346,7 @@ addContentScriptMethod(
     new ContentScriptMethod("nextImage", function () {
         if (i + 1 < images.length) {
             i++;
-            $("#slideDIV").attr("style", "-webkit-animation: fadeOutLeft 500ms steps(20);");
-            setTimeout(function () {
-                $("#slideDIV")
-                    .empty()
-                    .append("<img src='" + images[i] + "'>")
-                    .attr("style", "-webkit-animation: fadeInRight 500ms steps(20);");
-            }, 460);
+            fadeOutLeftSlide();
             if (i + 1 < images.length) {
                 updateMessage({
                     id: id,
@@ -373,13 +382,7 @@ addContentScriptMethod(
     new ContentScriptMethod("previousImage", function () {
         if (i - 1 >= 0) {
             i--;
-            $("#slideDIV").attr("style", "-webkit-animation: fadeOutRight 500ms steps(20);");
-            setTimeout(function () {
-                $("#slideDIV")
-                    .empty()
-                    .append("<img src='" + images[i] + "'>")
-                    .attr("style", "-webkit-animation: fadeInLeft 500ms steps(20);");
-            }, 460);
+            fadeOutRightSlide();
             if (i - 1 > 0) {
                 updateMessage({
                     id: id,
@@ -423,22 +426,10 @@ addContentScriptMethod(
             var oldI = i;
             i = parseInt(params) - 1;
             if (oldI > params) {
-                $("#slideDIV").attr("style", "-webkit-animation: fadeOutRight 500ms steps(20);");
-                setTimeout(function () {
-                    $("#slideDIV")
-                        .empty()
-                        .append("<img src='" + images[i] + "'>")
-                        .attr("style", "-webkit-animation: fadeInLeft 500ms steps(20);");
-                }, 460);
+                fadeOutRightSlide();
                 // go to a further page
             } else {
-                $("#slideDIV").attr("style", "-webkit-animation: fadeOutLeft 500ms steps(20);");
-                setTimeout(function () {
-                    $("#slideDIV")
-                        .empty()
-                        .append("<img src='" + images[i] + "'>")
-                        .attr("style", "-webkit-animation: fadeInRight 500ms steps(20);");
-                }, 460);
+                fadeOutLeftSlide();
             }
             if (i + 1 > 1) {
                 if (i + 1 < images.length) {
@@ -584,7 +575,7 @@ addContentScriptMethod(
                 }
             }
             $("#slideDIV").remove();
-            $("#objectUIDIV").attr("style", "-webkit-animation: fadeIn 700ms steps(40);");
+            $("#objectUIDIV").attr("style", "-webkit-animation: fadeIn 500ms steps(40);");
         }, 470);
         if (pages > 1) {
             if (pages < Math.ceil(images.length / 9)) {
