@@ -43,6 +43,22 @@ chrome.storage.sync.get({
 	//noinspection JSUnresolvedVariable
 	butlerName = items.speechAssistantName;
 });
+
+var moduleLanguageJson = null;
+/**
+ * load actual module language file
+ */
+function loadModuleLanguageJson() {
+	chrome.storage.sync.get({
+		language: 'en'
+	}, function(items) {
+		$.getJSON(chrome.extension.getURL("scripts/languages/" + items["language"] + "Modules.json"), function(json) {
+			moduleLanguageJson = json;
+		});
+	});
+}
+loadModuleLanguageJson();
+
 /**
  * function that is called after option changing
  * @param changes

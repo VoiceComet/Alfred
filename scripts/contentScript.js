@@ -272,3 +272,18 @@ function elementScrollDown(params) {
 	}
 }
 
+
+var languageJson = null;
+/**
+ * load actual language file
+ */
+function loadLanguageJson() {
+	chrome.storage.sync.get({
+		language: 'en'
+	}, function(items) {
+		$.getJSON(chrome.extension.getURL("scripts/languages/" + items["language"] + "Values.json"), function(json) {
+			languageJson = json;
+		});
+	});
+}
+loadLanguageJson();

@@ -219,7 +219,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addBookmark = new Action("addBookmark", 0, bookmarkListenState);
-    addBookmark.addCommand(new Command("add new bookmark", 0));
     addBookmark.act = function () {
         folder = "";
     };
@@ -230,7 +229,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addBookmarkToFolder = new Action("addBookmarkToFolder", 1, bookmarkListenState);
-    addBookmarkToFolder.addCommand(new Command("create new bookmark in (.*)", 1));
     addBookmarkToFolder.act = function (params) {
         interacting(params[0], "folder", "open");
         setTimeout(function () {
@@ -246,7 +244,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var sayTitleBookmark = new Action("sayTitleBookmark", 1, globalCommonState);
-    sayTitleBookmark.addCommand(new Command("(.+)", 1));
     sayTitleBookmark.act = function (params) {
         chrome.tabs.query({currentWindow: true, active: true}, function(result) {
             var url = result[0].url;
@@ -295,7 +292,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var openBookmark = new Action("openBookmark", 1, globalCommonState);
-    openBookmark.addCommand(new Command("open bookmark (.*)", 1));
     openBookmark.act = function (params) {
         interacting(params[0], "bookmark", "open");
     };
@@ -307,7 +303,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var removeBookmark = new Action("removeBookmark", 1, globalCommonState);
-    removeBookmark.addCommand(new Command("remove bookmark (.*)", 1));
     removeBookmark.act = function (params) {
         interacting(params[0], "bookmark", "remove");
     };
@@ -318,7 +313,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addFolder = new Action("addFolder", 0, folderListenState);
-    addFolder.addCommand(new Command("add new folder", 0));
     addFolder.act = function () {
         folder = "";
     };
@@ -329,7 +323,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var addFolderInFolder = new Action("addFolderInFolder", 1, folderListenState);
-    addFolderInFolder.addCommand(new Command("create new folder in (.*)", 1));
     addFolderInFolder.act = function (params) {
         interacting(params[0], "folder", "open");
         setTimeout(function () {
@@ -345,7 +338,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var sayTitleFolder = new Action("sayTitleFolder", 1, globalCommonState);
-    sayTitleFolder.addCommand(new Command("(.+)", 1));
     sayTitleFolder.act = function (params) {
         availability({
             title: params[0]
@@ -387,7 +379,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var openFolder = new Action("openFolder", 1, folderState);
-    openFolder.addCommand(new Command("show content of (.*)", 1));
     openFolder.act = function (params) {
         interacting(params[0], "folder", "open");
         setTimeout(function () {
@@ -437,7 +428,6 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var removeFolder = new Action("removeFolder", 1, globalCommonState);
-    removeFolder.addCommand(new Command("remove folder (.*)", 1));
     removeFolder.act = function (params) {
         interacting(params[0], "folder", "remove");
     };

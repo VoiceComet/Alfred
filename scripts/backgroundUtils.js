@@ -135,3 +135,70 @@ function say(phrase, sayTitle, callback) {
 	});
 }
 speechSynthesis.speak(new SpeechSynthesisUtterance("")); //for async load of the voices at beginning
+
+/**
+ * find object in class group with given key
+ * @param className - classname of a single class (module, state, action)
+ * @param key - searched key
+ * @return {Object}
+ */
+function getTranslationObject(className, key) {
+	if (moduleLanguageJson.hasOwnProperty(className + "s")) {
+		for (var i = 0; i < moduleLanguageJson[className + "s"].length; i++) {
+			if (moduleLanguageJson[className + "s"][i][className] == key) {
+				return moduleLanguageJson[className + "s"][i];
+			}
+		}
+	}
+	console.log("could not find " + className + " " + key);
+	return null;
+}
+
+
+/**
+ *
+ * @param key
+ * @return {String}
+ */
+function getModuleTranslation(key) {
+	var module = getTranslationObject("module", key);
+	if (module != null) {
+		return module["name"];
+	}
+	return key;
+}
+
+/**
+ *
+ * @param key
+ * @return {String}
+ */
+function getStateTranslation(key) {
+	var state = getTranslationObject("state", key);
+	if (state != null) {
+		return state["name"];
+	}
+	return key;
+}
+
+/**
+ *
+ * @param key
+ * @return {String}
+ */
+function getActionTranslation(key) {
+	var action = getTranslationObject("action", key);
+	if (action != null) {
+		return action["name"];
+	}
+	return key;
+}
+
+/**
+ *
+ * @param key
+ * @return {Object}
+ */
+function getActionTranslationObject(key) {
+	return getTranslationObject("action", key);
+}

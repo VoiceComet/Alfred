@@ -21,7 +21,7 @@ function MultilingualAction(name, relatedAction, settings) {
 	 */
 	function generateStatesAndActions(parameterNumber, spokenParameter) {
 		//create choose language state
-		var chooseLanguageState = new State("Choose Language");
+		var chooseLanguageState = new State("chooseLanguageState");
 		chooseLanguageState.hideDialog = function () {
 			hideDialog(this.messageId, this.dialogId);
 		};
@@ -34,20 +34,13 @@ function MultilingualAction(name, relatedAction, settings) {
 			this.accessibleWithCancelAction = false;
 
 			//create choose language action
-			var chooseLanguageAction = new Action("Choose Language", 1, null);
+			var chooseLanguageAction = new Action("chooseLanguage", 1, null);
 			chooseLanguageAction.chooseLanguageState = this;
-			chooseLanguageAction.addCommands([
-				new Command("(english)", 1),
-				new Command("(german)", 1),
-				new Command("(spanish)", 1),
-				new Command("(french)", 1),
-				new Command("(turkish)", 1),
-				new Command("(russian)", 1)
-			]);
 			chooseLanguageAction.act = function(arguments) {
 				this.chooseLanguageState.hideDialog();
 
 				var lang;
+				//TODO translate command switch
 				switch(arguments[0].toLowerCase()) {
 					case "english": lang = "en"; break;
 					case "german": lang = "de"; break;
@@ -58,7 +51,7 @@ function MultilingualAction(name, relatedAction, settings) {
 					default: lang = "en"
 				}
 				//create following state and action
-				var sayParameterState = new State("Say Parameter");
+				var sayParameterState = new State("sayParameterState");
 				sayParameterState.lang = lang;
 				sayParameterState.hideDialog = function () {
 					hideMessage(this.messageId);
@@ -92,7 +85,6 @@ function MultilingualAction(name, relatedAction, settings) {
 				};
 
 				var sayParameterAction = new Action("Say Parameter", 1, null);
-				sayParameterAction.addCommand(new Command("(.+)", 1));
 				sayParameterAction.sayParameterState = sayParameterState;
 				sayParameterAction.act = function(args) {
 					this.sayParameterState.hideDialog();
@@ -118,6 +110,7 @@ function MultilingualAction(name, relatedAction, settings) {
 		chooseLanguageState.runAtEntrance = function() {
 			var languageState = this;
 			//show dialog with languages
+			//TODO translate dialog
 			var dialogActions = [
 				{command: "english", description: "english language"},
 				{command: "german", description: "deutsche Sprache"},

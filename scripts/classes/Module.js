@@ -24,6 +24,14 @@ function Module (settingName, init) {
 	});
 
 	/**
+	 * get translated name of module
+	 * @return {String} name
+	 */
+	this.getName = function() {
+		return getModuleTranslation(this.settingName)
+	};
+
+	/**
 	 * add an action to this module, the action list will be loaded in the global common state
 	 * @param {Action} action - action
 	 */

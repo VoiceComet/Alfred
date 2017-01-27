@@ -21,7 +21,6 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var showLinks = new Action("showLinks", 0, linkState);
-    showLinks.addCommand(new Command("show (?:all )?links", 0));
     showLinks.act = function () {
         callContentScriptMethod("showLinks", {}, function (params) {
             if (typeof params !== 'undefined') {
@@ -44,8 +43,7 @@ addModule(new Module("linkModule", function () {
      * show next link
      * @type {Action}
      */
-    var next = new Action("nextLink", 0, linkState);
-    next.addCommand(new Command("next", 0));
+    var next = new Action("next", 0, linkState);
     next.act = function() {
         callContentScriptMethod("nextLink", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -59,8 +57,7 @@ addModule(new Module("linkModule", function () {
      * show previous link
      * @type {Action}
      */
-    var prev = new Action("previousLink", 0, linkState);
-    prev.addCommand(new Command("previous", 0));
+    var prev = new Action("previous", 0, linkState);
     prev.act = function () {
         callContentScriptMethod("previousLink", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -75,7 +72,6 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var certainNNumber = new Action("certainLinkByNumber", 1, linkState);
-    certainNNumber.addCommand(new Command("go to number (.*)", 1));
     certainNNumber.act = function () {
         callContentScriptMethod("certainLinkByNumber", arguments[0], function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -90,7 +86,6 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var certainName = new Action("certainLinkByName", 1, linkState);
-    certainName.addCommand(new Command("go to link (.*)", 1));
     certainName.act = function () {
         callContentScriptMethod("certainLinkByName", arguments[0], function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -106,10 +101,6 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: "Which link shall i got to", say: "Which link shall i got to?"}]);
-    searchLanguage.addCommands([
-        new Command("link language", 0),
-        new Command("change link language", 0)
-    ]);
     linkState.addAction(searchLanguage);
     this.addAction(searchLanguage);
 
@@ -119,7 +110,6 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var openLink = new Action("openLink", 0, globalCommonState);
-    openLink.addCommand(new Command("open", 0));
     openLink.act = function () {
          callContentScriptMethod("openLink", {}, function (params) {
              if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -134,7 +124,6 @@ addModule(new Module("linkModule", function () {
      * @type {Action}
      */
     var openLinkNewTab = new Action("openLinkNewTab", 0, globalCommonState);
-    openLinkNewTab.addCommand(new Command("open in new tab", 0));
     openLinkNewTab.act = function () {
         callContentScriptMethod("openLinkNewTab", {});
     };

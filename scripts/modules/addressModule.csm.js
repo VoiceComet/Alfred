@@ -154,8 +154,8 @@ addContentScriptMethod(
 
 		if(addresses.length === 0) {
 			//no addresses found
-			showMessage({content: "Could not find addresses", centered: true});
-			return({content: "I could not find addresses", followingState:"globalCommonState"});
+			showMessage({content: translate("CouldNotFindAddresses"), centered: true});
+			return({content: translate("CouldNotFindAddresses"), followingState:"globalCommonState"});
 		} else {
 			//addresses found
 			highlightAllAddresses();

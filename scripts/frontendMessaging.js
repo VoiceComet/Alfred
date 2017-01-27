@@ -197,3 +197,15 @@ function hideDialog(params) {
 	hideMessage({id: params.messageId});
 	hideAlfredElement({elementId:params.dialogId, parentId: "ChromeSpeechControlDialogs"});
 }
+
+/**
+ * translate key to actual language
+ * @param {String} key
+ * @return {String} translation
+ */
+function translate(key) {
+	if (languageJson.hasOwnProperty(key)) {
+		return languageJson[key];
+	}
+	return key;
+}

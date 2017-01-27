@@ -1,10 +1,10 @@
 /**
  * State
- * @param {String} name
+ * @param {String} internalName
  * @constructor
  */
-function State (name) {
-    this.name = name;
+function State (internalName) {
+    this.internalName = internalName;
 	this.oldState = globalCommonState;
     this.actions = [];
 	/** @private */
@@ -30,6 +30,14 @@ function State (name) {
 	this.cancelAction = null;
 
 	/**
+	 * get translated name of state
+	 * @return {String} name
+	 */
+	this.getName = function() {
+		return getStateTranslation(this.internalName)
+	};
+
+	/**
 	 * add an action to this state
 	 * @param {Action} action
 	 */
@@ -43,7 +51,7 @@ function State (name) {
 	this.generateStandardActions = function() {
 		//mute
 		if (this.muteState == null) {
-			this.muteState = new State("MuteState of " + this.name);
+			this.muteState = new State("muteState");
 			var that = this;
 			this.muteState.init = function() {
 				//mute state after creation
@@ -57,18 +65,13 @@ function State (name) {
 				this.accessibleWithCancelAction = false;
 				notify('muted, say "Hello ' + butlerName + '" or "' + butlerName + ' listen"');
 			};
-			this.muteActionIn = new Action("Mute Action", 0, this.muteState);
-			this.muteActionIn.addCommand(new Command("mute", 0));
-			this.muteActionIn.addCommand(new Command("don't listen", 0));
-			this.muteActionIn.addCommand(new Command("go away", 0));
+			this.muteActionIn = new Action("muteEnable", 0, this.muteState);
 			this.muteActionIn.act = function() {
 				//mute state
 				that.muted = true;
 				that.updateMicrophoneIcon();
 			};
-			this.muteActionOut = new Action("Mute Action", 1, this);
-			this.muteActionOut.addCommand(new Command("hello (.+)", 1));
-			this.muteActionOut.addCommand(new Command("(.+) listen", 1));
+			this.muteActionOut = new Action("muteDisable", 1, this);
 			this.muteActionOut.act = function(parameter) {
 				if (parameter[0] == butlerName) {
 					notify("Welcome back");
@@ -88,8 +91,7 @@ function State (name) {
 		
 		//abort
 		if (this.cancelAction == null) {
-			this.cancelAction = new Action("Cancel Action", 0, null);
-			this.cancelAction.addCommand(new Command("cancel", 0));
+			this.cancelAction = new Action("cancel", 0, null);
 			//can be override
 			this.cancelAction.cancelAct = function() {};
 			this.cancelAction.act = function() {
@@ -273,12 +275,13 @@ function State (name) {
 			}
 			var actionAdded = false;
 			//all commands of action
-			for (j = 0; j < this.actions[i].commands.length; j++) {
+			var actionCommands = this.actions[i].getCommands();
+			for (j = 0; j < actionCommands.length; j++) {
 				//all alternatives
 				for (var k = 0; k < alternatives.length; k++) {
 					alternatives[k] = alternatives[k].trim(); //delete spaces at string beginning and ending
 					//test the regular expression
-					var execResult = this.actions[i].commands[j].getRegExp().exec(alternatives[k]);
+					var execResult = actionCommands[j].getRegExp().exec(alternatives[k]);
 					if (execResult != null) {
 						//result found
 						if (!actionAdded) {
@@ -436,6 +439,7 @@ function State (name) {
 						action.actionHit = actionHits[i];
 						action.hit = j;
 						action.dialogState = dialogState;
+						//TODO add command should work
 						action.addCommand(new Command(dialogActionNumber+'', 0));
 						//noinspection JSUnusedLocalSymbols
 						action.act = function (arguments) {

@@ -1,0 +1,246 @@
+{
+	"modules" : [
+		{
+			"module" : "addressModule",
+			"name" : "Address module"
+		},
+		{
+			"module" : "bookmarkModule",
+			"name" : "Bookmark module"
+		},
+		{
+			"module" : "imageModule",
+			"name" : "Image module"
+		},
+		{
+			"module" : "linkModule",
+			"name" : "Link module"
+		}
+	],
+
+	"states" : [
+		{
+			"state" : "muteState",
+			"name" : "Mute state"
+		},
+		{
+			"state" : "chooseLanguageState",
+			"name" : "Choose language state"
+		},
+		{
+			"state" : "sayParameterState",
+			"name" : "Say parameter state"
+		},
+
+
+		{
+			"state" : "addressState",
+			"name" : "Address state"
+		},
+		{
+			"state" : "folderState",
+			"name" : "Folder state"
+		},
+		{
+			"state" : "bookmarkListenState",
+			"name" : "Bookmark listen state"
+		},
+		{
+			"state" : "folderListenState",
+			"name" : "Folder listen state"
+		},
+		{
+			"state" : "galleryState",
+			"name" : "Gallery state"
+		},
+		{
+			"state" : "slideState",
+			"name" : "Slide state"
+		},
+		{
+			"state" : "linkState",
+			"name" : "Link state"
+		}
+	],
+
+	"actions" : [
+		{
+			"action" : "muteIn",
+			"name" : "Mute enable",
+			"commands" : ["mute", "don't listen", "go away"]
+		},
+		{
+			"action" : "muteDisable",
+			"name" : "Mute disable",
+			"commands" : ["hello (.+)", "(.+) listen"]
+		},
+		{
+			"action" : "cancel",
+			"name" : "Cancel",
+			"commands" : ["cancel"]
+		},
+		{
+			"action" : "next",
+			"name" : "Next",
+			"commands" : ["next"]
+		},
+		{
+			"action" : "previous",
+			"name" : "Previous",
+			"commands" : ["previous"]
+		},
+		{
+			"action" : "chooseLanguage",
+			"name" : "Choose Language",
+			"commands" : ["(english)", "(german)", "(spanish)", "(french)", "(turkish)", "(russian)"]
+		},
+		{
+			"action" : "sayParameter",
+			"name" : "Say parameter",
+			"commands" : ["(.+)"]
+		},
+
+
+		{
+			"action" : "showAddresses",
+			"name" : "Show addresses",
+			"commands" : ["show (?:all )?addresses"]
+		},
+		{
+			"action" : "certainAddress",
+			"name" : "Certain address",
+			"commands" : ["go to address ([\\d]+)"]
+		},
+		{
+			"action" : "showAddressOnMap",
+			"name" : "Show address on map",
+			"commands" : ["show (?:address )?on map"]
+		},
+
+
+		{
+			"action" : "addBookmark",
+			"name" : "Add bookmark",
+			"commands" : ["add new bookmark"]
+		},
+		{
+			"action" : "addBookmarkToFolder",
+			"name" : "Add bookmark to folder",
+			"commands" : ["create new bookmark in (.+)"]
+		},
+		{
+			"action" : "sayTitleBookmark",
+			"name" : "Say title of bookmark",
+			"commands" : ["(.+)"]
+		},
+		{
+			"action" : "openBookmark",
+			"name" : "Open bookmark",
+			"commands" : ["open bookmark (.+)"]
+		},
+		{
+			"action" : "removeBookmark",
+			"name" : "Remove bookmark",
+			"commands" : ["remove bookmark (.+)"]
+		},
+		{
+			"action" : "addFolder",
+			"name" : "Add folder",
+			"commands" : ["(?:add|create) (?:new )?folder"]
+		},
+		{
+			"action" : "addFolderInFolder",
+			"name" : "Add folder in folder",
+			"commands" : ["(?:add|create) (?:new )?folder in (.+)"]
+		},
+		{
+			"action" : "sayTitleFolder",
+			"name" : "Say title folder",
+			"commands" : ["(.+)"]
+		},
+		{
+			"action" : "openFolder",
+			"name" : "Open folder",
+			"commands" : ["show content of (.+)"]
+		},
+		{
+			"action" : "removeFolder",
+			"name" : "Remove folder",
+			"commands" : ["remove folder (.+)"]
+		},
+
+
+		{
+			"action" : "showImages",
+			"name" : "Show images",
+			"commands" : ["show images"]
+		},
+		{
+			"action" : "certainGalleryPage",
+			"name" : "Certain gallery page",
+			"commands" : ["go to page (.*)"]
+		},
+		{
+			"action" : "showOneImage",
+			"name" : "Show image",
+			"commands" : ["show image ([0-9])"]
+		},
+		{
+			"action" : "certainImage",
+			"name" : "Certain image",
+			"commands" : ["show image ([0-9]+)"]
+		},
+		{
+			"action" : "clickImage",
+			"name" : "Click images",
+			"commands" : ["open link"]
+		},
+		{
+			"action" : "imageOnPage",
+			"name" : "Image on page",
+			"commands" : ["show image on page"]
+		},
+		{
+			"action" : "backToSlides",
+			"name" : "Back to slides",
+			"commands" : ["back to slides gallery"]
+		},
+		{
+			"action" : "switchToGallery",
+			"name" : "Switch to gallery",
+			"commands" : ["switch to gallery"]
+		},
+
+
+		{
+			"action" : "showLinks",
+			"name" : "ShowLinks",
+			"commands" : ["show (?:all )?links"]
+		},
+		{
+			"action" : "certainLinkByNumber",
+			"name" : "Certain link number",
+			"commands" : ["go to number ([\\d]+)"]
+		},
+		{
+			"action" : "certainLinkByName",
+			"name" : "Certain link name",
+			"commands" : ["go to link (.*)"]
+		},
+		{
+			"action" : "searchLanguage",
+			"name" : "Search language",
+			"commands" : ["link language", "change link language"]
+		},
+		{
+			"action" : "openLink",
+			"name" : "Open link",
+			"commands" : ["open"]
+		},
+		{
+			"action" : "openLinkNewTab",
+			"name" : "Open link in new tab",
+			"commands" : ["open (?:link )?in new tab"]
+		}
+	]
+}
