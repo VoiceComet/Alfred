@@ -15,6 +15,30 @@
 		{
 			"module" : "linkModule",
 			"name" : "Link module"
+		},
+		{
+			"module" : "mapModule",
+			"name" : "Map module"
+		},
+		{
+			"module" : "ownCommandModule",
+			"name" : "Own commands module"
+		},
+		{
+			"module" : "scrollModule",
+			"name" : "Scroll module"
+		},
+		{
+			"module" : "searchEngineModule",
+			"name" : "Search engine module"
+		},
+		{
+			"module" : "searchModule",
+			"name" : "Search module"
+		},
+		{
+			"module" : "tabHandleModule",
+			"name" : "Tab handle module"
 		}
 	],
 
@@ -31,8 +55,6 @@
 			"state" : "sayParameterState",
 			"name" : "Say parameter state"
 		},
-
-
 		{
 			"state" : "addressState",
 			"name" : "Address state"
@@ -60,6 +82,18 @@
 		{
 			"state" : "linkState",
 			"name" : "Link state"
+		},
+		{
+			"state" : "mapState",
+			"name" : "Map state"
+		},
+		{
+			"state" : "searchEngineState",
+			"name" : "Search engine state"
+		},
+		{
+			"state" : "searchState",
+			"name" : "Search state"
 		}
 	],
 
@@ -88,6 +122,26 @@
 			"action" : "previous",
 			"name" : "Previous",
 			"commands" : ["previous"]
+		},
+		{
+			"action" : "scrollUp",
+			"name" : "Scroll up",
+			"commands" : ["(?:scroll )?\\bup\\b"]
+		},
+		{
+			"action" : "scrollDown",
+			"name" : "Scroll down",
+			"commands" : ["(?:scroll )?\\bdown\\b"]
+		},
+		{
+			"action" : "enlargePanel",
+			"name" : "Enlarge panel",
+			"commands" : ["enlarge", "bigger", "larger"]
+		},
+		{
+			"action" : "reducePanel",
+			"name" : "Reduce panel",
+			"commands" : ["reduce", "smaller"]
 		},
 		{
 			"action" : "chooseLanguage",
@@ -241,6 +295,218 @@
 			"action" : "openLinkNewTab",
 			"name" : "Open link in new tab",
 			"commands" : ["open (?:link )?in new tab"]
+		},
+
+
+		{
+			"action" : "mapSearch",
+			"name" : "Map search",
+			"commands" : ["go to (.+)", "search (.+)"]
+		},
+		{
+			"action" : "mapLanguageSearch",
+			"name" : "Map search in other language",
+			"commands" : ["language search"]
+		},
+		{
+			"action" : "mapSearchRoute",
+			"name" : "Map route search",
+			"commands" : ["from (.+) to (.+)"]
+		},
+		{
+			"action" : "mapLanguageSearchRoute",
+			"name" : "Map route search in other language",
+			"commands" : ["language route"]
+		},
+		{
+			"action" : "mapZoomToMarker",
+			"name" : "Map zoom to marker",
+			"commands" : ["zoom to (.)$"]
+		},
+		{
+			"action" : "mapCenterMarker",
+			"name" : "Map center marker",
+			"commands" : ["^(.)$", "center (.)$", "centre (.)$"]
+		},
+		{
+			"action" : "mapZoomIn",
+			"name" : "Map zoom in",
+			"commands" : ["(?:zoom )?\\bin\\b"]
+		},
+		{
+			"action" : "mapZoomOut",
+			"name" : "Map zoom out",
+			"commands" : ["(?:zoom )?\\bout\\b"]
+		},
+		{
+			"action" : "mapScrollUp",
+			"name" : "Map scroll up",
+			"commands" : ["(?:scroll )?\\bup\\b"]
+		},
+		{
+			"action" : "mapScrollDown",
+			"name" : "Map scroll down",
+			"commands" : ["(?:scroll )?\\bdown\\b"]
+		},
+		{
+			"action" : "mapScrollLeft",
+			"name" : "Map scroll left",
+			"commands" : ["(?:scroll )?\\bleft\\b"]
+		},
+		{
+			"action" : "mapScrollRight",
+			"name" : "Map scroll right",
+			"commands" : ["(?:scroll )?\\bright\\b"]
+		},
+		{
+			"action" : "openMap",
+			"name" : "Show map",
+			"commands" : ["show map"]
+		},
+
+
+		{
+			"action" : "OwnReloadPage",
+			"name" : "Reload Page",
+			"commands" : []
+		},
+		{
+			"action" : "OwnGoBack",
+			"name" : "Go back",
+			"commands" : []
+		},
+		{
+			"action" : "OwnGoForward",
+			"name" : "Go forward",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToTop",
+			"name" : "Scroll to top",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToMiddle",
+			"name" : "Scroll to middle",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToBottom",
+			"name" : "Scroll to bottom",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToBottom",
+			"name" : "Scroll to bottom",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollUp",
+			"name" : "Scroll up",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollDown",
+			"name" : "Scroll down",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollLeft",
+			"name" : "Scroll left",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollRight",
+			"name" : "Scroll right",
+			"commands" : []
+		},
+
+
+		{
+			"action" : "scrollToTop",
+			"name" : "Scroll to top",
+			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\btop\\b"]
+		},
+		{
+			"action" : "scrollToMiddle",
+			"name" : "Scroll to middle",
+			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\bmiddle\\b"]
+		},
+		{
+			"action" : "scrollToBottom",
+			"name" : "Scroll to bottom",
+			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\bbottom\\b"]
+		},
+		{
+			"action" : "scrollLeft",
+			"name" : "Scroll left",
+			"commands" : ["(?:scroll )?\\bleft\\b"]
+		},
+		{
+			"action" : "scrollRight",
+			"name" : "Scroll right",
+			"commands" : ["(?:scroll )?\\bright\\b"]
+		},
+
+
+		{
+			"action" : "webSearch",
+			"name" : "Web search",
+			"commands" : ["web search (.+)", "websearch (.+)", "google (.+)", "bing (.+)"]
+		},
+		{
+			"action" : "languageWebSearch",
+			"name" : "Scroll right",
+			"commands" : ["language web search", "language websearch", "language google", "language bing"]
+		},
+
+
+		{
+			"action" : "search",
+			"name" : "Search",
+			"commands" : ["search (:?for )?(.+)"]
+		},
+		{
+			"action" : "searchLanguage",
+			"name" : "Search in other language",
+			"commands" : ["language search", "change search language"]
+		},
+		{
+			"action" : "certainMatch",
+			"name" : "Go to certain match",
+			"commands" : ["go to match (\\d+)"]
+		},
+
+
+		{
+			"action" : "newTab",
+			"name" : "New tab",
+			"commands" : ["new tab"]
+		},
+		{
+			"action" : "openNewPage",
+			"name" : "Open new page",
+			"commands" : ["open page (.+)"]
+		},
+		{
+			"action" : "close",
+			"name" : "Close",
+			"commands" : ["close (tab|window)"]
+		},
+		{
+			"action" : "reload",
+			"name" : "Reload",
+			"commands" : ["reload"]
+		},
+		{
+			"action" : "goBackOnePage",
+			"name" : "Go back one page",
+			"commands" : ["go back"]
+		},
+		{
+			"action" : "goForwardOnePage",
+			"name" : "Go forward one page",
+			"commands" : ["go forward"]
 		}
 	]
 }

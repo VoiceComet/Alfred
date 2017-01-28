@@ -191,7 +191,7 @@ addModule(new Module("searchEngineModule", function() {
 			});
 
 			//generate following state
-			this.followingState = new PanelState("Search State");
+			this.followingState = new PanelState("searchEngineState");
 			this.followingState.init = function () {
 				//hide panel with cancel action
 				//noinspection JSUnusedLocalSymbols
@@ -219,6 +219,7 @@ addModule(new Module("searchEngineModule", function() {
 					var action = new Action(i + "", 0, globalCommonState);
 					//noinspection JSUnresolvedVariable
 					action.resultLink = searchResultObject.items[i].link;
+					//TODO
 					action.addCommand(new Command((i + 1) + "", 0));
 					//noinspection JSUnusedLocalSymbols
 					action.act = function (arguments) {
@@ -230,8 +231,7 @@ addModule(new Module("searchEngineModule", function() {
 
 				//add next action
 				if (searchResultObject.hasOwnProperty('nextPage')) {
-					var next = new SearchAction("Next", 0, null); //state is set during act function
-					next.addCommand(new Command("next", 0));
+					var next = new SearchAction("next", 0, null); //state is set during act function
 					next.maxResults = this.maxResults;
 					next.start = searchResultObject.nextPage.startIndex;
 					next.query = this.query;
@@ -241,8 +241,7 @@ addModule(new Module("searchEngineModule", function() {
 
 				//add previous action
 				if (searchResultObject.hasOwnProperty('previousPage')) {
-					var previous = new SearchAction("Previous", 0, null); //state is set during act function
-					previous.addCommand(new Command("previous", 0));
+					var previous = new SearchAction("previous", 0, null); //state is set during act function
 					previous.maxResults = this.maxResults;
 					previous.start = searchResultObject.previousPage.startIndex;
 					previous.query = this.query;
@@ -262,25 +261,13 @@ addModule(new Module("searchEngineModule", function() {
 	 * @param {Module|State} stateOrModule
 	 */
 	function addSearchEngineActions(stateOrModule) {
-		var searchEngineAction = new SearchAction("WebSearch", 1, null); //state is set during act function
-		searchEngineAction.addCommands([
-			new Command("web search (.+)", 1),
-			new Command("websearch (.+)", 1),
-			new Command("google (.+)", 1),
-			new Command("bing (.+)", 1)
-		]);
+		var searchEngineAction = new SearchAction("webSearch", 1, null); //state is set during act function
 		searchEngineAction.maxResults = maxResults;
 		searchEngineAction.start = 0;
 		searchEngineAction.query = "empty";
 		stateOrModule.addAction(searchEngineAction);
 
-		var languageSearchEngineAction = new MultilingualAction("LanguageWebSearch", searchEngineAction, [{notify:"Say your search query in chosen language", say:"Say your search query in chosen language"}]);
-		languageSearchEngineAction.addCommands([
-			new Command("language web search", 0),
-			new Command("language websearch", 0),
-			new Command("language google", 0),
-			new Command("language bing", 0)
-		]);
+		var languageSearchEngineAction = new MultilingualAction("languageWebSearch", searchEngineAction, [{notify:"Say your search query in chosen language", say:"Say your search query in chosen language"}]);
 		stateOrModule.addAction(languageSearchEngineAction);
 	}
 

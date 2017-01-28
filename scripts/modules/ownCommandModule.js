@@ -8,7 +8,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * reload the current tab
      */
-    var reloadPage = new Action("reloadPage", 0, globalCommonState);
+    var reloadPage = new Action("OwnReloadPage", 0, globalCommonState);
     reloadPage.act = function () {
         chrome.tabs.reload();
     };
@@ -17,7 +17,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * go back one page
      */
-    var goBack = new Action("goBack", 0, globalCommonState);
+    var goBack = new Action("OwnGoBack", 0, globalCommonState);
     goBack.act = function () {
         var curr = "";
         chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
@@ -40,7 +40,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * go forward one page
      */
-    var goForward = new Action("goForward", 0, globalCommonState);
+    var goForward = new Action("OwnGoForward", 0, globalCommonState);
     goForward.act = function () {
         var curr = "";
         chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
@@ -63,7 +63,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * scroll to top of the page
      */
-    var scrollToTop = new Action("scroll to top", 0, globalCommonState);
+    var scrollToTop = new Action("OwnScrollToTop", 0, globalCommonState);
     scrollToTop.act = function() {
         callContentScriptMethod("scrollToTop", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -76,7 +76,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * scroll to the middle of the page
      */
-    var scrollToMiddle = new Action("scroll to middle", 0, globalCommonState);
+    var scrollToMiddle = new Action("OwnScrollToMiddle", 0, globalCommonState);
     scrollToMiddle.act = function() {
         callContentScriptMethod("scrollToMiddle", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -89,7 +89,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * scroll to the bottom of the page
      */
-    var scrollToBottom = new Action("scroll to bottom", 0, globalCommonState);
+    var scrollToBottom = new Action("OwnScrollToBottom", 0, globalCommonState);
     scrollToBottom.act = function() {
         callContentScriptMethod("scrollToBottom", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -102,7 +102,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * scroll up
      */
-    var scrollUp = new Action("scroll up", 0, globalCommonState);
+    var scrollUp = new Action("OwnScrollUp", 0, globalCommonState);
     scrollUp.act = function() {
         callContentScriptMethod("scrollUp", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -115,7 +115,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * scroll down
      */
-    var scrollDown = new Action("scroll down", 0, globalCommonState);
+    var scrollDown = new Action("OwnScrollDown", 0, globalCommonState);
     scrollDown.act = function() {
         callContentScriptMethod("scrollDown", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -128,7 +128,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * scroll left
      */
-    var scrollLeft = new Action("scroll left", 0, globalCommonState);
+    var scrollLeft = new Action("OwnScrollLeft", 0, globalCommonState);
     scrollLeft.act = function() {
         callContentScriptMethod("scrollLeft", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -141,7 +141,7 @@ addModule(new Module("ownCommandModule", function() {
     /**
      * scroll right
      */
-    var scrollRight = new Action("scroll right", 0, globalCommonState);
+    var scrollRight = new Action("OwnScrollRight", 0, globalCommonState);
     scrollRight.act = function() {
         callContentScriptMethod("scrollRight", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -151,6 +151,7 @@ addModule(new Module("ownCommandModule", function() {
     };
     this.addAction(scrollRight);
 
+    //TODO addCommands
     //get all user actions from Storage and generate actions
     function generateCommands() {
         chrome.storage.sync.get({ownCommands: []}, function (results) {

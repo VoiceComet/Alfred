@@ -20,33 +20,22 @@ function PanelState(name) {
 	this.generateStandardActions = function() {
 		oldGenerateStandardActions.apply(this);
 
-		this.scrollDownAction = new Action("Scroll down action", 0, this);
-		this.scrollDownAction.addCommand(new Command("scroll down", 0));
+		this.scrollDownAction = new Action("scrollDown", 0, this);
 		this.scrollDownAction.act = function() {
 			callContentScriptMethod("elementScrollDown", {"id":"ChromeSpeechControlPanel"});
 		};
 
-		this.scrollUpAction = new Action("Scroll up action", 0, this);
-		this.scrollUpAction.addCommand(new Command("scroll up", 0));
+		this.scrollUpAction = new Action("scrollUp", 0, this);
 		this.scrollUpAction.act = function() {
 			callContentScriptMethod("elementScrollUp", {"id":"ChromeSpeechControlPanel"});
 		};
 
-		this.enlargeAction = new Action("Enlarge panel action", 0, this);
-		this.enlargeAction.addCommands([
-			new Command("enlarge", 0),
-			new Command("bigger", 0),
-			new Command("larger", 0)
-		]);
+		this.enlargeAction = new Action("enlargePanel", 0, this);
 		this.enlargeAction.act = function() {
 			callContentScriptMethod("enlargePanel", {});
 		};
 
-		this.reduceAction = new Action("Reduce panel action", 0, this);
-		this.reduceAction.addCommands([
-			new Command("reduce", 0),
-			new Command("smaller", 0)
-		]);
+		this.reduceAction = new Action("reducePanel", 0, this);
 		this.reduceAction.act = function() {
 			callContentScriptMethod("reducePanel", {});
 		};

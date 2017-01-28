@@ -18,11 +18,7 @@ addModule(new Module("searchModule", function() {
      * search for an expression
      * @type {Action}
      */
-    var search = new Action("search expression", 1, searchState);
-    search.addCommands([
-        new Command("search for (.*)", 1),
-        new Command("search (.*)", 1)
-    ]);
+    var search = new Action("search", 1, searchState);
     search.act = function (arguments) {
         callContentScriptMethod("search", arguments[0], function (params) {
             if (typeof params !== 'undefined') {
@@ -46,10 +42,6 @@ addModule(new Module("searchModule", function() {
      * @type {Action}
      */
     var searchLanguage = new MultilingualAction("searchLanguage", search, [{notify: "What shall i search for", say: "What shall i search for?"}]);
-    searchLanguage.addCommands([
-        new Command("search language", 0),
-        new Command("change search language", 0)
-    ]);
     this.addAction(searchLanguage);
     searchState.addAction(searchLanguage);
 
@@ -57,8 +49,7 @@ addModule(new Module("searchModule", function() {
      * next match
      * @type {Action}
      */
-    var next = new Action("nextMatch", 0, searchState);
-    next.addCommand(new Command("next", 0));
+    var next = new Action("next", 0, searchState);
     next.act = function() {
       callContentScriptMethod("nextMatch", {}, function (params) {
           if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -72,8 +63,7 @@ addModule(new Module("searchModule", function() {
      * previous match
      * @type {Action}
      */
-    var prev = new Action("previousMatch", 0, searchState);
-    prev.addCommand(new Command("previous", 0));
+    var prev = new Action("previous", 0, searchState);
     prev.act = function () {
         callContentScriptMethod("previousMatch", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -88,7 +78,6 @@ addModule(new Module("searchModule", function() {
      * @type {Action}
      */
     var certainMatch = new Action("certainMatch", 1, searchState);
-    certainMatch.addCommand(new Command("go to match (.*)", 1));
     certainMatch.act = function () {
         callContentScriptMethod("certainMatch", arguments[0], function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {

@@ -6,8 +6,7 @@ addModule(new Module("tabHandleModule", function() {
 	/**
  	 * open new tab
 	 */
-	var newTab = new Action("new Tab", 0, globalCommonState);
-	newTab.addCommand(new Command("new tab", 0));
+	var newTab = new Action("newTab", 0, globalCommonState);
 	newTab.act = function() {
 		chrome.tabs.create({active: true});
 	};
@@ -16,8 +15,7 @@ addModule(new Module("tabHandleModule", function() {
 	/**
 	 * open new page
 	 */
-	var openPage = new Action("open new page", 1, globalCommonState);
-	openPage.addCommand(new Command("open page (.*)", 1));
+	var openPage = new Action("openNewPage", 1, globalCommonState);
 	openPage.act = function(arguments) {
 		var url = "";
 		var repWhitespace = "";
@@ -42,7 +40,6 @@ addModule(new Module("tabHandleModule", function() {
  	 * close tab(s)/window
 	 */
 	var close = new Action("close", 1, globalCommonState);
-	close.addCommands([new Command("close (tab)", 1), new Command("close (window)", 1)]);
 	close.act = function(arguments) {
 		if(arguments[0].search(/tab/) != -1) {
 			//closes current tab
@@ -62,7 +59,6 @@ addModule(new Module("tabHandleModule", function() {
  	 * reload the current tab
 	 */
 	var reload = new Action("reload", 0, globalCommonState);
-	reload.addCommand(new Command("reload", 0));
 	reload.act = function() {
 		chrome.tabs.reload();
 	};
@@ -71,8 +67,7 @@ addModule(new Module("tabHandleModule", function() {
 	/**
  	 * go back one page
 	 */
-	var goBack = new Action("go back one page", 0, globalCommonState);
-	goBack.addCommand(new Command("go back", 0));
+	var goBack = new Action("goBackOnePage", 0, globalCommonState);
 	goBack.act = function() {
 		var curr = "";
 		chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
@@ -95,8 +90,7 @@ addModule(new Module("tabHandleModule", function() {
 	/**
 	 * go forward one page
      */
-	var goForward = new Action("go forward one page", 0, globalCommonState);
-	goForward.addCommand(new Command("go forward", 0));
+	var goForward = new Action("goForwardOnePage", 0, globalCommonState);
 	goForward.act = function() {
 		var curr = "";
 		chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
