@@ -164,10 +164,10 @@ function changeActiveState(newState, cancelStack) {
 				//push to stack only if the last one is not the same state
 				var lastPos = tabCancelStacks[activeTab].length - 1;
 				var lastState = tabCancelStacks[activeTab][lastPos];
-				if (lastState.name == newState.name) {
+				if (lastState.internalName == newState.internalName) {
 					//come to the last state of stack because of a circle, remove
 					tabCancelStacks[activeTab].splice(lastPos, 1);
-				} else if (newState.name != activeState.name) {
+				} else if (newState.internalName != activeState.internalName) {
 					//otherwise if it is different to active state, add to stack
 					if (activeState.accessibleWithCancelAction)
 						tabCancelStacks[activeTab].push(activeState);

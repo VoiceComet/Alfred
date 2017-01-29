@@ -39,6 +39,18 @@
 		{
 			"module" : "tabHandleModule",
 			"name" : "Tab handle module"
+		},
+		{
+			"module" : "videoModule",
+			"name" : "Video module"
+		},
+		{
+			"module" : "weatherModule",
+			"name" : "Weather module"
+		},
+		{
+			"module" : "zoomModule",
+			"name" : "Zoom module"
 		}
 	],
 
@@ -94,6 +106,14 @@
 		{
 			"state" : "searchState",
 			"name" : "Search state"
+		},
+		{
+			"state" : "videoState",
+			"name" : "Video state"
+		},
+		{
+			"state" : "zoomInState",
+			"name" : "Zoom state"
 		}
 	],
 
@@ -507,6 +527,117 @@
 			"action" : "goForwardOnePage",
 			"name" : "Go forward one page",
 			"commands" : ["go forward"]
+		},
+
+
+		{
+			"action" : "watchVideos",
+			"name" : "Watch videos",
+			"commands" : ["watch videos"]
+		},
+		{
+			"action" : "certainVideo",
+			"name" : "Watch certain video",
+			"commands" : ["watch video (\\d+)"]
+		},
+		{
+			"action" : "playVideo",
+			"name" : "Play video",
+			"commands" : ["play video"]
+		},
+		{
+			"action" : "stopVideo",
+			"name" : "Stop video",
+			"commands" : ["stop video"]
+		},
+		{
+			"action" : "clickVideo",
+			"name" : "Click video",
+			"commands" : ["click (:?on )?video"]
+		},
+		{
+			"action" : "muteVideo",
+			"name" : "Mute video",
+			"commands" : ["mute video"]
+		},
+		{
+			"action" : "unmuteVideo",
+			"name" : "Unmute video",
+			"commands" : ["unmute video"]
+		},
+		{
+			"action" : "jumpForwardVideo",
+			"name" : "Jump forward",
+			"commands" : ["jump forward(:?s)?"]
+		},
+		{
+			"action" : "jumpBackwardsVideo",
+			"name" : "Jump backward",
+			"commands" : ["jump backward(:?s)?"]
+		},
+		{
+			"action" : "jumpCertainVideo",
+			"name" : "Certain time",
+			"commands" : ["time ([0-9][0-9]:[0-9][0-9])", "time ([0-9][0-9] [0-9][0-9])"]
+		},
+		{
+			"action" : "increaseVolume",
+			"name" : "Increase volume",
+			"commands" : ["louder", "increase volume"]
+		},
+		{
+			"action" : "decreaseVolume",
+			"name" : "Decrease volume",
+			"commands" : ["quieter", "decrease volume"]
+		},
+		{
+			"action" : "setVolumeVideo",
+			"name" : "Set volume",
+			"commands" : ["(:?set )?volume (:?to )?([0-9]+)"]
+		},
+
+
+		{
+			"action" : "showWeather",
+			"name" : "Show weather",
+			"commands" : ["(?:show )?weather (?:of )?(.+)"]
+		},
+
+
+		{
+			"action" : "startZooming",
+			"name" : "Zoom in",
+			"commands" : ["zoom in"]
+		},
+		{
+			"action" : "first",
+			"name" : "Sector 1",
+			"commands" : ["1", "first"]
+		},
+		{
+			"action" : "second",
+			"name" : "Sector 2",
+			"commands" : ["2", "second"]
+		},
+		{
+			"action" : "third",
+			"name" : "Sector 3",
+			"commands" : ["3", "third"]
+		},
+		{
+			"action" : "fourth",
+			"name" : "Sector 4",
+			"commands" : ["4", "fourth"]
+		},
+		{
+			"action" : "zoomOut",
+			"name" : "Zoom out",
+			"commands" : ["zoom out"]
+		},
+		{
+			"action" : "reset",
+			"name" : "Reset zoom",
+			"commands" : ["reset zoom"]
 		}
 	]
 }

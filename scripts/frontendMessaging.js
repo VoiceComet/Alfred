@@ -181,7 +181,8 @@ function showDialog(params) {
 	dialogBox.appendChild(dialog);
 
 	//show message
-	params.time = 0;
+	//noinspection JSUndefinedPropertyAssignment
+    params.time = 0;
 	var messageId = showMessage(params);
 	return {messageId: messageId, dialogId: dialogId};
 }
