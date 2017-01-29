@@ -151,49 +151,55 @@ addModule(new Module("ownCommandModule", function() {
     };
     this.addAction(scrollRight);
 
-    //TODO addCommands
     //get all user actions from Storage and generate actions
     function generateCommands() {
-        chrome.storage.sync.get({ownCommands: []}, function (results) {
-            results.ownCommands.forEach(function (params) {
-                var command = params.command.toString();
-                var action = params.action;
-                switch (action) {
-                    case "reloadPage":
-                        reloadPage.addCommand(new Command(command, 0));
-                        break;
-                    case "goBack":
-                        goBack.addCommand(new Command(command, 0));
-                        break;
-                    case "goForward":
-                        goForward.addCommand(new Command(command, 0));
-                        break;
-                    case "scrollTop":
-                        scrollToTop.addCommand(new Command(command, 0));
-                        break;
-                    case "scrollMiddle":
-                        scrollToMiddle.addCommand(new Command(command, 0));
-                        break;
-                    case "scrollBottom":
-                        scrollToBottom.addCommand(new Command(command, 0));
-                        break;
-                    case "scrollUp":
-                        scrollUp.addCommand(new Command(command, 0));
-                        break;
-                    case "scrollDown":
-                        scrollDown.addCommand(new Command(command, 0));
-                        break;
-                    case "scrollLeft":
-                        scrollLeft.addCommand(new Command(command, 0));
-                        break;
-                    case "scrollRight":
-                        scrollRight.addCommand(new Command(command, 0));
-                        break;
-                    default:
-                        break;
-                }
-            })
-        });
+        chrome.storage.sync.get(
+            {ownCommands: []},
+            /**
+             * @param {Object} results
+             * @param {Array} results.ownCommands
+             */
+            function (results) {
+                results.ownCommands.forEach(function (params) {
+                    var command = params.command.toString();
+                    var action = params.action;
+                    switch (action) {
+                        case "reloadPage":
+                            reloadPage.addCommand(new Command(command, 0));
+                            break;
+                        case "goBack":
+                            goBack.addCommand(new Command(command, 0));
+                            break;
+                        case "goForward":
+                            goForward.addCommand(new Command(command, 0));
+                            break;
+                        case "scrollTop":
+                            scrollToTop.addCommand(new Command(command, 0));
+                            break;
+                        case "scrollMiddle":
+                            scrollToMiddle.addCommand(new Command(command, 0));
+                            break;
+                        case "scrollBottom":
+                            scrollToBottom.addCommand(new Command(command, 0));
+                            break;
+                        case "scrollUp":
+                            scrollUp.addCommand(new Command(command, 0));
+                            break;
+                        case "scrollDown":
+                            scrollDown.addCommand(new Command(command, 0));
+                            break;
+                        case "scrollLeft":
+                            scrollLeft.addCommand(new Command(command, 0));
+                            break;
+                        case "scrollRight":
+                            scrollRight.addCommand(new Command(command, 0));
+                            break;
+                        default:
+                            break;
+                    }
+                })
+            }
+        );
     }
     generateCommands();
 

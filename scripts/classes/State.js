@@ -426,7 +426,7 @@ function State (internalName) {
 					for (j = 0; j < actionHits[i].hits.length; j++) {
 						var dialogAction = {
 							command: dialogActionNumber,
-							description: actionHits[i].action.name
+							description: actionHits[i].action.getName()
 						};
 						for (k = 0; k < actionHits[i].action.parameterCount; k++) {
 							var before = (k == 0) ? ": " : ", ";
@@ -439,7 +439,6 @@ function State (internalName) {
 						action.actionHit = actionHits[i];
 						action.hit = j;
 						action.dialogState = dialogState;
-						//TODO add command should work
 						action.addCommand(new Command(dialogActionNumber+'', 0));
 						//noinspection JSUnusedLocalSymbols
 						action.act = function (arguments) {

@@ -105,16 +105,23 @@ var options = [
 var deleteUserAction = function (params) {
 	var button = document.getElementById(params);
 	button.addEventListener("click", function () {
-		chrome.storage.sync.get({ownCommands: []}, function (results) {
-			for (var i = 0; i < results.ownCommands.length; i++) {
-				if (results.ownCommands[i].command === params) {
-					results.ownCommands.splice(i, 1);
+		chrome.storage.sync.get(
+			{ownCommands: []},
+            /**
+             * @param {Object} results
+             * @param {Array} results.ownCommands
+             */
+			function (results) {
+				for (var i = 0; i < results.ownCommands.length; i++) {
+					if (results.ownCommands[i].command === params) {
+						results.ownCommands.splice(i, 1);
+					}
 				}
+				chrome.storage.sync.set(results, function () {
+					document.getElementById(params).remove();
+				})
 			}
-			chrome.storage.sync.set(results, function () {
-				document.getElementById(params).remove();
-			})
-		});
+		);
 	});
 };
 
@@ -145,15 +152,22 @@ document.getElementById("addButton").addEventListener("click", function () {
 			.appendChild(deleteButton);
 		document.getElementById("userCommands").appendChild(newDiv);
 		deleteUserAction(newDiv.id);
-		chrome.storage.sync.get({ownCommands: []}, function (results) {
-			results.ownCommands.push({
-				command: command,
-				action: action
-			});
-			chrome.storage.sync.set(results, function() {
-				//do nothing after saving
-			});
-		});
+		chrome.storage.sync.get(
+			{ownCommands: []},
+            /**
+             * @param {Object} results
+             * @param {Array} results.ownCommands
+             */
+			function (results) {
+				results.ownCommands.push({
+					command: command,
+					action: action
+				});
+				chrome.storage.sync.set(results, function() {
+					//do nothing after saving
+				});
+			}
+		);
 	}
 });
 
@@ -222,22 +236,29 @@ function restore_options() {
 		});
 	});
 
-	chrome.storage.sync.get({ownCommands: []}, function (result) {
-		result.ownCommands.forEach(function (params) {
-			var newDiv = document.createElement("div");
-			newDiv.class = "setting";
-			newDiv.id = params.command;
-			var label = document.createElement("label");
-			label.innerHTML = params.command + " | " + params.action + " ";
-			var deleteButton = document.createElement("button");
-			deleteButton.class = "deleteButton";
-			deleteButton.innerHTML = "Delete";
-			newDiv
-				.appendChild(label)
-				.appendChild(deleteButton);
-			document.getElementById("userCommands").appendChild(newDiv);
-			deleteUserAction(newDiv.id);
-		});
-	})
+	chrome.storage.sync.get(
+		{ownCommands: []},
+        /**
+         * @param {Object} results
+         * @param {Array} results.ownCommands
+         */
+		function (results) {
+			results.ownCommands.forEach(function (params) {
+				var newDiv = document.createElement("div");
+				newDiv.class = "setting";
+				newDiv.id = params.command;
+				var label = document.createElement("label");
+				label.innerHTML = params.command + " | " + params.action + " ";
+				var deleteButton = document.createElement("button");
+				deleteButton.class = "deleteButton";
+				deleteButton.innerHTML = "Delete";
+				newDiv
+					.appendChild(label)
+					.appendChild(deleteButton);
+				document.getElementById("userCommands").appendChild(newDiv);
+				deleteUserAction(newDiv.id);
+			});
+		}
+	)
 }
 document.addEventListener('DOMContentLoaded', restore_options);

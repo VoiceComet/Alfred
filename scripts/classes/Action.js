@@ -8,6 +8,9 @@
 function Action (internalName, parameterCount, followingState) {
 	/** @type {String} */
 	this.internalName = internalName;
+	/** @type {[Command]} */
+    /** @private */
+	this.commands = [];
 	/** @type {State} */
     this.followingState = followingState;
 	/** @type {number} */
@@ -23,20 +26,32 @@ function Action (internalName, parameterCount, followingState) {
 		return getActionTranslation(this.internalName)
 	};
 
+    /**
+     * add a command to this action
+     * @param {Command} command - command
+     */
+    this.addCommand = function(command) {
+        if (this.parameterCount == command.parameterCount) {
+            this.commands.push(command);
+        } else {
+            //error message
+            alert("parameterCount not the same");
+        }
+    };
+
 	/**
 	 * get list of translated commands
 	 * @return {[Command]} command list
 	 */
 	this.getCommands = function() {
+        var commands = this.commands.slice();
 		var action = getActionTranslationObject(this.internalName);
 		if (action != null) {
-			var commands = [];
 			for (var i = 0; i < action["commands"].length; i++) {
 				commands.push(new Command(action["commands"][i], this.parameterCount));
 			}
-			return commands;
 		}
-		return [];
+		return commands;
 	};
 
 	/**
