@@ -15,7 +15,7 @@ addModule(new Module("bookmarkModule", function () {
     folderState.init = function () {
         this.cancelAction.cancelAct = function() {
             callContentScriptMethod("hidePanel", {});
-            say("I stopped rummaging in your library");
+            say(translate("stoppedRummagingInLibrary"));
         };
     };
 
@@ -24,11 +24,11 @@ addModule(new Module("bookmarkModule", function () {
      */
     var bookmarkListenState = new State("bookmarkListenState");
     bookmarkListenState.init = function () {
-      notify("Say a title for the new bookmark");
-      say("Which name shall i give the bookmark");
+      notify(translate("sayTitleOfNewBookmark"));
+      say(translate("sayTitleOfNewBookmark"));
       this.cancelAction.cancelAct = function () {
-          notify("Stopped creating a bookmark");
-          say("I canceled creating a bookmark");
+          notify(translate("stoppedCreatingBookmark"));
+          say(translate("stoppedCreatingBookmark"));
       }
     };
 
@@ -37,11 +37,11 @@ addModule(new Module("bookmarkModule", function () {
      */
     var folderListenState = new State("folderListenState");
     folderListenState.init = function () {
-        notify("Which name shall i give the folder");
-        say("Which name shall i give the folder");
+        notify(translate("sayTitleOfNewFolder"));
+        say(translate("sayTitleOfNewFolder"));
         this.cancelAction.cancelAct = function () {
-            notify("canceled folder listen state");
-            say("I canceled creating a folder");
+            notify(translate("stoppedCreatingFolder"));
+            say(translate("stoppedCreatingFolder"));
         }
     };
 
@@ -119,8 +119,8 @@ addModule(new Module("bookmarkModule", function () {
                             if (BookmarkTreeNodesBookmark[i].url != undefined) {
                                 hit++;
                                 available = false;
-                                say("There is already a bookmark with the same title in your library");
-                                notify("Bookmark title taken");
+                                say(translate("sayBookmarkNameTaken"));
+                                notify(translate("notifyBookmarkNameTaken"));
                             }
                         }
                     } else {
@@ -131,8 +131,8 @@ addModule(new Module("bookmarkModule", function () {
                             if (BookmarkTreeNodesUrl.length > 0) {
                                 hit++;
                                 available = false;
-                                say("There is already a bookmark with the same url in your library");
-                                notify("Bookmark url taken");
+                                say(translate("sayBookmarkUrlTaken"));
+                                notify(translate("notifyBookmarkUrlTaken"));
                             }
                         });
                     }
@@ -147,8 +147,8 @@ addModule(new Module("bookmarkModule", function () {
                             if (BookmarkTreeNodesFolder[i].url === undefined) {
                                 hit++;
                                 available = false;
-                                say("There is already a folder with the same title in your library");
-                                notify("Folder title taken");
+                                say(translate("sayFolderNameTaken"));
+                                notify(translate("notifyFolderNameTaken"));
                             }
                         }
                     }
@@ -180,8 +180,8 @@ addModule(new Module("bookmarkModule", function () {
                                 chrome.tabs.update({url: BookmarkTreeNodes[i].url, active: true});
                             } else {
                                 chrome.bookmarks.remove(BookmarkTreeNodes[i].id);
-                                say("I removed the bookmark " + BookmarkTreeNodes[i].title + " from your library");
-                                notify("Removed bookmark " + BookmarkTreeNodes[i].title + " from library");
+                                say(translate("sayRemovedBookmark").format([BookmarkTreeNodes[i].title]));
+                                notify(translate("notifyRemovedBookmark").format([BookmarkTreeNodes[i].title]));
                             }
                             if (hit != 0) {
                                 return;
@@ -194,8 +194,8 @@ addModule(new Module("bookmarkModule", function () {
                             hit++;
                             if (action != "open") {
                                 chrome.bookmarks.removeTree(BookmarkTreeNodes[k].id);
-                                say("I removed the folder " + BookmarkTreeNodes[k].title + " from your library");
-                                notify("Removed folder " + BookmarkTreeNodes[k].title + " from library");
+                                say(translate("sayRemovedFolder").format([BookmarkTreeNodes[k].title]));
+                                notify(translate("notifyRemovedFolder").format([BookmarkTreeNodes[k].title]));
                             }
                             if (hit != 0) {
                                 return;
@@ -208,8 +208,8 @@ addModule(new Module("bookmarkModule", function () {
         setTimeout(function () {
             if (hit <= 0) {
                 interact = false;
-                say("There is no " + object + ", " + title + " in your library");
-                notify("No " + object + " " + title + " found");
+                say(translate("sayThereIsNoObjectX").format([object, title]));
+                notify(translate("notifyThereIsNoObjectX").format([object, title]));
             }
         }, 10);
     };
@@ -264,8 +264,8 @@ addModule(new Module("bookmarkModule", function () {
                                             title: params[0],
                                             url: url
                                         });
-                                        say("I added the bookmark " + params[0] + " to your folder, " + folder);
-                                        notify("Added bookmark " + params[0] + " to folder " + folder);
+                                        say(translate("sayAddedBookmarkXToFolderY").format([params[0], folder]));
+                                        notify(translate("notifyAddedBookmarkXToFolderY").format([params[0], folder]));
                                     }
                                 }
                             }
@@ -278,8 +278,8 @@ addModule(new Module("bookmarkModule", function () {
                                 url: url
                             });
                         });
-                        say("I added the bookmark " + params[0] + " to your library");
-                        notify("Added bookmark " + params[0] + " to library");
+                        say(translate("sayAddedBookmarkX").format([params[0]]));
+                        notify(translate("notifyAddedBookmarkX").format([params[0]]));
                     }
                 }
             }, 10);
@@ -353,8 +353,8 @@ addModule(new Module("bookmarkModule", function () {
                                         parentId: BookmarkTreeNodesFolder[i].id,
                                         title: params[0]
                                     });
-                                    say("I added the folder " + params[0] + " to your folder, " + folder);
-                                    notify("Added folder " + params[0] + " to folder " + folder);
+                                    say(translate("sayAddedFolderXToFolderY").format([params[0], folder]));
+                                    notify(translate("notifyAddedFolderXToFolderY").format([params[0], folder]));
                                 }
                             }
                         }
@@ -366,8 +366,8 @@ addModule(new Module("bookmarkModule", function () {
                             title: params[0]
                         });
                     });
-                    say("I added the folder " + params[0] + " to your library");
-                    notify("Added folder " + params[0] + " to library");
+                    say(translate("sayAddedFolderX").format([params[0]]));
+                    notify(translate("notifyAddedFolderX").format([params[0]]));
                 }
             }
         }, 10);
@@ -404,13 +404,13 @@ addModule(new Module("bookmarkModule", function () {
                                         var send = {title: folder, kidFolder: kidFolder, kidBookmark: kidBookmark};
                                         callContentScriptMethod("showFolder", send);
                                         if (kidBookmark.length > 1) {
-                                            say("Your folder " + folder + " contains " + kidBookmark.length + "bookmarks and " + kidFolder.length + " folder");
+                                            say(translate("sayFolderXContainsYBookmarksZFolders").format([folder, kidBookmark.length, kidFolder.length]));
                                         } else {
-                                            say("Your folder " + folder + " contains " + kidBookmark.length + "bookmark and " + kidFolder.length + " folder");
+                                            say(translate("sayFolderXContainsOneBookmarkYFolders").format([folder, kidFolder.length]));
                                         }
                                     } else {
-                                        notify("The folder is empty");
-                                        say("The folder " + folder + " is empty");
+                                        say(translate("notifyEmptyFolder").format([folder]));
+                                        notify(translate("notifyEmptyFolder"));
                                     }
                                 });
                             }

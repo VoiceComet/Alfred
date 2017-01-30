@@ -63,6 +63,7 @@ function State (internalName) {
 				this.ableToCancel = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.accessibleWithCancelAction = false;
+				//TODO
 				notify('muted, say "Hello ' + butlerName + '" or "' + butlerName + ' listen"');
 			};
 			this.muteActionIn = new Action("muteEnable", 0, this.muteState);
@@ -74,8 +75,8 @@ function State (internalName) {
 			this.muteActionOut = new Action("muteDisable", 1, this);
 			this.muteActionOut.act = function(parameter) {
 				if (parameter[0] == butlerName) {
-					notify("Welcome back");
-					say("Welcome back");
+					notify(translate("welcomeBack"));
+					say(translate("welcomeBack"));
 					that.muteState.muted = false;
 					that.muted = false;
 					that.updateMicrophoneIcon();
@@ -254,7 +255,7 @@ function State (internalName) {
 		 * @param {Number} [hit=0]
 		 */
 		function runHitAction(actionHit, hit) {
-			hit = (typeof hit !== 'undefined') ? hit : 0; //set default value to 3000
+			hit = (typeof hit !== 'undefined') ? hit : 0; //set default value to 0
 			var arguments = [];
 			for (var i = 1;  i <= actionHit.action.parameterCount; i++) {
 				arguments[i-1] = actionHit.hits[hit].execResult[i].trim();
@@ -456,16 +457,16 @@ function State (internalName) {
 
 				this.changeActiveState(dialogState);
 
-				showDialog("&nbsp;", "What can I do for you?", "Say a number:", dialogActions, function(ids) {
+				showDialog("&nbsp;", translate("whatCanIDoForYou"), translate("sayANumber") + ":", dialogActions, function(ids) {
 					dialogState.setMessageId(ids.messageId, ids.dialogId);
 				});
-				say('What can I do for you?');
+				say(translate("whatCanIDoForYou"));
 			}
 		} else {
 			//not found
 			if (!this.muted) {
-				notify('I don\'t know what you mean with "' + alternatives[0] + '".');
-				say('Please, repeat your wish');
+				notify(translate("IDontKnowWhatYouMeanWith").format([alternatives[0]]));
+				say(translate("PleaseRepeatYourWish"));
 			}
 		}
 	};
@@ -527,9 +528,8 @@ function State (internalName) {
 
 		//noinspection SpellCheckingInspection
 		this.recognition.onnomatch = function(event) {
-			//alert("onnomatch");
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
-				alert("no match: " + event.results[i][0].transcript);
+				console.log("no match: " + event.results[i][0].transcript);
 			}
 		};
 
@@ -547,7 +547,7 @@ function State (internalName) {
 			} else if (event.error == "network") {
 				that.recognition.networkError = true;
 				console.log(event.error + ": " + event.message);
-				notify("Network Error. Please check your network connection.", 3000);
+				notify(translate("networkError"), 3000);
 			} else {
 				if (event.error != "no-speech") {
 					console.log(event.error + ": " + event.message);

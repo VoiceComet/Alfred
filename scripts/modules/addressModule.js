@@ -96,7 +96,7 @@ addModule(new Module("addressModule", function () {
 
 				//add next actions to mapState
 				//noinspection JSCheckFunctionSignatures
-				var nextMapAction = new Action("nextAddress", 0, this);
+				var nextMapAction = new Action("next", 0, this);
 				nextMapAction.act = function () {
 					callContentScriptMethod("nextAddress", {}, function(params) {
 						callContentScriptMethod("mapSearch", {query:params.address});
@@ -107,7 +107,7 @@ addModule(new Module("addressModule", function () {
 
 				//add previous actions to mapState
 				//noinspection JSCheckFunctionSignatures
-				var previousMapAction = new Action("previousAddress", 0, this);
+				var previousMapAction = new Action("previous", 0, this);
 				previousMapAction.act = function () {
 					callContentScriptMethod("previousAddress", {}, function(params) {
 						callContentScriptMethod("mapSearch", {query:params.address});

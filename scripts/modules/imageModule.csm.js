@@ -92,44 +92,22 @@ addContentScriptMethod(
             }
         }
         if (images.length > 0) {
+            var message = {
+                content: translate("galleryMode"),
+                cancelable: true,
+                infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+                time: 0
+            };
             if (Math.ceil(images.length / 9) > 1) {
-                if (id != "") {
-                    pages = 1;
-                    updateMessage({
-                        id: id,
-                        content: "Gallery mode",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                } else {
-                    id = showMessage({
-                        content: "Gallery mode",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                }
+                message.commandRight = translate("next");
+            }
+            if (id != "") {
+                pages = 1;
+                message.id = id;
+                //noinspection JSCheckFunctionSignatures
+                updateMessage(message);
             } else {
-                if (id != "") {
-                    pages = 1;
-                    updateMessage({
-                        id: id,
-                        content: "Gallery mode",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                } else {
-                    id = showMessage({
-                        content: "Gallery mode",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                }
+                id = showMessage(message);
             }
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
@@ -144,11 +122,11 @@ addContentScriptMethod(
                     }
                 }
             });
-            return({content: "I found " + images.length + " images. You are on page one"});
+            return({content: translate("sayFoundXImages").format([images.length])});
 
         } else {
-            showMessage({content: "No images found on this page" , centered: true});
-            return({content: "I found no relevant images on this page", followingState: "globalCommonState"});
+            showMessage({content: translate("notifyNoImagesFound"), centered: true});
+            return({content: translate("sayNoImagesFound"), followingState: "globalCommonState"});
         }
     })
 );
@@ -159,33 +137,25 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("nextGalleryPage", function () {
         if (pages >= Math.ceil(images.length / 9)) {
-            showMessage({content: "No further images on this website", centered: true});
-            return({content: "There are no further images on this website"});
+            showMessage({content: translate("notifyNoFurtherImages"), centered: true});
+            return({content: translate("sayNoFurtherImages")});
         } else {
             pages++;
             i = pages * 9 - 1;
             fadeOutLeft();
+            var message = {
+                id: id,
+                content: translate("galleryMode"),
+                commandLeft: translate("previous"),
+                cancelable: true,
+                infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+                time: 0
+            };
             if (pages < Math.ceil(images.length / 9)) {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
+                message.commandRight = translate("next");
             }
-            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
+            updateMessage(message);
+            return({content: translate("sayYouAreOnPageXOfY").format([pages, Math.ceil(images.length / 9)])});
         }
     })
 );
@@ -196,37 +166,30 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("previousGalleryPage", function () {
         if (pages < 2 || images.length < 9) {
-            showMessage({content: "No previous images", centered: true});
-            return({content: "There are no previous images on this page"});
+            showMessage({content: translate("notifyNoPreviousImages"), centered: true});
+            return({content: translate("sayNoPreviousImages")});
         } else {
             pages--;
             i = pages * 9 - 1;
             fadeOutRight();
+            var message = {
+                id: id,
+                content: translate("galleryMode"),
+                commandRight: translate("next"),
+                cancelable: true,
+                infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+                time: 0
+            };
             if (pages > 1) {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
+                message.commandLeft = translate("previous");
             }
-            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
+            updateMessage(message);
+            return({content: translate("sayYouAreOnPageXOfY").format([pages, Math.ceil(images.length / 9)])});
         }
     })
 );
 
+//TODO hier weitermachen
 /**
  * go to certain gallery page
  */

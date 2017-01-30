@@ -40,14 +40,13 @@ function MultilingualAction(name, relatedAction, settings) {
 				this.chooseLanguageState.hideDialog();
 
 				var lang;
-				//TODO translate command switch
 				switch(arguments[0].toLowerCase()) {
-					case "english": lang = "en"; break;
-					case "german": lang = "de"; break;
-					case "spanish": lang = "es"; break;
-					case "french": lang = "fr"; break;
-					case "turkish": lang = "tr"; break;
-					case "russian": lang = "ru"; break;
+					case translate("english"): lang = "en"; break;
+					case translate("german"): lang = "de"; break;
+					case translate("spanish"): lang = "es"; break;
+					case translate("french"): lang = "fr"; break;
+					case translate("turkish"): lang = "tr"; break;
+					case translate("russian"): lang = "ru"; break;
 					default: lang = "en"
 				}
 				//create following state and action
@@ -68,7 +67,7 @@ function MultilingualAction(name, relatedAction, settings) {
 				sayParameterState.runAtEntrance = function() {
 					var sayParamState = this;
 
-					var paramText = "say your parameter in chosen language";
+					var paramText = translate("sayParameterInLanguage");
 					if (settings.length >= 1) {
 						var pos = parameterNumber - 1;
 						if (settings[pos].hasOwnProperty("notify") && settings[pos].notify != "") {
@@ -84,7 +83,7 @@ function MultilingualAction(name, relatedAction, settings) {
 					});
 				};
 
-				var sayParameterAction = new Action("Say Parameter", 1, null);
+				var sayParameterAction = new Action("sayParameter", 1, null);
 				sayParameterAction.sayParameterState = sayParameterState;
 				sayParameterAction.act = function(args) {
 					this.sayParameterState.hideDialog();
@@ -110,16 +109,15 @@ function MultilingualAction(name, relatedAction, settings) {
 		chooseLanguageState.runAtEntrance = function() {
 			var languageState = this;
 			//show dialog with languages
-			//TODO translate dialog
 			var dialogActions = [
-				{command: "english", description: "english language"},
-				{command: "german", description: "deutsche Sprache"},
-				{command: "spanish", description: "idioma español"},
-				{command: "french", description: "langue française"},
-				{command: "turkish", description: "türk dili"},
-				{command: "russian", description: "русский язык"}
+				{command: translate("english"), description: "english language"},
+				{command: translate("german"), description: "deutsche Sprache"},
+				{command: translate("spanish"), description: "idioma español"},
+				{command: translate("french"), description: "langue française"},
+				{command: translate("turkish"), description: "türk dili"},
+				{command: translate("russian"), description: "русский язык"}
 			];
-			showDialog("Choose a Language", "", "Say a language:", dialogActions, function (ids) {
+			showDialog(translate("chooseLanguage"), "", translate("sayLanguage") + ":", dialogActions, function (ids) {
 				languageState.setMessageId(ids.messageId, ids.dialogId);
 			});
 			//close dialog at cancel
