@@ -63,6 +63,17 @@
 	"notifyNoFurtherImages" : "No further images on this website",
 	"sayNoPreviousImages" : "There are no previous images on this page",
 	"notifyNoPreviousImages" : "No previous images",
-	"sayYouAreOnPageXOfY" : "You are now on page {0} of {1}"
+	"sayYouAreOnPageXOfY" : "You are now on page {0} of {1}",
+	"thereIsNoPageX" : "There is no page {0}",
+	"youAreStillOnPageX" : "You are still on page {0}",
+	"thereIsNoImageX" : "There is no image {0} on this page",
+	"slideMode" : "Slide mode",
+	"imageXOfY" : "image {0} of {1}",
+	"sayYouSeeImageXOfY" : "You see image, {0} of {1}",
+	"thisIsTheLastImage" : "This is the last image",
+	"thisIsTheFirstImage" : "This is the first image",
+	"thisImageHasNoLink" : "This image has no link",
+	"welcomeBackOnSlidesGallery" : "Welcome back to the slides gallery",
+	"sayStoppedInteractingImages" : "I stopped interacting with images"
 
 }
