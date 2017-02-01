@@ -42,8 +42,8 @@ addContentScriptMethod(
         allLinks();
         searchedAll = true;
         if(links.length === 0) {
-            showMessage({content: "Could not find links", centered: true});
-            return({content: "I found no links on this page", followingState:"globalCommonState"});
+            showMessage({content: translate("notifyCouldNotFindLinks"), centered: true});
+            return({content: translate("sayCouldNotFindLinks"), followingState:"globalCommonState"});
         } else {
             for (i = 0; i < links.length; i++) {
                 if (window.scrollY <= $(links[i]).offset().top &&
@@ -57,14 +57,14 @@ addContentScriptMethod(
                         .animate({scrollTop: $(links[i]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(links[i]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "Show all links",
+                        content: translate("showAllLinks"),
                         time: 0,
                         cancelable: true,
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        infoCenter: "link " + (i + 1) + " of " + links.length
+                        commandLeft: translate("previous"),
+                        commandRight: translate("next"),
+                        infoCenter: translate("linkXOfY").format([(i + 1), links.length])
                     });
-                    return({content: "I found " + links.length + "links. You are on link " + (i + 1)});
+                    return({content: translate("FoundXLinksYouAreOnLinkY").format([links.length, (i + 1)])});
                 } else if (i + 1 >= links.length) {
                     i = 0;
                     $(links[0])
@@ -74,17 +74,17 @@ addContentScriptMethod(
                         .animate({scrollTop: $(links[0]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(links[0]).offset().left - window.innerWidth / 2}, 1000);
                     id = showMessage({
-                        content: "Search for: <span style='background-color:yellowgreen'>" + parameter + "</span>",
+                        content: translate("searchForX").format(['<span style="background-color:yellowgreen">' + parameter + '</span>']),
                         time: 0,
                         cancelable: true,
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        infoCenter: "link " + (i + 1) + " of " + links.length
+						commandLeft: translate("previous"),
+						commandRight: translate("next"),
+                        infoCenter: translate("linkXOfY").format([(i + 1), links.length])
                     });
                     if (links.length > 1) {
-                        return({content: "I found " + links.length + "links. You are on link " + (i + 1)});
+                        return({content: translate("FoundXLinksYouAreOnLinkY").format([links.length, (i + 1)])});
                     } else {
-                        return({content: "I found " + links.length + "link."});
+                        return({content: translate("FoundOneLink")});
                     }
                 }
             }
@@ -125,12 +125,12 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "Show all links",
+                content: translate("showAllLinks"),
                 time: 0,
                 cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"link " + (i + 1) + " of " + (links.length)
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("linkXOfY").format([(i + 1), links.length])
             });
         } else if(found.length > 1) {
             if (i < found.length - 1) {
@@ -159,16 +159,16 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "Show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
+                content: translate("showAllLinks") + ': <span style="background-color:yellowgreen">' + foundParams + '</span>',
                 time: 0,
                 cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"link " + (i + 1) + " of " + (found.length)
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("linkXOfY").format([(i + 1), links.length])
             });
         } else {
-            showMessage({content: "No link found", centered: true});
-            return({content: "There is only one link on this page"});
+            showMessage({content: translate("notifyNoLinkFound"), centered: true});
+            return({content: translate("sayNoLinkFound")});
         }
     })
 );
@@ -205,12 +205,12 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "Show all links",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"link " + (i + 1) + " of " + (links.length)
+				content: translate("showAllLinks"),
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("linkXOfY").format([(i + 1), links.length])
             });
         } else if (found.length > 1){
             if (i > 0) {
@@ -239,16 +239,16 @@ addContentScriptMethod(
             }
             updateMessage({
                 id: id,
-                content: "Show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"link " + (i + 1) + " of " + (found.length)
+				content: translate("showAllLinks") + ': <span style="background-color:yellowgreen">' + foundParams + '</span>',
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("linkXOfY").format([(i + 1), links.length])
             });
         } else {
-            showMessage({content: "No link found", centered: true});
-            return({content: "I found only one link on this page"});
+			showMessage({content: translate("notifyNoLinkFound"), centered: true});
+			return({content: translate("sayNoLinkFound")});
         }
     })
 );
@@ -275,16 +275,16 @@ addContentScriptMethod(
             i = params - 1;
             updateMessage({
                 id: id,
-                content: "show all links",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter: "link " + (i + 1) + " of " + (links.length)
+				content: translate("showAllLinks"),
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("linkXOfY").format([(i + 1), links.length])
             });
         } else {
-            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>", centered: true});
-            return({content: "I found no link" + foundParams + "on this page"});
+            showMessage({content: translate("notifyNoLinkXFound").format(['<span style="background-color:lightcoral">' + foundParams + '</span>']), centered: true});
+            return({content: translate("sayNoLinkXFound").format([foundParams])});
         }
     })
 );
@@ -318,6 +318,7 @@ addContentScriptMethod(
                     .removeClass("highlight");
             }
         }
+        var message = {};
         if (found.length > 1){
             $(".highlight").each(function () {
                 if ($(this).hasClass("searched") != true) {
@@ -335,26 +336,20 @@ addContentScriptMethod(
             $('html, body')
                 .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
                 .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
+            message = {
+				content: translate("showAllLinks") + ': <span style="background-color:yellowgreen">' + foundParams + '</span>',
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("linkXOfY").format([(i + 1), found.length])
+			};
             if (searchedAll != true) {
-                id = showMessage({
-                    id: id,
-                    content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
-                    time: 0,
-                    cancelable: true,
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    infoCenter:"link " + (i + 1) + " of " + (found.length)
-                });
+                id = showMessage(message);
             } else {
-                updateMessage({
-                    id: id,
-                    content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
-                    time: 0,
-                    cancelable: true,
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    infoCenter: "link " + (i + 1) + " of " + (found.length)
-                });
+				message.id = id;
+                //noinspection JSCheckFunctionSignatures
+				updateMessage(message);
             }
             return({content: "I found " + found.length + "links. You are on link " + (i + 1)});
         } else if (found.length === 1) {
@@ -371,31 +366,30 @@ addContentScriptMethod(
             $('html, body')
                 .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
                 .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
+            message = {
+				content: translate("showAllLinks") + ': <span style="background-color:yellowgreen">' + foundParams + '</span>',
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("linkXOfY").format([(i + 1), links.length])
+			};
             if (searchedAll != true) {
-                id = showMessage({
-                    id: id,
-                    content: "show all links: <span style='background-color:yellowgreen'>" + foundParams + "</span>",
-                    time: 0,
-                    cancelable: true,
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    infoCenter: "link " + (i + 1) + " of " + (links.length)
-                });
+                id = showMessage(message);
             } else {
-                updateMessage({
-                    id: id,
-                    content: "show all links",
-                    time: 0,
-                    cancelable: true,
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    infoCenter: "link " + (i + 1) + " of " + (links.length)
-                });
+				message.id = id;
+                //noinspection JSCheckFunctionSignatures
+				updateMessage(message);
             }
-            return ({content: "I found " + found.length + "link."});
+
+			if (found.length > 1) {
+				return({content: translate("FoundXLinks").format([found.length])});
+			} else {
+				return({content: translate("FoundOneLink")});
+			}
         } else {
-            showMessage({content: "There is no link <span style='background-color:lightcoral'>" + foundParams + "</span>", centered: true});
-            return({content: "I found no link" + foundParams + "on this page"});
+			showMessage({content: translate("notifyNoLinkXFound").format(['<span style="background-color:lightcoral">' + foundParams + '</span>']), centered: true});
+			return({content: translate("sayNoLinkXFound").format([foundParams])});
         }
     })
 );
@@ -408,7 +402,7 @@ addContentScriptMethod(
         hideMessage({id: id});
         window.location = links[i].getAttribute("href") ;
         id = "";
-        return({content: "I stopped searching"});
+        return({content: translate("stoppedSearching")});
     })
 );
 

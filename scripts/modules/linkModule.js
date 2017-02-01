@@ -12,7 +12,7 @@ addModule(new Module("linkModule", function () {
     linkState.init = function () {
         this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelLinkState", {});
-            say("I stopped interacting with links");
+            say(translate("stoppedInteractingWithLinks"));
         };
     };
 
@@ -100,7 +100,7 @@ addModule(new Module("linkModule", function () {
      * change language for link
      * @type {Action}
      */
-    var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: "Which link shall i got to", say: "Which link shall i got to?"}]);
+    var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: translate("whichLink"), say: translate("whichLink")}]);
     linkState.addAction(searchLanguage);
     this.addAction(searchLanguage);
 

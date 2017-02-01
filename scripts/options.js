@@ -9,6 +9,11 @@ var options = [
 		stdValue : "Alfred"
 	},
 	{
+		id : "speechAssistantLanguage",
+		type : "select",
+		stdValue : "en"
+	},
+	{
 		id : "speechAssistantSpeechOutput",
 		type : "checkbox",
 		stdValue : true

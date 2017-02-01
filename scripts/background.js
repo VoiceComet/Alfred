@@ -59,6 +59,22 @@ function loadModuleLanguageJson() {
 }
 loadModuleLanguageJson();
 
+var languageJson = null;
+/**
+ * load actual language file
+ */
+function loadLanguageJson() {
+	chrome.storage.sync.get({
+		language: 'en'
+	}, function(items) {
+		$.getJSON(chrome.extension.getURL("scripts/languages/" + items["language"] + "Values.json"), function(json) {
+			languageJson = json;
+		});
+	});
+}
+loadLanguageJson();
+
+
 /**
  * function that is called after option changing
  * @param changes
@@ -74,6 +90,9 @@ function optionChangeListener(changes) {
 				//say something with new voice
 				say("This is my new voice");
 				return;
+			} else if (key == "speechAssistantLanguage") {
+				loadModuleLanguageJson();
+				loadLanguageJson();
 			}
 			//refresh active modules
 			for (var i = 0; i < modules.length; i++) {

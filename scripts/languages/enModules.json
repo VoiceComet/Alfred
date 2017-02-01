@@ -119,7 +119,7 @@
 
 	"actions" : [
 		{
-			"action" : "muteIn",
+			"action" : "muteEnable",
 			"name" : "Mute enable",
 			"commands" : ["mute", "don't listen", "go away"]
 		},

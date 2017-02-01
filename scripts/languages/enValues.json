@@ -14,7 +14,7 @@
 	"welcomeBack" : "Welcome back",
 	"whatCanIDoForYou" : "What can I do for you?",
 	"sayANumber" : "Say a number",
-	"IDontKnowWhatYouMeanWith" : "'I don't know what you mean with {0}.",
+	"IDontKnowWhatYouMeanWith" : "I don't know what you mean with {0}.",
 	"PleaseRepeatYourWish" : "Please, repeat your wish",
 	"networkError" : "Network Error. Please check your network connection.",
 
@@ -74,6 +74,33 @@
 	"thisIsTheFirstImage" : "This is the first image",
 	"thisImageHasNoLink" : "This image has no link",
 	"welcomeBackOnSlidesGallery" : "Welcome back to the slides gallery",
-	"sayStoppedInteractingImages" : "I stopped interacting with images"
+	"sayStoppedInteractingImages" : "I stopped interacting with images",
 
+	"notifyCouldNotFindLinks" : "Could not find links",
+	"sayCouldNotFindLinks" : "I found no links on this page",
+	"showAllLinks" : "Show all links",
+	"searchForX" : "Search for: {0}",
+	"linkXOfY" : "link {0} of {1}",
+	"FoundXLinksYouAreOnLinkY" : "I found {0} links. You are on link {1}",
+	"FoundOneLink" : "I found one link.",
+	"notifyNoLinkFound" : "No link found",
+	"sayNoLinkFound" : "There is only one link on this page",
+	"notifyNoLinkXFound" : "There is no link {0}",
+	"sayNoLinkXFound" : "I found no link {0} on this page",
+	"FoundXLinks" : "I found {0} links.",
+	"stoppedSearching" : "I stopped searching",
+	"stoppedInteractingWithLinks" : "I stopped interacting with links",
+	"whichLink" : "Which link shall i got to?",
+
+	"LetterXDoesNotExist" : "Letter {0} does not exist.",
+	"ZoomingIsNotPossible" : "Zooming is not possible.",
+	"foundPlaceX" : "I found the place \"{0}\".",
+	"foundXPlacesForY" : "I found {0} places for \"{1}\"",
+	"cannotFindPlaceX" : "I cannot find {0} on the map.",
+	"serviceNotAvailable" : "Sorry, the service is not available for now.",
+	"routeBetweenWAndXTimeYDistanceZ" : "Route between \"{0}\" and \"{1}\".<br/><br/>Time: {2}<br/>Distance: {3}",
+	"cannotFindRouteBetweenXAndY" : "I cannot find a route between \"{0}\" and \"{1}\".",
+	"sayQueryInChosenLanguage" : "Say your search query in chosen language",
+	"sayOriginInChosenLanguage" : "Say your origin query in chosen language",
+	"sayDestinationInChosenLanguage" : "Say destination search query in chosen language"
 }
