@@ -128,5 +128,20 @@
 	"cannotFindX" : "I cannot find {0}",
 	"searchEngineError" : "The Search Engine does not work.",
 	"searchingX" : "Searching \"{0}\" ...",
-	"XResultsFound" : "{0} results found"
+	"XResultsFound" : "{0} results found",
+
+	"notifyCouldNotFindX" : "Could not find {0}",
+	"sayCouldNotFindX" : "I could not find {0}",
+	"foundXMatchesForYYouAreOnMatchZ" : "I found {0} matches for {1}. You are on match {2}",
+	"foundOneMatchForX" : "I found one match for {0}",
+	"youAreOnMatchXOfY" : "You are now on match {0} of {1}",
+	"notifyNoMatchFound" : "No match found",
+	"notifyThereIsNoMatchX" : "There is no match {0}",
+	"sayThereIsNoMatchXForY" : "I cannot find a match {0} for {1}",
+	"whatShallISearchFor" : "What shall i search for?",
+
+	"sayCannotGoBack" : "I am at the first page. I cannot go back a page",
+	"notifyCannotGoBack" : "I can not go back",
+	"sayCannotGoForward" : "I am at the last page. I cannot go forward a page",
+	"notifyCannotGoForward" : "I can not go forward"
 }

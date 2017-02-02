@@ -77,8 +77,8 @@ addModule(new Module("tabHandleModule", function() {
 				setTimeout(function () {
 					chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
 						if (curr === tabs[0].url) {
-							say("I am at the first page. I cannot go back a page");
-							notify("I can not go back");
+							say(translate("sayCannotGoBack"));
+							notify(translate("notifyCannotGoBack"));
 						}
 					});
 				}, 500);
@@ -100,8 +100,8 @@ addModule(new Module("tabHandleModule", function() {
 				setTimeout(function () {
 					chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
 						if (curr === tabs[0].url) {
-							say("I am at the last page. I cannot go forward a page");
-							notify("I can not go forward");
+							say(translate("sayCannotGoForward"));
+							notify(translate("notifyCannotGoForward"));
 						}
 					});
 				}, 500);

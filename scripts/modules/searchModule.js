@@ -10,7 +10,7 @@ addModule(new Module("searchModule", function() {
     searchState.init = function () {
         this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelSearchState", {});
-            say("I stopped searching");
+            say(translate("stoppedSearching"));
         };
     };
 
@@ -41,7 +41,7 @@ addModule(new Module("searchModule", function() {
      * change language of expression
      * @type {Action}
      */
-    var searchLanguage = new MultilingualAction("searchLanguage", search, [{notify: "What shall i search for", say: "What shall i search for?"}]);
+    var searchLanguage = new MultilingualAction("searchLanguage", search, [{notify: translate("whatShallISearchFor"), say: translate("whatShallISearchFor")}]);
     this.addAction(searchLanguage);
     searchState.addAction(searchLanguage);
 
