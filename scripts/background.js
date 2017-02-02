@@ -80,16 +80,14 @@ loadLanguageJson();
  * @param changes
  */
 function optionChangeListener(changes) {
-	for (var key in changes)  {
+	for (var key in changes) {
 		if (changes.hasOwnProperty(key)) {
 			if (key == "speechAssistantName") {
 				//refresh butler name after option change
 				butlerName = changes[key].newValue;
-				return;
 			} else if (key == "speechAssistantVoice") {
 				//say something with new voice
-				say("This is my new voice");
-				return;
+				say(translate("thisIsMyNewVoice"));
 			} else if (key == "speechAssistantLanguage") {
 				loadModuleLanguageJson();
 				loadLanguageJson();

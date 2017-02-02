@@ -287,3 +287,18 @@ function loadLanguageJson() {
 	});
 }
 loadLanguageJson();
+
+/**
+ * function that is called after option changing
+ * @param changes
+ */
+function optionChangeListener(changes) {
+	for (var key in changes) {
+		if (changes.hasOwnProperty(key)) {
+			if (key == "speechAssistantLanguage") {
+				loadLanguageJson();
+			}
+		}
+	}
+}
+chrome.storage.onChanged.addListener(optionChangeListener);
