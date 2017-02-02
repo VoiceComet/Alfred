@@ -1,6 +1,6 @@
 {
-	"previous" : "previous",
-	"next" : "next",
+	"previous" : "zurück",
+	"next" : "vor",
 	"thisIsMyNewVoice" : "This is my new voice",
 
 	"english" : "english",

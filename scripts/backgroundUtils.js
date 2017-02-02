@@ -84,6 +84,7 @@ function say(phrase, sayTitle, callback) {
 	sayTitle = (sayTitle === undefined) ? true : sayTitle;
 
 	chrome.storage.sync.get({
+		language: 'en',
 		speechAssistantSpeechOutput: true,
 		speechAssistantVoice: 'Google UK English Male',
 		speechAssistantUserTitle: 'Master',
@@ -101,7 +102,7 @@ function say(phrase, sayTitle, callback) {
 		}
 
 		var msg = new SpeechSynthesisUtterance();
-		msg.lang = "en-US";
+		msg.lang = items["language"];
 
 		msg.text = phrase;
 		//noinspection JSUnresolvedVariable

@@ -19,6 +19,7 @@ function State (internalName) {
 	this.continuous = false;
 	this.interimResults = false;
 	this.maxAlternatives = 20;
+	this.refreshLanguage = true;
 	this.lang = 'en';
 	
 	//standard actions
@@ -63,8 +64,8 @@ function State (internalName) {
 				this.ableToCancel = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.accessibleWithCancelAction = false;
-				//TODO
-				notify('muted, say "Hello ' + butlerName + '" or "' + butlerName + ' listen"');
+				var commands = that.muteActionOut.getCommands();
+				notify(translate("mutedSayXOrY").format([commands[0].expression, commands[1].expression]).replace(new RegExp("\\(.\\+\\)", 'g'), butlerName));
 			};
 			this.muteActionIn = new Action("muteEnable", 0, this.muteState);
 			this.muteActionIn.act = function() {
@@ -138,6 +139,21 @@ function State (internalName) {
     this.run = function(oldState) {
 		this.oldState = oldState;
 		if (!this.initialized) {
+			if (this.refreshLanguage) {
+				var that = this;
+				function refreshLang (changes) {
+					for (var key in changes) {
+						if (key == "language") {
+							chrome.storage.sync.get({
+								language: 'en'
+							}, function(items) {
+								that.lang = items["language"];
+							});
+						}
+					}
+				}
+				chrome.storage.onChanged.addListener(refreshLang);
+			}
 			this.generateStandardActions();
 			this.init();
 			this.activateStandardActions();

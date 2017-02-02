@@ -8,7 +8,7 @@ function Command (expression, parameterCount) {
 	/**
 	 * regular expression as string
 	 * @type {String}
-	 * @protected
+	 * @public
 	 */
 	this.expression = expression;
 

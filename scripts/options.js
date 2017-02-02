@@ -4,14 +4,14 @@
  */
 var options = [
 	{
+		id : "language",
+		type : "select",
+		stdValue : "en"
+	},
+	{
 		id : "speechAssistantName",
 		type : "text",
 		stdValue : "Alfred"
-	},
-	{
-		id : "speechAssistantLanguage",
-		type : "select",
-		stdValue : "en"
 	},
 	{
 		id : "speechAssistantSpeechOutput",
@@ -217,7 +217,9 @@ function restore_options() {
 				window.speechSynthesis.onvoiceschanged = function() {
 					var optionId = 'speechAssistantVoice';
 					var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-						return voice.lang == "en-GB" || voice.lang == "en-US";
+						//TODO Nur Sprache laden, die eingestellt ist
+						//TODO refresh, wenn Sprache gewechselt wird
+						return voice.lang == "en-GB" || voice.lang == "en-US" || voice.lang == "de-DE";
 					});
 					var selectElement = document.getElementById(optionId);
 					selectElement.innerHTML = ""; //delete content

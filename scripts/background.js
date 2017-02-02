@@ -88,7 +88,7 @@ function optionChangeListener(changes) {
 			} else if (key == "speechAssistantVoice") {
 				//say something with new voice
 				say(translate("thisIsMyNewVoice"));
-			} else if (key == "speechAssistantLanguage") {
+			} else if (key == "language") {
 				loadModuleLanguageJson();
 				loadLanguageJson();
 			}

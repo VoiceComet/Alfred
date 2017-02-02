@@ -295,7 +295,7 @@ loadLanguageJson();
 function optionChangeListener(changes) {
 	for (var key in changes) {
 		if (changes.hasOwnProperty(key)) {
-			if (key == "speechAssistantLanguage") {
+			if (key == "language") {
 				loadLanguageJson();
 			}
 		}
