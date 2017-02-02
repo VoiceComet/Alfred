@@ -103,5 +103,30 @@
 	"cannotFindRouteBetweenXAndY" : "I cannot find a route between \"{0}\" and \"{1}\".",
 	"sayQueryInChosenLanguage" : "Say your search query in chosen language",
 	"sayOriginInChosenLanguage" : "Say your origin query in chosen language",
-	"sayDestinationInChosenLanguage" : "Say destination search query in chosen language"
+	"sayDestinationInChosenLanguage" : "Say destination search query in chosen language",
+
+
+
+	"notifyCannotScrollToTop" : "I cannot scroll to the top",
+	"sayCannotScrollToTop" : "I am already at the top of the page",
+	"notifyCannotScrollToMiddle" : "I cannot scroll to the middle",
+	"sayCannotScrollToMiddle" : "I am already at the middle of the page",
+	"notifyCannotScrollToBottom" : "I cannot scroll to the bottom",
+	"sayCannotScrollToBottom" : "I am already at the top of the bottom",
+	"notifyCannotScrollUp" : "I cannot scroll up",
+	"sayCannotScrollUp" : "I reached the top of the page",
+	"notifyCannotScrollDown" : "I cannot scroll down",
+	"sayCannotScrollDown" : "I reached the bottom of the page",
+	"notifyCannotScrollLeft" : "I cannot scroll left",
+	"sayCannotScrollLeft" : "I reached the left border of the page",
+	"notifyCannotScrollRight" : "I cannot scroll right",
+	"sayCannotScrollRight" : "I reached the right border of the page",
+
+	"searchResultsForX" : "Search results for \"{0}\"",
+	"results" : "Results",
+	"timeInXSeconds" : "Time: {0} s",
+	"cannotFindX" : "I cannot find {0}",
+	"searchEngineError" : "The Search Engine does not work.",
+	"searchingX" : "Searching \"{0}\" ...",
+	"XResultsFound" : "{0} results found"
 }

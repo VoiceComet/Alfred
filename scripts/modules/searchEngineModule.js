@@ -22,8 +22,8 @@ addModule(new Module("searchEngineModule", function() {
 			 * @param query
 			 */
 			function showNoResultsFound(query) {
-				notify("I cannot find " + query);
-				say("I cannot find " + query);
+				notify(translate("cannotFindX").format([query]));
+				say(translate("cannotFindX").format([query]));
 			}
 
 			/**
@@ -32,8 +32,8 @@ addModule(new Module("searchEngineModule", function() {
 			 */
 			function showSearchEngineError(error) {
 				console.log("Search Engine Request Failed: " + error );
-				notify("The Search Engine does not work.");
-				say("The Search Engine does not work");
+				notify(translate("searchEngineError"));
+				say(translate("searchEngineError"));
 			}
 
 			var that = this;
@@ -42,7 +42,7 @@ addModule(new Module("searchEngineModule", function() {
 			}
 
 			if (!(activeState.oldState instanceof PanelState)) {
-				notify("Searching \"" + this.query + "\" ...");
+				notify(translate("searchingX").format([this.query]));
 			}
 
 			//std value is google
@@ -211,7 +211,7 @@ addModule(new Module("searchEngineModule", function() {
 				callContentScriptMethod("elementResetScrolling", {"id":"ChromeSpeechControlPanel"});
 
 				if (!(activeState.oldState instanceof PanelState)) {
-					say(searchResultObject.searchTotalResults + " results found");
+					say(translate("XResultsFound").format([searchResultObject.searchTotalResults]));
 				}
 
 				//create state actions with generated commands
@@ -266,7 +266,7 @@ addModule(new Module("searchEngineModule", function() {
 		searchEngineAction.query = "empty";
 		stateOrModule.addAction(searchEngineAction);
 
-		var languageSearchEngineAction = new MultilingualAction("languageWebSearch", searchEngineAction, [{notify:"Say your search query in chosen language", say:"Say your search query in chosen language"}]);
+		var languageSearchEngineAction = new MultilingualAction("languageWebSearch", searchEngineAction, [{notify:translate("sayQueryInChosenLanguage"), say:translate("sayQueryInChosenLanguage")}]);
 		stateOrModule.addAction(languageSearchEngineAction);
 	}
 

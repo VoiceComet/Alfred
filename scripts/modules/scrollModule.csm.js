@@ -11,8 +11,8 @@ addContentScriptMethod(
             //showMessage({content: "Scroll to the top"});
             //on top of the page
         } else {
-            showMessage({content: "I cannot scroll to the top", centered: true});
-            return({content: "I am already at the top of the page"});
+            showMessage({content: translate("notifyCannotScrollToTop"), centered: true});
+            return({content: translate("sayCannotScrollToTop")});
         }
     })
 );
@@ -27,8 +27,8 @@ addContentScriptMethod(
             $("html, body").animate({scrollTop: middle}, 1000);
             //at the middle of the page
         } else {
-            showMessage({content: "I cannot scroll to the middle", centered: true});
-            return({content: "I am already at the middle of the page"});
+			showMessage({content: translate("notifyCannotScrollToMiddle"), centered: true});
+			return({content: translate("sayCannotScrollToMiddle")});
         }
     })
 );
@@ -44,8 +44,8 @@ addContentScriptMethod(
             $("html, body").animate({scrollTop: document.body.scrollHeight - scrollHeight}, 1000);
             //on the bottom of the page
         } else {
-            showMessage({content: "I cannot scroll to the bottom", centered: true});
-            return({content: "I am already at the bottom of the page"});
+			showMessage({content: translate("notifyCannotScrollToBottom"), centered: true});
+			return({content: translate("sayCannotScrollToBottom")});
         }
     })
 );
@@ -60,8 +60,8 @@ addContentScriptMethod(
             $("html, body").animate({scrollTop: scrollPosVertical - scrollHeight}, 1000);
             //Position of scrolling is on top of the page -> alert
         } else {
-            showMessage({content: "I cannot scroll up", centered: true});
-            return({content: "I reached the top of the page"});
+            showMessage({content: translate("notifyCannotScrollUp"), centered: true});
+            return({content: translate("sayCannotScrollUp")});
         }
     })
 );
@@ -77,8 +77,8 @@ addContentScriptMethod(
             $("html, body").animate({scrollTop: scrollPosVertical + scrollHeight}, 1000);
             //Position of scrolling is on the bottom of the page -> alert
         } else {
-            showMessage({content: "I cannot scroll down", centered: true});
-            return({content: "I reached the bottom of the page"});
+            showMessage({content: translate("notifyCannotScrollDown"), centered: true});
+            return({content: translate("sayCannotScrollDown")});
         }
     })
 );
@@ -93,8 +93,8 @@ addContentScriptMethod(
             $("html, body").animate({scrollLeft: scrollPosHorizontal - scrollWidth}, 1000);
             //Position of scrolling is on the left end of the page -> alert
         } else {
-            showMessage({content: "I cannot scroll left", centered: true});
-            return({content: "I reached the left border of the page"});
+            showMessage({content: translate("notifyCannotScrollLeft"), centered: true});
+            return({content: translate("sayCannotScrollLeft")});
         }
     })
 );
@@ -110,8 +110,8 @@ addContentScriptMethod(
             $("html, body").animate({scrollLeft: scrollPosHorizontal + scrollWidth}, 1000);
             //Position of scrolling is on the right end of the page -> alert
         } else {
-            showMessage({content: "I cannot scroll right", centered: true});
-            return({content: "I reached the right border of the page"});
+            showMessage({content: translate("notifyCannotScrollRight"), centered: true});
+            return({content: translate("sayCannotScrollRight")});
         }
     })
 );
