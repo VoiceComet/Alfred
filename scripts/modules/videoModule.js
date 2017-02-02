@@ -9,7 +9,7 @@ addModule(new Module("videoModule", function () {
     videoState.init = function() {
         this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelVideoState", {});
-            say("I stopped interacting with videos");
+            say(translate("stoppedInteractingVideos"));
         };
     };
 

@@ -9,7 +9,7 @@ addModule(new Module("zoomModule", function() {
     zoomInState.init = function () {
         this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelZoomState", {});
-            say("I stopped zooming");
+            say(translate("stoppedZooming"));
         };
     };
 
@@ -59,8 +59,8 @@ addModule(new Module("zoomModule", function() {
             } else if (zoomFactor >= 5) {
                 newZoomFactor = zoomFactor - (zoomFactor / 5) * i * 0.04;
             } else {
-                notify("Zooming out isn't possible");
-                say("I cannot zoom out");
+                notify(translate("notifyZoomingImpossible"));
+                say(translate("sayZoomingImpossible"));
             }
         }
         chrome.tabs.setZoom(newZoomFactor, function () {
@@ -80,8 +80,8 @@ addModule(new Module("zoomModule", function() {
         chrome.tabs.getZoom(function (zoomFactor) {
             // check if max zoom is reached
             if(zoomFactor >= 4.9) {
-                notify("reached max zoom");
-                say("The maximal level of zooming is reached");
+                notify(translate("notifyReachedMaxZoom"));
+                say(translate("sayReachedMaxZoom"));
             } else{
                 setTimeout(newZoom("+", zoomFactor, 1), 1000);
                 callContentScriptMethod(ContentScriptMethod, {});
@@ -110,8 +110,8 @@ addModule(new Module("zoomModule", function() {
                   i++;
               }
           } else {
-              notify("Zoom is already reseted");
-              say("The zoom is already reseted");
+              notify(translate("notifyAlreadyReseted"));
+              say(translate("sayAlreadyReseted"));
           }
       }, 20)
     };

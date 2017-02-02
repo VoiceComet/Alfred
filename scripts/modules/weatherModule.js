@@ -8,7 +8,7 @@ addModule(new Module("weatherModule", function() {
 		 */
 		function showWeatherData(weatherObject) {
 			callContentScriptMethod("showWeather", {"weatherObject":weatherObject});
-			say(weatherObject.city + ": " + weatherObject.conditionText + " and " + weatherObject.temp + " °" + weatherObject.tempUnit);
+			say(weatherObject.city + ": " + weatherObject.conditionText + " " + translate("and") + " " + weatherObject.temp + " °" + weatherObject.tempUnit);
 		}
 
 		/**
@@ -16,13 +16,13 @@ addModule(new Module("weatherModule", function() {
 		 * @param {String} city
 		 */
 		function showNoWeatherDataFound(city) {
-			notify("I cannot find the weather report of " + city);
-			say("I cannot find the weather report");
+			notify(translate("cannotFindWeatherOfX").format([city]));
+			say(translate("cannotFindWeather"));
 		}
 
 		var city = arguments[0];
 
-		notify("\"" + city + "\" Weather loading...");
+		notify(translate("weatherOfXLoading").format([city]));
 
 		var api = "yahoo";
 		if (api == "yahoo") {

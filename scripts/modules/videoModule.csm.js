@@ -43,20 +43,20 @@ addContentScriptMethod(
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
             id = showMessage({
-                content: "Show videos",
-                commandRight: "next",
+                content: translate("showVideos"),
+                commandRight: translate("next"),
                 cancelable: true,
-                infoCenter: "video " + (i + 1) + " of " + videos.length,
+                infoCenter: translate("videoXOfY").format([i + 1, videos.length]),
                 time: 0
             });
             if (videos.length > 1) {
-                return({content: "I found " + videos.length + " videos on this page. You watch video one"});
+                return({content: translate("foundXVideosYouWatchFirstVideo").format([videos.length])});
             } else {
-                return({content: "I found one video on this page"});
+                return({content: translate("foundOneVideo")});
             }
         } else {
-            showMessage({content: "No videos found on this page", centered: true});
-            return({content: "I found no videos on this page"});
+            showMessage({content: translate("notifyFoundNoVideos"), centered: true});
+            return({content: translate("sayFoundNoVideos")});
         }
     })
 );
@@ -71,30 +71,22 @@ addContentScriptMethod(
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
+            var message = {
+				id: id,
+				content: translate("showVideos"),
+				commandLeft: translate("previous"),
+				cancelable: true,
+				infoCenter: translate("videoXOfY").format([i + 1, videos.length]),
+				time: 0
+			};
             if (i + 1 < videos.length) {
-                updateMessage({
-                    id: id,
-                    content: "Show videos",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "video " + (i + 1) + " of " + videos.length,
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Show videos",
-                    commandLeft: "previous",
-                    cancelable: true,
-                    infoCenter: "video " + (i + 1) + " of " + videos.length,
-                    time: 0
-                });
+				message.commandRight = translate("next");
             }
-            return({content: "You watch video " + (i + 1)});
+			updateMessage(message);
+            return({content: translate("youWatchVideoX").format([i + 1])});
         } else {
-            showMessage({content: "This is the last video", centered: true});
-            return({content: "This is the last video"});
+            showMessage({content: translate("thisIsTheLastVideo"), centered: true});
+            return({content: translate("thisIsTheLastVideo")});
         }
     })
 );
@@ -109,30 +101,22 @@ addContentScriptMethod(
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
+			var message = {
+				id: id,
+				content: translate("showVideos"),
+				commandRight: translate("next"),
+				cancelable: true,
+				infoCenter: translate("videoXOfY").format([i + 1, videos.length]),
+				time: 0
+			};
             if (i - 1 > -1) {
-                updateMessage({
-                    id: id,
-                    content: "Show videos",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "video " + (i + 1) + " of " + videos.length,
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Show videos",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "video " + (i + 1) + " of " + videos.length,
-                    time: 0
-                });
+				message.commandLeft = translate("previous");
             }
-            return({content: "You watch video " + (i + 1)});
+			updateMessage(message);
+			return({content: translate("youWatchVideoX").format([i + 1])});
         } else {
-            showMessage({content: "This is the first video", centered: true});
-            return({content: "This is the first video"});
+			showMessage({content: translate("thisIsTheFirstVideo"), centered: true});
+			return({content: translate("thisIsTheFirstVideo")});
         }
     })
 );
@@ -147,48 +131,35 @@ addContentScriptMethod(
         }
         var newVideo = parseInt(params);
         if (videos.length < newVideo || 0 >= newVideo || isNaN(newVideo)) {
-                showMessage({content: "There is no video " + params, centered: true});
-                return({content: "There is no video " + params});
+                showMessage({content: translate("thereIsNoVideoX").format([params]), centered: true});
+                return({content: translate("thereIsNoVideoX").format([params])});
         } else if (i === newVideo - 1) {
-            showMessage({content: "You are still on video " + params, centered: true});
-            return ({content: "You are still on video " + params});
+            showMessage({content: translate("youAreStillOnVideoX").format([params]), centered: true});
+            return ({content: translate("youAreStillOnVideoX").format([params])});
         } else {
             i = newVideo - 1;
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
+			var message = {
+				id: id,
+				content: translate("showVideos"),
+				cancelable: true,
+				infoCenter: translate("videoXOfY").format([i + 1, videos.length]),
+				time: 0
+			};
             if (i > 0) {
                 if (i < videos.length - 1) {
-                    updateMessage({
-                        id: id,
-                        content: "Show videos",
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "video " + (i + 1) + " of " + videos.length,
-                        time: 0
-                    });
+					message.commandLeft = translate("previous");
+					message.commandRight = translate("next");
                 } else {
-                    updateMessage({
-                        id: id,
-                        content: "Show videos",
-                        commandLeft: "previous",
-                        cancelable: true,
-                        infoCenter: "video " + (i + 1) + " of " + videos.length,
-                        time: 0
-                    });
+					message.commandLeft = translate("previous");
                 }
             } else {
-                updateMessage({
-                    id: id,
-                    content: "Show videos",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "video 1 of " + videos.length,
-                    time: 0
-                });
+				message.commandRight = translate("next");
             }
-            return({content: "You watch video " + (i + 1)});
+			updateMessage(message);
+			return({content: translate("youWatchVideoX").format([i + 1])});
         }
     })
 );
@@ -201,9 +172,9 @@ addContentScriptMethod(
         videos[i].play();
         updateMessage({
             id: id,
-            content: "Show videos",
+            content: translate("showVideos"),
             cancelable: true,
-            infoCenter: "Volume: " + videos[i].volume,
+            infoCenter: translate("volumeX").format([videos[i].volume]),
             time: 0
         });
     })
@@ -215,37 +186,24 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("stopVideo", function () {
         videos[i].pause();
-        if (i > 0) {
-            if (i < videos.length - 1) {
-                updateMessage({
-                    id: id,
-                    content: "Show videos",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "video " + (i + 1) + " of " + videos.length,
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Show videos",
-                    commandLeft: "previous",
-                    cancelable: true,
-                    infoCenter: "video " + (i + 1) + " of " + videos.length,
-                    time: 0
-                });
-            }
-        } else {
-            updateMessage({
-                id: id,
-                content: "Show videos",
-                commandRight: "next",
-                cancelable: true,
-                infoCenter: "video 1 of " + videos.length,
-                time: 0
-            });
-        }
+		var message = {
+			id: id,
+			content: translate("showVideos"),
+			cancelable: true,
+			infoCenter: translate("videoXOfY").format([i + 1, videos.length]),
+			time: 0
+		};
+		if (i > 0) {
+			if (i < videos.length - 1) {
+				message.commandLeft = translate("previous");
+				message.commandRight = translate("next");
+			} else {
+				message.commandLeft = translate("previous");
+			}
+		} else {
+			message.commandRight = translate("next");
+		}
+		updateMessage(message);
     })
 );
 
@@ -267,9 +225,9 @@ addContentScriptMethod(
         if (videos[i].play) {
             updateMessage({
                 id: id,
-                content: "Show videos",
+                content: translate("showVideos"),
                 cancelable: true,
-                infoCenter: "muted",
+                infoCenter: translate("muted"),
                 time: 0
             });
         }
@@ -283,13 +241,13 @@ addContentScriptMethod(
     new ContentScriptMethod("unmuteVideo", function () {
         $(videos[i]).prop("muted", false);
         if (videos[i].play) {
-            updateMessage({
-                id: id,
-                content: "Show videos",
-                cancelable: true,
-                infoCenter: "Volume: " + videos[i].volume,
-                time: 0
-            });
+			updateMessage({
+				id: id,
+				content: translate("showVideos"),
+				cancelable: true,
+				infoCenter: translate("volumeX").format([videos[i].volume]),
+				time: 0
+			});
         }
     })
 );
@@ -348,13 +306,13 @@ addContentScriptMethod(
             videos[i].volume = 1;
         }
         if (videos[i].play) {
-            updateMessage({
-                id: id,
-                content: "Show videos",
-                cancelable: true,
-                infoCenter: "Volume: " + videos[i].volume,
-                time: 0
-            });
+			updateMessage({
+				id: id,
+				content: translate("showVideos"),
+				cancelable: true,
+				infoCenter: translate("volumeX").format([videos[i].volume]),
+				time: 0
+			});
         }
     })
 );
@@ -373,13 +331,13 @@ addContentScriptMethod(
             videos[i].volume = 0;
         }
         if (videos[i].play) {
-            updateMessage({
-                id: id,
-                content: "Show videos",
-                cancelable: true,
-                infoCenter: "Volume: " + videos[i].volume,
-                time: 0
-            });
+			updateMessage({
+				id: id,
+				content: translate("showVideos"),
+				cancelable: true,
+				infoCenter: translate("volumeX").format([videos[i].volume]),
+				time: 0
+			});
         }
     })
 );
@@ -402,13 +360,13 @@ addContentScriptMethod(
             videos[i].volume = 0;
         }
         if (videos[i].play) {
-            updateMessage({
-                id: id,
-                content: "Show videos",
-                cancelable: true,
-                infoCenter: "Volume: " + videos[i].volume,
-                time: 0
-            });
+			updateMessage({
+				id: id,
+				content: translate("showVideos"),
+				cancelable: true,
+				infoCenter: translate("volumeX").format([videos[i].volume]),
+				time: 0
+			});
         }
     })
 );

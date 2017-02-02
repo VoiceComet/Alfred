@@ -105,8 +105,6 @@
 	"sayOriginInChosenLanguage" : "Say your origin query in chosen language",
 	"sayDestinationInChosenLanguage" : "Say destination search query in chosen language",
 
-
-
 	"notifyCannotScrollToTop" : "I cannot scroll to the top",
 	"sayCannotScrollToTop" : "I am already at the top of the page",
 	"notifyCannotScrollToMiddle" : "I cannot scroll to the middle",
@@ -143,5 +141,37 @@
 	"sayCannotGoBack" : "I am at the first page. I cannot go back a page",
 	"notifyCannotGoBack" : "I can not go back",
 	"sayCannotGoForward" : "I am at the last page. I cannot go forward a page",
-	"notifyCannotGoForward" : "I can not go forward"
+	"notifyCannotGoForward" : "I can not go forward",
+
+	"showVideos" : "Show videos",
+	"videoXOfY" : "video {0} of {1}",
+	"foundXVideosYouWatchFirstVideo" : "I found {0} videos on this page. You watch video one",
+	"foundOneVideo" : "I found one video on this page",
+	"notifyFoundNoVideos" : "No videos found on this page",
+	"sayFoundNoVideos" : "I found no videos on this page",
+	"youWatchVideoX" : "You watch video {0}",
+	"thisIsTheLastVideo" : "This is the last video",
+	"thisIsTheFirstVideo" : "This is the first video",
+	"thereIsNoVideoX" : "There is no video {0}",
+	"youAreStillOnVideoX" : "You are still on video {0}",
+	"volumeX" : "Volume: ",
+	"muted" : "muted",
+	"stoppedInteractingVideos" : "I stopped interacting with videos",
+
+	"and" : "and",
+	"cannotFindWeatherOfX" : "I cannot find the weather report of {0}",
+	"cannotFindWeather" : "I cannot find the weather report",
+	"weatherOfXLoading" : "\"{0}\" Weather loading...",
+
+	"zoomToFirstSector" : "Zoom into first sector",
+	"zoomToSecondSector" : "Zoom into second sector",
+	"zoomToThirdSector" : "Zoom into third sector",
+	"zoomToFourthSector" : "Zoom into fourth sector",
+	"stoppedZooming" : "I stopped zooming",
+	"notifyZoomingImpossible" : "Zooming out isn't possible",
+	"sayZoomingImpossible" : "I cannot zoom out",
+	"notifyReachedMaxZoom" : "reached max zoom",
+	"sayReachedMaxZoom" : "The maximal level of zooming is reached",
+	"notifyAlreadyReseted" : "Zoom is already reseted",
+	"sayAlreadyReseted" : "The zoom is already reseted"
 }

@@ -26,7 +26,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical}, "slow")
             .animate({scrollLeft: scrollPosHorizontal}, "slow");
-        showMessage({content: "Zoom into first sector", centered: true});
+        showMessage({content: translate("zoomToFirstSector"), centered: true});
     })
 );
 
@@ -40,7 +40,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical}, "slow")
             .animate({scrollLeft: scrollPosHorizontal + window.innerWidth}, "slow");
-        showMessage({content: "Zoom into second sector", centered: true});
+        showMessage({content: translate("zoomToSecondSector"), centered: true});
     })
 );
 
@@ -54,7 +54,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical + window.innerHeight}, "slow")
             .animate({scrollLeft: scrollPosHorizontal}, "slow");
-        showMessage({content: "Zoom into third sector", centered: true});
+        showMessage({content: translate("zoomToThirdSector"), centered: true});
     })
 );
 
@@ -68,7 +68,7 @@ addContentScriptMethod(
         $("html, body")
             .animate({scrollTop: scrollPosVertical + window.innerHeight}, "slow")
             .animate({scrollLeft: scrollPosHorizontal + window.innerWidth}, "slow");
-        showMessage({content: "Zoom into fourth sector", centered: true});
+        showMessage({content: translate("zoomToFourthSector"), centered: true});
     })
 );
 
