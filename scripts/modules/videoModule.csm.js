@@ -203,7 +203,7 @@ addContentScriptMethod(
             id: id,
             content: "Show videos",
             cancelable: true,
-            infoCenter: "Volume: " + videos[i].volume,
+            infoCenter: "Volume: " + (Math.round(videos[i].volume * 100)/100).toFixed(2),
             time: 0
         });
     })
@@ -352,7 +352,7 @@ addContentScriptMethod(
                 id: id,
                 content: "Show videos",
                 cancelable: true,
-                infoCenter: "Volume: " + videos[i].volume,
+                infoCenter: "Volume: " + (Math.round(videos[i].volume * 100)/100).toFixed(2),
                 time: 0
             });
         }
@@ -377,7 +377,7 @@ addContentScriptMethod(
                 id: id,
                 content: "Show videos",
                 cancelable: true,
-                infoCenter: "Volume: " + videos[i].volume,
+                infoCenter: "Volume: " + (Math.round(videos[i].volume * 100)/100).toFixed(2),
                 time: 0
             });
         }
@@ -406,7 +406,7 @@ addContentScriptMethod(
                 id: id,
                 content: "Show videos",
                 cancelable: true,
-                infoCenter: "Volume: " + videos[i].volume,
+                infoCenter: "Volume: " + (Math.round(videos[i].volume * 100)/100).toFixed(2),
                 time: 0
             });
         }
