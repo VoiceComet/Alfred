@@ -9,7 +9,7 @@ addModule(new Module("videoModule", function () {
     videoState.init = function() {
         this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelVideoState", {});
-            say("I stopped interacting with videos");
+            say(translate("stoppedInteractingVideos"));
         };
     };
 
@@ -17,7 +17,6 @@ addModule(new Module("videoModule", function () {
      * show all videos
      */
     var watchVideos = new Action("watchVideos", 0, videoState);
-    watchVideos.addCommand(new Command("watch videos", 0));
     watchVideos.act = function () {
         callContentScriptMethod("watchVideos", {}, function (params) {
             if (params.content) {
@@ -31,8 +30,7 @@ addModule(new Module("videoModule", function () {
     /**
      * show next video
      */
-    var nextVideo = new Action("nextVideo", 0, videoState);
-    nextVideo.addCommand(new Command("next", 0));
+    var nextVideo = new Action("next", 0, videoState);
     nextVideo.act = function () {
         callContentScriptMethod("nextVideo", {}, function (params) {
             if (params.content) {
@@ -45,8 +43,7 @@ addModule(new Module("videoModule", function () {
     /**
      * show previous video
      */
-    var previousVideo = new Action("previousVideo", 0, videoState);
-    previousVideo.addCommand(new Command("previous", 0));
+    var previousVideo = new Action("previous", 0, videoState);
     previousVideo.act = function () {
         callContentScriptMethod("previousVideo", {}, function (params) {
             if (params.content) {
@@ -60,7 +57,6 @@ addModule(new Module("videoModule", function () {
      * watch certain video
      */
     var certainVideo = new Action("certainVideo", 1, videoState);
-    certainVideo.addCommand(new Command("watch video ([0-9]*)", 1));
     certainVideo.act = function (arguments) {
         callContentScriptMethod("certainVideo", arguments[0], function (params) {
             if (params.content) {
@@ -74,7 +70,6 @@ addModule(new Module("videoModule", function () {
      * play video
      */
     var playVideo = new Action("playVideo", 0, videoState);
-    playVideo.addCommand(new Command("play Video", 0));
     playVideo.act = function () {
         callContentScriptMethod("playVideo", {});
     };
@@ -84,7 +79,6 @@ addModule(new Module("videoModule", function () {
      * stop video
      */
     var stopVideo = new Action("stopVideo", 0, videoState);
-    stopVideo.addCommand(new Command("stop Video", 0));
     stopVideo.act = function () {
         callContentScriptMethod("stopVideo", {});
     };
@@ -94,7 +88,6 @@ addModule(new Module("videoModule", function () {
      * click video
      */
     var clickVideo = new Action("clickVideo", 0, videoState);
-    clickVideo.addCommand(new Command("click on Video", 0));
     clickVideo.act = function () {
         callContentScriptMethod("clickVideo", {});
     };
@@ -104,7 +97,6 @@ addModule(new Module("videoModule", function () {
      * mute video
      */
     var muteVideo = new Action("muteVideo", 0, videoState);
-    muteVideo.addCommand(new Command("mute Video", 0));
     muteVideo.act = function () {
         callContentScriptMethod("muteVideo", {});
     };
@@ -114,7 +106,6 @@ addModule(new Module("videoModule", function () {
      * unmute video
      */
     var unmuteVideo = new Action("unmuteVideo", 0, videoState);
-    unmuteVideo.addCommand(new Command("unmute Video", 0));
     unmuteVideo.act = function () {
         callContentScriptMethod("unmuteVideo", {});
     };
@@ -124,7 +115,6 @@ addModule(new Module("videoModule", function () {
      * jump forward in video
      */
     var jumpForwardVideo = new Action("jumpForwardVideo", 0, videoState);
-    jumpForwardVideo.addCommand(new Command("jump forward", 0));
     jumpForwardVideo.act = function () {
         callContentScriptMethod("jumpForwardVideo", {});
     };
@@ -134,7 +124,6 @@ addModule(new Module("videoModule", function () {
      * jump backwards in video
      */
     var jumpBackwardsVideo = new Action("jumpBackwardsVideo", 0, videoState);
-    jumpBackwardsVideo.addCommand(new Command("jump backwards", 0));
     jumpBackwardsVideo.act = function () {
         callContentScriptMethod("jumpBackwardsVideo", {});
     };
@@ -144,8 +133,6 @@ addModule(new Module("videoModule", function () {
      * jump to certain time
      */
     var jumpCertainVideo = new Action("jumpCertainVideo", 1, videoState);
-    jumpCertainVideo.addCommand(new Command("time ([0-9]*:[0-9]*)", 1));
-    jumpCertainVideo.addCommand(new Command("time ([0-9]* [0-9]*)", 1));
     jumpCertainVideo.act = function (arguments) {
         callContentScriptMethod("jumpCertainVideo", arguments[0]);
     };
@@ -155,7 +142,6 @@ addModule(new Module("videoModule", function () {
      * increase volume
      */
     var increaseVolume = new Action("increaseVolume", 0, videoState);
-    increaseVolume.addCommand(new Command("louder", 0));
     increaseVolume.act = function () {
         callContentScriptMethod("increaseVolume", {});
     };
@@ -165,7 +151,6 @@ addModule(new Module("videoModule", function () {
      * decrease volume
      */
     var decreaseVolume = new Action("decreaseVolume", 0, videoState);
-    decreaseVolume.addCommand(new Command("quieter", 0));
     decreaseVolume.act = function () {
         callContentScriptMethod("decreaseVolume", {});
     };
@@ -175,7 +160,6 @@ addModule(new Module("videoModule", function () {
      * set volume
      */
     var setVolumeVideo = new Action("setVolumeVideo", 1, videoState);
-    setVolumeVideo.addCommand(new Command("Volume ([0-9]+)", 1));
     setVolumeVideo.act = function (arguments) {
         callContentScriptMethod("setVolumeVideo", arguments[0]);
     };

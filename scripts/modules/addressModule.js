@@ -18,10 +18,7 @@ addModule(new Module("addressModule", function () {
 	 * search for addresses
 	 * @type {Action}
 	 */
-	var addressSearch = new Action("show (?:all )?addresses", 0, addressState);
-	addressSearch.addCommands([
-		new Command("show addresses", 0)
-	]);
+	var addressSearch = new Action("showAddresses", 0, addressState);
 	addressSearch.act = function () {
 		callContentScriptMethod("showAddressResults", {}, function (params) {
 			if (typeof params !== 'undefined') {
@@ -43,8 +40,7 @@ addModule(new Module("addressModule", function () {
 	 * next address
 	 * @type {Action}
 	 */
-	var next = new Action("nextAddress", 0, addressState);
-	next.addCommand(new Command("next", 0));
+	var next = new Action("next", 0, addressState);
 	next.act = function() {
 		callContentScriptMethod("nextAddress", {});
 	};
@@ -54,8 +50,7 @@ addModule(new Module("addressModule", function () {
 	 * previous address
 	 * @type {Action}
 	 */
-	var prev = new Action("previousAddress", 0, addressState);
-	prev.addCommand(new Command("previous", 0));
+	var prev = new Action("previous", 0, addressState);
 	prev.act = function () {
 		callContentScriptMethod("previousAddress", {});
 	};
@@ -66,7 +61,6 @@ addModule(new Module("addressModule", function () {
 	 * @type {Action}
 	 */
 	var certainAddress = new Action("certainAddress", 1, addressState);
-	certainAddress.addCommand(new Command("go to address ([\\d]+)", 1));
 	certainAddress.act = function () {
 		callContentScriptMethod("certainAddress", arguments[0], function (params) {
 			if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -81,7 +75,6 @@ addModule(new Module("addressModule", function () {
 	 * @type {Action}
 	 */
 	var showAddressOnMap = new Action("showAddressOnMap", 0, null);
-	showAddressOnMap.addCommand(new Command("show (?:address )?on map", 0));
 	showAddressOnMap.act = function () {
 		var mapState = getGlobalState("MapState");
 		if (mapState == null) {
@@ -103,8 +96,7 @@ addModule(new Module("addressModule", function () {
 
 				//add next actions to mapState
 				//noinspection JSCheckFunctionSignatures
-				var nextMapAction = new Action("next address", 0, this);
-				nextMapAction.addCommand(new Command("next", 0));
+				var nextMapAction = new Action("next", 0, this);
 				nextMapAction.act = function () {
 					callContentScriptMethod("nextAddress", {}, function(params) {
 						callContentScriptMethod("mapSearch", {query:params.address});
@@ -115,8 +107,7 @@ addModule(new Module("addressModule", function () {
 
 				//add previous actions to mapState
 				//noinspection JSCheckFunctionSignatures
-				var previousMapAction = new Action("previous address", 0, this);
-				previousMapAction.addCommand(new Command("previous", 0));
+				var previousMapAction = new Action("previous", 0, this);
 				previousMapAction.act = function () {
 					callContentScriptMethod("previousAddress", {}, function(params) {
 						callContentScriptMethod("mapSearch", {query:params.address});

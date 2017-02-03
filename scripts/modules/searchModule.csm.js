@@ -38,18 +38,26 @@ addContentScriptMethod(
 
         if(result.length === 0) {
             if (oldId) {
-                showMessage({content: "Could not find " + parameter, centered: true});
+                showMessage({content: translate("notifyCouldNotFindX").format([parameter]), centered: true});
             } else {
                 updateMessage({
                     id: id,
-                    content: "Could not find " + parameter,
+                    content: translate("notifyCouldNotFindX").format([parameter]),
                     centered: true
                 });
                 oldId = true;
             }
-            return({content: "I could not find " + parameter, followingState:"globalCommonState"});
+            return({content: translate("sayCouldNotFindX").format([parameter]), followingState:"globalCommonState"});
         } else {
             for (i = 0; i < result.length; i++) {
+				var message = {
+					content: translate("searchForX").format(["<span style='font-weight: bold'>" + parameter + "</span>"]),
+					time: 0,
+					cancelable: true,
+					commandLeft: translate("previous"),
+					commandRight: translate("next"),
+					infoCenter: translate("matchXOfY").format([i + 1, result.length])
+				};
                 if (window.scrollY <= $(result[i]).offset().top &&
                     window.scrollX <= $(result[i]).offset().left &&
                     $(result[i]).offset().top - window.innerHeight <= window.scrollY &&
@@ -59,30 +67,17 @@ addContentScriptMethod(
                         .animate({scrollTop: $(result[i]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[i]).offset().left - window.innerWidth / 2}, 1000);
                     if (oldId) {
-                        id = showMessage({
-                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                            time: 0,
-                            cancelable: true,
-                            commandLeft: "previous",
-                            commandRight: "next",
-                            infoCenter: "match " + (i + 1) + " of " + result.length
-                        });
+                        id = showMessage(message);
                         oldId = false;
                     } else {
-                        updateMessage({
-                            id : id,
-                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                            time: 0,
-                            cancelable: true,
-                            commandLeft: "previous",
-                            commandRight: "next",
-                            infoCenter: "match " + (i + 1) + " of " + result.length
-                        });
+						message.id = id;
+                        //noinspection JSCheckFunctionSignatures
+						updateMessage(message);
                     }
                     if (result.length > 1) {
-                        return({content: "I found " + result.length + " matches for " + parameter + ". You are on match " + (i + 1)})
+                        return({content: translate("foundXMatchesForYYouAreOnMatchZ").format([result.length, parameter, i + 1])})
                     } else {
-                        return({content: "I found one match for " + parameter})
+                        return({content: translate("foundOneMatchForX").format([parameter])})
                     }
                 } else if (i + 1 >= result.length) {
                     i = 0;
@@ -90,32 +85,20 @@ addContentScriptMethod(
                     $('html, body')
                         .animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000)
                         .animate({scrollLeft: $(result[0]).offset().left - window.innerWidth / 2}, 1000);
+
                     if (oldId) {
-                        id = showMessage({
-                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                            time: 0,
-                            cancelable: true,
-                            commandLeft: "previous",
-                            commandRight: "next",
-                            infoCenter: "match " + (i + 1) + " of " + (result.length)
-                        });
+                        id = showMessage(message);
                         oldId = false;
                     } else {
-                        updateMessage({
-                            id : id,
-                            content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                            time: 0,
-                            cancelable: true,
-                            commandLeft: "previous",
-                            commandRight: "next",
-                            infoCenter: "match " + (i + 1) + " of " + result.length
-                        });
+						message.id = id;
+						//noinspection JSCheckFunctionSignatures
+						updateMessage(message);
                     }
-                    if (result.length > 1) {
-                        return({content: "I found " + result.length + " matches for " + parameter + ". You are on match " + (i + 1)})
-                    } else {
-                        return({content: "I found one match for " + parameter})
-                    }
+					if (result.length > 1) {
+						return({content: translate("foundXMatchesForYYouAreOnMatchZ").format([result.length, parameter, i + 1])})
+					} else {
+						return({content: translate("foundOneMatchForX").format([parameter])})
+					}
                 }
             }
         }
@@ -146,18 +129,18 @@ addContentScriptMethod(
                 i = 0;
             }
             updateMessage({
-                id: id,
-                content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"match " + (i + 1) + " of " + result.length
-            });
-            return({content: "You are now on match " + (i + 1) + " of " + result.length});
+				id: id,
+				content: translate("searchForX").format(["<span style='font-weight: bold'>" + parameter + "</span>"]),
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("matchXOfY").format([i + 1, result.length])
+			});
+            return({content: translate("youAreOnMatchXOfY").format([i + 1, result.length])});
         } else {
-            showMessage({content: "No match found", centered: true});
-            return({content: "I just found 1 match for " + parameter});
+            showMessage({content: translate("notifyNoMatchFound"), centered: true});
+            return({content: translate("foundOneMatchForX").format([parameter])});
         }
     })
 );
@@ -185,18 +168,18 @@ addContentScriptMethod(
                 i = result.length - 1;
             }
             updateMessage({
-                id: id,
-                content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"match " + (i + 1) + " of " + result.length
-            });
-            return({content: "You are now on match " + (i + 1) + " of " + result.length});
+				id: id,
+				content: translate("searchForX").format(["<span style='font-weight: bold'>" + parameter + "</span>"]),
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("matchXOfY").format([i + 1, result.length])
+			});
+			return({content: translate("youAreOnMatchXOfY").format([i + 1, result.length])});
         } else {
-            showMessage({content: "No match found", centered: true});
-            return({content: "I just found 1 match for " + parameter});
+			showMessage({content: translate("notifyNoMatchFound"), centered: true});
+			return({content: translate("foundOneMatchForX").format([parameter])});
         }
     })
 );
@@ -217,18 +200,18 @@ addContentScriptMethod(
                 .animate({scrollLeft: $(result[params - 1]).offset().left - window.innerWidth / 2}, 1000);
             i = params - 1;
             updateMessage({
-                id: id,
-                content: "Search for: <span style='font-weight: bold'>" + parameter + "</span>",
-                time: 0,
-                cancelable: true,
-                commandLeft: "previous",
-                commandRight: "next",
-                infoCenter:"match " + (i + 1) + " of " + result.length
-            });
-            return({content: "You are now on match " + (i + 1) + "of" + result.length});
+				id: id,
+				content: translate("searchForX").format(["<span style='font-weight: bold'>" + parameter + "</span>"]),
+				time: 0,
+				cancelable: true,
+				commandLeft: translate("previous"),
+				commandRight: translate("next"),
+				infoCenter: translate("matchXOfY").format([i + 1, result.length])
+			});
+			return({content: translate("youAreOnMatchXOfY").format([i + 1, result.length])});
         } else {
-            showMessage({content: "There is no match " + params , centered: true});
-            return({content: "I cannot find a match " + params + "for" + parameter});
+            showMessage({content: translate("notifyThereIsNoMatchX").format([params]), centered: true});
+            return({content: translate("sayThereIsNoMatchXForY").format([params, parameter])});
         }
     })
 );

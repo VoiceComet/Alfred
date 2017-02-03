@@ -1,10 +1,10 @@
 addContentScriptMethod(
 	new ContentScriptMethod("showSearchResults", function(params) {
 		//generate html
-		var html = '<b>Search results for "' + params.searchResultObject.searchTerm + '"</b><br/>';
-		html += '<span class="SearchEngineResultSnippet">Results: ' + params.searchResultObject.searchTotalResults;
+		var html = '<b>' + translate("searchResultsForX").format([params.searchResultObject.searchTerm]) + '</b><br/>';
+		html += '<span class="SearchEngineResultSnippet">' + translate("results") + ': ' + params.searchResultObject.searchTotalResults;
 		if (params.searchResultObject.searchTime >= 0) {
-			html += ' Time: ' + params.searchResultObject.searchTime + ' s';
+			html += ' ' + translate("timeInXSeconds").format(params.searchResultObject.searchTime);
 		}
 		html += '</span><br/>';
 		for (var i = 0; i < params.searchResultObject.items.length; i++) {
@@ -17,11 +17,11 @@ addContentScriptMethod(
 		//generate panel parameters
 		var panelParams = {"html":html, "time":0};
 		if (params.searchResultObject.hasOwnProperty('nextPage')) {
-			panelParams.commandRight = "next";
+			panelParams.commandRight = translate("next");
 		}
 		panelParams.infoCenter = " - " + (params.searchResultObject.page + 1) + " - ";
 		if (params.searchResultObject.hasOwnProperty('previousPage')) {
-			panelParams.commandLeft = "previous";
+			panelParams.commandLeft = translate("previous");
 		}
 		showPanel(panelParams);
 	})

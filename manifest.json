@@ -65,6 +65,8 @@
 	},
 
 	"web_accessible_resources": [
+		"scripts/languages/deValues.json",
+		"scripts/languages/enValues.json",
 		"images/mic_both.png",
 		"images/mic_hear.png",
 		"images/mic_work.png",

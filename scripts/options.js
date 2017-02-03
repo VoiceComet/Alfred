@@ -4,6 +4,11 @@
  */
 var options = [
 	{
+		id : "language",
+		type : "select",
+		stdValue : "en"
+	},
+	{
 		id : "speechAssistantName",
 		type : "text",
 		stdValue : "Alfred"
@@ -100,21 +105,29 @@ var options = [
 		stdValue : "google"
 	}
 ];
+var voices = [];
 
 //add OnClickListener for deleting commands
 var deleteUserAction = function (params) {
 	var button = document.getElementById(params);
 	button.addEventListener("click", function () {
-		chrome.storage.sync.get({ownCommands: []}, function (results) {
-			for (var i = 0; i < results.ownCommands.length; i++) {
-				if (results.ownCommands[i].command === params) {
-					results.ownCommands.splice(i, 1);
+		chrome.storage.sync.get(
+			{ownCommands: []},
+            /**
+             * @param {Object} results
+             * @param {Array} results.ownCommands
+             */
+			function (results) {
+				for (var i = 0; i < results.ownCommands.length; i++) {
+					if (results.ownCommands[i].command === params) {
+						results.ownCommands.splice(i, 1);
+					}
 				}
+				chrome.storage.sync.set(results, function () {
+					document.getElementById(params).remove();
+				})
 			}
-			chrome.storage.sync.set(results, function () {
-				document.getElementById(params).remove();
-			})
-		});
+		);
 	});
 };
 
@@ -145,15 +158,22 @@ document.getElementById("addButton").addEventListener("click", function () {
 			.appendChild(deleteButton);
 		document.getElementById("userCommands").appendChild(newDiv);
 		deleteUserAction(newDiv.id);
-		chrome.storage.sync.get({ownCommands: []}, function (results) {
-			results.ownCommands.push({
-				command: command,
-				action: action
-			});
-			chrome.storage.sync.set(results, function() {
-				//do nothing after saving
-			});
-		});
+		chrome.storage.sync.get(
+			{ownCommands: []},
+            /**
+             * @param {Object} results
+             * @param {Array} results.ownCommands
+             */
+			function (results) {
+				results.ownCommands.push({
+					command: command,
+					action: action
+				});
+				chrome.storage.sync.set(results, function() {
+					//do nothing after saving
+				});
+			}
+		);
 	}
 });
 
@@ -190,27 +210,61 @@ function restore_options() {
 		stdValues[option.id] = option.stdValue;
 	});
 
+	function refreshVoices(defaultValue) {
+		chrome.storage.sync.get({language:'en'}, function(items) {
+			var optionId = 'speechAssistantVoice';
+			var lang = items["language"];
+			var defaultSetted = false;
+			var langVoices = voices.filter(function(voice) {
+				if (lang == 'de') {
+					return voice.lang == "de-DE";
+				} else {
+					return voice.lang == "en-GB" || voice.lang == "en-US";
+				}
+			});
+			var selectElement = document.getElementById(optionId);
+			selectElement.innerHTML = ""; //delete content
+			for (var i = 0; i < langVoices.length; i++) {
+				var option = document.createElement('option');
+				option.setAttribute("value", langVoices[i].voiceURI);
+				option.innerHTML = langVoices[i].name;
+				selectElement.appendChild(option);
+				//set default
+				if (langVoices[i].voiceURI == defaultValue) {
+					selectElement.value = langVoices[i].voiceURI;
+					defaultSetted = true;
+				}
+			}
+			if (!defaultSetted) {
+				if (lang == 'en') {
+					selectElement.value = stdValues[optionId]
+				} else {
+					selectElement.value = langVoices[0].voiceURI;
+				}
+				chrome.storage.sync.set({'speechAssistantVoice': selectElement.value}, function() {
+					//do nothing after saving
+				});
+			}
+		});
+	}
+
+	function optionChangeListener(changes) {
+		for (var key in changes) {
+			if (key == "language") {
+				refreshVoices(null);
+			}
+		}
+	}
+	chrome.storage.onChanged.addListener(optionChangeListener);
+
 	chrome.storage.sync.get(stdValues, function(items) {
 		options.forEach(function (option) {
 			if (option.id == 'speechAssistantVoice') {
 				//for voice loading
 				//noinspection SpellCheckingInspection
 				window.speechSynthesis.onvoiceschanged = function() {
-					var optionId = 'speechAssistantVoice';
-					var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-						return voice.lang == "en-GB" || voice.lang == "en-US";
-					});
-					var selectElement = document.getElementById(optionId);
-					selectElement.innerHTML = ""; //delete content
-					for (var i = 0; i < voices.length; i++) {
-						var option = document.createElement('option');
-						option.setAttribute("value", voices[i].voiceURI);
-						option.innerHTML = voices[i].name;
-						selectElement.appendChild(option);
-					}
-
-					//set default
-					document.getElementById(optionId).value = items[optionId];
+					voices = window.speechSynthesis.getVoices();
+					refreshVoices(items['speechAssistantVoice']);
 				};
 			} else {
 				if (option.type == "checkbox") {
@@ -222,22 +276,29 @@ function restore_options() {
 		});
 	});
 
-	chrome.storage.sync.get({ownCommands: []}, function (result) {
-		result.ownCommands.forEach(function (params) {
-			var newDiv = document.createElement("div");
-			newDiv.class = "setting";
-			newDiv.id = params.command;
-			var label = document.createElement("label");
-			label.innerHTML = params.command + " | " + params.action + " ";
-			var deleteButton = document.createElement("button");
-			deleteButton.class = "deleteButton";
-			deleteButton.innerHTML = "Delete";
-			newDiv
-				.appendChild(label)
-				.appendChild(deleteButton);
-			document.getElementById("userCommands").appendChild(newDiv);
-			deleteUserAction(newDiv.id);
-		});
-	})
+	chrome.storage.sync.get(
+		{ownCommands: []},
+        /**
+         * @param {Object} results
+         * @param {Array} results.ownCommands
+         */
+		function (results) {
+			results.ownCommands.forEach(function (params) {
+				var newDiv = document.createElement("div");
+				newDiv.class = "setting";
+				newDiv.id = params.command;
+				var label = document.createElement("label");
+				label.innerHTML = params.command + " | " + params.action + " ";
+				var deleteButton = document.createElement("button");
+				deleteButton.class = "deleteButton";
+				deleteButton.innerHTML = "Delete";
+				newDiv
+					.appendChild(label)
+					.appendChild(deleteButton);
+				document.getElementById("userCommands").appendChild(newDiv);
+				deleteUserAction(newDiv.id);
+			});
+		}
+	)
 }
 document.addEventListener('DOMContentLoaded', restore_options);

@@ -1,0 +1,643 @@
+{
+	"modules" : [
+		{
+			"module" : "addressModule",
+			"name" : "Adressen Modul"
+		},
+		{
+			"module" : "bookmarkModule",
+			"name" : "Lesezeichen Modul"
+		},
+		{
+			"module" : "imageModule",
+			"name" : "Bilder Modul"
+		},
+		{
+			"module" : "linkModule",
+			"name" : "Link Modul"
+		},
+		{
+			"module" : "mapModule",
+			"name" : "Karten Modul"
+		},
+		{
+			"module" : "ownCommandModule",
+			"name" : "Eigene Kommandos Modul"
+		},
+		{
+			"module" : "scrollModule",
+			"name" : "Scroll Modul"
+		},
+		{
+			"module" : "searchEngineModule",
+			"name" : "Suchmaschinen Modul"
+		},
+		{
+			"module" : "searchModule",
+			"name" : "Suche Modul"
+		},
+		{
+			"module" : "tabHandleModule",
+			"name" : "Tab Modul"
+		},
+		{
+			"module" : "videoModule",
+			"name" : "Video Modul"
+		},
+		{
+			"module" : "weatherModule",
+			"name" : "Wetter Modul"
+		},
+		{
+			"module" : "zoomModule",
+			"name" : "Zoom Modul"
+		}
+	],
+
+	"states" : [
+		{
+			"state" : "muteState",
+			"name" : "Stumm Zustand"
+		},
+		{
+			"state" : "chooseLanguageState",
+			"name" : "Sprachwahl Zustand"
+		},
+		{
+			"state" : "sayParameterState",
+			"name" : "Sage Parameter Zustand"
+		},
+		{
+			"state" : "addressState",
+			"name" : "Adressen Zustand"
+		},
+		{
+			"state" : "folderState",
+			"name" : "Ordner Zustand"
+		},
+		{
+			"state" : "bookmarkListenState",
+			"name" : "Lesezeichen Listen Zustand"
+		},
+		{
+			"state" : "folderListenState",
+			"name" : "Ordner Listen Zustand"
+		},
+		{
+			"state" : "galleryState",
+			"name" : "Galerie Zustand"
+		},
+		{
+			"state" : "slideState",
+			"name" : "Diashow Zustand"
+		},
+		{
+			"state" : "linkState",
+			"name" : "Link Zustand"
+		},
+		{
+			"state" : "mapState",
+			"name" : "Karten Zustand"
+		},
+		{
+			"state" : "searchEngineState",
+			"name" : "Suchmaschinen Zustand"
+		},
+		{
+			"state" : "searchState",
+			"name" : "Suche Zustand"
+		},
+		{
+			"state" : "videoState",
+			"name" : "Video Zustand"
+		},
+		{
+			"state" : "zoomInState",
+			"name" : "Zoom Zustand"
+		}
+	],
+
+	"actions" : [
+		{
+			"action" : "muteEnable",
+			"name" : "Stumm einschalten",
+			"commands" : ["stumm", "hör(:?.)? weg", "geh(:?.)? weg"]
+		},
+		{
+			"action" : "muteDisable",
+			"name" : "Stumm ausschalten",
+			"commands" : ["Hallo (.+)", "(.+) hör zu"]
+		},
+		{
+			"action" : "cancel",
+			"name" : "Abbrechen",
+			"commands" : ["abbrechen"]
+		},
+		{
+			"action" : "next",
+			"name" : "Vor",
+			"commands" : ["vor"]
+		},
+		{
+			"action" : "previous",
+			"name" : "zurück",
+			"commands" : ["zurück"]
+		},
+		{
+			"action" : "scrollUp",
+			"name" : "Hochscrollen",
+			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(:?her|hin)?auf\\b"]
+		},
+		{
+			"action" : "scrollDown",
+			"name" : "Runterscrollen",
+			"commands" : ["(?:scroll )?\\b(:?her|hin)?runter\\b", "runterscrollen"]
+		},
+		{
+			"action" : "enlargePanel",
+			"name" : "Panel vergrößern",
+			"commands" : ["vergrößern", "größer", "breiter"]
+		},
+		{
+			"action" : "reducePanel",
+			"name" : "Panel verkleinern",
+			"commands" : ["verkleinern", "kleiner", "schmaler"]
+		},
+		{
+			"action" : "chooseLanguage",
+			"name" : "Sprachwahl",
+			"commands" : ["(englisch)", "(deutsch)", "(spanisch)", "(französisch)", "(türkisch)", "(russisch)"]
+		},
+		{
+			"action" : "sayParameter",
+			"name" : "Sage Parameter",
+			"commands" : []
+		},
+
+
+		{
+			"action" : "showAddresses",
+			"name" : "Zeige Adressen",
+			"commands" : ["zeige (?:alle )?Adressen"]
+		},
+		{
+			"action" : "certainAddress",
+			"name" : "Bestimmte Adresse",
+			"commands" : ["geh zur Addresse ([\\d]+)"]
+		},
+		{
+			"action" : "showAddressOnMap",
+			"name" : "Zeige Adresse auf Karte",
+			"commands" : ["zeige (?:die )?(?:Addresse )?auf (:?der )?Karte"]
+		},
+
+
+		{
+			"action" : "addBookmark",
+			"name" : "Lesezeichen hinzufügen",
+			"commands" : ["neues Lesezeichen hinzufügen"]
+		},
+		{
+			"action" : "addBookmarkToFolder",
+			"name" : "Lesezeichen in Ordner hinzufügen",
+			"commands" : ["neues Lesezeichen hinzufügen in (.+)"]
+		},
+		{
+			"action" : "sayTitleBookmark",
+			"name" : "Titel des Lesezeichens",
+			"commands" : []
+		},
+		{
+			"action" : "openBookmark",
+			"name" : "Öffne Lesezeichen",
+			"commands" : ["öffne Lesezeichen (.+)"]
+		},
+		{
+			"action" : "removeBookmark",
+			"name" : "Lesezeichen löschen",
+			"commands" : ["lösche Lesezeichen (.+)"]
+		},
+		{
+			"action" : "addFolder",
+			"name" : "Ordner hinzufügen",
+			"commands" : ["erstelle (?:neuen )?Ordner", "füg(:?e)? (?:neuen )?Ordner hinzu", "(?:neuen )?Ordner hinzufügen"]
+		},
+		{
+			"action" : "addFolderInFolder",
+			"name" : "Ordner in Ordner hinzufügen",
+			"commands" : ["erstelle (?:neuen )?Ordner in (.+)", "füg(:?e)? (?:neuen )?Ordner in (.+) hinzu", "(?:neuen )?Ordner in (.+) hinzufügen"]
+		},
+		{
+			"action" : "sayTitleFolder",
+			"name" : "Titel des Ordners",
+			"commands" : []
+		},
+		{
+			"action" : "openFolder",
+			"name" : "Ordner öffnen",
+			"commands" : ["zeige Inhalt von (.+)"]
+		},
+		{
+			"action" : "removeFolder",
+			"name" : "Ordner löschen",
+			"commands" : ["Ordner (.+) löschen"]
+		},
+
+
+		{
+			"action" : "showImages",
+			"name" : "Bilder anzeigen",
+			"commands" : ["zeige Bilder", "Bilder anzeigen"]
+		},
+		{
+			"action" : "certainGalleryPage",
+			"name" : "Bestimme Galerieseite",
+			"commands" : ["gehe zu Seite (\\d+)"]
+		},
+		{
+			"action" : "showOneImage",
+			"name" : "Bild anzeigen",
+			"commands" : ["zeige Bild ([0-9])"]
+		},
+		{
+			"action" : "certainImage",
+			"name" : "Bestimmtes Bild",
+			"commands" : ["zeige Bild ([0-9]+)"]
+		},
+		{
+			"action" : "clickImage",
+			"name" : "Bild anklicken",
+			"commands" : ["öffne Link"]
+		},
+		{
+			"action" : "imageOnPage",
+			"name" : "Bild auf der Seite",
+			"commands" : ["Zeige Bild auf (:?der )?Seite"]
+		},
+		{
+			"action" : "backToSlides",
+			"name" : "Zurück zur Diashow",
+			"commands" : ["zurück zur Diashow"]
+		},
+		{
+			"action" : "switchToGallery",
+			"name" : "Zur Galerie wechseln",
+			"commands" : ["wechsle zur Galerie"]
+		},
+
+
+		{
+			"action" : "showLinks",
+			"name" : "Links anzeigen",
+			"commands" : ["zeige (?:alle )?Links"]
+		},
+		{
+			"action" : "certainLinkByNumber",
+			"name" : "Bestimmte Linknummer",
+			"commands" : ["gehe zu Nummer ([\\d]+)"]
+		},
+		{
+			"action" : "certainLinkByName",
+			"name" : "Bestimmter Linkname",
+			"commands" : ["gehe zu Link (.*)"]
+		},
+		{
+			"action" : "searchLanguage",
+			"name" : "Link Sprachsuche",
+			"commands" : ["(:?wechsle )?Link(:? )?Sprache"]
+		},
+		{
+			"action" : "openLink",
+			"name" : "Link öffnen",
+			"commands" : ["öffnen"]
+		},
+		{
+			"action" : "openLinkNewTab",
+			"name" : "Link im neuen Tab öffnen",
+			"commands" : ["öffne (?:link )?in neuem Tab", "(?:link )?in neuem Tab öffnen"]
+		},
+
+
+		{
+			"action" : "mapSearch",
+			"name" : "Kartensuche",
+			"commands" : ["gehe zu (.+)", "suche (.+)"]
+		},
+		{
+			"action" : "mapLanguageSearch",
+			"name" : "Kartensuche in anderer Sprache",
+			"commands" : ["sprachen(:? )?suche"]
+		},
+		{
+			"action" : "mapSearchRoute",
+			"name" : "Routensuche",
+			"commands" : ["von (.+) (:?nach|zu) (.+)"]
+		},
+		{
+			"action" : "mapLanguageSearchRoute",
+			"name" : "Routensuche in anderer Sprache",
+			"commands" : ["sprache(:?n)? route"]
+		},
+		{
+			"action" : "mapZoomToMarker",
+			"name" : "Map zoom to marker",
+			"commands" : ["zoom to (.)$"]
+		},
+		{
+			"action" : "mapCenterMarker",
+			"name" : "Map center marker",
+			"commands" : ["^(.)$", "center (.)$", "centre (.)$"]
+		},
+		{
+			"action" : "mapZoomIn",
+			"name" : "Map zoom in",
+			"commands" : ["(?:zoom )?\\bin\\b"]
+		},
+		{
+			"action" : "mapZoomOut",
+			"name" : "Map zoom out",
+			"commands" : ["(?:zoom )?\\bout\\b"]
+		},
+		{
+			"action" : "mapScrollUp",
+			"name" : "Map scroll up",
+			"commands" : ["(?:scroll )?\\bup\\b"]
+		},
+		{
+			"action" : "mapScrollDown",
+			"name" : "Map scroll down",
+			"commands" : ["(?:scroll )?\\bdown\\b"]
+		},
+		{
+			"action" : "mapScrollLeft",
+			"name" : "Map scroll left",
+			"commands" : ["(?:scroll )?\\bleft\\b"]
+		},
+		{
+			"action" : "mapScrollRight",
+			"name" : "Map scroll right",
+			"commands" : ["(?:scroll )?\\bright\\b"]
+		},
+		{
+			"action" : "openMap",
+			"name" : "Show map",
+			"commands" : ["show map"]
+		},
+
+
+		{
+			"action" : "OwnReloadPage",
+			"name" : "Reload Page",
+			"commands" : []
+		},
+		{
+			"action" : "OwnGoBack",
+			"name" : "Go back",
+			"commands" : []
+		},
+		{
+			"action" : "OwnGoForward",
+			"name" : "Go forward",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToTop",
+			"name" : "Scroll to top",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToMiddle",
+			"name" : "Scroll to middle",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToBottom",
+			"name" : "Scroll to bottom",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToBottom",
+			"name" : "Scroll to bottom",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollUp",
+			"name" : "Scroll up",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollDown",
+			"name" : "Scroll down",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollLeft",
+			"name" : "Scroll left",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollRight",
+			"name" : "Scroll right",
+			"commands" : []
+		},
+
+
+		{
+			"action" : "scrollToTop",
+			"name" : "Scroll to top",
+			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\btop\\b"]
+		},
+		{
+			"action" : "scrollToMiddle",
+			"name" : "Scroll to middle",
+			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\bmiddle\\b"]
+		},
+		{
+			"action" : "scrollToBottom",
+			"name" : "Scroll to bottom",
+			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\bbottom\\b"]
+		},
+		{
+			"action" : "scrollLeft",
+			"name" : "Scroll left",
+			"commands" : ["(?:scroll )?\\bleft\\b"]
+		},
+		{
+			"action" : "scrollRight",
+			"name" : "Scroll right",
+			"commands" : ["(?:scroll )?\\bright\\b"]
+		},
+
+
+		{
+			"action" : "webSearch",
+			"name" : "Web search",
+			"commands" : ["web search (.+)", "websearch (.+)", "google (.+)", "bing (.+)"]
+		},
+		{
+			"action" : "languageWebSearch",
+			"name" : "Scroll right",
+			"commands" : ["language web search", "language websearch", "language google", "language bing"]
+		},
+
+
+		{
+			"action" : "search",
+			"name" : "Search",
+			"commands" : ["search (:?for )?(.+)"]
+		},
+		{
+			"action" : "searchLanguage",
+			"name" : "Search in other language",
+			"commands" : ["language search", "change search language"]
+		},
+		{
+			"action" : "certainMatch",
+			"name" : "Go to certain match",
+			"commands" : ["go to match (\\d+)"]
+		},
+
+
+		{
+			"action" : "newTab",
+			"name" : "New tab",
+			"commands" : ["new tab"]
+		},
+		{
+			"action" : "openNewPage",
+			"name" : "Open new page",
+			"commands" : ["open page (.+)"]
+		},
+		{
+			"action" : "close",
+			"name" : "Close",
+			"commands" : ["close (tab|window)"]
+		},
+		{
+			"action" : "reload",
+			"name" : "Reload",
+			"commands" : ["reload"]
+		},
+		{
+			"action" : "goBackOnePage",
+			"name" : "Go back one page",
+			"commands" : ["go back"]
+		},
+		{
+			"action" : "goForwardOnePage",
+			"name" : "Go forward one page",
+			"commands" : ["go forward"]
+		},
+
+
+		{
+			"action" : "watchVideos",
+			"name" : "Watch videos",
+			"commands" : ["watch videos"]
+		},
+		{
+			"action" : "certainVideo",
+			"name" : "Watch certain video",
+			"commands" : ["watch video (\\d+)"]
+		},
+		{
+			"action" : "playVideo",
+			"name" : "Play video",
+			"commands" : ["play video"]
+		},
+		{
+			"action" : "stopVideo",
+			"name" : "Stop video",
+			"commands" : ["stop video"]
+		},
+		{
+			"action" : "clickVideo",
+			"name" : "Click video",
+			"commands" : ["click (:?on )?video"]
+		},
+		{
+			"action" : "muteVideo",
+			"name" : "Mute video",
+			"commands" : ["mute video"]
+		},
+		{
+			"action" : "unmuteVideo",
+			"name" : "Unmute video",
+			"commands" : ["unmute video"]
+		},
+		{
+			"action" : "jumpForwardVideo",
+			"name" : "Jump forward",
+			"commands" : ["jump forward(:?s)?"]
+		},
+		{
+			"action" : "jumpBackwardsVideo",
+			"name" : "Jump backward",
+			"commands" : ["jump backward(:?s)?"]
+		},
+		{
+			"action" : "jumpCertainVideo",
+			"name" : "Certain time",
+			"commands" : ["time ([0-9][0-9]:[0-9][0-9])", "time ([0-9][0-9] [0-9][0-9])"]
+		},
+		{
+			"action" : "increaseVolume",
+			"name" : "Increase volume",
+			"commands" : ["louder", "increase volume"]
+		},
+		{
+			"action" : "decreaseVolume",
+			"name" : "Decrease volume",
+			"commands" : ["quieter", "decrease volume"]
+		},
+		{
+			"action" : "setVolumeVideo",
+			"name" : "Set volume",
+			"commands" : ["(:?set )?volume (:?to )?([0-9]+)"]
+		},
+
+
+		{
+			"action" : "showWeather",
+			"name" : "Show weather",
+			"commands" : ["(?:show )?weather (?:of )?(.+)"]
+		},
+
+
+		{
+			"action" : "startZooming",
+			"name" : "Zoom in",
+			"commands" : ["zoom in"]
+		},
+		{
+			"action" : "first",
+			"name" : "Sector 1",
+			"commands" : ["1", "first"]
+		},
+		{
+			"action" : "second",
+			"name" : "Sector 2",
+			"commands" : ["2", "second"]
+		},
+		{
+			"action" : "third",
+			"name" : "Sector 3",
+			"commands" : ["3", "third"]
+		},
+		{
+			"action" : "fourth",
+			"name" : "Sector 4",
+			"commands" : ["4", "fourth"]
+		},
+		{
+			"action" : "zoomOut",
+			"name" : "Zoom out",
+			"commands" : ["zoom out"]
+		},
+		{
+			"action" : "reset",
+			"name" : "Reset zoom",
+			"commands" : ["reset zoom"]
+		}
+	]
+}

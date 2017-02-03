@@ -21,7 +21,7 @@ function MultilingualAction(name, relatedAction, settings) {
 	 */
 	function generateStatesAndActions(parameterNumber, spokenParameter) {
 		//create choose language state
-		var chooseLanguageState = new State("Choose Language");
+		var chooseLanguageState = new State("chooseLanguageState");
 		chooseLanguageState.hideDialog = function () {
 			hideDialog(this.messageId, this.dialogId);
 		};
@@ -34,32 +34,25 @@ function MultilingualAction(name, relatedAction, settings) {
 			this.accessibleWithCancelAction = false;
 
 			//create choose language action
-			var chooseLanguageAction = new Action("Choose Language", 1, null);
+			var chooseLanguageAction = new Action("chooseLanguage", 1, null);
 			chooseLanguageAction.chooseLanguageState = this;
-			chooseLanguageAction.addCommands([
-				new Command("(english)", 1),
-				new Command("(german)", 1),
-				new Command("(spanish)", 1),
-				new Command("(french)", 1),
-				new Command("(turkish)", 1),
-				new Command("(russian)", 1)
-			]);
 			chooseLanguageAction.act = function(arguments) {
 				this.chooseLanguageState.hideDialog();
 
 				var lang;
 				switch(arguments[0].toLowerCase()) {
-					case "english": lang = "en"; break;
-					case "german": lang = "de"; break;
-					case "spanish": lang = "es"; break;
-					case "french": lang = "fr"; break;
-					case "turkish": lang = "tr"; break;
-					case "russian": lang = "ru"; break;
+					case translate("english"): lang = "en"; break;
+					case translate("german"): lang = "de"; break;
+					case translate("spanish"): lang = "es"; break;
+					case translate("french"): lang = "fr"; break;
+					case translate("turkish"): lang = "tr"; break;
+					case translate("russian"): lang = "ru"; break;
 					default: lang = "en"
 				}
 				//create following state and action
-				var sayParameterState = new State("Say Parameter");
+				var sayParameterState = new State("sayParameterState");
 				sayParameterState.lang = lang;
+				sayParameterState.refreshLanguage = false;
 				sayParameterState.hideDialog = function () {
 					hideMessage(this.messageId);
 				};
@@ -75,7 +68,7 @@ function MultilingualAction(name, relatedAction, settings) {
 				sayParameterState.runAtEntrance = function() {
 					var sayParamState = this;
 
-					var paramText = "say your parameter in chosen language";
+					var paramText = translate("sayParameterInLanguage");
 					if (settings.length >= 1) {
 						var pos = parameterNumber - 1;
 						if (settings[pos].hasOwnProperty("notify") && settings[pos].notify != "") {
@@ -91,7 +84,8 @@ function MultilingualAction(name, relatedAction, settings) {
 					});
 				};
 
-				var sayParameterAction = new Action("Say Parameter", 1, null);
+				var sayParameterAction = new Action("sayParameter", 1, null);
+				sayParameterAction.loadLanguageCommands = false;
 				sayParameterAction.addCommand(new Command("(.+)", 1));
 				sayParameterAction.sayParameterState = sayParameterState;
 				sayParameterAction.act = function(args) {
@@ -119,14 +113,14 @@ function MultilingualAction(name, relatedAction, settings) {
 			var languageState = this;
 			//show dialog with languages
 			var dialogActions = [
-				{command: "english", description: "english language"},
-				{command: "german", description: "deutsche Sprache"},
-				{command: "spanish", description: "idioma español"},
-				{command: "french", description: "langue française"},
-				{command: "turkish", description: "türk dili"},
-				{command: "russian", description: "русский язык"}
+				{command: translate("english"), description: "english language"},
+				{command: translate("german"), description: "deutsche Sprache"},
+				{command: translate("spanish"), description: "idioma español"},
+				{command: translate("french"), description: "langue française"},
+				{command: translate("turkish"), description: "türk dili"},
+				{command: translate("russian"), description: "русский язык"}
 			];
-			showDialog("Choose a Language", "", "Say a language:", dialogActions, function (ids) {
+			showDialog(translate("chooseLanguage"), "", translate("sayLanguage") + ":", dialogActions, function (ids) {
 				languageState.setMessageId(ids.messageId, ids.dialogId);
 			});
 			//close dialog at cancel

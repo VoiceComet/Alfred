@@ -24,7 +24,11 @@ addContentScriptMethod(
 		//add map div and needed javascript to front page
 		jQuery.get(chrome.extension.getURL("scripts/frontendMessaging.js"), function(frontendMessagingContent) {
 			jQuery.get(chrome.extension.getURL("scripts/modules/mapModule.html"), function(mapModuleContent) {
-				panelParams.html = '<script type="text/javascript">\n' + frontendMessagingContent + '\n</script>\n';
+				//noinspection JSUnusedLocalSymbols
+				panelParams.html = "<script type=\"text/javascript\">\n";
+				panelParams.html += "var languageJson = " + JSON.stringify(languageJson) + ";\n";
+				panelParams.html += frontendMessagingContent;
+				panelParams.html += "\n</script>\n";
 				panelParams.html += mapModuleContent;
 				showPanel(panelParams);
 			});
@@ -98,7 +102,7 @@ addContentScriptMethod(
 				}
 				showMessage({title:alfredMapMarkers[letterPos].name, content:alfredMapMarkers[letterPos].address});
 			} else {
-				showMessage({content:"Letter " + letter + " does not exist.", centered: true});
+				showMessage({content:translate("LetterXDoesNotExist").format([letter]), centered: true});
 			}
 		}, params);
 	})
@@ -113,7 +117,7 @@ addContentScriptMethod(
 				alfredMap.panTo(alfredMapMarkers[letterPos].marker.getPosition());
 				showMessage({title:alfredMapMarkers[letterPos].name, content:alfredMapMarkers[letterPos].address});
 			} else {
-				showMessage({content:"Letter " + letter + " does not exist.", centered: true});
+				showMessage({content:translate("LetterXDoesNotExist").format([letter]), centered: true});
 			}
 		}, params);
 	})
@@ -125,7 +129,7 @@ addContentScriptMethod(
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() + 1);
 			if (oldZoom >= alfredMap.getZoom()) {
-				showMessage({content:"Zooming is not possible.", centered: true});
+				showMessage({content:translate("ZoomingIsNotPossible"), centered: true});
 			}
 		});
 	})
@@ -137,7 +141,7 @@ addContentScriptMethod(
 			var oldZoom = alfredMap.getZoom();
 			alfredMap.setZoom(alfredMap.getZoom() - 1);
 			if (oldZoom <= alfredMap.getZoom()) {
-				showMessage({content:"Zooming is not possible.", centered: true});
+				showMessage({content:translate("ZoomingIsNotPossible"), centered: true});
 			}
 		});
 	})

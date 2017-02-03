@@ -43,27 +43,60 @@ chrome.storage.sync.get({
 	//noinspection JSUnresolvedVariable
 	butlerName = items.speechAssistantName;
 });
+
+var moduleLanguageJson = {};
+/**
+ * load actual module language file
+ */
+function loadModuleLanguageJson() {
+	chrome.storage.sync.get({
+		language: 'en'
+	}, function(items) {
+		$.getJSON(chrome.extension.getURL("scripts/languages/" + items["language"] + "Modules.json"), function(json) {
+			moduleLanguageJson = json;
+		});
+	});
+}
+loadModuleLanguageJson();
+
+var languageJson = {};
+/**
+ * load actual language file
+ */
+function loadLanguageJson() {
+	chrome.storage.sync.get({
+		language: 'en'
+	}, function(items) {
+		$.getJSON(chrome.extension.getURL("scripts/languages/" + items["language"] + "Values.json"), function(json) {
+			languageJson = json;
+		});
+	});
+}
+loadLanguageJson();
+
+
 /**
  * function that is called after option changing
  * @param changes
  */
 function optionChangeListener(changes) {
-	for (var key in changes)  {
+	for (var key in changes) {
 		if (changes.hasOwnProperty(key)) {
 			if (key == "speechAssistantName") {
 				//refresh butler name after option change
 				butlerName = changes[key].newValue;
-				return;
 			} else if (key == "speechAssistantVoice") {
 				//say something with new voice
-				say("This is my new voice");
-				return;
+				say(translate("thisIsMyNewVoice"));
+			} else if (key == "language") {
+				loadModuleLanguageJson();
+				loadLanguageJson();
 			}
 			//refresh active modules
 			for (var i = 0; i < modules.length; i++) {
 				if (key == modules[i].settingName) {
 					modules[i].active = changes[key].newValue;
-					return;
+					break;
 				}
 			}
 		}
@@ -148,10 +181,10 @@ function changeActiveState(newState, cancelStack) {
 				//push to stack only if the last one is not the same state
 				var lastPos = tabCancelStacks[activeTab].length - 1;
 				var lastState = tabCancelStacks[activeTab][lastPos];
-				if (lastState.name == newState.name) {
+				if (lastState.internalName == newState.internalName) {
 					//come to the last state of stack because of a circle, remove
 					tabCancelStacks[activeTab].splice(lastPos, 1);
-				} else if (newState.name != activeState.name) {
+				} else if (newState.internalName != activeState.internalName) {
 					//otherwise if it is different to active state, add to stack
 					if (activeState.accessibleWithCancelAction)
 						tabCancelStacks[activeTab].push(activeState);

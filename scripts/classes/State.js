@@ -1,10 +1,10 @@
 /**
  * State
- * @param {String} name
+ * @param {String} internalName
  * @constructor
  */
-function State (name) {
-    this.name = name;
+function State (internalName) {
+    this.internalName = internalName;
 	this.oldState = globalCommonState;
     this.actions = [];
 	/** @private */
@@ -19,6 +19,7 @@ function State (name) {
 	this.continuous = false;
 	this.interimResults = false;
 	this.maxAlternatives = 20;
+	this.refreshLanguage = true;
 	this.lang = 'en';
 	
 	//standard actions
@@ -28,6 +29,14 @@ function State (name) {
 	this.muteState = null;
 	this.ableToCancel = true;
 	this.cancelAction = null;
+
+	/**
+	 * get translated name of state
+	 * @return {String} name
+	 */
+	this.getName = function() {
+		return getStateTranslation(this.internalName)
+	};
 
 	/**
 	 * add an action to this state
@@ -43,7 +52,7 @@ function State (name) {
 	this.generateStandardActions = function() {
 		//mute
 		if (this.muteState == null) {
-			this.muteState = new State("MuteState of " + this.name);
+			this.muteState = new State("muteState");
 			var that = this;
 			this.muteState.init = function() {
 				//mute state after creation
@@ -55,24 +64,20 @@ function State (name) {
 				this.ableToCancel = false;
 				//noinspection JSPotentiallyInvalidUsageOfThis
 				this.accessibleWithCancelAction = false;
-				notify('muted, say "Hello ' + butlerName + '" or "' + butlerName + ' listen"');
+				var commands = that.muteActionOut.getCommands();
+				notify(translate("mutedSayXOrY").format([commands[0].expression, commands[1].expression]).replace(new RegExp("\\(.\\+\\)", 'g'), butlerName));
 			};
-			this.muteActionIn = new Action("Mute Action", 0, this.muteState);
-			this.muteActionIn.addCommand(new Command("mute", 0));
-			this.muteActionIn.addCommand(new Command("don't listen", 0));
-			this.muteActionIn.addCommand(new Command("go away", 0));
+			this.muteActionIn = new Action("muteEnable", 0, this.muteState);
 			this.muteActionIn.act = function() {
 				//mute state
 				that.muted = true;
 				that.updateMicrophoneIcon();
 			};
-			this.muteActionOut = new Action("Mute Action", 1, this);
-			this.muteActionOut.addCommand(new Command("hello (.+)", 1));
-			this.muteActionOut.addCommand(new Command("(.+) listen", 1));
+			this.muteActionOut = new Action("muteDisable", 1, this);
 			this.muteActionOut.act = function(parameter) {
 				if (parameter[0] == butlerName) {
-					notify("Welcome back");
-					say("Welcome back");
+					notify(translate("welcomeBack"));
+					say(translate("welcomeBack"));
 					that.muteState.muted = false;
 					that.muted = false;
 					that.updateMicrophoneIcon();
@@ -88,8 +93,7 @@ function State (name) {
 		
 		//abort
 		if (this.cancelAction == null) {
-			this.cancelAction = new Action("Cancel Action", 0, null);
-			this.cancelAction.addCommand(new Command("cancel", 0));
+			this.cancelAction = new Action("cancel", 0, null);
 			//can be override
 			this.cancelAction.cancelAct = function() {};
 			this.cancelAction.act = function() {
@@ -135,6 +139,25 @@ function State (name) {
     this.run = function(oldState) {
 		this.oldState = oldState;
 		if (!this.initialized) {
+			if (this.refreshLanguage) {
+				var that = this;
+				function refreshLang() {
+					chrome.storage.sync.get({
+						language: 'en'
+					}, function(items) {
+						that.lang = items["language"];
+					});
+				}
+				refreshLang();
+				function onChangedListener (changes) {
+					for (var key in changes) {
+						if (key == "language") {
+							refreshLang();
+						}
+					}
+				}
+				chrome.storage.onChanged.addListener(onChangedListener);
+			}
 			this.generateStandardActions();
 			this.init();
 			this.activateStandardActions();
@@ -252,7 +275,7 @@ function State (name) {
 		 * @param {Number} [hit=0]
 		 */
 		function runHitAction(actionHit, hit) {
-			hit = (typeof hit !== 'undefined') ? hit : 0; //set default value to 3000
+			hit = (typeof hit !== 'undefined') ? hit : 0; //set default value to 0
 			var arguments = [];
 			for (var i = 1;  i <= actionHit.action.parameterCount; i++) {
 				arguments[i-1] = actionHit.hits[hit].execResult[i].trim();
@@ -273,12 +296,13 @@ function State (name) {
 			}
 			var actionAdded = false;
 			//all commands of action
-			for (j = 0; j < this.actions[i].commands.length; j++) {
+			var actionCommands = this.actions[i].getCommands();
+			for (j = 0; j < actionCommands.length; j++) {
 				//all alternatives
 				for (var k = 0; k < alternatives.length; k++) {
 					alternatives[k] = alternatives[k].trim(); //delete spaces at string beginning and ending
 					//test the regular expression
-					var execResult = this.actions[i].commands[j].getRegExp().exec(alternatives[k]);
+					var execResult = actionCommands[j].getRegExp().exec(alternatives[k]);
 					if (execResult != null) {
 						//result found
 						if (!actionAdded) {
@@ -423,7 +447,7 @@ function State (name) {
 					for (j = 0; j < actionHits[i].hits.length; j++) {
 						var dialogAction = {
 							command: dialogActionNumber,
-							description: actionHits[i].action.name
+							description: actionHits[i].action.getName()
 						};
 						for (k = 0; k < actionHits[i].action.parameterCount; k++) {
 							var before = (k == 0) ? ": " : ", ";
@@ -436,6 +460,7 @@ function State (name) {
 						action.actionHit = actionHits[i];
 						action.hit = j;
 						action.dialogState = dialogState;
+						action.loadLanguageCommands = false;
 						action.addCommand(new Command(dialogActionNumber+'', 0));
 						//noinspection JSUnusedLocalSymbols
 						action.act = function (arguments) {
@@ -453,16 +478,16 @@ function State (name) {
 
 				this.changeActiveState(dialogState);
 
-				showDialog("&nbsp;", "What can I do for you?", "Say a number:", dialogActions, function(ids) {
+				showDialog("&nbsp;", translate("whatCanIDoForYou"), translate("sayANumber") + ":", dialogActions, function(ids) {
 					dialogState.setMessageId(ids.messageId, ids.dialogId);
 				});
-				say('What can I do for you?');
+				say(translate("whatCanIDoForYou"));
 			}
 		} else {
 			//not found
 			if (!this.muted) {
-				notify('I don\'t know what you mean with "' + alternatives[0] + '".');
-				say('Please, repeat your wish');
+				notify(translate("IDontKnowWhatYouMeanWith").format([alternatives[0]]));
+				say(translate("PleaseRepeatYourWish"));
 			}
 		}
 	};
@@ -524,9 +549,8 @@ function State (name) {
 
 		//noinspection SpellCheckingInspection
 		this.recognition.onnomatch = function(event) {
-			//alert("onnomatch");
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
-				alert("no match: " + event.results[i][0].transcript);
+				console.log("no match: " + event.results[i][0].transcript);
 			}
 		};
 
@@ -544,7 +568,7 @@ function State (name) {
 			} else if (event.error == "network") {
 				that.recognition.networkError = true;
 				console.log(event.error + ": " + event.message);
-				notify("Network Error. Please check your network connection.", 3000);
+				notify(translate("networkError"), 3000);
 			} else {
 				if (event.error != "no-speech") {
 					console.log(event.error + ": " + event.message);

@@ -9,7 +9,7 @@ addModule(new Module("zoomModule", function() {
     zoomInState.init = function () {
         this.cancelAction.cancelAct = function() {
             callContentScriptMethod("cancelZoomState", {});
-            say("I stopped zooming");
+            say(translate("stoppedZooming"));
         };
     };
 
@@ -59,8 +59,8 @@ addModule(new Module("zoomModule", function() {
             } else if (zoomFactor >= 5) {
                 newZoomFactor = zoomFactor - (zoomFactor / 5) * i * 0.04;
             } else {
-                notify("Zooming out isn't possible");
-                say("I cannot zoom out");
+                notify(translate("notifyZoomingImpossible"));
+                say(translate("sayZoomingImpossible"));
             }
         }
         chrome.tabs.setZoom(newZoomFactor, function () {
@@ -80,8 +80,8 @@ addModule(new Module("zoomModule", function() {
         chrome.tabs.getZoom(function (zoomFactor) {
             // check if max zoom is reached
             if(zoomFactor >= 4.9) {
-                notify("reached max zoom");
-                say("The maximal level of zooming is reached");
+                notify(translate("notifyReachedMaxZoom"));
+                say(translate("sayReachedMaxZoom"));
             } else{
                 setTimeout(newZoom("+", zoomFactor, 1), 1000);
                 callContentScriptMethod(ContentScriptMethod, {});
@@ -110,8 +110,8 @@ addModule(new Module("zoomModule", function() {
                   i++;
               }
           } else {
-              notify("Zoom is already reseted");
-              say("The zoom is already reseted");
+              notify(translate("notifyAlreadyReseted"));
+              say(translate("sayAlreadyReseted"));
           }
       }, 20)
     };
@@ -120,8 +120,7 @@ addModule(new Module("zoomModule", function() {
      * start zooming in
      * @type {Action}
      */
-    var startZooming = new Action("start zooming", 0, zoomInState);
-    startZooming.addCommand(new Command("zoom in", 0));
+    var startZooming = new Action("startZooming", 0, zoomInState);
     startZooming.act = function() {
         callContentScriptMethod("startZooming", {});
     };
@@ -133,7 +132,6 @@ addModule(new Module("zoomModule", function() {
      * @type {Action}
      */
     var first = new Action("first", 0, globalCommonState);
-    first.addCommand(new Command("1", 0));
     first.act = function () {
         callContentScriptMethod("cancelZoomState", {});
         zoomIn("zoomFirstSector");
@@ -145,7 +143,6 @@ addModule(new Module("zoomModule", function() {
      * @type {Action}
      */
     var second = new Action("second", 0, globalCommonState);
-    second.addCommand(new Command("2", 0));
     second.act = function() {
         callContentScriptMethod("cancelZoomState", {});
         zoomIn("zoomSecondSector")
@@ -157,7 +154,6 @@ addModule(new Module("zoomModule", function() {
      * @type {Action}
      */
     var third = new Action("third", 0, globalCommonState);
-    third.addCommand(new Command("3", 0));
     third.act = function() {
         callContentScriptMethod("cancelZoomState", {});
         zoomIn("zoomThirdSector")
@@ -169,7 +165,6 @@ addModule(new Module("zoomModule", function() {
      * @type {Action}
      */
     var fourth = new Action("fourth", 0, globalCommonState);
-    fourth.addCommand(new Command("4", 0));
     fourth.act = function() {
         callContentScriptMethod("cancelZoomState", {});
         zoomIn("zoomFourthSector")
@@ -181,7 +176,6 @@ addModule(new Module("zoomModule", function() {
      * @type {Action}
      */
     var zoomOut = new Action("zoomOut", 0, globalCommonState);
-    zoomOut.addCommand(new Command("zoom out", 0));
     zoomOut.act = function() {
       chrome.tabs.getZoom(function (zoomFactor) {
           newZoom("-", zoomFactor, 1);
@@ -194,7 +188,6 @@ addModule(new Module("zoomModule", function() {
      * @type {Action}
      */
     var reset = new Action("reset", 0, globalCommonState);
-    reset.addCommand(new Command("reset zoom", 0));
     reset.act = function () {
         chrome.tabs.getZoom(function (zoomFactor) {
             resetZoom(zoomFactor, 1);

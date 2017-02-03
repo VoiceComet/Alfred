@@ -84,6 +84,7 @@ function say(phrase, sayTitle, callback) {
 	sayTitle = (sayTitle === undefined) ? true : sayTitle;
 
 	chrome.storage.sync.get({
+		language: 'en',
 		speechAssistantSpeechOutput: true,
 		speechAssistantVoice: 'Google UK English Male',
 		speechAssistantUserTitle: 'Master',
@@ -101,7 +102,7 @@ function say(phrase, sayTitle, callback) {
 		}
 
 		var msg = new SpeechSynthesisUtterance();
-		msg.lang = "en-US";
+		msg.lang = items["language"];
 
 		msg.text = phrase;
 		//noinspection JSUnresolvedVariable
@@ -135,3 +136,108 @@ function say(phrase, sayTitle, callback) {
 	});
 }
 speechSynthesis.speak(new SpeechSynthesisUtterance("")); //for async load of the voices at beginning
+
+/**
+ * find object in class group with given key
+ * @param className - classname of a single class (module, state, action)
+ * @param key - searched key
+ * @return {Object}
+ */
+function getTranslationObject(className, key) {
+	if (moduleLanguageJson.hasOwnProperty(className + "s")) {
+		for (var i = 0; i < moduleLanguageJson[className + "s"].length; i++) {
+			if (moduleLanguageJson[className + "s"][i][className] == key) {
+				return moduleLanguageJson[className + "s"][i];
+			}
+		}
+	}
+	console.log("could not find " + className + " " + key);
+	return null;
+}
+
+
+/**
+ *
+ * @param key
+ * @return {String}
+ */
+function getModuleTranslation(key) {
+	var module = getTranslationObject("module", key);
+	if (module != null) {
+		return module["name"];
+	}
+	return key;
+}
+
+/**
+ *
+ * @param key
+ * @return {String}
+ */
+function getStateTranslation(key) {
+	var state = getTranslationObject("state", key);
+	if (state != null) {
+		return state["name"];
+	}
+	return key;
+}
+
+/**
+ *
+ * @param key
+ * @return {String}
+ */
+function getActionTranslation(key) {
+	var action = getTranslationObject("action", key);
+	if (action != null) {
+		return action["name"];
+	}
+	return key;
+}
+
+/**
+ *
+ * @param key
+ * @return {Object}
+ */
+function getActionTranslationObject(key) {
+	return getTranslationObject("action", key);
+}
+
+
+/**
+ * format function to replace {number}-parts of a string
+ * @param args
+ * @returns {string}
+ */
+String.prototype.format = function (args) {
+	var str = this;
+	return str.replace(String.prototype.format.regex, function(item) {
+		var intVal = parseInt(item.substring(1, item.length - 1));
+		var replace;
+		if (intVal >= 0) {
+			replace = args[intVal];
+		} else if (intVal === -1) {
+			replace = "{";
+		} else if (intVal === -2) {
+			replace = "}";
+		} else {
+			replace = "";
+		}
+		return replace;
+	});
+};
+String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
+
+/**
+ * translate key to actual language
+ * @param {String} key
+ * @return {String} translation
+ */
+function translate(key) {
+	if (languageJson.hasOwnProperty(key)) {
+		return languageJson[key];
+	}
+	console.log("could not find translation of " + key);
+	return key;
+}

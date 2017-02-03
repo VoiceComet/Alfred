@@ -181,7 +181,8 @@ function showDialog(params) {
 	dialogBox.appendChild(dialog);
 
 	//show message
-	params.time = 0;
+	//noinspection JSUndefinedPropertyAssignment
+    params.time = 0;
 	var messageId = showMessage(params);
 	return {messageId: messageId, dialogId: dialogId};
 }
@@ -196,4 +197,41 @@ function showDialog(params) {
 function hideDialog(params) {
 	hideMessage({id: params.messageId});
 	hideAlfredElement({elementId:params.dialogId, parentId: "ChromeSpeechControlDialogs"});
+}
+
+/**
+ * format function to replace {number}-parts of a string
+ * @param args
+ * @returns {string}
+ */
+String.prototype.format = function (args) {
+    var str = this;
+    return str.replace(String.prototype.format.regex, function(item) {
+        var intVal = parseInt(item.substring(1, item.length - 1));
+        var replace;
+        if (intVal >= 0) {
+            replace = args[intVal];
+        } else if (intVal === -1) {
+            replace = "{";
+        } else if (intVal === -2) {
+            replace = "}";
+        } else {
+            replace = "";
+        }
+        return replace;
+    });
+};
+String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
+
+/**
+ * translate key to actual language
+ * @param {String} key
+ * @return {String} translation
+ */
+function translate(key) {
+	if (languageJson.hasOwnProperty(key)) {
+		return languageJson[key];
+	}
+	console.log("could not find translation of " + key);
+	return key;
 }

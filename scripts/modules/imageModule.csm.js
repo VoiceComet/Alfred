@@ -92,44 +92,22 @@ addContentScriptMethod(
             }
         }
         if (images.length > 0) {
+            var message = {
+                content: translate("galleryMode"),
+                cancelable: true,
+                infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+                time: 0
+            };
             if (Math.ceil(images.length / 9) > 1) {
-                if (id != "") {
-                    pages = 1;
-                    updateMessage({
-                        id: id,
-                        content: "Gallery mode",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                } else {
-                    id = showMessage({
-                        content: "Gallery mode",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                }
+                message.commandRight = translate("next");
+            }
+            if (id != "") {
+                pages = 1;
+                message.id = id;
+                //noinspection JSCheckFunctionSignatures
+                updateMessage(message);
             } else {
-                if (id != "") {
-                    pages = 1;
-                    updateMessage({
-                        id: id,
-                        content: "Gallery mode",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                } else {
-                    id = showMessage({
-                        content: "Gallery mode",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                }
+                id = showMessage(message);
             }
             $("body")
                 .append("<div id='objectUIDIVBackground'></div>")
@@ -144,11 +122,11 @@ addContentScriptMethod(
                     }
                 }
             });
-            return({content: "I found " + images.length + " images. You are on page one"});
+            return({content: translate("sayFoundXImages").format([images.length])});
 
         } else {
-            showMessage({content: "No images found on this page" , centered: true});
-            return({content: "I found no relevant images on this page", followingState: "globalCommonState"});
+            showMessage({content: translate("notifyNoImagesFound"), centered: true});
+            return({content: translate("sayNoImagesFound"), followingState: "globalCommonState"});
         }
     })
 );
@@ -159,33 +137,25 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("nextGalleryPage", function () {
         if (pages >= Math.ceil(images.length / 9)) {
-            showMessage({content: "No further images on this website", centered: true});
-            return({content: "There are no further images on this website"});
+            showMessage({content: translate("notifyNoFurtherImages"), centered: true});
+            return({content: translate("sayNoFurtherImages")});
         } else {
             pages++;
             i = pages * 9 - 1;
             fadeOutLeft();
+            var message = {
+                id: id,
+                content: translate("galleryMode"),
+                commandLeft: translate("previous"),
+                cancelable: true,
+                infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+                time: 0
+            };
             if (pages < Math.ceil(images.length / 9)) {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
+                message.commandRight = translate("next");
             }
-            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
+            updateMessage(message);
+            return({content: translate("sayYouAreOnPageXOfY").format([pages, Math.ceil(images.length / 9)])});
         }
     })
 );
@@ -196,33 +166,25 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("previousGalleryPage", function () {
         if (pages < 2 || images.length < 9) {
-            showMessage({content: "No previous images", centered: true});
-            return({content: "There are no previous images on this page"});
+            showMessage({content: translate("notifyNoPreviousImages"), centered: true});
+            return({content: translate("sayNoPreviousImages")});
         } else {
             pages--;
             i = pages * 9 - 1;
             fadeOutRight();
+            var message = {
+                id: id,
+                content: translate("galleryMode"),
+                commandRight: translate("next"),
+                cancelable: true,
+                infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+                time: 0
+            };
             if (pages > 1) {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
+                message.commandLeft = translate("previous");
             }
-            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
+            updateMessage(message);
+            return({content: translate("sayYouAreOnPageXOfY").format([pages, Math.ceil(images.length / 9)])});
         }
     })
 );
@@ -236,11 +198,11 @@ addContentScriptMethod(
             params = 1;
         }
         if (Math.ceil(images.length / 9) < parseInt(params) || 0 >= parseInt(params) || isNaN(parseInt(params))) {
-            showMessage({content: "There is no page " + params, centered: true});
-            return ({content: "There is no page " + params});
+            showMessage({content: translate("thereIsNoPageX").format([params]), centered: true});
+            return ({content: translate("thereIsNoPageX").format([params])});
         } else if (pages === parseInt(params)) {
-            showMessage({content: "You are still on page " + params, centered: true});
-            return ({content: "You are still on page " + params});
+            showMessage({content: translate("youAreStillOnPageX").format([params]), centered: true});
+            return ({content: translate("youAreStillOnPageX").format([params])});
         } else {
             // go to a previous page
             if (pages > params) {
@@ -251,38 +213,22 @@ addContentScriptMethod(
                 fadeOutLeft();
             }
             pages = parseInt(params);
+            var message = {
+				id: id,
+				content: translate("galleryMode"),
+				cancelable: true,
+				infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+				time: 0
+			};
             if (pages > 1) {
-                if (pages < Math.ceil(images.length / 9)) {
-                    updateMessage({
-                        id: id,
-                        content: "Gallery mode",
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                } else {
-                    updateMessage({
-                        id: id,
-                        content: "Gallery mode",
-                        commandLeft: "previous",
-                        cancelable: true,
-                        infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                        time: 0
-                    });
-                }
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page 1 of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
+				message.commandLeft = translate("previous");
             }
-            return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
+			if (pages < Math.ceil(images.length / 9)) {
+				message.commandRight = translate("next");
+			}
+			updateMessage(message);
+
+            return({content: translate("sayYouAreOnPageXOfY").format([pages, Math.ceil(images.length / 9)])});
         }
     })
 );
@@ -293,8 +239,8 @@ addContentScriptMethod(
 addContentScriptMethod(
     new ContentScriptMethod("showOneImage", function (params) {
         if ((pages * 9 - 9 + parseInt(params) > images.length) || (parseInt(params) > 9) || (parseInt(params) < 0) || isNaN(parseInt(params))) {
-            showMessage({content: "There is no image " + params + " on this page", centered: true});
-            return({content: "There is no image " + params + " on this page", followingState: "galleryState"});
+            showMessage({content: translate("thereIsNoImageX").format([params]), centered: true});
+            return({content: translate("thereIsNoImageX").format([params]), followingState: "galleryState"});
         } else {
             i = pages * 9 - 10 + parseInt(params);
             $("#objectUIDIV").attr("style", "-webkit-animation: fadeOut 500ms steps(20);");
@@ -303,38 +249,22 @@ addContentScriptMethod(
                 $("body").append("<div id='slideDIV'><img src='" + images[i] + "'></div>");
                 $("#slideDIV").attr("style", "-webkit-animation: fadeIn 500ms steps(20);");
             }, 460);
+
+            var message = {
+				id: id,
+				content: translate("slideMode"),
+				cancelable: true,
+				infoCenter: translate("imageXOfY").format([(i + 1), images.length]),
+				time: 0
+			};
             if (i + 1 > 1) {
-                if (i + 1 < images.length) {
-                    updateMessage({
-                        id: id,
-                        content: "Slide mode",
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "image " + (i + 1) + " of " + images.length,
-                        time: 0
-                    });
-                } else {
-                    updateMessage({
-                        id: id,
-                        content: "Slide mode",
-                        commandLeft: "previous",
-                        cancelable: true,
-                        infoCenter: "image " + (i + 1) + " of " + images.length,
-                        time: 0
-                    });
-                }
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "image 1 of " + images.length,
-                    time: 0
-                });
-            }
-            return({content: "You see image, " + (i + 1) + " of " + images.length});
+				message.commandLeft = translate("previous");
+			}
+			if (i + 1 < images.length) {
+				message.commandRight = translate("next");
+			}
+			updateMessage(message);
+            return({content: translate("sayYouSeeImageXOfY").format([(i + 1), images.length])});
         }
     })
 );
@@ -347,30 +277,25 @@ addContentScriptMethod(
         if (i + 1 < images.length) {
             i++;
             fadeOutLeftSlide();
-            if (i + 1 < images.length) {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "image " + (i + 1) + " of " + images.length,
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandLeft: "previous",
-                    cancelable: true,
-                    infoCenter: "image " + (i + 1) + " of " + images.length,
-                    time: 0
-                });
-            }
-            return({content: "You see image, " + (i + 1) + " of " + images.length});
+
+			var message = {
+				id: id,
+				content: translate("slideMode"),
+				cancelable: true,
+				infoCenter: translate("imageXOfY").format([(i + 1), images.length]),
+				time: 0
+			};
+			if (i + 1 > 1) {
+				message.commandLeft = translate("previous");
+			}
+			if (i + 1 < images.length) {
+				message.commandRight = translate("next");
+			}
+			updateMessage(message);
+			return({content: translate("sayYouSeeImageXOfY").format([(i + 1), images.length])});
         } else {
-            showMessage({content: "This is the last image", centered: true});
-            return({content: "This is the last image"});
+            showMessage({content: translate("thisIsTheLastImage"), centered: true});
+            return({content: translate("thisIsTheLastImage")});
         }
     })
 );
@@ -383,30 +308,24 @@ addContentScriptMethod(
         if (i - 1 >= 0) {
             i--;
             fadeOutRightSlide();
-            if (i - 1 > 0) {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "image " + (i + 1) + " of " + images.length,
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "image " + (i + 1) + " of " + images.length,
-                    time: 0
-                });
-            }
-            return({content: "You see image, " + (i + 1) + " of " + images.length});
+			var message = {
+				id: id,
+				content: translate("slideMode"),
+				cancelable: true,
+				infoCenter: translate("imageXOfY").format([(i + 1), images.length]),
+				time: 0
+			};
+			if (i - 1 > 0) {
+				message.commandLeft = translate("previous");
+			}
+			if (i - 1 < images.length) {
+				message.commandRight = translate("next");
+			}
+			updateMessage(message);
+			return({content: translate("sayYouSeeImageXOfY").format([(i + 1), images.length])});
         } else {
-            showMessage({content: "This is the first image", centered: true});
-            return({content: "This is the firs image"});
+            showMessage({content: translate("thisIsTheFirstImage"), centered: true});
+            return({content: translate("thisIsTheFirstImage")});
         }
     })
 );
@@ -431,38 +350,21 @@ addContentScriptMethod(
             } else {
                 fadeOutLeftSlide();
             }
-            if (i + 1 > 1) {
-                if (i + 1 < images.length) {
-                    updateMessage({
-                        id: id,
-                        content: "Slide mode",
-                        commandLeft: "previous",
-                        commandRight: "next",
-                        cancelable: true,
-                        infoCenter: "image " + (i + 1) + " of " + images.length,
-                        time: 0
-                    });
-                } else {
-                    updateMessage({
-                        id: id,
-                        content: "Slide mode",
-                        commandLeft: "previous",
-                        cancelable: true,
-                        infoCenter: "image " + (i + 1) + " of " + images.length,
-                        time: 0
-                    });
-                }
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "image 1 of " + images.length,
-                    time: 0
-                });
-            }
-            return({content: "You see image, " + (i + 1) + " of " + images.length});
+			var message = {
+				id: id,
+				content: translate("slideMode"),
+				cancelable: true,
+				infoCenter: translate("imageXOfY").format([(i + 1), images.length]),
+				time: 0
+			};
+			if (i + 1 > 1) {
+				message.commandLeft = translate("previous");
+			}
+			if (i + 1 < images.length) {
+				message.commandRight = translate("next");
+			}
+			updateMessage(message);
+			return({content: translate("sayYouSeeImageXOfY").format([(i + 1), images.length])});
         }
     })
 );
@@ -482,8 +384,8 @@ addContentScriptMethod(
             id = "";
             return({link: link[0].href});
         } else {
-           showMessage({content: "This image has no link", centered: true});
-           return({content: "This image has no link", followingState: "slideState"});
+           showMessage({content: translate("thisImageHasNoLink"), centered: true});
+           return({content: translate("thisImageHasNoLink"), followingState: "slideState"});
         }
     })
 );
@@ -503,12 +405,12 @@ addContentScriptMethod(
             .animate({scrollTop: $(objects[i]).offset().top - window.innerHeight / 2}, 1000)
             .animate({scrollLeft: $(objects[i]).offset().left - window.innerWidth / 2}, 1000);
         updateMessage({
-            id: id,
-            content: "Slide mode",
-            cancelable: true,
-            infoCenter: "image " + (i + 1) + " of " + images.length,
-            time: 0
-        });
+			id: id,
+			content: translate("slideMode"),
+			cancelable: true,
+			infoCenter: translate("imageXOfY").format([(i + 1), images.length]),
+			time: 0
+		});
     })
 );
 
@@ -519,38 +421,22 @@ addContentScriptMethod(
     new ContentScriptMethod("backToSlides", function () {
         $("#objectUIDIVBackground").attr("style", "-webkit-animation: fadeIn 500ms steps(20);");
         $("#slideDIV").attr("style", "-webkit-animation: fadeIn 500ms steps(20);");
-        if (i + 1 > 1) {
-            if (i + 1 < images.length) {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "image " + (i + 1) + " of " + images.length,
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Slide mode",
-                    commandLeft: "previous",
-                    cancelable: true,
-                    infoCenter: "image " + (i + 1) + " of " + images.length,
-                    time: 0
-                });
-            }
-        } else {
-            updateMessage({
-                id: id,
-                content: "Slide mode",
-                commandRight: "next",
-                cancelable: true,
-                infoCenter: "image 1 of " + images.length,
-                time: 0
-            });
-        }
-        return({content: "Welcome back to the slides gallery"})
+
+		var message = {
+			id: id,
+			content: translate("slideMode"),
+			cancelable: true,
+			infoCenter: translate("imageXOfY").format([(i + 1), images.length]),
+			time: 0
+		};
+		if (i + 1 > 1) {
+			message.commandLeft = translate("previous");
+		}
+		if (i + 1 < images.length) {
+			message.commandRight = translate("next");
+		}
+		updateMessage(message);
+        return({content: translate("welcomeBackOnSlidesGallery")})
     })
 );
 
@@ -577,38 +463,21 @@ addContentScriptMethod(
             $("#slideDIV").remove();
             $("#objectUIDIV").attr("style", "-webkit-animation: fadeIn 500ms steps(40);");
         }, 470);
-        if (pages > 1) {
-            if (pages < Math.ceil(images.length / 9)) {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    commandRight: "next",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
-            } else {
-                updateMessage({
-                    id: id,
-                    content: "Gallery mode",
-                    commandLeft: "previous",
-                    cancelable: true,
-                    infoCenter: "page " + pages + " of " + Math.ceil(images.length / 9),
-                    time: 0
-                });
-            }
-        } else {
-            updateMessage({
-                id: id,
-                content: "Gallery mode",
-                commandRight: "next",
-                cancelable: true,
-                infoCenter: "page 1 of " + Math.ceil(images.length / 9),
-                time: 0
-            });
-        }
-        return({content: "You are now on page " + pages + "of" + Math.ceil(images.length / 9)});
+		var message = {
+			id: id,
+			content: translate("galleryMode"),
+			cancelable: true,
+			infoCenter: translate("pageXOfY").format([pages, Math.ceil(images.length / 9)]),
+			time: 0
+		};
+		if (pages > 1) {
+			message.commandLeft = translate("previous");
+		}
+		if (pages < Math.ceil(images.length / 9)) {
+			message.commandRight = translate("next");
+		}
+		updateMessage(message);
+		return({content: translate("sayYouAreOnPageXOfY").format([pages, Math.ceil(images.length / 9)])});
     })
 );
 

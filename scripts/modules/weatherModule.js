@@ -1,6 +1,5 @@
 addModule(new Module("weatherModule", function() {
-	var showWeatherOf = new Action("Show Weather of ?", 1, globalCommonState);
-	showWeatherOf.addCommand(new Command("(?:show )?weather (?:of )?(.+)", 1));
+	var showWeatherOf = new Action("showWeather", 1, globalCommonState);
 	showWeatherOf.act = function(arguments) {
 
 		/**
@@ -9,7 +8,7 @@ addModule(new Module("weatherModule", function() {
 		 */
 		function showWeatherData(weatherObject) {
 			callContentScriptMethod("showWeather", {"weatherObject":weatherObject});
-			say(weatherObject.city + ": " + weatherObject.conditionText + " and " + weatherObject.temp + " °" + weatherObject.tempUnit);
+			say(weatherObject.city + ": " + weatherObject.conditionText + " " + translate("and") + " " + weatherObject.temp + " °" + weatherObject.tempUnit);
 		}
 
 		/**
@@ -17,20 +16,21 @@ addModule(new Module("weatherModule", function() {
 		 * @param {String} city
 		 */
 		function showNoWeatherDataFound(city) {
-			notify("I cannot find the weather report of " + city);
-			say("I cannot find the weather report");
+			notify(translate("cannotFindWeatherOfX").format([city]));
+			say(translate("cannotFindWeather"));
 		}
 
 		var city = arguments[0];
 
-		notify("\"" + city + "\" Weather loading...");
+		notify(translate("weatherOfXLoading").format([city]));
 
 		var api = "yahoo";
 		if (api == "yahoo") {
 			var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text=%22" + city + "%22)&format=json";
 
-			$.getJSON(url, function(json) {
-				//console.log(json);
+			$.getJSON(url, function(json, status) {
+				console.log("Weather Status: " + status);
+				console.log(json);
 				//noinspection JSUnresolvedVariable
 				if (json.query.results != null) {
 					//noinspection JSUnresolvedVariable

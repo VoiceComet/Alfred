@@ -6,8 +6,7 @@ addModule(new Module("scrollModule", function() {
     /**
      * scroll to top of the page
      */
-    var scrollToTop = new Action("scroll to top", 0, globalCommonState);
-    scrollToTop.addCommand(new Command("(?:scroll )?(?:to )?(?:the )?\\btop\\b", 0));
+    var scrollToTop = new Action("scrollToTop", 0, globalCommonState);
     scrollToTop.act = function() {
         callContentScriptMethod("scrollToTop", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -20,8 +19,7 @@ addModule(new Module("scrollModule", function() {
     /**
      * scroll to the middle of the page
      */
-    var scrollToMiddle = new Action("scroll to middle", 0, globalCommonState);
-    scrollToMiddle.addCommand(new Command("(?:scroll )?(?:to )?(?:the )?\\bmiddle\\b", 0));
+    var scrollToMiddle = new Action("scrollToMiddle", 0, globalCommonState);
     scrollToMiddle.act = function() {
         callContentScriptMethod("scrollToMiddle", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -34,8 +32,7 @@ addModule(new Module("scrollModule", function() {
     /**
      * scroll to the bottom of the page
      */
-    var scrollToBottom = new Action("scroll to bottom", 0, globalCommonState);
-    scrollToBottom.addCommand(new Command("(?:scroll )?(?:to )?(?:the )?\\bbottom\\b", 0));
+    var scrollToBottom = new Action("scrollToBottom", 0, globalCommonState);
     scrollToBottom.act = function() {
         callContentScriptMethod("scrollToBottom", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -48,8 +45,7 @@ addModule(new Module("scrollModule", function() {
     /**
      * scroll up
      */
-    var scrollUp = new Action("scroll up", 0, globalCommonState);
-    scrollUp.addCommand(new Command("(?:scroll )?\\bup\\b", 0));
+    var scrollUp = new Action("scrollUp", 0, globalCommonState);
     scrollUp.act = function() {
         callContentScriptMethod("scrollUp", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -62,8 +58,7 @@ addModule(new Module("scrollModule", function() {
     /**
      * scroll down
      */
-    var scrollDown = new Action("scroll down", 0, globalCommonState);
-    scrollDown.addCommand(new Command("(?:scroll )?\\bdown\\b", 0));
+    var scrollDown = new Action("scrollDown", 0, globalCommonState);
     scrollDown.act = function() {
         callContentScriptMethod("scrollDown", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -76,8 +71,7 @@ addModule(new Module("scrollModule", function() {
     /**
      * scroll left
      */
-    var scrollLeft = new Action("scroll left", 0, globalCommonState);
-    scrollLeft.addCommand(new Command("(?:scroll )?\\bleft\\b", 0));
+    var scrollLeft = new Action("scrollLeft", 0, globalCommonState);
     scrollLeft.act = function() {
         callContentScriptMethod("scrollLeft", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -90,8 +84,7 @@ addModule(new Module("scrollModule", function() {
     /**
      * scroll right
      */
-    var scrollRight = new Action("scroll right", 0, globalCommonState);
-    scrollRight.addCommand(new Command("(?:scroll )?\\bright\\b", 0));
+    var scrollRight = new Action("scrollRight", 0, globalCommonState);
     scrollRight.act = function() {
         callContentScriptMethod("scrollRight", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {

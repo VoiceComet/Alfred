@@ -92,19 +92,19 @@ function searchLocationOnAlfredMap(query) {
                     alfredMap.fitBounds(bounds);
 
                     if (results.length == 1) {
-                        showMessage({content: 'I found the place "' + query + '".'});
+                        showMessage({content: translate("foundPlaceX").format([query])});
                     } else {
-                        showMessage({content: 'I found ' + results.length + ' places for "' + query + '".'});
+                        showMessage({content: translate("foundXPlacesForY").format([query])});
                     }
                 } else {
                     //nothing found
-                    showMessage({content:'I cannot find "' + query + '" on the map.'});
+                    showMessage({content:translate("cannotFindPlaceX").format([query])});
                 }
             } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS)  {
                 //nothing found
-                showMessage({content:'I cannot find "' + query + '" on the map.'});
+                showMessage({content:translate("cannotFindPlaceX").format([query])});
             } else {
-                showMessage({content:'Sorry, the service is not available for now.'});
+                showMessage({content:translate("serviceNotAvailable")});
                 console.log('Places request failed due to ' + status);
             }
         }
@@ -164,13 +164,11 @@ function searchRouteOnAlfredMap(origin, destination) {
                 address: response.routes[0].legs[0].end_address
             });
             alfredMapRouteMessageId = showMessage({
-                content: 'Route between "' + origin + '" and "' + destination + '". <br/><br/>' +
-                    'Time: ' + response.routes[0].legs[0].duration.text + '<br/>' +
-                    'Distance: ' + response.routes[0].legs[0].distance.text,
+                content: translate("routeBetweenWAndXTimeYDistanceZ").format([origin, destination, response.routes[0].legs[0].duration.text, response.routes[0].legs[0].distance.text]),
                 time: 0
             });
         } else {
-            showMessage({content:'I cannot find a route between "' + origin + '" and "' + destination + '"'});
+            showMessage({content:translate("cannotFindRouteBetweenXAndY").format([origin, destination])});
             console.log('Directions request failed due to ' + status);
         }
     });

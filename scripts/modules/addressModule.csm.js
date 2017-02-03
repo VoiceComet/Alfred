@@ -133,9 +133,9 @@ function showOrUpdateAddressMessage() {
 		content: addresses[activeAddress].readable,
 		time: 0,
 		cancelable: true,
-		commandLeft: "previous",
-		commandRight: "next",
-		infoCenter: "match " + (activeAddress + 1) + " of " + addresses.length
+		commandLeft: translate("previous"),
+		commandRight: translate("next"),
+		infoCenter: translate("matchXOfY").format([activeAddress + 1, addresses.length])
 	};
 
 	if (addressMessageId === null) {
@@ -154,8 +154,8 @@ addContentScriptMethod(
 
 		if(addresses.length === 0) {
 			//no addresses found
-			showMessage({content: "Could not find addresses", centered: true});
-			return({content: "I could not find addresses", followingState:"globalCommonState"});
+			showMessage({content: translate("couldNotFindAddresses"), centered: true});
+			return({content: translate("couldNotFindAddresses"), followingState:"globalCommonState"});
 		} else {
 			//addresses found
 			highlightAllAddresses();
@@ -214,8 +214,8 @@ addContentScriptMethod(
 			showOrUpdateAddressMessage();
 			scrollToActiveAddress();
 		} else {
-			showMessage({content: "There is no address " + params , centered: true});
-			return({content: "I cannot find a address " + params});
+			showMessage({content: translate("ThereIsNoAddressX").format([params]), centered: true});
+			return({content: translate("ICannotFindAAddressX").format([params])});
 		}
 	})
 );
