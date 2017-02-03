@@ -174,7 +174,7 @@ addContentScriptMethod(
             id: id,
             content: translate("showVideos"),
             cancelable: true,
-            infoCenter: translate("volumeX").format([videos[i].volume]),
+            infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
             time: 0
         });
     })
@@ -245,7 +245,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format([videos[i].volume]),
+				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
 				time: 0
 			});
         }
@@ -310,7 +310,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format([videos[i].volume]),
+				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
 				time: 0
 			});
         }
@@ -335,7 +335,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format([videos[i].volume]),
+				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
 				time: 0
 			});
         }
@@ -364,7 +364,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format([videos[i].volume]),
+				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
 				time: 0
 			});
         }
