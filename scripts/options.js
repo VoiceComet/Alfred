@@ -105,6 +105,7 @@ var options = [
 		stdValue : "google"
 	}
 ];
+var voices = [];
 
 //add OnClickListener for deleting commands
 var deleteUserAction = function (params) {
@@ -209,29 +210,61 @@ function restore_options() {
 		stdValues[option.id] = option.stdValue;
 	});
 
+	function refreshVoices(defaultValue) {
+		chrome.storage.sync.get({language:'en'}, function(items) {
+			var optionId = 'speechAssistantVoice';
+			var lang = items["language"];
+			var defaultSetted = false;
+			var langVoices = voices.filter(function(voice) {
+				if (lang == 'de') {
+					return voice.lang == "de-DE";
+				} else {
+					return voice.lang == "en-GB" || voice.lang == "en-US";
+				}
+			});
+			var selectElement = document.getElementById(optionId);
+			selectElement.innerHTML = ""; //delete content
+			for (var i = 0; i < langVoices.length; i++) {
+				var option = document.createElement('option');
+				option.setAttribute("value", langVoices[i].voiceURI);
+				option.innerHTML = langVoices[i].name;
+				selectElement.appendChild(option);
+				//set default
+				if (langVoices[i].voiceURI == defaultValue) {
+					selectElement.value = langVoices[i].voiceURI;
+					defaultSetted = true;
+				}
+			}
+			if (!defaultSetted) {
+				if (lang == 'en') {
+					selectElement.value = stdValues[optionId]
+				} else {
+					selectElement.value = langVoices[0].voiceURI;
+				}
+				chrome.storage.sync.set({'speechAssistantVoice': selectElement.value}, function() {
+					//do nothing after saving
+				});
+			}
+		});
+	}
+
+	function optionChangeListener(changes) {
+		for (var key in changes) {
+			if (key == "language") {
+				refreshVoices(null);
+			}
+		}
+	}
+	chrome.storage.onChanged.addListener(optionChangeListener);
+
 	chrome.storage.sync.get(stdValues, function(items) {
 		options.forEach(function (option) {
 			if (option.id == 'speechAssistantVoice') {
 				//for voice loading
 				//noinspection SpellCheckingInspection
 				window.speechSynthesis.onvoiceschanged = function() {
-					var optionId = 'speechAssistantVoice';
-					var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-						//TODO Nur Sprache laden, die eingestellt ist
-						//TODO refresh, wenn Sprache gewechselt wird
-						return voice.lang == "en-GB" || voice.lang == "en-US" || voice.lang == "de-DE";
-					});
-					var selectElement = document.getElementById(optionId);
-					selectElement.innerHTML = ""; //delete content
-					for (var i = 0; i < voices.length; i++) {
-						var option = document.createElement('option');
-						option.setAttribute("value", voices[i].voiceURI);
-						option.innerHTML = voices[i].name;
-						selectElement.appendChild(option);
-					}
-
-					//set default
-					document.getElementById(optionId).value = items[optionId];
+					voices = window.speechSynthesis.getVoices();
+					refreshVoices(items['speechAssistantVoice']);
 				};
 			} else {
 				if (option.type == "checkbox") {

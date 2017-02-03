@@ -96,7 +96,7 @@ function optionChangeListener(changes) {
 			for (var i = 0; i < modules.length; i++) {
 				if (key == modules[i].settingName) {
 					modules[i].active = changes[key].newValue;
-					return;
+					break;
 				}
 			}
 		}
