@@ -142,7 +142,6 @@ addContentScriptMethod(
             showMessage({content: translate("notifyNoMatchFound"), centered: true});
             return({content: translate("foundOneMatchForX").format([parameter])});
         }
-        //TODO kein Treffer vs einen Treffer?
     })
 );
 

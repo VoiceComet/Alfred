@@ -44,7 +44,7 @@ chrome.storage.sync.get({
 	butlerName = items.speechAssistantName;
 });
 
-var moduleLanguageJson = null;
+var moduleLanguageJson = {};
 /**
  * load actual module language file
  */
@@ -59,7 +59,7 @@ function loadModuleLanguageJson() {
 }
 loadModuleLanguageJson();
 
-var languageJson = null;
+var languageJson = {};
 /**
  * load actual language file
  */

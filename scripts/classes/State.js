@@ -141,18 +141,22 @@ function State (internalName) {
 		if (!this.initialized) {
 			if (this.refreshLanguage) {
 				var that = this;
-				function refreshLang (changes) {
+				function refreshLang() {
+					chrome.storage.sync.get({
+						language: 'en'
+					}, function(items) {
+						that.lang = items["language"];
+					});
+				}
+				refreshLang();
+				function onChangedListener (changes) {
 					for (var key in changes) {
 						if (key == "language") {
-							chrome.storage.sync.get({
-								language: 'en'
-							}, function(items) {
-								that.lang = items["language"];
-							});
+							refreshLang();
 						}
 					}
 				}
-				chrome.storage.onChanged.addListener(refreshLang);
+				chrome.storage.onChanged.addListener(onChangedListener);
 			}
 			this.generateStandardActions();
 			this.init();
@@ -456,6 +460,7 @@ function State (internalName) {
 						action.actionHit = actionHits[i];
 						action.hit = j;
 						action.dialogState = dialogState;
+						action.loadLanguageCommands = false;
 						action.addCommand(new Command(dialogActionNumber+'', 0));
 						//noinspection JSUnusedLocalSymbols
 						action.act = function (arguments) {

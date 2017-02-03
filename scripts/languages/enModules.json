@@ -171,7 +171,7 @@
 		{
 			"action" : "sayParameter",
 			"name" : "Say parameter",
-			"commands" : ["(.+)"]
+			"commands" : []
 		},
 
 
@@ -205,7 +205,7 @@
 		{
 			"action" : "sayTitleBookmark",
 			"name" : "Say title of bookmark",
-			"commands" : ["(.+)"]
+			"commands" : []
 		},
 		{
 			"action" : "openBookmark",
@@ -230,7 +230,7 @@
 		{
 			"action" : "sayTitleFolder",
 			"name" : "Say title folder",
-			"commands" : ["(.+)"]
+			"commands" : []
 		},
 		{
 			"action" : "openFolder",

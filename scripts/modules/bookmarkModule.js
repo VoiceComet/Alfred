@@ -244,6 +244,8 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var sayTitleBookmark = new Action("sayTitleBookmark", 1, globalCommonState);
+	sayTitleBookmark.loadLanguageCommands = false;
+	sayTitleBookmark.addCommand(new Command("(.+)", 1));
     sayTitleBookmark.act = function (params) {
         chrome.tabs.query({currentWindow: true, active: true}, function(result) {
             var url = result[0].url;
@@ -338,6 +340,8 @@ addModule(new Module("bookmarkModule", function () {
      * @type {Action}
      */
     var sayTitleFolder = new Action("sayTitleFolder", 1, globalCommonState);
+	sayTitleFolder.loadLanguageCommands = false;
+	sayTitleFolder.addCommand(new Command("(.+)", 1));
     sayTitleFolder.act = function (params) {
         availability({
             title: params[0]

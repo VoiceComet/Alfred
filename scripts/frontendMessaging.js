@@ -232,5 +232,6 @@ function translate(key) {
 	if (languageJson.hasOwnProperty(key)) {
 		return languageJson[key];
 	}
+	console.log("could not find translation of " + key);
 	return key;
 }

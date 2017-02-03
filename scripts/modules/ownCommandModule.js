@@ -9,6 +9,7 @@ addModule(new Module("ownCommandModule", function() {
      * reload the current tab
      */
     var reloadPage = new Action("OwnReloadPage", 0, globalCommonState);
+	reloadPage.loadLanguageCommands = false;
     reloadPage.act = function () {
         chrome.tabs.reload();
     };
@@ -18,6 +19,7 @@ addModule(new Module("ownCommandModule", function() {
      * go back one page
      */
     var goBack = new Action("OwnGoBack", 0, globalCommonState);
+	goBack.loadLanguageCommands = false;
     goBack.act = function () {
         var curr = "";
         chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
@@ -41,6 +43,7 @@ addModule(new Module("ownCommandModule", function() {
      * go forward one page
      */
     var goForward = new Action("OwnGoForward", 0, globalCommonState);
+	goForward.loadLanguageCommands = false;
     goForward.act = function () {
         var curr = "";
         chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
@@ -64,6 +67,7 @@ addModule(new Module("ownCommandModule", function() {
      * scroll to top of the page
      */
     var scrollToTop = new Action("OwnScrollToTop", 0, globalCommonState);
+	scrollToTop.loadLanguageCommands = false;
     scrollToTop.act = function() {
         callContentScriptMethod("scrollToTop", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -77,6 +81,7 @@ addModule(new Module("ownCommandModule", function() {
      * scroll to the middle of the page
      */
     var scrollToMiddle = new Action("OwnScrollToMiddle", 0, globalCommonState);
+	scrollToMiddle.loadLanguageCommands = false;
     scrollToMiddle.act = function() {
         callContentScriptMethod("scrollToMiddle", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -90,6 +95,7 @@ addModule(new Module("ownCommandModule", function() {
      * scroll to the bottom of the page
      */
     var scrollToBottom = new Action("OwnScrollToBottom", 0, globalCommonState);
+	scrollToBottom.loadLanguageCommands = false;
     scrollToBottom.act = function() {
         callContentScriptMethod("scrollToBottom", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -103,6 +109,7 @@ addModule(new Module("ownCommandModule", function() {
      * scroll up
      */
     var scrollUp = new Action("OwnScrollUp", 0, globalCommonState);
+	scrollUp.loadLanguageCommands = false;
     scrollUp.act = function() {
         callContentScriptMethod("scrollUp", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -116,6 +123,7 @@ addModule(new Module("ownCommandModule", function() {
      * scroll down
      */
     var scrollDown = new Action("OwnScrollDown", 0, globalCommonState);
+	scrollDown.loadLanguageCommands = false;
     scrollDown.act = function() {
         callContentScriptMethod("scrollDown", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -129,6 +137,7 @@ addModule(new Module("ownCommandModule", function() {
      * scroll left
      */
     var scrollLeft = new Action("OwnScrollLeft", 0, globalCommonState);
+	scrollLeft.loadLanguageCommands = false;
     scrollLeft.act = function() {
         callContentScriptMethod("scrollLeft", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
@@ -142,6 +151,7 @@ addModule(new Module("ownCommandModule", function() {
      * scroll right
      */
     var scrollRight = new Action("OwnScrollRight", 0, globalCommonState);
+	scrollRight.loadLanguageCommands = false;
     scrollRight.act = function() {
         callContentScriptMethod("scrollRight", {}, function (params) {
             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {

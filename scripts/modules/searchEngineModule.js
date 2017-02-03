@@ -219,6 +219,7 @@ addModule(new Module("searchEngineModule", function() {
 					var action = new Action(i + "", 0, globalCommonState);
 					//noinspection JSUnresolvedVariable
 					action.resultLink = searchResultObject.items[i].link;
+					action.loadLanguageCommands = false;
 					action.addCommand(new Command((i + 1) + "", 0));
 					//noinspection JSUnusedLocalSymbols
 					action.act = function (arguments) {

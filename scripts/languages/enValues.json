@@ -132,7 +132,7 @@
 	"notifyCouldNotFindX" : "Could not find {0}",
 	"sayCouldNotFindX" : "I could not find {0}",
 	"foundXMatchesForYYouAreOnMatchZ" : "I found {0} matches for {1}. You are on match {2}",
-	"foundOneMatchForX" : "I found one match for {0}",
+	"foundOneMatchForX" : "I found only one match for {0}",
 	"youAreOnMatchXOfY" : "You are now on match {0} of {1}",
 	"notifyNoMatchFound" : "No match found",
 	"notifyThereIsNoMatchX" : "There is no match {0}",

@@ -17,6 +17,7 @@ function Action (internalName, parameterCount, followingState) {
     this.parameterCount = parameterCount;
 	/** @type {Module} */
 	this.module = null;
+	this.loadLanguageCommands = true;
 
 	/**
 	 * get translated name of state
@@ -45,10 +46,12 @@ function Action (internalName, parameterCount, followingState) {
 	 */
 	this.getCommands = function() {
         var commands = this.commands.slice();
-		var action = getActionTranslationObject(this.internalName);
-		if (action != null) {
-			for (var i = 0; i < action["commands"].length; i++) {
-				commands.push(new Command(action["commands"][i], this.parameterCount));
+        if (this.loadLanguageCommands) {
+			var action = getActionTranslationObject(this.internalName);
+			if (action != null) {
+				for (var i = 0; i < action["commands"].length; i++) {
+					commands.push(new Command(action["commands"][i], this.parameterCount));
+				}
 			}
 		}
 		return commands;

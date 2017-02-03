@@ -85,6 +85,8 @@ function MultilingualAction(name, relatedAction, settings) {
 				};
 
 				var sayParameterAction = new Action("sayParameter", 1, null);
+				sayParameterAction.loadLanguageCommands = false;
+				sayParameterAction.addCommand(new Command("(.+)", 1));
 				sayParameterAction.sayParameterState = sayParameterState;
 				sayParameterAction.act = function(args) {
 					this.sayParameterState.hideDialog();
