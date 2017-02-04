@@ -479,7 +479,7 @@
 		{
 			"action" : "search",
 			"name" : "Suche",
-			"commands" : ["suche (:?nach )?(.+)"]
+			"commands" : ["suche (.+)"]
 		},
 		{
 			"action" : "searchLanguage",
@@ -489,7 +489,7 @@
 		{
 			"action" : "certainMatch",
 			"name" : "zu bestimmten Treffer gehen",
-			"commands" : ["geh(:?e)? zum Treffer (\\d+)"]
+			"commands" : ["geh zu Treffer (\\d+)", "gehe zu Treffer (\\d+)"]
 		},
 
 
@@ -558,86 +558,86 @@
 		{
 			"action" : "muteVideo",
 			"name" : "Video stumm schalten",
-			"commands" : ["video stumm (:?schalten)?"]
+			"commands" : ["video stumm (:?schalten)?", "video stumm"]
 		},
 		{
 			"action" : "unmuteVideo",
-			"name" : "Unmute video",
-			"commands" : ["unmute video"]
+			"name" : "Video laut schalten",
+			"commands" : ["video laut (:?schalten)?", "video laut"]
 		},
 		{
 			"action" : "jumpForwardVideo",
-			"name" : "Jump forward",
-			"commands" : ["jump forward(:?s)?"]
+			"name" : "Vorwärts springen",
+			"commands" : ["vorwärts (:?s)?"]
 		},
 		{
 			"action" : "jumpBackwardsVideo",
-			"name" : "Jump backward",
-			"commands" : ["jump backward(:?s)?"]
+			"name" : "Rückwärts springen",
+			"commands" : ["zurück (:?s)?"]
 		},
 		{
 			"action" : "jumpCertainVideo",
-			"name" : "Certain time",
-			"commands" : ["time ([0-9][0-9]:[0-9][0-9])", "time ([0-9][0-9] [0-9][0-9])"]
+			"name" : "Spring zu bestimmter Stelle im Video",
+			"commands" : ["zeit ([0-9][0-9]:[0-9][0-9])", "zeit ([0-9][0-9] [0-9][0-9])"]
 		},
 		{
 			"action" : "increaseVolume",
-			"name" : "Increase volume",
-			"commands" : ["louder", "increase volume"]
+			"name" : "Lautsärke erhöhen",
+			"commands" : ["lauter", "lautsärke erhöhen"]
 		},
 		{
 			"action" : "decreaseVolume",
-			"name" : "Decrease volume",
-			"commands" : ["quieter", "decrease volume"]
+			"name" : "Laustärke verringern ",
+			"commands" : ["leiser", "laustärke verringern"]
 		},
 		{
 			"action" : "setVolumeVideo",
-			"name" : "Set volume",
-			"commands" : ["(:?set )?volume (:?to )?([0-9]+)"]
+			"name" : "Setze Lautstärke",
+			"commands" : ["(:?setze )?lautsärke (:?auf )?([0-9]+)"]
 		},
 
 
 		{
 			"action" : "showWeather",
-			"name" : "Show weather",
-			"commands" : ["(?:show )?weather (?:of )?(.+)"]
+			"name" : "Wetter anzeigen",
+			"commands" : ["(?:wie ist das )?wetter (?:in )?(.+)"]
 		},
 
 
 		{
 			"action" : "startZooming",
-			"name" : "Zoom in",
-			"commands" : ["zoom in"]
+			"name" : "heranzoomen",
+			"commands" : ["heranzoomen"]
 		},
 		{
 			"action" : "first",
-			"name" : "Sector 1",
-			"commands" : ["1", "first"]
+			"name" : "Sektor 1",
+			"commands" : ["1", "erster sektor"]
 		},
 		{
 			"action" : "second",
-			"name" : "Sector 2",
-			"commands" : ["2", "second"]
+			"name" : "Sektor 2",
+			"commands" : ["2", "zweiter sektor"]
 		},
 		{
 			"action" : "third",
-			"name" : "Sector 3",
-			"commands" : ["3", "third"]
+			"name" : "Sektor 3",
+			"commands" : ["3", "dritter sektor"]
 		},
 		{
 			"action" : "fourth",
-			"name" : "Sector 4",
-			"commands" : ["4", "fourth"]
+			"name" : "Sektor 4",
+			"commands" : ["4", "vierter sektor"]
 		},
 		{
 			"action" : "zoomOut",
-			"name" : "Zoom out",
-			"commands" : ["zoom out"]
+			"name" : "herauszoomen",
+			"commands" : ["herauszoomen", "rauszoomen"]
 		},
 		{
 			"action" : "reset",
-			"name" : "Reset zoom",
-			"commands" : ["reset zoom"]
+			"name" : "Zoom zurücksetzen",
+			"commands" : ["setze den zoom zurück", "zoom zurücksetzen"]
 		}
 	]
 }
