@@ -39,10 +39,15 @@ var options = [
 		stdValue : true
 	},
 	{
-		id : "browserActionsModule",
+		id : "tabHandleModule",
 		type : "checkbox",
 		stdValue : true
 	},
+    {
+        id : "scrollModule",
+        type : "checkbox",
+        stdValue : true
+    },
 	{
 		id : "weatherModule",
 		type : "checkbox",
