@@ -416,11 +416,6 @@
 			"commands" : []
 		},
 		{
-			"action" : "OwnScrollToBottom",
-			"name" : "Scroll to bottom",
-			"commands" : []
-		},
-		{
 			"action" : "OwnScrollUp",
 			"name" : "Scroll up",
 			"commands" : []
@@ -476,7 +471,7 @@
 		},
 		{
 			"action" : "languageWebSearch",
-			"name" : "Scroll right",
+			"name" : "Language web search",
 			"commands" : ["language web search", "language websearch", "language google", "language bing"]
 		},
 
@@ -509,9 +504,14 @@
 			"commands" : ["open page (.+)"]
 		},
 		{
-			"action" : "close",
-			"name" : "Close",
-			"commands" : ["close (tab|window)"]
+			"action" : "closeTab",
+			"name" : "Close tab",
+			"commands" : ["close tab"]
+		},
+		{
+			"action" : "closeWindow",
+			"name" : "Close window",
+			"commands" : ["close window"]
 		},
 		{
 			"action" : "reload",

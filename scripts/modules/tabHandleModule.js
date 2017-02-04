@@ -37,23 +37,28 @@ addModule(new Module("tabHandleModule", function() {
 	this.addAction(openPage);
 
 	/**
- 	 * close tab(s)/window
+ 	 * close tab
 	 */
-	var close = new Action("close", 1, globalCommonState);
-	close.act = function(arguments) {
-		if(arguments[0].search(/tab/) != -1) {
-			//closes current tab
-			chrome.tabs.getSelected(null, function(tab) {
-				chrome.tabs.remove(tab.id);
-			})
-		} else {
-			//closes current window
-			chrome.windows.getCurrent(function(window) {
-				chrome.windows.remove(window.id);
-			})
-		}
+	var closeTab = new Action("closeTab", 0, globalCommonState);
+	closeTab.act = function() {
+		//closes current tab
+		chrome.tabs.getSelected(null, function(tab) {
+			chrome.tabs.remove(tab.id);
+		})
 	};
-	this.addAction(close);
+	this.addAction(closeTab);
+
+	/**
+	 * close window
+	 */
+	var closeWindow = new Action("closeWindow", 0, globalCommonState);
+	closeWindow.act = function() {
+		//closes current window
+		chrome.windows.getCurrent(function(window) {
+			chrome.windows.remove(window.id);
+		})
+	};
+	this.addAction(closeWindow);
 
 	/**
  	 * reload the current tab

@@ -146,12 +146,12 @@
 		{
 			"action" : "scrollUp",
 			"name" : "Hochscrollen",
-			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(:?her|hin)?auf\\b"]
+			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(:?her|hin|r)auf\\b"]
 		},
 		{
 			"action" : "scrollDown",
 			"name" : "Runterscrollen",
-			"commands" : ["(?:scroll )?\\b(:?her|hin)?runter\\b", "runterscrollen"]
+			"commands" : ["(?:scroll )?\\b(:?her|hin|r)unter\\b", "runterscrollen"]
 		},
 		{
 			"action" : "enlargePanel",
@@ -340,225 +340,225 @@
 		},
 		{
 			"action" : "mapZoomToMarker",
-			"name" : "Map zoom to marker",
-			"commands" : ["zoom to (.)$"]
+			"name" : "Zu Marker zoomen",
+			"commands" : ["zoome zu (.)$", "zu (.) zoomen"]
 		},
 		{
 			"action" : "mapCenterMarker",
-			"name" : "Map center marker",
-			"commands" : ["^(.)$", "center (.)$", "centre (.)$"]
+			"name" : "Zentriere Marker",
+			"commands" : ["^(.)$", "zentriere (.)$", "^(.) zentrieren"]
 		},
 		{
 			"action" : "mapZoomIn",
-			"name" : "Map zoom in",
-			"commands" : ["(?:zoom )?\\bin\\b"]
+			"name" : "Karte hineinzoomen",
+			"commands" : ["(:?hin|her)ein(?:zoomen)?", "zoom (:?hin|her)ein", "zoom(:?en)?"]
 		},
 		{
 			"action" : "mapZoomOut",
-			"name" : "Map zoom out",
-			"commands" : ["(?:zoom )?\\bout\\b"]
+			"name" : "Karte herauszoomen",
+			"commands" : ["(:?hin|her)aus(?:zoomen)?", "zoom (:?hin|her)aus"]
 		},
 		{
 			"action" : "mapScrollUp",
-			"name" : "Map scroll up",
-			"commands" : ["(?:scroll )?\\bup\\b"]
+			"name" : "Karte hochscrollen",
+			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(:?her|hin|r)auf\\b"]
 		},
 		{
 			"action" : "mapScrollDown",
-			"name" : "Map scroll down",
-			"commands" : ["(?:scroll )?\\bdown\\b"]
+			"name" : "Karte runterscrollen",
+			"commands" : ["(?:scroll )?\\b(:?her|hin|r)unter\\b", "runterscrollen"]
 		},
 		{
 			"action" : "mapScrollLeft",
-			"name" : "Map scroll left",
-			"commands" : ["(?:scroll )?\\bleft\\b"]
+			"name" : "Karte nach links scrollen",
+			"commands" : ["(?:scroll )?(:?nach )?links", "(:?nach )?links scrollen"]
 		},
 		{
 			"action" : "mapScrollRight",
-			"name" : "Map scroll right",
-			"commands" : ["(?:scroll )?\\bright\\b"]
+			"name" : "Karte nach rechts scrollen",
+			"commands" : ["(?:scroll )?(:?nach )?rechts", "(:?nach )?rechts scrollen"]
 		},
 		{
 			"action" : "openMap",
-			"name" : "Show map",
-			"commands" : ["show map"]
+			"name" : "Zeige Karte",
+			"commands" : ["zeige karte", "karte zeigen"]
 		},
 
 
 		{
 			"action" : "OwnReloadPage",
-			"name" : "Reload Page",
+			"name" : "Seite aktualisieren",
 			"commands" : []
 		},
 		{
 			"action" : "OwnGoBack",
-			"name" : "Go back",
+			"name" : "Eine Seite zurück",
 			"commands" : []
 		},
 		{
 			"action" : "OwnGoForward",
-			"name" : "Go forward",
+			"name" : "Eine Seite vor",
 			"commands" : []
 		},
 		{
 			"action" : "OwnScrollToTop",
-			"name" : "Scroll to top",
+			"name" : "Zum Anfang scrollen",
 			"commands" : []
 		},
 		{
 			"action" : "OwnScrollToMiddle",
-			"name" : "Scroll to middle",
+			"name" : "Zur Mitte scrollen",
 			"commands" : []
 		},
 		{
 			"action" : "OwnScrollToBottom",
-			"name" : "Scroll to bottom",
-			"commands" : []
-		},
-		{
-			"action" : "OwnScrollToBottom",
-			"name" : "Scroll to bottom",
+			"name" : "Zum Ende scrollen",
 			"commands" : []
 		},
 		{
 			"action" : "OwnScrollUp",
-			"name" : "Scroll up",
+			"name" : "Hochscrollen",
 			"commands" : []
 		},
 		{
 			"action" : "OwnScrollDown",
-			"name" : "Scroll down",
+			"name" : "Runterscrollen",
 			"commands" : []
 		},
 		{
 			"action" : "OwnScrollLeft",
-			"name" : "Scroll left",
+			"name" : "Nach links scrollen",
 			"commands" : []
 		},
 		{
 			"action" : "OwnScrollRight",
-			"name" : "Scroll right",
+			"name" : "Nach rechts scrollen",
 			"commands" : []
 		},
 
 
 		{
 			"action" : "scrollToTop",
-			"name" : "Scroll to top",
-			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\btop\\b"]
+			"name" : "Zum Anfang scrollen",
+			"commands" : ["(?:zum |an |an den )?Anfang scrollen", "scroll (?:zum |an |an den )?Anfang"]
 		},
 		{
 			"action" : "scrollToMiddle",
-			"name" : "Scroll to middle",
-			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\bmiddle\\b"]
+			"name" : "Zur Mitte scrollen",
+			"commands" : ["(?:zur |in die )?Mitte scrollen", "scroll (?:zur |in die )?Mitte"]
 		},
 		{
 			"action" : "scrollToBottom",
-			"name" : "Scroll to bottom",
-			"commands" : ["(?:scroll )?(?:to )?(?:the )?\\bbottom\\b"]
+			"name" : "Zum Ende scrollen",
+			"commands" : ["(?:zum |an |an das )?Ende scrollen", "scroll (?:zum |an |an das )?Ende"]
 		},
 		{
 			"action" : "scrollLeft",
-			"name" : "Scroll left",
-			"commands" : ["(?:scroll )?\\bleft\\b"]
+			"name" : "Nach links scrollen",
+			"commands" : ["(?:scroll )?(:?nach )?links", "(:?nach )?links scrollen"]
 		},
 		{
 			"action" : "scrollRight",
-			"name" : "Scroll right",
-			"commands" : ["(?:scroll )?\\bright\\b"]
+			"name" : "Nach rechts scrollen",
+			"commands" : ["(?:scroll )?(:?nach )?rechts", "(:?nach )?rechts scrollen"]
 		},
 
 
 		{
 			"action" : "webSearch",
-			"name" : "Web search",
-			"commands" : ["web search (.+)", "websearch (.+)", "google (.+)", "bing (.+)"]
+			"name" : "Internetsuche",
+			"commands" : ["internet(:? )?suche (.+)", "google (.+)", "bing (.+)"]
 		},
 		{
 			"action" : "languageWebSearch",
-			"name" : "Scroll right",
-			"commands" : ["language web search", "language websearch", "language google", "language bing"]
+			"name" : "Internetsuche in anderer Sprache",
+			"commands" : ["Sprache(:?n)? internet(:? )?suche", "wechsle internet(:? )?suche(:?n)? Sprache(:?n)?", "Sprache(:?n)? google", "Sprache(:?n)? bing"]
 		},
 
 
 		{
 			"action" : "search",
-			"name" : "Search",
-			"commands" : ["search (:?for )?(.+)"]
+			"name" : "Suche",
+			"commands" : ["suche (:?nach )?(.+)"]
 		},
 		{
 			"action" : "searchLanguage",
-			"name" : "Search in other language",
-			"commands" : ["language search", "change search language"]
+			"name" : "Suche in anderer Sprache",
+			"commands" : ["Sprache(:?n)? suche", "wechsle suche(:?n)? Sprache(:?n)?"]
 		},
 		{
 			"action" : "certainMatch",
-			"name" : "Go to certain match",
-			"commands" : ["go to match (\\d+)"]
+			"name" : "zu bestimmten Treffer gehen",
+			"commands" : ["geh(:?e)? zum Treffer (\\d+)"]
 		},
 
 
 		{
 			"action" : "newTab",
-			"name" : "New tab",
-			"commands" : ["new tab"]
+			"name" : "Neuer Tab",
+			"commands" : ["neuer tab"]
 		},
 		{
 			"action" : "openNewPage",
-			"name" : "Open new page",
-			"commands" : ["open page (.+)"]
+			"name" : "Neue Seite öffnen",
+			"commands" : ["öffne Seite (.+)"]
 		},
 		{
-			"action" : "close",
-			"name" : "Close",
-			"commands" : ["close (tab|window)"]
+			"action" : "closeTab",
+			"name" : "Tab schließen",
+			"commands" : ["schließe tab", "tab schließen"]
+		},
+		{
+			"action" : "closeWindow",
+			"name" : "Fenster schließen",
+			"commands" : ["schließe fenster", "fenster schließen"]
 		},
 		{
 			"action" : "reload",
-			"name" : "Reload",
-			"commands" : ["reload"]
+			"name" : "Aktualisieren",
+			"commands" : ["aktualisiere(:?n)?"]
 		},
 		{
 			"action" : "goBackOnePage",
-			"name" : "Go back one page",
-			"commands" : ["go back"]
+			"name" : "Eine Seite zurück",
+			"commands" : ["(:?eine )?seite zurück"]
 		},
 		{
 			"action" : "goForwardOnePage",
-			"name" : "Go forward one page",
-			"commands" : ["go forward"]
+			"name" : "Eine Seite vor",
+			"commands" : ["(:?eine )?seite vor"]
 		},
 
 
 		{
 			"action" : "watchVideos",
-			"name" : "Watch videos",
-			"commands" : ["watch videos"]
+			"name" : "Videos schauen",
+			"commands" : ["zeige videos", "videos (:?schauen|zeigen)"]
 		},
 		{
 			"action" : "certainVideo",
-			"name" : "Watch certain video",
-			"commands" : ["watch video (\\d+)"]
+			"name" : "Bestimmtes Video schauen",
+			"commands" : ["zeige video (\\d+)", "video (\\d+) (:?schauen|zeigen)"]
 		},
 		{
 			"action" : "playVideo",
-			"name" : "Play video",
-			"commands" : ["play video"]
+			"name" : "Video straten",
+			"commands" : ["video starten", "play"]
 		},
 		{
 			"action" : "stopVideo",
-			"name" : "Stop video",
-			"commands" : ["stop video"]
+			"name" : "Video stoppen",
+			"commands" : ["video (:?stoppen|anhalten|pausieren)", "stop", "pause", "halt"]
 		},
 		{
 			"action" : "clickVideo",
-			"name" : "Click video",
-			"commands" : ["click (:?on )?video"]
+			"name" : "Video anklicken",
+			"commands" : ["klick(:?e)? (:?auf )?(:?das )?video", "klick(:?e)? (:?das )?video an", "video (:?an)?klicken"]
 		},
 		{
 			"action" : "muteVideo",
-			"name" : "Mute video",
-			"commands" : ["mute video"]
+			"name" : "Video stumm schalten",
+			"commands" : ["video stumm (:?schalten)?"]
 		},
 		{
 			"action" : "unmuteVideo",
