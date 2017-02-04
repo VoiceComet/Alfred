@@ -121,7 +121,7 @@
 		{
 			"action" : "muteEnable",
 			"name" : "Stumm einschalten",
-			"commands" : ["stumm", "hör(:?.)? weg", "geh(:?.)? weg"]
+			"commands" : ["stumm", "hör(?:.)? weg", "geh(?:.)? weg"]
 		},
 		{
 			"action" : "muteDisable",
@@ -146,12 +146,12 @@
 		{
 			"action" : "scrollUp",
 			"name" : "Hochscrollen",
-			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(:?her|hin|r)auf\\b"]
+			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(?:her|hin|r)auf\\b"]
 		},
 		{
 			"action" : "scrollDown",
 			"name" : "Runterscrollen",
-			"commands" : ["(?:scroll )?\\b(:?her|hin|r)unter\\b", "runterscrollen"]
+			"commands" : ["(?:scroll )?\\b(?:her|hin|r)unter\\b", "runterscrollen"]
 		},
 		{
 			"action" : "enlargePanel",
@@ -188,7 +188,7 @@
 		{
 			"action" : "showAddressOnMap",
 			"name" : "Zeige Adresse auf Karte",
-			"commands" : ["zeige (?:die )?(?:Addresse )?auf (:?der )?Karte"]
+			"commands" : ["zeige (?:die )?(?:Addresse )?auf (?:der )?Karte"]
 		},
 
 
@@ -220,12 +220,12 @@
 		{
 			"action" : "addFolder",
 			"name" : "Ordner hinzufügen",
-			"commands" : ["erstelle (?:neuen )?Ordner", "füg(:?e)? (?:neuen )?Ordner hinzu", "(?:neuen )?Ordner hinzufügen"]
+			"commands" : ["erstelle (?:neuen )?Ordner", "füg(?:e)? (?:neuen )?Ordner hinzu", "(?:neuen )?Ordner hinzufügen"]
 		},
 		{
 			"action" : "addFolderInFolder",
 			"name" : "Ordner in Ordner hinzufügen",
-			"commands" : ["erstelle (?:neuen )?Ordner in (.+)", "füg(:?e)? (?:neuen )?Ordner in (.+) hinzu", "(?:neuen )?Ordner in (.+) hinzufügen"]
+			"commands" : ["erstelle (?:neuen )?Ordner in (.+)", "füg(?:e)? (?:neuen )?Ordner in (.+) hinzu", "(?:neuen )?Ordner in (.+) hinzufügen"]
 		},
 		{
 			"action" : "sayTitleFolder",
@@ -272,7 +272,7 @@
 		{
 			"action" : "imageOnPage",
 			"name" : "Bild auf der Seite",
-			"commands" : ["Zeige Bild auf (:?der )?Seite"]
+			"commands" : ["Zeige Bild auf (?:der )?Seite"]
 		},
 		{
 			"action" : "backToSlides",
@@ -304,7 +304,7 @@
 		{
 			"action" : "searchLanguage",
 			"name" : "Link Sprachsuche",
-			"commands" : ["(:?wechsle )?Link(:? )?Sprache"]
+			"commands" : ["(?:wechsle )?Link(?: )?Sprache"]
 		},
 		{
 			"action" : "openLink",
@@ -326,17 +326,17 @@
 		{
 			"action" : "mapLanguageSearch",
 			"name" : "Kartensuche in anderer Sprache",
-			"commands" : ["sprachen(:? )?suche"]
+			"commands" : ["sprachen(?: )?suche"]
 		},
 		{
 			"action" : "mapSearchRoute",
 			"name" : "Routensuche",
-			"commands" : ["von (.+) (:?nach|zu) (.+)"]
+			"commands" : ["von (.+) (?:nach|zu) (.+)"]
 		},
 		{
 			"action" : "mapLanguageSearchRoute",
 			"name" : "Routensuche in anderer Sprache",
-			"commands" : ["sprache(:?n)? route"]
+			"commands" : ["sprache(?:n)? route"]
 		},
 		{
 			"action" : "mapZoomToMarker",
@@ -351,32 +351,32 @@
 		{
 			"action" : "mapZoomIn",
 			"name" : "Karte hineinzoomen",
-			"commands" : ["(:?hin|her)ein(?:zoomen)?", "zoom (:?hin|her)ein", "zoom(:?en)?"]
+			"commands" : ["(?:hin|her)ein(?:zoomen)?", "zoom (?:hin|her)ein", "zoom(?:en)?"]
 		},
 		{
 			"action" : "mapZoomOut",
 			"name" : "Karte herauszoomen",
-			"commands" : ["(:?hin|her)aus(?:zoomen)?", "zoom (:?hin|her)aus"]
+			"commands" : ["(?:hin|her)aus(?:zoomen)?", "zoom (?:hin|her)aus"]
 		},
 		{
 			"action" : "mapScrollUp",
 			"name" : "Karte hochscrollen",
-			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(:?her|hin|r)auf\\b"]
+			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(?:her|hin|r)auf\\b"]
 		},
 		{
 			"action" : "mapScrollDown",
 			"name" : "Karte runterscrollen",
-			"commands" : ["(?:scroll )?\\b(:?her|hin|r)unter\\b", "runterscrollen"]
+			"commands" : ["(?:scroll )?\\b(?:her|hin|r)unter\\b", "runterscrollen"]
 		},
 		{
 			"action" : "mapScrollLeft",
 			"name" : "Karte nach links scrollen",
-			"commands" : ["(?:scroll )?(:?nach )?links", "(:?nach )?links scrollen"]
+			"commands" : ["(?:scroll )?(?:nach )?links", "(?:nach )?links scrollen"]
 		},
 		{
 			"action" : "mapScrollRight",
 			"name" : "Karte nach rechts scrollen",
-			"commands" : ["(?:scroll )?(:?nach )?rechts", "(:?nach )?rechts scrollen"]
+			"commands" : ["(?:scroll )?(?:nach )?rechts", "(?:nach )?rechts scrollen"]
 		},
 		{
 			"action" : "openMap",
@@ -455,41 +455,41 @@
 		{
 			"action" : "scrollLeft",
 			"name" : "Nach links scrollen",
-			"commands" : ["(?:scroll )?(:?nach )?links", "(:?nach )?links scrollen"]
+			"commands" : ["(?:scroll )?(?:nach )?links", "(?:nach )?links scrollen"]
 		},
 		{
 			"action" : "scrollRight",
 			"name" : "Nach rechts scrollen",
-			"commands" : ["(?:scroll )?(:?nach )?rechts", "(:?nach )?rechts scrollen"]
+			"commands" : ["(?:scroll )?(?:nach )?rechts", "(?:nach )?rechts scrollen"]
 		},
 
 
 		{
 			"action" : "webSearch",
 			"name" : "Internetsuche",
-			"commands" : ["internet(:? )?suche (.+)", "google (.+)", "bing (.+)"]
+			"commands" : ["internet(?: )?suche (.+)", "google (.+)", "bing (.+)"]
 		},
 		{
 			"action" : "languageWebSearch",
 			"name" : "Internetsuche in anderer Sprache",
-			"commands" : ["Sprache(:?n)? internet(:? )?suche", "wechsle internet(:? )?suche(:?n)? Sprache(:?n)?", "Sprache(:?n)? google", "Sprache(:?n)? bing"]
+			"commands" : ["Sprache(?:n)? internet(?: )?suche", "wechsle internet(?: )?suche(?:n)? Sprache(?:n)?", "Sprache(?:n)? google", "Sprache(?:n)? bing"]
 		},
 
 
 		{
 			"action" : "search",
 			"name" : "Suche",
-			"commands" : ["suche (.+)"]
+			"commands" : ["suche (?:nach)? (.+)"]
 		},
 		{
 			"action" : "searchLanguage",
 			"name" : "Suche in anderer Sprache",
-			"commands" : ["Sprache(:?n)? suche", "wechsle suche(:?n)? Sprache(:?n)?"]
+			"commands" : ["Sprache(?:n)? suche", "wechsle suche(?:n)? Sprache(?:n)?"]
 		},
 		{
 			"action" : "certainMatch",
 			"name" : "zu bestimmten Treffer gehen",
-			"commands" : ["geh zu Treffer (\\d+)", "gehe zu Treffer (\\d+)"]
+			"commands" : ["geh(?:e)? zu Treffer (\\d+)"]
 		},
 
 
@@ -516,29 +516,29 @@
 		{
 			"action" : "reload",
 			"name" : "Aktualisieren",
-			"commands" : ["aktualisiere(:?n)?"]
+			"commands" : ["aktualisiere(?:n)?"]
 		},
 		{
 			"action" : "goBackOnePage",
 			"name" : "Eine Seite zurück",
-			"commands" : ["(:?eine )?seite zurück"]
+			"commands" : ["(?:eine )?seite zurück"]
 		},
 		{
 			"action" : "goForwardOnePage",
 			"name" : "Eine Seite vor",
-			"commands" : ["(:?eine )?seite vor"]
+			"commands" : ["(?:eine )?seite vor"]
 		},
 
 
 		{
 			"action" : "watchVideos",
 			"name" : "Videos schauen",
-			"commands" : ["zeige videos", "videos (:?schauen|zeigen)"]
+			"commands" : ["zeige videos", "videos (?:schauen|zeigen)"]
 		},
 		{
 			"action" : "certainVideo",
 			"name" : "Bestimmtes Video schauen",
-			"commands" : ["zeige video (\\d+)", "video (\\d+) (:?schauen|zeigen)"]
+			"commands" : ["zeige video (\\d+)", "video (\\d+) (?:schauen|zeigen)"]
 		},
 		{
 			"action" : "playVideo",
@@ -548,32 +548,32 @@
 		{
 			"action" : "stopVideo",
 			"name" : "Video stoppen",
-			"commands" : ["video (:?stoppen|anhalten|pausieren)", "stop", "pause", "halt"]
+			"commands" : ["video (?:stoppen|anhalten|pausieren)", "stop", "pause", "halt"]
 		},
 		{
 			"action" : "clickVideo",
 			"name" : "Video anklicken",
-			"commands" : ["klick(:?e)? (:?auf )?(:?das )?video", "klick(:?e)? (:?das )?video an", "video (:?an)?klicken"]
+			"commands" : ["klick(?:e)? (?:auf )?(?:das )?video", "klick(?:e)? (?:das )?video an", "video (?:an)?klicken"]
 		},
 		{
 			"action" : "muteVideo",
 			"name" : "Video stumm schalten",
-			"commands" : ["video stumm (:?schalten)?", "video stumm"]
+			"commands" : ["video stumm (?:schalten)?", "video stumm"]
 		},
 		{
 			"action" : "unmuteVideo",
 			"name" : "Video laut schalten",
-			"commands" : ["video laut (:?schalten)?", "video laut"]
+			"commands" : ["video laut (?:schalten)?", "video laut"]
 		},
 		{
 			"action" : "jumpForwardVideo",
 			"name" : "Vorwärts springen",
-			"commands" : ["vorwärts (:?s)?"]
+			"commands" : ["vorwärts (?:s)?"]
 		},
 		{
 			"action" : "jumpBackwardsVideo",
 			"name" : "Rückwärts springen",
-			"commands" : ["zurück (:?s)?"]
+			"commands" : ["zurück (?:s)?"]
 		},
 		{
 			"action" : "jumpCertainVideo",
@@ -593,7 +593,7 @@
 		{
 			"action" : "setVolumeVideo",
 			"name" : "Setze Lautstärke",
-			"commands" : ["(:?setze )?lautsärke (:?auf )?([0-9]+)"]
+			"commands" : ["(?:setze )?lautsärke (?:auf )?([0-9]+)"]
 		},
 
 

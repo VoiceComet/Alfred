@@ -160,7 +160,7 @@
 	"stoppedInteractingVideos" : "Ich habe aufgehört mit den Videos zu interagieren",
 
 	"and" : "und",
-	"cannotFindWeatherOfX" : "Ic hkann keinen Wetterbericht für {0} finden",
+	"cannotFindWeatherOfX" : "Ich hkann keinen Wetterbericht für {0} finden",
 	"cannotFindWeather" : "Ich kann keinen Wetterbericht finden",
 	"weatherOfXLoading" : "\"{0}\" Wetter lädt...",
 

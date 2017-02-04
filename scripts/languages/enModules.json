@@ -479,7 +479,7 @@
 		{
 			"action" : "search",
 			"name" : "Search",
-			"commands" : ["search (:?for )?(.+)"]
+			"commands" : ["search (?:for )?(.+)"]
 		},
 		{
 			"action" : "searchLanguage",
@@ -553,7 +553,7 @@
 		{
 			"action" : "clickVideo",
 			"name" : "Click video",
-			"commands" : ["click (:?on )?video"]
+			"commands" : ["click (?:on )?video"]
 		},
 		{
 			"action" : "muteVideo",
@@ -568,12 +568,12 @@
 		{
 			"action" : "jumpForwardVideo",
 			"name" : "Jump forward",
-			"commands" : ["jump forward(:?s)?"]
+			"commands" : ["jump forward(?:s)?"]
 		},
 		{
 			"action" : "jumpBackwardsVideo",
 			"name" : "Jump backward",
-			"commands" : ["jump backward(:?s)?"]
+			"commands" : ["jump backward(?:s)?"]
 		},
 		{
 			"action" : "jumpCertainVideo",
@@ -593,7 +593,7 @@
 		{
 			"action" : "setVolumeVideo",
 			"name" : "Set volume",
-			"commands" : ["(:?set )?volume (:?to )?([0-9]+)"]
+			"commands" : ["(?:set )?volume (?:to )?([0-9]+)"]
 		},
 
 
