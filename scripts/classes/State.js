@@ -429,7 +429,7 @@ function State (internalName) {
 					//noinspection JSPotentiallyInvalidUsageOfThis
 					this.cancelAction.dialogState = this;
 					//noinspection JSPotentiallyInvalidUsageOfThis,JSUnusedLocalSymbols
-					this.cancelAction.act = function(arguments) {
+					this.cancelAction.cancelAct = function(arguments) {
 						this.dialogState.hideDialog(this.messageId);
 					};
 				};
