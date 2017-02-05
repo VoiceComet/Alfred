@@ -161,6 +161,10 @@ function getNextCancelState() {
  * @global
  */
 function changeActiveState(newState, cancelStack) {
+	if (newState == null) {
+		console.error("change active state to null state is not possible", newState);
+		return;
+	}
 	if (typeof tabCancelStacks[activeTab] === 'undefined') {
 		tabCancelStacks[activeTab] = [];
 	}
@@ -231,16 +235,6 @@ function browserAction(tab) {
 }
 chrome.browserAction.onClicked.addListener(browserAction);
 
-
-window.addEventListener("load", function() {
-	if (!('webkitSpeechRecognition' in window)) {
-		alert("webkitSpeechRecognition not available.");
-	} else {
-		changeActiveState(globalCommonState);
-	}
-}, false);
-
-
 /**
  * activate the correct state of this tab
  * @param {Object} activeInfo
@@ -303,3 +297,13 @@ function checkCorrectState(tabId, changeInfo) {
 	}
 }
 chrome.tabs.onUpdated.addListener(checkCorrectState);
+
+
+window.addEventListener("load", function() {
+	if (!('webkitSpeechRecognition' in window)) {
+		console.error("webkitSpeechRecognition not available.");
+		alert("webkitSpeechRecognition not available.");
+	} else {
+		changeActiveState(globalCommonState);
+	}
+}, false);

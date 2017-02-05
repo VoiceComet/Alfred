@@ -41,7 +41,7 @@ addModule(new Module("searchModule", function() {
      * change language of expression
      * @type {Action}
      */
-    var searchLanguage = new MultilingualAction("searchLanguage", search, [{notify: translate("whatShallISearchFor"), say: translate("whatShallISearchFor")}]);
+    var searchLanguage = new MultilingualAction("searchLanguage", search, [{notify: "whatShallISearchFor", say: "whatShallISearchFor"}]);
     this.addAction(searchLanguage);
     searchState.addAction(searchLanguage);
 

@@ -37,7 +37,7 @@ addModule(new Module("mapModule", function () {
 		 * multilingual search
 		 * @type {MultilingualAction}
 		 */
-		var mapLanguageSearch = new MultilingualAction("mapLanguageSearch", mapSearch, [{notify:translate("sayQueryInChosenLanguage"), say:translate("sayQueryInChosenLanguage")}]);
+		var mapLanguageSearch = new MultilingualAction("mapLanguageSearch", mapSearch, [{notify:"sayQueryInChosenLanguage", say:"sayQueryInChosenLanguage"}]);
 		//noinspection JSPotentiallyInvalidUsageOfThis
 		this.addAction(mapLanguageSearch);
 
@@ -57,8 +57,8 @@ addModule(new Module("mapModule", function () {
 		 * @type {MultilingualAction}
 		 */
 		var mapLanguageSearchRoute = new MultilingualAction("mapLanguageSearchRoute", mapSearchRoute, [
-			{notify:translate("sayOriginInChosenLanguage"), say:translate("sayOriginInChosenLanguage")},
-			{notify:translate("sayDestinationInChosenLanguage"), say:translate("sayDestinationInChosenLanguage")}
+			{notify:"sayOriginInChosenLanguage", say:"sayOriginInChosenLanguage"},
+			{notify:"sayDestinationInChosenLanguage", say:"sayDestinationInChosenLanguage"}
 		]);
 		//noinspection JSPotentiallyInvalidUsageOfThis
 		this.addAction(mapLanguageSearchRoute);

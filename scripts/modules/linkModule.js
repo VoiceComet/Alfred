@@ -100,7 +100,7 @@ addModule(new Module("linkModule", function () {
      * change language for link
      * @type {Action}
      */
-    var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: translate("whichLink"), say: translate("whichLink")}]);
+    var searchLanguage = new MultilingualAction("searchLanguage", certainName, [{notify: "whichLink", say: "whichLink"}]);
     linkState.addAction(searchLanguage);
     this.addAction(searchLanguage);
 

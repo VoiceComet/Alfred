@@ -71,11 +71,11 @@ function MultilingualAction(name, relatedAction, settings) {
 					if (settings.length >= 1) {
 						var pos = parameterNumber - 1;
 						if (settings[pos].hasOwnProperty("notify") && settings[pos].notify != "") {
-							paramText = settings[pos].notify;
+							paramText = translate(settings[pos].notify);
 						}
 
 						if (settings[pos].hasOwnProperty("say") && settings[pos].say != "") {
-							say(settings[pos].say);
+							say(translate(settings[pos].say));
 						}
 					}
 					notify(paramText, 0, function(messageId) {
