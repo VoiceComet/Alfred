@@ -89,7 +89,7 @@ function updateMessage(params) {
 		}
 		//add cancel action
 		if (params.hasOwnProperty('cancelable') && params.cancelable) {
-			html += '<div class="right">cancel</div>';
+			html += '<div class="right">' + translate("cancel") + '</div>';
 		}
 		html += '</div>';
 	}

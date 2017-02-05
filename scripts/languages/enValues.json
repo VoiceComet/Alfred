@@ -1,6 +1,7 @@
 {
 	"previous" : "previous",
 	"next" : "next",
+	"cancel" : "cancel",
 	"thisIsMyNewVoice" : "This is my new voice",
 
 	"english" : "english",
@@ -19,6 +20,7 @@
 	"IDontKnowWhatYouMeanWith" : "I don't know what you mean with {0}.",
 	"PleaseRepeatYourWish" : "Please, repeat your wish",
 	"networkError" : "Network Error. Please check your network connection.",
+	"attention" : "Attention!",
 
 	"matchXOfY" : "match {0} of {1}",
 	"couldNotFindAddresses" : "I could not find addresses.",

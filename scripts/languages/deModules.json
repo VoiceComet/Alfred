@@ -479,7 +479,7 @@
 		{
 			"action" : "search",
 			"name" : "Suche",
-			"commands" : ["suche (?:nach)? (.+)"]
+			"commands" : ["suche (?:nach )?(.+)"]
 		},
 		{
 			"action" : "searchLanguage",

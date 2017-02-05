@@ -134,7 +134,7 @@ function showPanel(params) {
 	//generate html
 	var html = "";
 	if (typeof params.cancelable === 'undefined' || params.cancelable) {
-		html += '<div class="top right">cancel</div>';
+		html += '<div class="top right">' + translate("cancel") + '</div>';
 	}
 	html += params.html;
 
@@ -244,7 +244,7 @@ function elementScrollUp(params) {
 	if(scrollTo < scrollPosVertical) {
 		element.animate({scrollTop: scrollTo}, 1000);
 	} else {
-		showMessage({title: "Attention!", content: "Scrolling up isn't possible"});
+		showMessage({title: translate("attention"), content: translate("notifyCannotScrollUp")});
 	}
 }
 
@@ -268,7 +268,7 @@ function elementScrollDown(params) {
 	if (scrollTo > scrollPosVertical) {
 		element.animate({scrollTop: scrollTo}, 1000);
 	} else {
-		showMessage({title: "Attention!", content: "Scrolling down isn't possible"});
+		showMessage({title: translate("attention"), content: translate("notifyCannotScrollDown")});
 	}
 }
 

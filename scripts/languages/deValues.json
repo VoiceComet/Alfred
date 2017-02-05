@@ -1,6 +1,7 @@
 {
 	"previous" : "zurück",
 	"next" : "vor",
+	"cancel" : "abbrechen",
 	"thisIsMyNewVoice" : "Das ist meine neue Stimme",
 
 	"english" : "englisch",
@@ -19,6 +20,7 @@
 	"IDontKnowWhatYouMeanWith" : "Ich weiß nicht, was du mit {0} meinst.",
 	"PleaseRepeatYourWish" : "Bitte wiederhole deinen Wunsch",
 	"networkError" : "Netzwerkfehler. Bitte überprüfe deine Internetverbindung.",
+	"attention" : "Achtung!",
 
 	"matchXOfY" : "Treffer {0} von {1}",
 	"couldNotFindAddresses" : "Ich konnte keine Adressen finden.",
@@ -160,7 +162,7 @@
 	"stoppedInteractingVideos" : "Ich habe aufgehört mit den Videos zu interagieren",
 
 	"and" : "und",
-	"cannotFindWeatherOfX" : "Ich hkann keinen Wetterbericht für {0} finden",
+	"cannotFindWeatherOfX" : "Ich kann keinen Wetterbericht für {0} finden",
 	"cannotFindWeather" : "Ich kann keinen Wetterbericht finden",
 	"weatherOfXLoading" : "\"{0}\" Wetter lädt...",
 
