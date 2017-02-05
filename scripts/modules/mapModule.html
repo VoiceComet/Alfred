@@ -33,7 +33,11 @@ function initAlfredMap() {
 
 /**
  * set a marker on the map
- * @param {google.maps.places.PlaceResult} place - marker place
+ * @param {Object} place - place object
+ * @param {string} place.name - name of place
+ * @param {string} place.formatted_address - address of place
+ * @param {Object} place.geometry
+ * @param {google.maps.LatLng} place.geometry.location - LatLng of place
  */
 function createMarker(place) {
     alfredMapMarkers.push({

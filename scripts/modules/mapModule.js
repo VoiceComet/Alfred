@@ -42,6 +42,24 @@ addModule(new Module("mapModule", function () {
 		this.addAction(mapLanguageSearch);
 
 		/**
+		 * show users loaction on map
+		 * @type {Action}
+		 */
+		var mapShowUsersLocation = new Action("mapShowUsersLocation", 0, this);
+		mapShowUsersLocation.act = function () {
+			function showPosition(position) {
+				callContentScriptMethod("mapShowUsersLocation", {latitude:position.coords.latitude, longitude:position.coords.longitude});
+			}
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition);
+			} else {
+				console.warn("location unavailable.");
+			}
+		};
+		//noinspection JSPotentiallyInvalidUsageOfThis
+		this.addAction(mapShowUsersLocation);
+
+		/**
 		 * search route
 		 * @type {Action}
 		 */

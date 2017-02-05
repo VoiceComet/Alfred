@@ -10,6 +10,7 @@
 		"notifications",
 		"history",
 		"bookmarks",
+		"geolocation",
 		"storage"
 	],
 

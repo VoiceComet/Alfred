@@ -96,6 +96,9 @@
 	"stoppedInteractingWithLinks" : "Ich habe aufgehört mit den Links zu interagieren",
 	"whichLink" : "Welchen Link soll ich suchen?",
 
+	"yourLocation" : "Deine Position",
+	"latitude" : "Breitengrad",
+	"longitude" : "Längengrad",
 	"LetterXDoesNotExist" : "Buchstabe {0} existiert nicht.",
 	"ZoomingIsNotPossible" : "Zoomen ist nicht möglich.",
 	"foundPlaceX" : "Ich habe den Ort \"{0}\" gefunden.",

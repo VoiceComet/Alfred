@@ -64,6 +64,29 @@ addContentScriptMethod(
 );
 
 addContentScriptMethod(
+	new ContentScriptMethod("mapShowUsersLocation", function(params) {
+		runMethodOnPage(function(params) {
+			//clear markers
+			clearMarkers();
+			var latLng = new google.maps.LatLng(params.latitude, params.longitude);
+			var place = {
+				name : translate("yourLocation"),
+				formatted_address : translate("latitude") + ": " + params.latitude + "<br/>" + translate("longitude") + ": " + params.longitude,
+				geometry : {
+					location : latLng
+				}
+			};
+			//create new markers
+			createMarker(place);
+			//center marker
+			alfredMap.panTo(latLng);
+
+			showMessage({title:place.name, content:place.formatted_address});
+		}, params);
+	})
+);
+
+addContentScriptMethod(
 	new ContentScriptMethod("mapSearchRoute", function(params) {
 		runMethodOnPage(function(params) {
 			searchRouteOnAlfredMap(params.origin, params.destination);

@@ -329,6 +329,11 @@
 			"commands" : ["sprachen(?: )?suche"]
 		},
 		{
+			"action" : "mapShowUsersLocation",
+			"name" : "Zeige Nutzers Position",
+			"commands" : ["zeige (?:meine )?position", "gehe zu (?:meiner )?position"]
+		},
+		{
 			"action" : "mapSearchRoute",
 			"name" : "Routensuche",
 			"commands" : ["von (.+) (?:nach|zu) (.+)"]

@@ -96,6 +96,9 @@
 	"stoppedInteractingWithLinks" : "I stopped interacting with links",
 	"whichLink" : "Which link shall i got to?",
 
+	"yourLocation" : "Your location",
+	"latitude" : "Latitude",
+	"longitude" : "Longitude",
 	"LetterXDoesNotExist" : "Letter {0} does not exist.",
 	"ZoomingIsNotPossible" : "Zooming is not possible.",
 	"foundPlaceX" : "I found the place \"{0}\".",
