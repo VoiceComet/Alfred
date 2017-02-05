@@ -134,7 +134,7 @@ function updateMessage(params) {
 		}
 		return params.id;
 	} else {
-		console.log("message id " + params.id + " not found");
+		console.warn("message id " + params.id + " not found");
 	}
 	return null
 }
@@ -232,6 +232,6 @@ function translate(key) {
 	if (languageJson.hasOwnProperty(key)) {
 		return languageJson[key];
 	}
-	console.log("could not find translation of " + key);
+	console.warn("could not find translation of " + key);
 	return key;
 }

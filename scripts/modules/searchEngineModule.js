@@ -31,7 +31,7 @@ addModule(new Module("searchEngineModule", function() {
 			 * @param error
 			 */
 			function showSearchEngineError(error) {
-				console.log("Search Engine Request Failed: " + error );
+				console.warn("Search Engine Request Failed", error );
 				notify(translate("searchEngineError"));
 				say(translate("searchEngineError"));
 			}
@@ -64,8 +64,6 @@ addModule(new Module("searchEngineModule", function() {
 
 					//noinspection JSUnresolvedFunction
 					$.getJSON(url, function(json) {
-						//console.log(json);
-
 						//translate google json to alfreds json
 						//noinspection JSUnresolvedVariable
 						if (json != null) {
@@ -132,7 +130,7 @@ addModule(new Module("searchEngineModule", function() {
 								xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '5f37efca5e0641d884902129d20db859');
 							},
 							success: function(json) {
-								//console.log(json);
+								//console.debug(json);
 
 								//translate bing json to alfreds json
 								if (json != null) {
@@ -202,7 +200,7 @@ addModule(new Module("searchEngineModule", function() {
 		};
 
 		this.afterLoading = function (searchResultObject) {
-			//console.log(searchResultObject);
+			//console.debug(searchResultObject);
 
 			if (searchResultObject != null) {
 				//show results

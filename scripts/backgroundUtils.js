@@ -151,7 +151,7 @@ function getTranslationObject(className, key) {
 			}
 		}
 	}
-	console.log("could not find " + className + " " + key);
+	console.warn("could not find " + className + " " + key);
 	return null;
 }
 
@@ -238,6 +238,6 @@ function translate(key) {
 	if (languageJson.hasOwnProperty(key)) {
 		return languageJson[key];
 	}
-	console.log("could not find translation of " + key);
+	console.warn("could not find translation of " + key);
 	return key;
 }

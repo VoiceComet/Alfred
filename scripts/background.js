@@ -160,8 +160,7 @@ function getNextCancelState() {
 		tabCancelStacks[activeTab].splice(lastPos, 1);
 		return newState;
 	}
-	console.log("cancel error: stack is empty");
-	console.log(tabCancelStacks[activeTab]);
+	console.error("cancel failed: stack is empty", tabCancelStacks[activeTab]);
 	return null;
 }
 
@@ -195,12 +194,11 @@ function changeActiveState(newState, cancelStack) {
 			}
 		}
 	}
-	//console.log(tabCancelStacks[activeTab]);
 
 	var oldState = activeState;
 	activeState = newState;
 	tabStates[activeTab] = activeState;
-	//console.log("run " + activeState.name + " (alt: " + ((oldState != null) ? oldState.name : "null") + ")");
+	console.debug("run " + activeState.internalName + " (old: " + ((oldState != null) ? oldState.internalName : "null") + ")");
 	activeState.run(oldState);
 }
 
@@ -304,14 +302,12 @@ chrome.tabs.onUpdated.addListener(resizeUI);
 function checkCorrectState(tabId, changeInfo) {
 	if (changeInfo.hasOwnProperty("status") && changeInfo.status == "loading") {
 		if (tabId == activeTab && activeState != globalCommonState) {
-			//console.log("change active state");
 			//stop recognition
 			if (recognizing) {
 				activeState.stopSpeechRecognition();
 			}
 			changeActiveState(globalCommonState);
 		} else if (tabStates[tabId] != globalCommonState) {
-			//console.log("change tab state");
 			tabStates[tabId] = globalCommonState;
 		}
 	}

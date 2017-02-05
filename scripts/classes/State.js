@@ -249,12 +249,12 @@ function State (internalName) {
 				}
 				/** @type {Number} */
 				var parameterPositionWeight = (i <= 1) ? 1 : weight / (i-1);
-				//console.log("confidenceWeight: " + confidenceWeight + " textLengthWeight: " + textLengthWeight + " parameterPositionWeight: " + parameterPositionWeight);
+				//console.debug("confidenceWeight: " + confidenceWeight + " textLengthWeight: " + textLengthWeight + " parameterPositionWeight: " + parameterPositionWeight);
 
 				this.weight = confidenceWeight * 0.4 + textLengthWeight * 0.4 + parameterPositionWeight * 0.2;
 				return this.weight;
 			};
-			//console.log(alternativeIndex + ": " + this.execResult['input'] + " || " + this.execResult[0] + " || " + this.getWeight());
+			//console.debug(alternativeIndex + ": " + this.execResult['input'] + " || " + this.execResult[0] + " || " + this.getWeight());
 		}
 
 		/**
@@ -529,6 +529,7 @@ function State (internalName) {
 				confidence = 0.8; //std confidence when webspeech api fails with confidence caused by bug
 			}
 
+			console.debug("speech recognition found result", alternatives);
 			that.analyseRecognitionResult(alternatives, confidence);
 			that.working = false;
 			that.updateMicrophoneIcon();
@@ -550,7 +551,7 @@ function State (internalName) {
 		//noinspection SpellCheckingInspection
 		this.recognition.onnomatch = function(event) {
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
-				console.log("no match: " + event.results[i][0].transcript);
+				console.warn("speech recognition found no match", event.results[i][0].transcript);
 			}
 		};
 
@@ -567,11 +568,11 @@ function State (internalName) {
 				permissionGrounded = false;
 			} else if (event.error == "network") {
 				that.recognition.networkError = true;
-				console.log(event.error + ": " + event.message);
+				console.warn(event.error, event.message);
 				notify(translate("networkError"), 3000);
 			} else {
 				if (event.error != "no-speech") {
-					console.log(event.error + ": " + event.message);
+					console.error(event.error, event.message);
 				}
 			}
 		};
@@ -596,6 +597,7 @@ function State (internalName) {
 		};
 		
 		this.recognition.start();
+		console.info("start speech recognition", "language = " + this.lang);
 	};
 
 	/**
@@ -617,5 +619,6 @@ function State (internalName) {
 		//noinspection SpellCheckingInspection
 		this.recognition.onend = function(event) {};
 		this.recognition.stop();
+		console.info("start speech stopped");
 	};
 }

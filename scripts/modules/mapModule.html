@@ -70,7 +70,6 @@ function searchLocationOnAlfredMap(query) {
             var bounds = new google.maps.LatLngBounds();
 
             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                //console.log(results);
                 if (results.length > 0) {
                     //clear markers
                     clearMarkers();
@@ -105,7 +104,7 @@ function searchLocationOnAlfredMap(query) {
                 showMessage({content:translate("cannotFindPlaceX").format([query])});
             } else {
                 showMessage({content:translate("serviceNotAvailable")});
-                console.log('Places request failed due to ' + status);
+                console.warn('Places request failed due to ' + status);
             }
         }
     );
@@ -169,7 +168,7 @@ function searchRouteOnAlfredMap(origin, destination) {
             });
         } else {
             showMessage({content:translate("cannotFindRouteBetweenXAndY").format([origin, destination])});
-            console.log('Directions request failed due to ' + status);
+            console.warn('Directions request failed due to ' + status);
         }
     });
 }

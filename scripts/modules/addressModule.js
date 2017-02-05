@@ -79,7 +79,7 @@ addModule(new Module("addressModule", function () {
 		var mapState = getGlobalState("MapState");
 		if (mapState == null) {
 			this.followingState = globalCommonState;
-			console.log("following map state not found");
+			console.error("showAddressOnMap: following map state not found");
 		} else {
 			callContentScriptMethod("showAddressOnMap", {});
 
