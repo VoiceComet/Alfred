@@ -52,7 +52,6 @@ function MultilingualAction(name, relatedAction, settings) {
 				//create following state and action
 				var sayParameterState = new State("sayParameterState");
 				sayParameterState.lang = lang;
-				sayParameterState.refreshLanguage = false;
 				sayParameterState.hideDialog = function () {
 					hideMessage(this.messageId);
 				};

@@ -19,8 +19,7 @@ function State (internalName) {
 	this.continuous = false;
 	this.interimResults = false;
 	this.maxAlternatives = 20;
-	this.refreshLanguage = true;
-	this.lang = 'en';
+	this.lang = null; //if null, the global language is loaded
 	
 	//standard actions
 	this.ableToMute = true;
@@ -36,6 +35,17 @@ function State (internalName) {
 	 */
 	this.getName = function() {
 		return getStateTranslation(this.internalName)
+	};
+
+	/**
+	 * get language of state
+	 * @return {String} language
+	 */
+	this.getLanguage = function() {
+		if (this.lang == null) {
+			return language; //load global language
+		}
+		return this.lang;
 	};
 
 	/**
@@ -139,25 +149,6 @@ function State (internalName) {
     this.run = function(oldState) {
 		this.oldState = oldState;
 		if (!this.initialized) {
-			if (this.refreshLanguage) {
-				var that = this;
-				function refreshLang() {
-					chrome.storage.sync.get({
-						language: 'en'
-					}, function(items) {
-						that.lang = items["language"];
-					});
-				}
-				refreshLang();
-				function onChangedListener (changes) {
-					for (var key in changes) {
-						if (key == "language") {
-							refreshLang();
-						}
-					}
-				}
-				chrome.storage.onChanged.addListener(onChangedListener);
-			}
 			this.generateStandardActions();
 			this.init();
 			this.activateStandardActions();
@@ -502,7 +493,7 @@ function State (internalName) {
 		this.recognition.continuous = this.continuous;
 		this.recognition.interimResults = this.interimResults; //true: is faster, but you get more answers per speech
 		this.recognition.maxAlternatives = this.maxAlternatives;
-		this.recognition.lang = this.lang;
+		this.recognition.lang = this.getLanguage();
 		this.recognition.networkError = false;
 		this.recognition.hearingTab = activeTab;
 
@@ -597,7 +588,7 @@ function State (internalName) {
 		};
 		
 		this.recognition.start();
-		console.info("start speech recognition", "language = " + this.lang);
+		console.debug("start speech recognition", "language = " + this.getLanguage());
 	};
 
 	/**
@@ -619,6 +610,6 @@ function State (internalName) {
 		//noinspection SpellCheckingInspection
 		this.recognition.onend = function(event) {};
 		this.recognition.stop();
-		console.info("start speech stopped");
+		console.debug("stop speech recognition");
 	};
 }

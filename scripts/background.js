@@ -44,35 +44,26 @@ chrome.storage.sync.get({
 	butlerName = items.speechAssistantName;
 });
 
+var language = 'en';
 var moduleLanguageJson = {};
+var languageJson = {};
 /**
- * load actual module language file
+ * set actual language and load language files
  */
-function loadModuleLanguageJson() {
+function loadLanguage() {
 	chrome.storage.sync.get({
 		language: 'en'
 	}, function(items) {
+		language = items["language"];
 		$.getJSON(chrome.extension.getURL("scripts/languages/" + items["language"] + "Modules.json"), function(json) {
 			moduleLanguageJson = json;
 		});
-	});
-}
-loadModuleLanguageJson();
-
-var languageJson = {};
-/**
- * load actual language file
- */
-function loadLanguageJson() {
-	chrome.storage.sync.get({
-		language: 'en'
-	}, function(items) {
 		$.getJSON(chrome.extension.getURL("scripts/languages/" + items["language"] + "Values.json"), function(json) {
 			languageJson = json;
 		});
 	});
 }
-loadLanguageJson();
+loadLanguage();
 
 
 /**
@@ -89,8 +80,7 @@ function optionChangeListener(changes) {
 				//say something with new voice
 				say(translate("thisIsMyNewVoice"));
 			} else if (key == "language") {
-				loadModuleLanguageJson();
-				loadLanguageJson();
+				loadLanguage();
 			}
 			//refresh active modules
 			for (var i = 0; i < modules.length; i++) {
@@ -198,7 +188,7 @@ function changeActiveState(newState, cancelStack) {
 	var oldState = activeState;
 	activeState = newState;
 	tabStates[activeTab] = activeState;
-	console.debug("run " + activeState.internalName + " (old: " + ((oldState != null) ? oldState.internalName : "null") + ")");
+	console.info("run " + activeState.internalName + " (old: " + ((oldState != null) ? oldState.internalName : "null") + ")");
 	activeState.run(oldState);
 }
 
