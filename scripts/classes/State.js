@@ -347,7 +347,7 @@ function State (internalName) {
 									var sameParameters = true;
 									//check parameters are equal
 									for (var paramId = 1; paramId <= actionHits[i].action.parameterCount; paramId++) {
-										if (newHitList[newHitListId].execResult[paramId] != actionHits[i].hits[hitId].execResult[paramId]) {
+										if (newHitList[newHitListId].execResult[paramId].toLowerCase() != actionHits[i].hits[hitId].execResult[paramId].toLowerCase()) {
 											sameParameters = false;
 											break;
 										}
