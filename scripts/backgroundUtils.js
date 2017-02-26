@@ -17,7 +17,7 @@ function importJsFile(path) {
  * @global
  */
 function notify(message, time, callback) {
-	callContentScriptMethod("showMessage", {content: message, centered: true, time: time}, callback);
+	callContentScriptMethod("showMessage", {content: message, centered: true, time: time}, callback, false);
 }
 
 /**
@@ -25,7 +25,7 @@ function notify(message, time, callback) {
  * @param messageId
  */
 function hideMessage(messageId) {
-	callContentScriptMethod("hideMessage", {id:messageId});
+	callContentScriptMethod("hideMessage", {id:messageId}, null, false);
 }
 
 /**
@@ -38,7 +38,7 @@ function hideMessage(messageId) {
  * @global
  */
 function showDialog(title, content, actionHeadline, actions, callback) {
-	callContentScriptMethod("showDialog", {title: title, content: content, actionHeadline: actionHeadline, actions: actions, cancelable:true}, callback);
+	callContentScriptMethod("showDialog", {title: title, content: content, actionHeadline: actionHeadline, actions: actions, cancelable:true}, callback, false);
 }
 
 /**
@@ -47,7 +47,7 @@ function showDialog(title, content, actionHeadline, actions, callback) {
  * @param dialogId
  */
 function hideDialog(messageId, dialogId) {
-	callContentScriptMethod("hideDialog", {messageId: messageId, dialogId: dialogId});
+	callContentScriptMethod("hideDialog", {messageId: messageId, dialogId: dialogId}, null, false);
 }
 
 /**
@@ -55,9 +55,19 @@ function hideDialog(messageId, dialogId) {
  * @param {String} callFunction - call a function of content script
  * @param {Object} params - parameter for the called function
  * @param {Function} [callback] - optional callback function
+ * @param {boolean} [working=true] - optional update working icon
  * @global
  */
-function callContentScriptMethod(callFunction, params, callback) {
+function callContentScriptMethod(callFunction, params, callback, working) {
+	var cb = callback;
+	if (typeof working === 'undefined' || working) {
+		speechRecognitionControl.setWorking(true);
+		cb = function() {
+			if (typeof callback === Function) callback();
+			speechRecognitionControl.setWorking(false);
+		}
+	}
+
 	chrome.tabs.query({active:true, currentWindow:true}, function (tabs) {
 		if (tabs.length > 0) {
 			chrome.tabs.sendMessage(
@@ -66,7 +76,7 @@ function callContentScriptMethod(callFunction, params, callback) {
 				//Params inside a object data
 				{callFunction: callFunction, params: params},
 				//Optional callback function
-				callback
+				cb
 			);
 		}
 	});
@@ -81,7 +91,11 @@ function callContentScriptMethod(callFunction, params, callback) {
  * @global
  */
 function say(phrase, sayTitle, callback) {
+	console.log("say begin");
 	sayTitle = (sayTitle === undefined) ? true : sayTitle;
+
+	//deactivate hearing: against self hearing
+	speechRecognitionControl.setSaying(true);
 
 	chrome.storage.sync.get({
 		language: 'en',
@@ -93,12 +107,9 @@ function say(phrase, sayTitle, callback) {
 	}, function(items) {
 		//noinspection JSUnresolvedVariable
 		if (!items.speechAssistantSpeechOutput) {
+			//reactivate hearing: against self hearing
+			speechRecognitionControl.setSaying(false);
 			return;
-		}
-
-		//deactivate hearing: against self hearing
-		if (recognizing) {
-			activeState.stopSpeechRecognition();
 		}
 
 		var msg = new SpeechSynthesisUtterance();
@@ -122,14 +133,19 @@ function say(phrase, sayTitle, callback) {
 
 		//noinspection SpellCheckingInspection
 		msg.onend = function(e) {
+			console.log("say end");
 			//reactivate hearing: against self hearing
-			if (recognizing) {
-				activeState.createWebkitSpeechRecognition();
-			}
+			speechRecognitionControl.setSaying(false);
 
 			if (callback) {
 				callback();
 			}
+		};
+
+		//noinspection SpellCheckingInspection
+		msg.onerror = function(e) {
+			console.warn("SpeechSynthesisUtterance Error", e);
+			this.onend(null);
 		};
 
 		speechSynthesis.speak(msg);

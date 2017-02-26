@@ -18,6 +18,7 @@
 		"scripts": [
 			"scripts/jquery-3.1.0.min.js",
 			"scripts/jquery.mark.min.js",
+			"scripts/classes/SpeechRecognitionControl.js",
 			"scripts/backgroundUtils.js",
 			"scripts/classes/Module.js",
 			"scripts/classes/State.js",

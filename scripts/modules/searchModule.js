@@ -27,7 +27,6 @@ addModule(new Module("searchModule", function() {
                 }
                 if (params.hasOwnProperty("followingState")) {
                     if (params.followingState == "globalCommonState") {
-                        if (recognizing) activeState.stopSpeechRecognition();
                         changeActiveState(globalCommonState);
                     }
                 }

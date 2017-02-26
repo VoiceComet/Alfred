@@ -30,7 +30,7 @@ var tabStates = [];
 /** @global */
 var tabCancelStacks = [];
 /** @global */
-var recognizing = true;
+var speechRecognitionControl = new SpeechRecognitionControl();
 
 
 //global butler name for better access
@@ -188,12 +188,13 @@ function changeActiveState(newState, cancelStack) {
 			}
 		}
 	}
-
+	speechRecognitionControl.stopSpeechRecognition();
 	var oldState = activeState;
 	activeState = newState;
 	tabStates[activeTab] = activeState;
 	console.info("run " + activeState.internalName + " (old: " + ((oldState != null) ? oldState.internalName : "null") + ")");
-	activeState.run(oldState);
+	activeState.run();
+	speechRecognitionControl.startSpeechRecognition();
 }
 
 /**
@@ -203,12 +204,6 @@ function changeActiveState(newState, cancelStack) {
  */
 function changeActiveTab(newTabId) {
 	activeTab = newTabId;
-
-	//stop recognition
-	if (recognizing) {
-		activeState.stopSpeechRecognition();
-	}
-
 	changeActiveState(tabStates[activeTab], false);
 }
 
@@ -220,18 +215,7 @@ function changeActiveTab(newTabId) {
  * @param {chrome.tabs.Tab} tab
  */
 function browserAction(tab) {
-	recognizing = !recognizing;
-	if (recognizing) {
-		//start recognition
-		activeState.createWebkitSpeechRecognition();
-		//change icon
-		chrome.browserAction.setIcon({path:"../images/mic_on.png"});
-	} else {
-		//stop recognition
-		activeState.stopSpeechRecognition();
-		//change icon
-		chrome.browserAction.setIcon({path:"../images/mic_off.png"});
-	}
+	speechRecognitionControl.switchRecognizing();
 }
 chrome.browserAction.onClicked.addListener(browserAction);
 
@@ -287,9 +271,6 @@ function checkCorrectState(tabId, changeInfo) {
 	if (changeInfo.hasOwnProperty("status") && changeInfo.status == "loading") {
 		if (tabId == activeTab && activeState != globalCommonState) {
 			//stop recognition
-			if (recognizing) {
-				activeState.stopSpeechRecognition();
-			}
 			changeActiveState(globalCommonState);
 		} else if (tabStates[tabId] != globalCommonState) {
 			tabStates[tabId] = globalCommonState;

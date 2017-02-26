@@ -37,7 +37,6 @@ addModule(new Module("imageModule", function () {
                 }
                 if (params.hasOwnProperty("followingState")) {
                     if (params.followingState == "globalCommonState") {
-                        if (recognizing) activeState.stopSpeechRecognition();
                         changeActiveState(globalCommonState);
                     }
                 }
@@ -104,7 +103,6 @@ addModule(new Module("imageModule", function () {
                 }
                 if (params.hasOwnProperty("followingState")) {
                     if (params.followingState == "galleryState") {
-                        if (recognizing) activeState.stopSpeechRecognition();
                         changeActiveState(galleryState);
                     }
                 }
@@ -173,7 +171,6 @@ addModule(new Module("imageModule", function () {
                 }
                 if (params.hasOwnProperty("followingState")) {
                     if (params.followingState == "slideState") {
-                        if (recognizing) activeState.stopSpeechRecognition();
                         changeActiveState(slideState);
                     }
                 }
