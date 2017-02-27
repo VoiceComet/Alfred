@@ -91,7 +91,7 @@ function callContentScriptMethod(callFunction, params, callback, working) {
  * @global
  */
 function say(phrase, sayTitle, callback) {
-	console.debug("start saying", phrase, sayTitle);
+	console.debug("start saying", phrase);
 	sayTitle = (sayTitle === undefined) ? true : sayTitle;
 
 	//deactivate hearing: against self hearing
