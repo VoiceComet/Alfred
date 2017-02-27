@@ -547,7 +547,7 @@
 		},
 		{
 			"action" : "playVideo",
-			"name" : "Video straten",
+			"name" : "Video starten",
 			"commands" : ["video starten", "play"]
 		},
 		{
