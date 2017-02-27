@@ -1,6 +1,4 @@
-/**
- * Created by Philip on 24.01.2017.
- */
+
 addModule(new Module("scrollModule", function() {
 
     /**

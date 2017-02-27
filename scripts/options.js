@@ -99,18 +99,65 @@ var options = [
 		stdValue: "Add Command"
 	},
 	{
-		id: "chooseAction",
-		type: "select",
-		stdValue: "reloadPage"
-
-	},
-	{
 		id : "searchEngine",
 		type : "select",
 		stdValue : "google"
 	}
 ];
 var voices = [];
+
+
+//fill actions for own commands
+document.getElementById("chooseModule").addEventListener("change", function () {
+	var choosenModule = document.getElementById("chooseModule").value;
+    var action = document.getElementById("chooseAction");
+    while (action.hasChildNodes()) {
+        action.removeChild(action.firstChild);
+    }
+	if (choosenModule === "tabHandling") {
+        var o0 = document.createElement("option");
+        o0.value = "reloadPage";
+        o0.text = "Reload Page";
+        var o1 = document.createElement("option");
+        o1.value = "goBack";
+        o1.text = "Go Back";
+        var o2 = document.createElement("option");
+        o2.value = "goForward";
+        o2.text = "Go Forward";
+        document.getElementById("chooseAction").appendChild(o0);
+        document.getElementById("chooseAction").appendChild(o1);
+        document.getElementById("chooseAction").appendChild(o2);
+	} else {
+        var o3 = document.createElement("option");
+        o3.value = "scrollTop";
+        o3.text = "scroll to Top";
+        var o4 = document.createElement("option");
+        o4.value = "scrollMiddle";
+        o4.text = "Scroll to Middle";
+        var o5 = document.createElement("option");
+        o5.value = "scrollBottom";
+        o5.text = "Scroll to Bottom";
+        var o6 = document.createElement("option");
+        o6.value = "scrollUp";
+        o6.text = "Scroll Up";
+        var o7 = document.createElement("option");
+        o7.value = "scrollDown";
+        o7.text = "Scroll Down";
+        var o8 = document.createElement("option");
+        o8.value = "scrollLeft";
+        o8.text = "Scroll Left";
+        var o9 = document.createElement("option");
+        o9.value = "scrollRight";
+        o9.text = "Scroll Right";
+        document.getElementById("chooseAction").appendChild(o3);
+        document.getElementById("chooseAction").appendChild(o4);
+        document.getElementById("chooseAction").appendChild(o5);
+        document.getElementById("chooseAction").appendChild(o6);
+        document.getElementById("chooseAction").appendChild(o7);
+        document.getElementById("chooseAction").appendChild(o8);
+        document.getElementById("chooseAction").appendChild(o9);
+	}
+});
 
 //add OnClickListener for deleting commands
 var deleteUserAction = function (params) {
