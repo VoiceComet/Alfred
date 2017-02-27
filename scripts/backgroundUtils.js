@@ -91,7 +91,7 @@ function callContentScriptMethod(callFunction, params, callback, working) {
  * @global
  */
 function say(phrase, sayTitle, callback) {
-	console.debug("start saying", phrase);
+	console.debug("start saying:", phrase);
 	sayTitle = (sayTitle === undefined) ? true : sayTitle;
 
 	//deactivate hearing: against self hearing
@@ -133,7 +133,7 @@ function say(phrase, sayTitle, callback) {
 
 		//noinspection SpellCheckingInspection
 		msg.onend = function(e) {
-			console.log("stop saying");
+			console.debug("stop saying");
 			//reactivate hearing: against self hearing
 			speechRecognitionControl.setSaying(false);
 
