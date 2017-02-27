@@ -29,14 +29,16 @@ function searchAddresses() {
 	var bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(document.documentElement.innerHTML)[1];
 	//cut all after div ChromeSpeechControlDIV
 	bodyHtml = bodyHtml.replace(/(<div id="ChromeSpeechControlDIV"[\s\S]*)/g, "");
+	//cut scripts
+	bodyHtml = bodyHtml.replace(/<script[\s\S]*?<\/script>/g, "");
 
 	/** @type RegExp */
-	var searched = /\b[\w\döÖüÜäÄß. -]{3,51}(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+[\d]{1,4}(?:\s|\n|\r|\t|&nbsp;|<br.*?>)*(?:[a-zA-Z])?(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+(?:[0][1-9]|[1-9][0-9])[0-9]{3}(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+[\w\döÖüÜäÄß -]{3,21}/g;
-
+	var searched = /\b[\wöÖüÜäÄß. -]{3,51}(?:\s|&nbsp;|<br[^>]*?>)+[\d]{1,4}(?:(?:\s|&nbsp;|<br[^>]*?>)*-(?:\s|&nbsp;|<br[^>]*?>)*[\d]{1,4})?(?:\s|&nbsp;|<br[^>]*?>)*(?:[a-zA-Z](?:(?:\s|&nbsp;|<br[^>]*?>)*-(?:\s|&nbsp;|<br[^>]*?>)*[a-zA-Z])?)?(?:\s|&nbsp;|<br[^>]*?>|<\/?p[^>]*?>|,|\|)+(?:[a-zA-Z](?:\s|&nbsp;|<br[^>]*?>)*-(?:\s|&nbsp;|<br[^>]*?>)*)?(?:[0][1-9]|[1-9][0-9])[0-9]{3}(?:\s|&nbsp;|<br[^>]*?>)+[\wöÖüÜäÄß-]{3,21}\b/g;
 
 	while ((result = searched.exec(bodyHtml)) != null) {
-		var parts = result[0].replace(/(?:\s|\n|\r|\t|&nbsp;)+/g, " ").split(/<.*?>/g);
-		addresses.push({result:result[0], readable:result[0].replace(/(?:\s|\n|\r|\t|&nbsp;|<br.*?>)+/g, " "), parts:parts, markCount:0});
+		//console.debug("exec result: ", result);
+		var parts = result[0].replace(/(?:\s|\n|\r|\t|&nbsp;)+/g, " ").split(/<[^>]*?>/g);
+		addresses.push({result:result[0], readable:result[0].replace(/(?:\s|\n|\r|\t|&nbsp;|<br[^>]*?>|<\/?p[^>]*?>)+/g, " "), parts:parts, markCount:0});
 	}
 }
 
