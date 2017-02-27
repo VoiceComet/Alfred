@@ -23,13 +23,11 @@ addModule(new Module("bookmarkModule", function () {
      * state which listens for bookmark title
      */
     var bookmarkListenState = new State("bookmarkListenState");
-    bookmarkListenState.init = function () {
-      notify(translate("sayTitleOfNewBookmark"));
-      say(translate("sayTitleOfNewBookmark"));
-      this.cancelAction.cancelAct = function () {
+    bookmarkListenState.init = function() {
+        this.cancelAction.cancelAct = function () {
           notify(translate("stoppedCreatingBookmark"));
           say(translate("stoppedCreatingBookmark"));
-      }
+        };
     };
 
     /**
@@ -37,12 +35,10 @@ addModule(new Module("bookmarkModule", function () {
      */
     var folderListenState = new State("folderListenState");
     folderListenState.init = function () {
-        notify(translate("sayTitleOfNewFolder"));
-        say(translate("sayTitleOfNewFolder"));
         this.cancelAction.cancelAct = function () {
             notify(translate("stoppedCreatingFolder"));
             say(translate("stoppedCreatingFolder"));
-        }
+        };
     };
 
     /**
@@ -221,6 +217,8 @@ addModule(new Module("bookmarkModule", function () {
     var addBookmark = new Action("addBookmark", 0, bookmarkListenState);
     addBookmark.act = function () {
         folder = "";
+        notify(translate("sayTitleOfNewBookmark"));
+        say(translate("sayTitleOfNewBookmark"));
     };
     this.addAction(addBookmark);
 
@@ -236,6 +234,8 @@ addModule(new Module("bookmarkModule", function () {
                 allFolder(params[0]);
             }
         }, 10);
+        notify(translate("sayTitleOfNewBookmark"));
+        say(translate("sayTitleOfNewBookmark"));
     };
     this.addAction(addBookmarkToFolder);
 
@@ -317,6 +317,8 @@ addModule(new Module("bookmarkModule", function () {
     var addFolder = new Action("addFolder", 0, folderListenState);
     addFolder.act = function () {
         folder = "";
+        notify(translate("sayTitleOfNewFolder"));
+        say(translate("sayTitleOfNewFolder"));
     };
     this.addAction(addFolder);
 
@@ -332,6 +334,8 @@ addModule(new Module("bookmarkModule", function () {
                 allFolder(params[0]);
             }
         }, 10);
+        notify(translate("sayTitleOfNewFolder"));
+        say(translate("sayTitleOfNewFolder"));
     };
     this.addAction(addFolderInFolder);
 

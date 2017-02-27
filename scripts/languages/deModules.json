@@ -200,7 +200,7 @@
 		{
 			"action" : "addBookmarkToFolder",
 			"name" : "Lesezeichen in Ordner hinzufügen",
-			"commands" : ["neues Lesezeichen hinzufügen in (.+)"]
+			"commands" : ["neues Lesezeichen in (.+) hinzufügen"]
 		},
 		{
 			"action" : "sayTitleBookmark",
