@@ -97,10 +97,8 @@ function SpeechRecognitionControl () {
 		this.saying = value;
 		this.updateMicrophoneIcon();
 		if (this.saying) {
-			console.log("say: stop speechRecognition");
 			this.stopSpeechRecognition();
 		} else {
-			console.log("say: start speechRecognition");
 			this.startSpeechRecognition();
 		}
 	};
