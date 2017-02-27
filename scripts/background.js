@@ -123,12 +123,12 @@ function registerGlobalState(state) {
 
 /**
  * get a state from global states with given name
- * @param {String} name - name of State object
+ * @param {String} internalName - internal name of State object
  * @global
  */
-function getGlobalState(name) {
+function getGlobalState(internalName) {
 	for (var i = 0; i < globalStates.length; i++) {
-		if (globalStates[i].name == name) {
+		if (globalStates[i].internalName == internalName) {
 			return globalStates[i];
 		}
 	}

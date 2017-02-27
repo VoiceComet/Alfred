@@ -75,7 +75,7 @@ addModule(new Module("addressModule", function () {
 	 */
 	var showAddressOnMap = new Action("showAddressOnMap", 0, null);
 	showAddressOnMap.act = function () {
-		var mapState = getGlobalState("MapState");
+		var mapState = getGlobalState("mapState");
 		if (mapState == null) {
 			this.followingState = globalCommonState;
 			console.error("showAddressOnMap: following map state not found");
