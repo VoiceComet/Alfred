@@ -15,7 +15,7 @@ addModule(new Module("tabHandleModule", function() {
 	/**
     * open new page
     */
-    var openPage = new Action("openNewPage", 1, globalCommonState);
+    var openPage = new Action("openPage", 1, globalCommonState);
     openPage.act = function(arguments) {
 		var repWhitespace = arguments[0].replace(/\s/g, '');
 		var url = "http://www." + repWhitespace;

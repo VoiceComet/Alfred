@@ -504,7 +504,7 @@
 			"commands" : ["neuer tab"]
 		},
 		{
-			"action" : "openNewPage",
+			"action" : "openPage",
 			"name" : "Neue Seite öffnen",
 			"commands" : ["öffne Seite (.+)"]
 		},
