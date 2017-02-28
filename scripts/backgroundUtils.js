@@ -91,7 +91,6 @@ function callContentScriptMethod(callFunction, params, callback, working) {
  * @global
  */
 function say(phrase, sayTitle, callback) {
-	console.debug("start saying:", phrase);
 	sayTitle = (sayTitle === undefined) ? true : sayTitle;
 
 	//deactivate hearing: against self hearing
@@ -154,7 +153,11 @@ function say(phrase, sayTitle, callback) {
 			this.onend(null);
 		};
 
-		speechSynthesis.speak(msg);
+		//Bugfix http://stackoverflow.com/questions/21947730/chrome-speech-synthesis-with-longer-texts
+		setTimeout(function() {
+			console.debug("start saying:", msg);
+			speechSynthesis.speak(msg)
+		}, 0);
 	});
 }
 speechSynthesis.speak(new SpeechSynthesisUtterance("")); //for async load of the voices at beginning

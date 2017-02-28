@@ -156,7 +156,7 @@ function SpeechRecognitionControl () {
 
 			console.debug("speech recognition found result", alternatives);
 			that.analyseRecognitionResult(alternatives, confidence);
-			that.setBackgroundWorking(false); //TODO working funktioniert noch nicht wie gewünscht
+			that.setBackgroundWorking(false);
 		};
 
 
@@ -224,9 +224,7 @@ function SpeechRecognitionControl () {
 	 */
 	this.getNextSpeechRecognition = function() {
 		//wait for setting new recognition object
-		console.debug("1");
 		while (this.nextRecognition == null) {} //TODO maybe with flags?
-		console.debug("2");
 		//get next recognition object
 		var nextRecognition = this.nextRecognition;
 		//set it to null
