@@ -9,8 +9,6 @@ function State (internalName) {
 	/** @private */
 	this.initialized = false;
 	this.accessibleWithCancelAction = true;
-
-	this.muted = false;
 	
 	//standard actions
 	this.ableToMute = true;
@@ -60,17 +58,14 @@ function State (internalName) {
 			this.muteActionIn = new Action("muteEnable", 0, this.muteState);
 			this.muteActionIn.act = function() {
 				//mute state
-				that.muted = true;
-				that.updateMicrophoneIcon();
+				speechRecognitionControl.setMuted(true);
 			};
 			this.muteActionOut = new Action("muteDisable", 1, this);
 			this.muteActionOut.act = function(parameter) {
 				if (parameter[0] == butlerName) {
 					notify(translate("welcomeBack"));
 					say(translate("welcomeBack"));
-					that.muteState.muted = false;
-					that.muted = false;
-					that.updateMicrophoneIcon();
+					speechRecognitionControl.setMuted(false);
 					//switch to un muted state
 					this.followingState = that;
 				} else {

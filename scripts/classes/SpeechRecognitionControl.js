@@ -13,6 +13,11 @@ function SpeechRecognitionControl () {
 	 * @type {boolean}
 	 * @private
 	 */
+	this.muted = false;
+	/**
+	 * @type {boolean}
+	 * @private
+	 */
 	this.hearing = false;
 	/**
 	 * @type {boolean}
@@ -51,6 +56,15 @@ function SpeechRecognitionControl () {
 	 */
 	this.setHearing = function(value) {
 		this.hearing = value;
+		this.updateMicrophoneIcon();
+	};
+
+	/**
+	 * sets muted value and updates icon
+	 * @private
+	 */
+	this.setMuted = function(value) {
+		this.muted = value;
 		this.updateMicrophoneIcon();
 	};
 
@@ -210,7 +224,9 @@ function SpeechRecognitionControl () {
 	 */
 	this.getNextSpeechRecognition = function() {
 		//wait for setting new recognition object
+		console.debug("1");
 		while (this.nextRecognition == null) {} //TODO maybe with flags?
+		console.debug("2");
 		//get next recognition object
 		var nextRecognition = this.nextRecognition;
 		//set it to null
