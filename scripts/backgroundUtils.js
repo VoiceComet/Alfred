@@ -54,7 +54,7 @@ function hideDialog(messageId, dialogId) {
  * send message to active front
  * @param {String} callFunction - call a function of content script
  * @param {Object} params - parameter for the called function
- * @param {Function} [callback] - optional callback function
+ * @param {function} [callback] - optional callback function
  * @param {boolean} [working=true] - optional update working icon
  * @global
  */
@@ -62,8 +62,8 @@ function callContentScriptMethod(callFunction, params, callback, working) {
 	var cb = callback;
 	if (typeof working === 'undefined' || working) {
 		speechRecognitionControl.setWorking(true);
-		cb = function() {
-			if (typeof callback === Function) callback();
+		cb = function(params) {
+			if (typeof callback === "function") callback(params);
 			speechRecognitionControl.setWorking(false);
 		}
 	}
