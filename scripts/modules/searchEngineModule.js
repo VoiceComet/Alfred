@@ -41,9 +41,7 @@ addModule(new Module("searchEngineModule", function() {
 				this.query = arguments[0];
 			}
 
-			if (!(activeState.oldState instanceof PanelState)) {
-				notify(translate("searchingX").format([this.query]));
-			}
+			notify(translate("searchingX").format([this.query]));
 
 			//std value is google
 			chrome.storage.sync.get({
@@ -207,10 +205,6 @@ addModule(new Module("searchEngineModule", function() {
 				callContentScriptMethod("showSearchResults", {"searchResultObject":searchResultObject});
 				//reset scrolling
 				callContentScriptMethod("elementResetScrolling", {"id":"ChromeSpeechControlPanel"});
-
-				if (!(activeState.oldState instanceof PanelState)) {
-					say(translate("XResultsFound").format([searchResultObject.searchTotalResults]));
-				}
 
 				//create state actions with generated commands
 				for (var i = 0; i < searchResultObject.items.length; i++) {

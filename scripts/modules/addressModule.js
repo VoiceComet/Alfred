@@ -90,7 +90,6 @@ addModule(new Module("addressModule", function () {
 			//extend init method
 			mapState.oldInit = mapState.init;
 			mapState.init = function () {
-				//this.oldState = addressState;
 				this.oldInit();
 
 				//add next actions to mapState
