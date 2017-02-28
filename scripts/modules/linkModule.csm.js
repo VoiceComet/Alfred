@@ -333,6 +333,7 @@ addContentScriptMethod(
                 .removeClass("highlight")
                 .addClass("topHighlight");
             i = 0;
+            links = found;
             $('html, body')
                 .animate({scrollTop: $([found[0]]).offset().top - window.innerHeight / 2}, 1000)
                 .animate({scrollLeft: $([found[0]]).offset().left - window.innerWidth / 2}, 1000);
@@ -351,7 +352,7 @@ addContentScriptMethod(
                 //noinspection JSCheckFunctionSignatures
 				updateMessage(message);
             }
-            return({content: "I found " + found.length + "links. You are on link " + (i + 1)});
+            return({content: translate("FoundXLinksYouAreOnLinkY").format([found.length, (i + 1)])});
         } else if (found.length === 1) {
             $(".searched").each(function () {
                 $(this).removeClass("searched");
@@ -381,12 +382,7 @@ addContentScriptMethod(
                 //noinspection JSCheckFunctionSignatures
 				updateMessage(message);
             }
-
-			if (found.length > 1) {
-				return({content: translate("FoundXLinks").format([found.length])});
-			} else {
-				return({content: translate("FoundOneLink")});
-			}
+            return({content: translate("FoundOneLink")});
         } else {
 			showMessage({content: translate("notifyNoLinkXFound").format(['<span style="background-color:lightcoral">' + foundParams + '</span>']), centered: true});
 			return({content: translate("sayNoLinkXFound").format([foundParams])});

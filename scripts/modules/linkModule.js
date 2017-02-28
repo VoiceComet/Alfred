@@ -110,11 +110,12 @@ addModule(new Module("linkModule", function () {
      */
     var openLink = new Action("openLink", 0, globalCommonState);
     openLink.act = function () {
-         callContentScriptMethod("openLink", {}, function (params) {
-             if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
-                 say(params.content);
-             }
-         });
+        callContentScriptMethod("openLink", {}, function (params) {
+            if (typeof params !== 'undefined' && params.hasOwnProperty("content")) {
+                say(params.content);
+            }
+        });
+        callContentScriptMethod("cancelLinkState", {});
     };
     linkState.addAction(openLink);
 

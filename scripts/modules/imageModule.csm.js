@@ -86,7 +86,7 @@ addContentScriptMethod(
         for (var j = 0; j < container.length; j++) {
             var imageWidth = container[j].width;
             var imageHeight = container[j].height;
-            if (imageWidth > 75 && imageHeight > 75) {
+            if (imageWidth > 75 && imageHeight > 75 && container[j].getAttribute("src") != "null") {
                 images.push(container[j].getAttribute("src"));
                 objects.push(container[j]);
             }
@@ -197,18 +197,22 @@ addContentScriptMethod(
         if (params === "one") {
             params = 1;
         }
-        if (Math.ceil(images.length / 9) < parseInt(params) || 0 >= parseInt(params) || isNaN(parseInt(params))) {
+        /**
+         * @type {Number}
+         */
+        params = parseInt(params);
+        if (Math.ceil(images.length / 9) < params || 0 >= params || isNaN(params)) {
             showMessage({content: translate("thereIsNoPageX").format([params]), centered: true});
             return ({content: translate("thereIsNoPageX").format([params])});
-        } else if (pages === parseInt(params)) {
+        } else if (pages === params) {
             showMessage({content: translate("youAreStillOnPageX").format([params]), centered: true});
             return ({content: translate("youAreStillOnPageX").format([params])});
         } else {
+            i = params * 9 - 1;
             // go to a previous page
             if (pages > params) {
-                i = params * 9 - 1;
                 fadeOutRight();
-                // go to a further page
+            // go to a further page
             } else {
                 fadeOutLeft();
             }

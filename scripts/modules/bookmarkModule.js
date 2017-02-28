@@ -204,8 +204,13 @@ addModule(new Module("bookmarkModule", function () {
         setTimeout(function () {
             if (hit <= 0) {
                 interact = false;
-                say(translate("sayThereIsNoObjectX").format([object, title]));
-                notify(translate("notifyThereIsNoObjectX").format([object, title]));
+                if(object === "bookmark") {
+                    say(translate("sayThereIsNoBookmarkX").format([title]));
+                    notify(translate("notifyThereIsNoBookmarkX").format([title]));
+                } else {
+                    say(translate("sayThereIsNoFolderX").format([title]));
+                    notify(translate("notifyThereIsNoFolderX").format([title]));
+                }
             }
         }, 10);
     };

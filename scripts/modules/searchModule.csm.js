@@ -81,6 +81,7 @@ addContentScriptMethod(
                     }
                 } else if (i + 1 >= result.length) {
                     i = 0;
+                    message.infoCenter = translate("matchXOfY").format([i + 1, result.length]);
                     result[0].style.backgroundColor = "rgb(255, 150, 50)";
                     $('html, body')
                         .animate({scrollTop: $(result[0]).offset().top - window.innerHeight / 2}, 1000)

@@ -19,26 +19,9 @@ addContentScriptMethod(
                 videos.push(html5[j]);
             }
         }
-        /* var iframeVideo = jQuery.makeArray(document.getElementsByTagName("iframe"));
-        for (var k = 0; k < iframeVideo.length; k++) {
-            if (iframeVideo[k].width > 0 && iframeVideo[k].height > 0) {
-                videos.push(iframeVideo[k]);
-            }
-        }
-        var objectTag = jQuery.makeArray(document.getElementsByTagName("object"));
-        for (var m = 0; m < objectTag.length; m++) {
-            var objectParams = jQuery.makeArray(objectTag[i].getElementsByTagName("param"));
-            for (var p = 0; p < objectParams.length; p++) {
-                var name = objectParams[p].getAttribute("name").toLowerCase();
-                if (name) {
-                    if (name == "flashvars" || name == "movie") {
-                        videos.push(objectTag[m]);
-                        return;
-                    }
-                }
-            }
-        }*/
         if (videos.length > 0) {
+            $(videos[i]).css("display", "block");
+            $(videos[i]).css("visibility", "visible");
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
@@ -56,7 +39,7 @@ addContentScriptMethod(
             }
         } else {
             showMessage({content: translate("notifyFoundNoVideos"), centered: true});
-            return({content: translate("sayFoundNoVideos")});
+            return({content: translate("sayFoundNoVideos"), followingState: "globalCommonState"});
         }
     })
 );
@@ -68,6 +51,8 @@ addContentScriptMethod(
     new ContentScriptMethod("nextVideo", function () {
         if (i + 1 < videos.length) {
             i++;
+            $(videos[i]).css("display", "block");
+            $(videos[i]).css("visibility", "visible");
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
@@ -98,6 +83,9 @@ addContentScriptMethod(
     new ContentScriptMethod("previousVideo", function () {
         if (i - 1 >= 0) {
             i--;
+            $(videos[i]).css("display", "block");
+            $(videos[i]).css("visibility", "visible");
+            console.debug($(videos[i]).offset().top, $(videos[i]).offset().left);
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
@@ -138,6 +126,8 @@ addContentScriptMethod(
             return ({content: translate("youAreStillOnVideoX").format([params])});
         } else {
             i = newVideo - 1;
+            $(videos[i]).css("display", "block");
+            $(videos[i]).css("visibility", "visible");
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)
                 .animate({scrollLeft: $(videos[i]).offset().left - window.innerWidth / 4}, 1000);
@@ -174,7 +164,7 @@ addContentScriptMethod(
             id: id,
             content: translate("showVideos"),
             cancelable: true,
-            infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
+            infoCenter: translate("volumeX").format([(Math.round(videos[i].volume * 100)/100).toFixed(2)]),
             time: 0
         });
     })
@@ -245,7 +235,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
+				infoCenter: translate("volumeX").format([(Math.round(videos[i].volume * 100)/100).toFixed(2)]),
 				time: 0
 			});
         }
@@ -310,7 +300,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
+				infoCenter: translate("volumeX").format([(Math.round(videos[i].volume * 100)/100).toFixed(2)]),
 				time: 0
 			});
         }
@@ -335,7 +325,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
+				infoCenter: translate("volumeX").format([(Math.round(videos[i].volume * 100)/100).toFixed(2)]),
 				time: 0
 			});
         }
@@ -364,7 +354,7 @@ addContentScriptMethod(
 				id: id,
 				content: translate("showVideos"),
 				cancelable: true,
-				infoCenter: translate("volumeX").format((Math.round(videos[i].volume * 100)/100).toFixed(2)),
+				infoCenter: translate("volumeX").format([(Math.round(videos[i].volume * 100)/100).toFixed(2)]),
 				time: 0
 			});
         }

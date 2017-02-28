@@ -22,6 +22,11 @@ addModule(new Module("videoModule", function () {
             if (params.content) {
                 say(params.content);
             }
+            if (params.hasOwnProperty("followingState")) {
+                if (params.followingState == "globalCommonState") {
+                    changeActiveState(globalCommonState);
+                }
+            }
         });
     };
     this.addAction(watchVideos);

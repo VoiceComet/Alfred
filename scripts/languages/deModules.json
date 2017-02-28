@@ -489,7 +489,7 @@
 		{
 			"action" : "searchLanguage",
 			"name" : "Suche in anderer Sprache",
-			"commands" : ["Sprache(?:n)? suche", "wechsle suche(?:n)? Sprache(?:n)?"]
+			"commands" : ["Sprache(?:n)? suche", "wechsle suche(?:n)? Sprache(?:n)?", "test"]
 		},
 		{
 			"action" : "certainMatch",
@@ -578,12 +578,12 @@
 		{
 			"action" : "jumpForwardVideo",
 			"name" : "Vorwärts springen",
-			"commands" : ["vorwärts (?:s)?"]
+			"commands" : ["vorwärts springen"]
 		},
 		{
 			"action" : "jumpBackwardsVideo",
 			"name" : "Rückwärts springen",
-			"commands" : ["zurück (?:s)?"]
+			"commands" : ["rückwärts springen"]
 		},
 		{
 			"action" : "jumpCertainVideo",
