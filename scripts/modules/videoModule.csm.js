@@ -19,7 +19,7 @@ addContentScriptMethod(
                 videos.push(html5[j]);
             }
         }
-        var iframeVideo = jQuery.makeArray(document.getElementsByTagName("iframe"));
+        /* var iframeVideo = jQuery.makeArray(document.getElementsByTagName("iframe"));
         for (var k = 0; k < iframeVideo.length; k++) {
             if (iframeVideo[k].width > 0 && iframeVideo[k].height > 0) {
                 videos.push(iframeVideo[k]);
@@ -37,7 +37,7 @@ addContentScriptMethod(
                     }
                 }
             }
-        }
+        }*/
         if (videos.length > 0) {
             $('html, body')
                 .animate({scrollTop: $(videos[i]).offset().top - window.innerHeight / 4}, 1000)

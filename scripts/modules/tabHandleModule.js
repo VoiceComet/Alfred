@@ -13,28 +13,26 @@ addModule(new Module("tabHandleModule", function() {
 	this.addAction(newTab);
 
 	/**
-	 * open new page
-	 */
-	var openPage = new Action("openNewPage", 1, globalCommonState);
-	openPage.act = function(arguments) {
-		var url = "";
-		var repWhitespace = "";
-		//opens new page in new tab
-		if(arguments[0].search(/new tab/) != -1) {
-			// opens page in new tab
-			repWhitespace = arguments[0].replace(/\s/g, '');
-			var split = repWhitespace.split("innewtab", 1);
-			url = "http://www." + split + ".com";
-			chrome.tabs.create({url: url, active: true});
-		//opens new page in current tab
-		} else {
-			//opens page in current tab
-			repWhitespace = arguments[0].replace(/\s/g, '');
-			url = "http://www." + repWhitespace + ".com";
-			chrome.tabs.update({url: url, active: true});
-		}
-	};
-	this.addAction(openPage);
+    * open new page
+    */
+    var openPage = new Action("openNewPage", 1, globalCommonState);
+    openPage.act = function(arguments) {
+		var repWhitespace = arguments[0].replace(/\s/g, '');
+		var url = "http://www." + repWhitespace;
+		chrome.tabs.update({url: url, active: true});
+    };
+    this.addAction(openPage);
+
+    /**
+     * open new page in new tab
+     */
+    var openPageNewTab = new Action("openPageNewTab", 1, globalCommonState);
+    openPageNewTab.act = function(arguments) {
+		var repWhitespace = arguments[0].replace(/\s/g, '');
+		var url = "http://www." + repWhitespace;
+		chrome.tabs.create({url: url, active: true});
+    };
+    this.addAction(openPageNewTab);
 
 	/**
  	 * close tab

@@ -509,6 +509,11 @@
 			"commands" : ["öffne Seite (.+)"]
 		},
 		{
+			"action" : "openPageNewTab",
+			"name" : "Neue Seite in neuem Tab öffnen",
+			"commands" : ["öffne Seite (.+) in neuem tab"]
+		},
+		{
 			"action" : "closeTab",
 			"name" : "Tab schließen",
 			"commands" : ["schließe tab", "tab schließen"]
