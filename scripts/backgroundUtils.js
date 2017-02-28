@@ -148,6 +148,12 @@ function say(phrase, sayTitle, callback) {
 			this.onend(null);
 		};
 
+		//noinspection SpellCheckingInspection
+		msg.onpause = function(e) {
+			console.warn("SpeechSynthesisUtterance Pause", e);
+			this.onend(null);
+		};
+
 		speechSynthesis.speak(msg);
 	});
 }
