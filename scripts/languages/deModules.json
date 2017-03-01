@@ -489,7 +489,7 @@
 		{
 			"action" : "searchLanguage",
 			"name" : "Suche in anderer Sprache",
-			"commands" : ["Sprache(?:n)? suche", "wechsle suche(?:n)? Sprache(?:n)?", "test"]
+			"commands" : ["Sprache(?:n)? suche", "wechsle suche(?:n)? Sprache(?:n)?"]
 		},
 		{
 			"action" : "certainMatch",

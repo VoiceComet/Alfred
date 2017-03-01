@@ -116,23 +116,21 @@
     <section id="addActions">
         <h3>Add Actions</h3>
         <div class="setting">
-            <label for="userCommand">Command</label>
-            <input id="userCommand" title="Your own command" type="text"/>
-        </div>
-        <div class="setting">
             <label for="chooseModule">Choose Module</label>
             <select id="chooseModule" title="Choose Module">
                 <option value="tabHandling">Tab Handling</option>
                 <option value="scrolling">Scrolling</option>
+                <option value="openURL">Open URL</option>
             </select>
         </div>
         <div class="setting">
             <label for="chooseAction">Choose Action</label>
-            <select id="chooseAction" title="Choose Action">
-                <option value="reloadPage">Reload Page</option>
-                <option value="goBack">Go Back</option>
-                <option value="goForward">Go Forward</option>
-            </select>
+            <select id="chooseAction" title="Choose Action"></select>
+        </div>
+        <div class="setting" id="params"></div>
+        <div class="setting">
+            <label for="userCommand">Command</label>
+            <input id="userCommand" title="Your own command" type="text"/>
             <button id="addButton">Add</button>
         </div>
     </section>

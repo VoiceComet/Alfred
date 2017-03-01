@@ -173,6 +173,7 @@ addModule(new Module("ownCommandModule", function() {
                 results.ownCommands.forEach(function (params) {
                     var command = params.command.toString();
                     var action = params.action;
+                    var parameter = params.params;
                     switch (action) {
                         case "reloadPage":
                             reloadPage.addCommand(new Command(command, 0));
@@ -203,6 +204,15 @@ addModule(new Module("ownCommandModule", function() {
                             break;
                         case "scrollRight":
                             scrollRight.addCommand(new Command(command, 0));
+                            break;
+                        case "openURL":
+                            var openURL = new Action("open" + command, 0, globalCommonState);
+                            openURL.act = function() {
+                                chrome.tabs.update({url: parameter, active: true});
+                            };
+                            openURL.addCommand(new Command(command, 0));
+                            globalCommonState.addAction(openURL);
+                            that.addAction(openURL);
                             break;
                         default:
                             break;

@@ -96,7 +96,7 @@ var options = [
 	{
 		id: "userCommand",
 		type: "text",
-		stdValue: "Add Command"
+		stdValue: ""
 	},
 	{
 		id : "searchEngine",
@@ -106,58 +106,100 @@ var options = [
 ];
 var voices = [];
 
+var ownCommands = {
+    "tabHandling": [
+		{
+			id: "reloadPage",
+            shownText: "Reload Page",
+			paramsCount: 0
+		},
+        {
+            id: "goBack",
+            shownText: "Go Back",
+            paramsCount: 0
+        },
+        {
+            id: "goForward",
+            shownText: "Go Forward",
+            paramsCount: 0
+        }
+	],
+    "scrolling": [
+        {
+            id: "scrollTop",
+            shownText: "scroll to Top",
+            paramsCount: 0
+        },
+        {
+            id: "scrollMiddle",
+            shownText: "Scroll to Middle",
+            paramsCount: 0
+        },
+        {
+            id: "scrollBottom",
+            shownText: "Scroll to Bottom",
+            paramsCount: 0
+        },
+        {
+            id: "scrollUp",
+            shownText: "Scroll Up",
+            paramsCount: 0
+        },
+        {
+            id: "scrollDown",
+            shownText: "Scroll Down",
+            paramsCount: 0
+        },
+        {
+            id: "scrollLeft",
+            shownText: "Scroll Left",
+            paramsCount: 0
+        },
+        {
+            id: "scrollRight",
+            shownText: "Scroll Right",
+            paramsCount: 0
+        }
+	],
+	"openURL": [
+		{
+			id: "openURL",
+			shownText: "Open URL",
+			paramsCount: 1
+		}
+	]
+};
 
 //fill actions for own commands
-document.getElementById("chooseModule").addEventListener("change", function () {
+function loadOwnCommands() {
 	var choosenModule = document.getElementById("chooseModule").value;
     var action = document.getElementById("chooseAction");
+    var params = document.getElementById("params");
     while (action.hasChildNodes()) {
         action.removeChild(action.firstChild);
     }
-	if (choosenModule === "tabHandling") {
-        var o0 = document.createElement("option");
-        o0.value = "reloadPage";
-        o0.text = "Reload Page";
-        var o1 = document.createElement("option");
-        o1.value = "goBack";
-        o1.text = "Go Back";
-        var o2 = document.createElement("option");
-        o2.value = "goForward";
-        o2.text = "Go Forward";
-        document.getElementById("chooseAction").appendChild(o0);
-        document.getElementById("chooseAction").appendChild(o1);
-        document.getElementById("chooseAction").appendChild(o2);
-	} else {
-        var o3 = document.createElement("option");
-        o3.value = "scrollTop";
-        o3.text = "scroll to Top";
-        var o4 = document.createElement("option");
-        o4.value = "scrollMiddle";
-        o4.text = "Scroll to Middle";
-        var o5 = document.createElement("option");
-        o5.value = "scrollBottom";
-        o5.text = "Scroll to Bottom";
-        var o6 = document.createElement("option");
-        o6.value = "scrollUp";
-        o6.text = "Scroll Up";
-        var o7 = document.createElement("option");
-        o7.value = "scrollDown";
-        o7.text = "Scroll Down";
-        var o8 = document.createElement("option");
-        o8.value = "scrollLeft";
-        o8.text = "Scroll Left";
-        var o9 = document.createElement("option");
-        o9.value = "scrollRight";
-        o9.text = "Scroll Right";
-        document.getElementById("chooseAction").appendChild(o3);
-        document.getElementById("chooseAction").appendChild(o4);
-        document.getElementById("chooseAction").appendChild(o5);
-        document.getElementById("chooseAction").appendChild(o6);
-        document.getElementById("chooseAction").appendChild(o7);
-        document.getElementById("chooseAction").appendChild(o8);
-        document.getElementById("chooseAction").appendChild(o9);
+    while (params.hasChildNodes()){
+    	params.removeChild(params.firstChild);
 	}
-});
+    if (ownCommands.hasOwnProperty(choosenModule)) {
+    	var commands = ownCommands[choosenModule];
+    	for (var i = 0; i < commands.length; i++) {
+            var option = document.createElement("option");
+            option.value = commands[i].id;
+            option.text = commands[i].shownText.toLowerCase();
+            for (var j = 0; j < commands[i].paramsCount; j++) {
+            	var input = document.createElement("input");
+                var label = document.createElement("label");
+                label.innerHTML = "Param " + (j + 1);
+                params.appendChild(label);
+                params.appendChild(input);
+			}
+            document.getElementById("chooseAction").appendChild(option);
+		}
+	}
+}
+document.getElementById("chooseModule").addEventListener("change", loadOwnCommands);
+document.addEventListener('DOMContentLoaded', loadOwnCommands);
 
 //add OnClickListener for deleting commands
 var deleteUserAction = function (params) {
@@ -185,23 +227,39 @@ var deleteUserAction = function (params) {
 
 //add onClickListener for adding commands
 document.getElementById("addButton").addEventListener("click", function () {
-	var command = document.getElementById("userCommand").value;
+	var command = document.getElementById("userCommand").value.toLowerCase();
 	var action = document.getElementById("chooseAction").value;
-	if (document.getElementById(command)) {
-		var warning = document.createElement("p");
-		warning.id = "warning";
-		warning.innerHTML = "This command already exists";
-		warning.setAttribute("style", "color: red");
-		document.getElementById("addActions").appendChild(warning);
-		setTimeout(function () {
-			warning.remove();
-		}, 2500);
+	var params = document.getElementById("params");
+    var warning = document.createElement("p");
+    warning.setAttribute("style", "color: red");
+    warning.id = "warning";
+	if (document.getElementById(command) || command === "" || (params.hasChildNodes() && params.childNodes[1].value === "")) {
+		if (command === "") {
+            warning.innerHTML = "Please enter a command";
+		} else if (document.getElementById(command.toLowerCase())){
+            warning.innerHTML = "This command already exists";
+		} else {
+            warning.innerHTML = "This command requires parameter";
+		}
+        document.getElementById("addActions").appendChild(warning);
+        setTimeout(function () {
+            warning.remove();
+        }, 2500);
 	} else {
 		var newDiv = document.createElement("div");
 		newDiv.class = "setting";
 		newDiv.id = command;
 		var label = document.createElement("label");
-		label.innerHTML = command + " | " + action + " ";
+        if (params.hasChildNodes()) {
+            label.innerHTML = command + " | " + action;
+            for (var j = 1; j < params.childNodes.length; j++) {
+            	var labelInnerHTML = label.innerHTML;
+            	var value = params.childNodes[j].value;
+                label.innerHTML = labelInnerHTML + " | " + value.substring(value.indexOf(".") + 1) + " ";
+            }
+        } else {
+            label.innerHTML = command + " | " + action + " ";
+		}
 		var deleteButton = document.createElement("button");
 		deleteButton.class = "deleteButton";
 		deleteButton.innerHTML = "Delete";
@@ -210,22 +268,43 @@ document.getElementById("addButton").addEventListener("click", function () {
 			.appendChild(deleteButton);
 		document.getElementById("userCommands").appendChild(newDiv);
 		deleteUserAction(newDiv.id);
-		chrome.storage.sync.get(
-			{ownCommands: []},
-            /**
-             * @param {Object} results
-             * @param {Array} results.ownCommands
-             */
-			function (results) {
-				results.ownCommands.push({
-					command: command,
-					action: action
-				});
-				chrome.storage.sync.set(results, function() {
-					//do nothing after saving
-				});
-			}
-		);
+		if (params.hasChildNodes()) {
+            chrome.storage.sync.get(
+                {ownCommands: []},
+                /**
+                 * @param {Object} results
+                 * @param {Array} results.ownCommands
+                 */
+                function (results) {
+                    results.ownCommands.push({
+                        command: command,
+                        action: action,
+                        params: params.childNodes[1].value
+                    });
+                    chrome.storage.sync.set(results, function() {
+                        //do nothing after saving
+                    });
+                }
+            );
+		} else {
+            chrome.storage.sync.get(
+                {ownCommands: []},
+                /**
+                 * @param {Object} results
+                 * @param {Array} results.ownCommands
+                 */
+                function (results) {
+                    results.ownCommands.push({
+                        command: command,
+                        action: action
+                    });
+                    chrome.storage.sync.set(results, function() {
+                        //do nothing after saving
+                    });
+                }
+            );
+		}
+
 	}
 });
 
@@ -340,7 +419,11 @@ function restore_options() {
 				newDiv.class = "setting";
 				newDiv.id = params.command;
 				var label = document.createElement("label");
-				label.innerHTML = params.command + " | " + params.action + " ";
+                if (params.params) {
+                    label.innerHTML = params.command + " | " + params.action + " | " + params.params.substring(params.params.indexOf(".") + 1) + " ";
+                } else {
+                    label.innerHTML = params.command + " | " + params.action + " ";
+				}
 				var deleteButton = document.createElement("button");
 				deleteButton.class = "deleteButton";
 				deleteButton.innerHTML = "Delete";
