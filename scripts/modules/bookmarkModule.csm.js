@@ -7,7 +7,7 @@
  */
 addContentScriptMethod(
     new ContentScriptMethod("showFolder", function (params) {
-        var html = '<b>' + translate("contentOfFolder").format([params.title]) + '</b><br/>';
+        var html = '<b>' + translate("contentOfFolderX").format([params.title]) + '</b><br/>';
         html += '</span><br/>';
         for (var i = 0; i < params.kidBookmark.length; i++) {
             html += '<br/>';
