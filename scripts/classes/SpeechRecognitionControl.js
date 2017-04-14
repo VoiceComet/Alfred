@@ -203,13 +203,15 @@ function SpeechRecognitionControl () {
 			that.stopSpeechRecognition();
 			that.setHearing(false);
 
-			//if there was a network error, wait until message box is away before restart
-			if (this.networkError) {
-				setTimeout(function() {
+			if (permissionGrounded) {
+				//if there was a network error, wait until message box is away before restart
+				if (this.networkError) {
+					setTimeout(function() {
+						that.startSpeechRecognition();
+					}, 3000)
+				} else {
 					that.startSpeechRecognition();
-				}, 3000)
-			} else {
-				that.startSpeechRecognition();
+				}
 			}
 		};
 
