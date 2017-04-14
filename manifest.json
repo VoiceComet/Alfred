@@ -3,7 +3,7 @@
 
 	"name": "Alfred - Your personal speech-controlled butler",
 	"description": "Alfred is a Chrome Extension which allows the user to control the browser by voice commands.",
-	"version": "0.1",
+	"version": "0.5",
 
 	"permissions": [
 		"tabs",

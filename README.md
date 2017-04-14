@@ -1,8 +1,8 @@
 # Alfred
 
-Alfred is a Chrome Extension which allows the user to control the browser with speech commands.
+Alfred is a Chrome Extension which allows the user to control the browser with voice commands.
 
-This project has been developed as a part of the bachelor thesis "Controlling Chrome Tab usin WebSpeechAPI". 
+This project has been developed as a part of the bachelor thesis "Controlling Chrome Tab using WebSpeechAPI".
 The idea arose in the institute GT-ARC of TU-Berlin in Germany.
 
 
