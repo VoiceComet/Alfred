@@ -1,0 +1,653 @@
+{
+	"modules" : [
+		{
+			"module" : "addressModule",
+			"name" : "Adressen Modul"
+		},
+		{
+			"module" : "bookmarkModule",
+			"name" : "Lesezeichen Modul"
+		},
+		{
+			"module" : "imageModule",
+			"name" : "Bilder Modul"
+		},
+		{
+			"module" : "linkModule",
+			"name" : "Link Modul"
+		},
+		{
+			"module" : "mapModule",
+			"name" : "Karten Modul"
+		},
+		{
+			"module" : "ownCommandModule",
+			"name" : "Eigene Kommandos Modul"
+		},
+		{
+			"module" : "scrollModule",
+			"name" : "Scroll Modul"
+		},
+		{
+			"module" : "searchEngineModule",
+			"name" : "Suchmaschinen Modul"
+		},
+		{
+			"module" : "searchModule",
+			"name" : "Suche Modul"
+		},
+		{
+			"module" : "tabHandleModule",
+			"name" : "Tab Modul"
+		},
+		{
+			"module" : "videoModule",
+			"name" : "Video Modul"
+		},
+		{
+			"module" : "weatherModule",
+			"name" : "Wetter Modul"
+		},
+		{
+			"module" : "zoomModule",
+			"name" : "Zoom Modul"
+		}
+	],
+
+	"states" : [
+		{
+			"state" : "muteState",
+			"name" : "Stumm Zustand"
+		},
+		{
+			"state" : "chooseLanguageState",
+			"name" : "Sprachwahl Zustand"
+		},
+		{
+			"state" : "sayParameterState",
+			"name" : "Sage Parameter Zustand"
+		},
+		{
+			"state" : "addressState",
+			"name" : "Adressen Zustand"
+		},
+		{
+			"state" : "folderState",
+			"name" : "Ordner Zustand"
+		},
+		{
+			"state" : "bookmarkListenState",
+			"name" : "Lesezeichen Listen Zustand"
+		},
+		{
+			"state" : "folderListenState",
+			"name" : "Ordner Listen Zustand"
+		},
+		{
+			"state" : "galleryState",
+			"name" : "Galerie Zustand"
+		},
+		{
+			"state" : "slideState",
+			"name" : "Diashow Zustand"
+		},
+		{
+			"state" : "linkState",
+			"name" : "Link Zustand"
+		},
+		{
+			"state" : "mapState",
+			"name" : "Karten Zustand"
+		},
+		{
+			"state" : "searchEngineState",
+			"name" : "Suchmaschinen Zustand"
+		},
+		{
+			"state" : "searchState",
+			"name" : "Suche Zustand"
+		},
+		{
+			"state" : "videoState",
+			"name" : "Video Zustand"
+		},
+		{
+			"state" : "zoomInState",
+			"name" : "Zoom Zustand"
+		}
+	],
+
+	"actions" : [
+		{
+			"action" : "muteEnable",
+			"name" : "Stumm einschalten",
+			"commands" : ["stumm", "hör(?:.)? weg", "geh(?:.)? weg"]
+		},
+		{
+			"action" : "muteDisable",
+			"name" : "Stumm ausschalten",
+			"commands" : ["Hallo (.+)", "(.+) hör zu"]
+		},
+		{
+			"action" : "cancel",
+			"name" : "Abbrechen",
+			"commands" : ["abbrechen"]
+		},
+		{
+			"action" : "next",
+			"name" : "Vor",
+			"commands" : ["vor"]
+		},
+		{
+			"action" : "previous",
+			"name" : "zurück",
+			"commands" : ["zurück"]
+		},
+		{
+			"action" : "scrollUp",
+			"name" : "Hochscrollen",
+			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(?:her|hin|r)auf\\b"]
+		},
+		{
+			"action" : "scrollDown",
+			"name" : "Runterscrollen",
+			"commands" : ["(?:scroll )?\\b(?:her|hin|r)unter\\b", "runterscrollen"]
+		},
+		{
+			"action" : "enlargePanel",
+			"name" : "Panel vergrößern",
+			"commands" : ["vergrößern", "größer", "breiter"]
+		},
+		{
+			"action" : "reducePanel",
+			"name" : "Panel verkleinern",
+			"commands" : ["verkleinern", "kleiner", "schmaler"]
+		},
+		{
+			"action" : "chooseLanguage",
+			"name" : "Sprachwahl",
+			"commands" : ["(englisch)", "(deutsch)", "(spanisch)", "(französisch)", "(türkisch)", "(russisch)"]
+		},
+		{
+			"action" : "sayParameter",
+			"name" : "Sage Parameter",
+			"commands" : []
+		},
+
+
+		{
+			"action" : "showAddresses",
+			"name" : "Zeige Adressen",
+			"commands" : ["zeige (?:alle )?Adressen"]
+		},
+		{
+			"action" : "certainAddress",
+			"name" : "Bestimmte Adresse",
+			"commands" : ["geh zur Addresse ([\\d]+)"]
+		},
+		{
+			"action" : "showAddressOnMap",
+			"name" : "Zeige Adresse auf Karte",
+			"commands" : ["zeige (?:die )?(?:Addresse )?auf (?:der )?Karte"]
+		},
+
+
+		{
+			"action" : "addBookmark",
+			"name" : "Lesezeichen hinzufügen",
+			"commands" : ["neues Lesezeichen hinzufügen"]
+		},
+		{
+			"action" : "addBookmarkToFolder",
+			"name" : "Lesezeichen in Ordner hinzufügen",
+			"commands" : ["neues Lesezeichen in (.+) hinzufügen"]
+		},
+		{
+			"action" : "sayTitleBookmark",
+			"name" : "Titel des Lesezeichens",
+			"commands" : []
+		},
+		{
+			"action" : "openBookmark",
+			"name" : "Öffne Lesezeichen",
+			"commands" : ["öffne Lesezeichen (.+)"]
+		},
+		{
+			"action" : "removeBookmark",
+			"name" : "Lesezeichen löschen",
+			"commands" : ["lösche Lesezeichen (.+)"]
+		},
+		{
+			"action" : "addFolder",
+			"name" : "Ordner hinzufügen",
+			"commands" : ["erstelle (?:neuen )?Ordner", "füg(?:e)? (?:neuen )?Ordner hinzu", "(?:neuen )?Ordner hinzufügen"]
+		},
+		{
+			"action" : "addFolderInFolder",
+			"name" : "Ordner in Ordner hinzufügen",
+			"commands" : ["erstelle (?:neuen )?Ordner in (.+)", "füg(?:e)? (?:neuen )?Ordner in (.+) hinzu", "(?:neuen )?Ordner in (.+) hinzufügen"]
+		},
+		{
+			"action" : "sayTitleFolder",
+			"name" : "Titel des Ordners",
+			"commands" : []
+		},
+		{
+			"action" : "openFolder",
+			"name" : "Ordner öffnen",
+			"commands" : ["zeige Inhalt von (.+)"]
+		},
+		{
+			"action" : "removeFolder",
+			"name" : "Ordner löschen",
+			"commands" : ["Ordner (.+) löschen"]
+		},
+
+
+		{
+			"action" : "showImages",
+			"name" : "Bilder anzeigen",
+			"commands" : ["zeige Bilder", "Bilder anzeigen"]
+		},
+		{
+			"action" : "certainGalleryPage",
+			"name" : "Bestimme Galerieseite",
+			"commands" : ["gehe zu Seite (\\d+)"]
+		},
+		{
+			"action" : "showOneImage",
+			"name" : "Bild anzeigen",
+			"commands" : ["zeige Bild ([0-9])"]
+		},
+		{
+			"action" : "certainImage",
+			"name" : "Bestimmtes Bild",
+			"commands" : ["zeige Bild ([0-9]+)"]
+		},
+		{
+			"action" : "clickImage",
+			"name" : "Bild anklicken",
+			"commands" : ["öffne Link"]
+		},
+		{
+			"action" : "imageOnPage",
+			"name" : "Bild auf der Seite",
+			"commands" : ["Zeige Bild auf (?:der )?Seite"]
+		},
+		{
+			"action" : "backToSlides",
+			"name" : "Zurück zur Diashow",
+			"commands" : ["zurück zur Diashow"]
+		},
+		{
+			"action" : "switchToGallery",
+			"name" : "Zur Galerie wechseln",
+			"commands" : ["wechsle zur Galerie"]
+		},
+
+
+		{
+			"action" : "showLinks",
+			"name" : "Links anzeigen",
+			"commands" : ["zeige (?:alle )?Links"]
+		},
+		{
+			"action" : "certainLinkByNumber",
+			"name" : "Bestimmte Linknummer",
+			"commands" : ["gehe zu Nummer ([\\d]+)"]
+		},
+		{
+			"action" : "certainLinkByName",
+			"name" : "Bestimmter Linkname",
+			"commands" : ["gehe zu Link (.*)"]
+		},
+		{
+			"action" : "searchLanguage",
+			"name" : "Link Sprachsuche",
+			"commands" : ["(?:wechsle )?Link(?: )?Sprache"]
+		},
+		{
+			"action" : "openLink",
+			"name" : "Link öffnen",
+			"commands" : ["öffnen"]
+		},
+		{
+			"action" : "openLinkNewTab",
+			"name" : "Link im neuen Tab öffnen",
+			"commands" : ["öffne (?:link )?in neuem Tab", "(?:link )?in neuem Tab öffnen"]
+		},
+
+
+		{
+			"action" : "mapSearch",
+			"name" : "Kartensuche",
+			"commands" : ["gehe zu (.+)", "suche (.+)"]
+		},
+		{
+			"action" : "mapLanguageSearch",
+			"name" : "Kartensuche in anderer Sprache",
+			"commands" : ["sprachen(?: )?suche"]
+		},
+		{
+			"action" : "mapShowUsersLocation",
+			"name" : "Zeige Nutzers Position",
+			"commands" : ["zeige (?:meine )?position", "gehe zu (?:meiner )?position"]
+		},
+		{
+			"action" : "mapSearchRoute",
+			"name" : "Routensuche",
+			"commands" : ["von (.+) (?:nach|zu) (.+)"]
+		},
+		{
+			"action" : "mapLanguageSearchRoute",
+			"name" : "Routensuche in anderer Sprache",
+			"commands" : ["sprache(?:n)? route"]
+		},
+		{
+			"action" : "mapZoomToMarker",
+			"name" : "Zu Marker zoomen",
+			"commands" : ["zoome zu (.)$", "zu (.) zoomen"]
+		},
+		{
+			"action" : "mapCenterMarker",
+			"name" : "Zentriere Marker",
+			"commands" : ["^(.)$", "zentriere (.)$", "^(.) zentrieren"]
+		},
+		{
+			"action" : "mapZoomIn",
+			"name" : "Karte hineinzoomen",
+			"commands" : ["(?:hin|her)ein(?:zoomen)?", "zoom (?:hin|her)ein", "zoom(?:en)?"]
+		},
+		{
+			"action" : "mapZoomOut",
+			"name" : "Karte herauszoomen",
+			"commands" : ["(?:hin|her)aus(?:zoomen)?", "zoom (?:hin|her)aus"]
+		},
+		{
+			"action" : "mapScrollUp",
+			"name" : "Karte hochscrollen",
+			"commands" : ["(?:scroll )?\\bhoch\\b", "hochscrollen", "(?:scroll )?\\b(?:her|hin|r)auf\\b"]
+		},
+		{
+			"action" : "mapScrollDown",
+			"name" : "Karte runterscrollen",
+			"commands" : ["(?:scroll )?\\b(?:her|hin|r)unter\\b", "runterscrollen"]
+		},
+		{
+			"action" : "mapScrollLeft",
+			"name" : "Karte nach links scrollen",
+			"commands" : ["(?:scroll )?(?:nach )?links", "(?:nach )?links scrollen"]
+		},
+		{
+			"action" : "mapScrollRight",
+			"name" : "Karte nach rechts scrollen",
+			"commands" : ["(?:scroll )?(?:nach )?rechts", "(?:nach )?rechts scrollen"]
+		},
+		{
+			"action" : "openMap",
+			"name" : "Zeige Karte",
+			"commands" : ["zeige karte", "karte zeigen"]
+		},
+
+
+		{
+			"action" : "OwnReloadPage",
+			"name" : "Seite aktualisieren",
+			"commands" : []
+		},
+		{
+			"action" : "OwnGoBack",
+			"name" : "Eine Seite zurück",
+			"commands" : []
+		},
+		{
+			"action" : "OwnGoForward",
+			"name" : "Eine Seite vor",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToTop",
+			"name" : "Zum Anfang scrollen",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToMiddle",
+			"name" : "Zur Mitte scrollen",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollToBottom",
+			"name" : "Zum Ende scrollen",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollUp",
+			"name" : "Hochscrollen",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollDown",
+			"name" : "Runterscrollen",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollLeft",
+			"name" : "Nach links scrollen",
+			"commands" : []
+		},
+		{
+			"action" : "OwnScrollRight",
+			"name" : "Nach rechts scrollen",
+			"commands" : []
+		},
+
+
+		{
+			"action" : "scrollToTop",
+			"name" : "Zum Anfang scrollen",
+			"commands" : ["(?:zum |an |an den )?Anfang scrollen", "scroll (?:zum |an |an den )?Anfang"]
+		},
+		{
+			"action" : "scrollToMiddle",
+			"name" : "Zur Mitte scrollen",
+			"commands" : ["(?:zur |in die )?Mitte scrollen", "scroll (?:zur |in die )?Mitte"]
+		},
+		{
+			"action" : "scrollToBottom",
+			"name" : "Zum Ende scrollen",
+			"commands" : ["(?:zum |an |an das )?Ende scrollen", "scroll (?:zum |an |an das )?Ende"]
+		},
+		{
+			"action" : "scrollLeft",
+			"name" : "Nach links scrollen",
+			"commands" : ["(?:scroll )?(?:nach )?links", "(?:nach )?links scrollen"]
+		},
+		{
+			"action" : "scrollRight",
+			"name" : "Nach rechts scrollen",
+			"commands" : ["(?:scroll )?(?:nach )?rechts", "(?:nach )?rechts scrollen"]
+		},
+
+
+		{
+			"action" : "webSearch",
+			"name" : "Internetsuche",
+			"commands" : ["internet(?: )?suche (.+)", "google (.+)", "bing (.+)"]
+		},
+		{
+			"action" : "languageWebSearch",
+			"name" : "Internetsuche in anderer Sprache",
+			"commands" : ["Sprache(?:n)? internet(?: )?suche", "wechsle internet(?: )?suche(?:n)? Sprache(?:n)?", "Sprache(?:n)? google", "Sprache(?:n)? bing"]
+		},
+
+
+		{
+			"action" : "search",
+			"name" : "Suche",
+			"commands" : ["suche (?:nach )?(.+)"]
+		},
+		{
+			"action" : "searchLanguage",
+			"name" : "Suche in anderer Sprache",
+			"commands" : ["Sprache(?:n)? suche", "wechsle suche(?:n)? Sprache(?:n)?"]
+		},
+		{
+			"action" : "certainMatch",
+			"name" : "zu bestimmten Treffer gehen",
+			"commands" : ["geh(?:e)? zu Treffer (\\d+)"]
+		},
+
+
+		{
+			"action" : "newTab",
+			"name" : "Neuer Tab",
+			"commands" : ["neuer tab"]
+		},
+		{
+			"action" : "openPage",
+			"name" : "Neue Seite öffnen",
+			"commands" : ["öffne Seite (.+)"]
+		},
+		{
+			"action" : "openPageNewTab",
+			"name" : "Neue Seite in neuem Tab öffnen",
+			"commands" : ["öffne Seite (.+) in neuem tab"]
+		},
+		{
+			"action" : "closeTab",
+			"name" : "Tab schließen",
+			"commands" : ["schließe tab", "tab schließen"]
+		},
+		{
+			"action" : "closeWindow",
+			"name" : "Fenster schließen",
+			"commands" : ["schließe fenster", "fenster schließen"]
+		},
+		{
+			"action" : "reload",
+			"name" : "Aktualisieren",
+			"commands" : ["aktualisiere(?:n)?"]
+		},
+		{
+			"action" : "goBackOnePage",
+			"name" : "Eine Seite zurück",
+			"commands" : ["(?:eine )?seite zurück"]
+		},
+		{
+			"action" : "goForwardOnePage",
+			"name" : "Eine Seite vor",
+			"commands" : ["(?:eine )?seite vor"]
+		},
+
+
+		{
+			"action" : "watchVideos",
+			"name" : "Videos schauen",
+			"commands" : ["zeige videos", "videos (?:schauen|zeigen)"]
+		},
+		{
+			"action" : "certainVideo",
+			"name" : "Bestimmtes Video schauen",
+			"commands" : ["zeige video (\\d+)", "video (\\d+) (?:schauen|zeigen)"]
+		},
+		{
+			"action" : "playVideo",
+			"name" : "Video starten",
+			"commands" : ["video starten", "play"]
+		},
+		{
+			"action" : "stopVideo",
+			"name" : "Video stoppen",
+			"commands" : ["video (?:stoppen|anhalten|pausieren)", "stop", "pause", "halt"]
+		},
+		{
+			"action" : "clickVideo",
+			"name" : "Video anklicken",
+			"commands" : ["klick(?:e)? (?:auf )?(?:das )?video", "klick(?:e)? (?:das )?video an", "video (?:an)?klicken"]
+		},
+		{
+			"action" : "muteVideo",
+			"name" : "Video stumm schalten",
+			"commands" : ["video stumm (?:schalten)?", "video stumm"]
+		},
+		{
+			"action" : "unmuteVideo",
+			"name" : "Video laut schalten",
+			"commands" : ["video laut (?:schalten)?", "video laut"]
+		},
+		{
+			"action" : "jumpForwardVideo",
+			"name" : "Vorwärts springen",
+			"commands" : ["vorwärts springen"]
+		},
+		{
+			"action" : "jumpBackwardsVideo",
+			"name" : "Rückwärts springen",
+			"commands" : ["rückwärts springen"]
+		},
+		{
+			"action" : "jumpCertainVideo",
+			"name" : "Spring zu bestimmter Stelle im Video",
+			"commands" : ["zeit ([0-9][0-9]:[0-9][0-9])", "zeit ([0-9][0-9] [0-9][0-9])"]
+		},
+		{
+			"action" : "increaseVolume",
+			"name" : "Lautsärke erhöhen",
+			"commands" : ["lauter", "lautsärke erhöhen"]
+		},
+		{
+			"action" : "decreaseVolume",
+			"name" : "Laustärke verringern ",
+			"commands" : ["leiser", "laustärke verringern"]
+		},
+		{
+			"action" : "setVolumeVideo",
+			"name" : "Setze Lautstärke",
+			"commands" : ["(?:setze )?lautsärke (?:auf )?([0-9]+)"]
+		},
+
+
+		{
+			"action" : "showWeather",
+			"name" : "Wetter anzeigen",
+			"commands" : ["(?:wie ist das )?wetter (?:in )?(.+)"]
+		},
+
+
+		{
+			"action" : "startZooming",
+			"name" : "heranzoomen",
+			"commands" : ["heranzoomen"]
+		},
+		{
+			"action" : "first",
+			"name" : "Sektor 1",
+			"commands" : ["1", "erster sektor"]
+		},
+		{
+			"action" : "second",
+			"name" : "Sektor 2",
+			"commands" : ["2", "zweiter sektor"]
+		},
+		{
+			"action" : "third",
+			"name" : "Sektor 3",
+			"commands" : ["3", "dritter sektor"]
+		},
+		{
+			"action" : "fourth",
+			"name" : "Sektor 4",
+			"commands" : ["4", "vierter sektor"]
+		},
+		{
+			"action" : "zoomOut",
+			"name" : "herauszoomen",
+			"commands" : ["herauszoomen", "rauszoomen"]
+		},
+		{
+			"action" : "reset",
+			"name" : "Zoom zurücksetzen",
+			"commands" : ["setze den zoom zurück", "zoom zurücksetzen"]
+		}
+	]
+}

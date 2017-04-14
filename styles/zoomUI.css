@@ -1,0 +1,68 @@
+/**
+ *CSS for zooming
+ */
+div#zoomUIDIV,
+div#zoomUIBackground,
+div#zoomUI{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1999999999;
+    height: 100%;
+    width: 100%;
+}
+
+div#zoomUIDIV div#zoomUIBackground {
+    background-color: lightgray;
+    opacity: 0.8;
+}
+
+div#zoomUIDIV div#zoomUI {
+    opacity: 1;
+}
+
+div#zoomUIDIV div#zoomUI h1 {
+    font-size: 5vh;
+    font-weight: bold;
+    border: none;
+    font-style: normal;
+    font-variant: normal;
+    color: black;
+    margin-top: -2.5vh;
+    margin-left: -2.5vh;
+    padding: 0;
+    background: none;
+}
+
+div#zoomUIDIV div#zoomUI h1#first {
+    position: fixed;
+    top: 22.5%;
+    left: 25.5%;
+}
+
+div#zoomUIDIV div#zoomUI h1#second {
+    position: fixed;
+    top: 22.5%;
+    left: 75.5%;
+
+}
+
+div#zoomUIDIV div#zoomUI h1#third {
+    position: fixed;
+    top: 72.5%;
+    left: 25.5%;
+}
+
+div#zoomUIDIV div#zoomUI h1#fourth {
+    position: fixed;
+    top: 72.5%;
+    left: 75.5%;
+}
+
+div#zoomUIDIV div#zoomUI img#zoomUIGrid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

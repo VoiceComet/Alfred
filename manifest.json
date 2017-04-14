@@ -1,35 +1,96 @@
 {
 	"manifest_version": 2,
 
-	"name": "Chrome Speech Control",
-	"description": "This extension adds a speech control option to your browser.",
-	"version": "1.0",
+	"name": "Alfred - Your personal speech-controlled butler",
+	"description": "Alfred is a Chrome Extension which allows the user to control the browser by voice commands.",
+	"version": "0.1",
 
 	"permissions": [
 		"tabs",
 		"notifications",
-		"history"
+		"history",
+		"bookmarks",
+		"geolocation",
+		"storage"
 	],
 
 	"background": {
 		"scripts": [
-			"scripts/utils.js",
+			"scripts/jquery-3.1.0.min.js",
+			"scripts/jquery.mark.min.js",
+			"scripts/classes/SpeechRecognitionControl.js",
+			"scripts/backgroundUtils.js",
 			"scripts/classes/Module.js",
 			"scripts/classes/State.js",
+			"scripts/classes/PanelState.js",
 			"scripts/classes/Action.js",
+			"scripts/classes/MultilingualAction.js",
 			"scripts/classes/Command.js",
-			"scripts/background.js"
+			"scripts/background.js",
+			"scripts/modules/moduleList.js"
 		]
 	},
-	
+
 	"content_scripts": [
 		{
 			"matches": ["*://*/*"],
-			"js": ["scripts/contentScript.js"]
+			"css": [
+				"styles/ui.css",
+				"styles/zoomUI.css",
+				"styles/objectUI.css"
+			],
+			"js": [
+				"scripts/jquery-3.1.0.min.js",
+				"scripts/jquery.mark.min.js",
+				"scripts/classes/ContentScriptMethod.js",
+				"scripts/frontendMessaging.js",
+				"scripts/contentScript.js",
+				"scripts/modules/tabHandleModule.csm.js",
+				"scripts/modules/weatherModule.csm.js",
+				"scripts/modules/zoomModule.csm.js",
+				"scripts/modules/searchModule.csm.js",
+                "scripts/modules/videoModule.csm.js",
+				"scripts/modules/searchEngineModule.csm.js",
+				"scripts/modules/mapModule.csm.js",
+				"scripts/modules/bookmarkModule.csm.js",
+				"scripts/modules/linkModule.csm.js",
+				"scripts/modules/imageModule.csm.js",
+				"scripts/modules/addressModule.csm.js",
+				"scripts/modules/ownCommandModule.csm.js",
+				"scripts/modules/scrollModule.csm.js"
+			]
 		}
 	],
 	
 	"browser_action": {
 		"default_icon": { "128": "images/mic_on.png" }
+	},
+
+	"web_accessible_resources": [
+		"scripts/languages/deValues.json",
+		"scripts/languages/enValues.json",
+		"images/mic_both.png",
+		"images/mic_hear.png",
+		"images/mic_work.png",
+		"images/mic_muted.png",
+		"images/mic_normal.png",
+        "images/grid.png",
+		"images/microphone.png",
+		"images/speech.png",
+		"images/think.png",
+		"ui.html",
+        "styles/ui.css",
+		"zoomUI.html",
+		"styles/zoomUI.css",
+		"styles/objectUI.css",
+		"objectUIImages.html",
+		"scripts/frontendMessaging.js",
+		"scripts/modules/mapModule.html"
+	],
+
+	"options_page": "options.html",
+	"options_ui": {
+		"page": "options.html",
+		"chrome_style": true
 	}
 }

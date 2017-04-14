@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Test Extension Options</title>
+    <style>
+        body { padding: 10px; }
+        section {
+            -webkit-padding-start: 18px;
+            margin-bottom: 24px;
+            margin-top: 8px;
+        }
+        section h3 {
+            -webkit-margin-start: -18px;
+        }
+        section .setting {
+            margin-bottom:6px;
+        }
+        section .setting input {
+            margin-left:7px;
+            margin-right:7px;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <h3>General</h3>
+        <div class="setting">
+            <label for="language">Language</label>
+            <select id="language" title="Language">
+                <option value="de">Deutsch</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </section>
+    <section>
+        <h3>Butler</h3>
+        <div class="setting">
+            <label for="speechAssistantName">Butlers name</label>
+            <input id="speechAssistantName" title="Name of your butler" type="text"/>
+        </div>
+        <div class="setting">
+            <input id="speechAssistantSpeechOutput" title="Speech Output" type="checkbox"/>
+            <label for="speechAssistantSpeechOutput">Speech Output</label>
+        </div>
+        <div class="setting">
+            <label for="speechAssistantVoice">Voice</label>
+            <select id="speechAssistantVoice" title="Speech Assistant Voice">
+                <!-- they will be loaded in options.js -->
+            </select>
+        </div>
+        <div class="setting">
+            <label for="speechAssistantUserTitle">Your Title</label>
+            <select id="speechAssistantUserTitle" title="Speech Assistant User Title">
+                <option value="Master">Master</option>
+                <option value="Mistress">Mistress</option>
+                <option value="Sir">Sir</option>
+                <option value="Lady">Lady</option>
+            </select>
+            <input id="speechAssistantUserName" title="Speech Assistant User Name" type="text"/>
+        </div>
+        <div class="setting">
+            <input id="speechAssistantSayTitle" title="Say your title after every speech output" type="checkbox"/>
+            <label for="speechAssistantSayTitle">Say Title</label>
+        </div>
+    </section>
+
+    <section>
+        <h3>Modules</h3>
+        <div class="setting">
+            <input id="tabHandleModule" title="Tab Handling" type="checkbox"/>
+            <label for="tabHandleModule">Tab Handling</label>
+        </div>
+        <div class="setting">
+            <input id="scrollModule" title="Scrolling" type="checkbox"/>
+            <label for="scrollModule">Scrolling</label>
+        </div>
+        <div class="setting">
+            <input id="weatherModule" title="Weather" type="checkbox"/>
+            <label for="weatherModule">Weather</label>
+        </div>
+        <div class="setting">
+            <input id="zoomModule" title="Zooming" type="checkbox"/>
+            <label for="zoomModule">Zooming</label>
+        </div>
+        <div class="setting">
+            <input id="searchModule" title="Text search" type="checkbox"/>
+            <label for="searchModule">Text search</label>
+        </div>
+        <div class="setting">
+            <input id="videoModule" title="Video control" type="checkbox"/>
+            <label for="videoModule">Video control</label>
+        </div>
+        <div class="setting">
+            <input id="searchEngineModule" title="Search engine" type="checkbox"/>
+            <label for="searchEngineModule">Search engine</label>
+        </div>
+        <div class="setting">
+            <input id="mapModule" title="Map" type="checkbox"/>
+            <label for="mapModule">Map</label>
+        </div>
+        <div class="setting">
+            <input id="bookmarkModule" title="Bookmarks" type="checkbox"/>
+            <label for="bookmarkModule">Bookmarks</label>
+        </div>
+        <div class="setting">
+            <input id="linkModule" title="Link search" type="checkbox"/>
+            <label for="linkModule">Link search</label>
+        </div>
+        <div class="setting">
+            <input id="imageModule" title="Image control" type="checkbox"/>
+            <label for="imageModule">Image control</label>
+        </div>
+    </section>
+
+    <section id="addActions">
+        <h3>Add Actions</h3>
+        <div class="setting">
+            <label for="chooseModule">Choose Module</label>
+            <select id="chooseModule" title="Choose Module">
+                <option value="tabHandling">Tab Handling</option>
+                <option value="scrolling">Scrolling</option>
+                <option value="openURL">Open URL</option>
+            </select>
+        </div>
+        <div class="setting">
+            <label for="chooseAction">Choose Action</label>
+            <select id="chooseAction" title="Choose Action"></select>
+        </div>
+        <div class="setting" id="params"></div>
+        <div class="setting">
+            <label for="userCommand">Command</label>
+            <input id="userCommand" title="Your own command" type="text"/>
+            <button id="addButton">Add</button>
+        </div>
+    </section>
+
+    <section id="userCommands">
+        <h3>User Commands</h3>
+    </section>
+
+    <section>
+        <h3>APIs</h3>
+        <label for="searchEngine">Search Engine</label>
+        <select id="searchEngine" title="Search Engine">
+            <option value="google">Google</option>
+            <option value="bing">Bing</option>
+        </select>
+    </section>
+
+    <script src="scripts/options.js"></script>
+</body>
+</html>

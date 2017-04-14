@@ -5,6 +5,32 @@
  * @constructor
  */
 function Command (expression, parameterCount) {
-	this.expression = new RegExp(expression, 'i');
+	/**
+	 * regular expression as string
+	 * @type {String}
+	 * @public
+	 */
+	this.expression = expression;
+
+	/**
+	 * regular expression as RegExp Object
+	 * @type {RegExp}
+	 * @private
+	 */
+	this.regExpression = new RegExp(this.expression, 'i');
+
+	/**
+	 * count of parameters in regular expression (example "(.+)")
+	 * @type {Number}
+	 */
     this.parameterCount = parameterCount;
+
+	/**
+	 * get regular expression as RegExp Object
+	 * @return {RegExp}
+	 */
+	this.getRegExp = function() {
+		//noinspection JSPotentiallyInvalidUsageOfThis
+		return this.regExpression;
+	}
 }

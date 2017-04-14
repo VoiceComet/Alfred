@@ -1,0 +1,180 @@
+<div id="alfredMap" style="height:100%"></div>
+<script type="text/javascript">
+var alfredMap;
+/** @type {{marker:google.maps.Marker, name:String, address:String}[]} */
+var alfredMapMarkers = [];
+var alfredMapMarkerLabels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; //EIOU difficult to understand?
+
+var alfredMapPlacesService;
+var alfredMapDirectionsService;
+var alfredMapDirectionsRenderer;
+var alfredMapRouteDisplayed = false;
+var alfredMapRouteMessageId = -1;
+
+//create new event that fires after initializing the map
+var initializedAlfredMapEvent = document.createEvent("HTMLEvents");
+initializedAlfredMapEvent.initEvent("initializedAlfredMap", true, true);
+initializedAlfredMapEvent.eventName = "initializedAlfredMap";
+
+//noinspection JSUnusedLocalSymbols
+/**
+ * callback of script loading
+ */
+function initAlfredMap() {
+    alfredMap = new google.maps.Map(document.getElementById("alfredMap"), {
+        center: {lat: 52.5197, lng: 13.4051},
+        zoom: 10
+    });
+    alfredMapPlacesService = new google.maps.places.PlacesService(alfredMap);
+    alfredMapDirectionsService = new google.maps.DirectionsService;
+    alfredMapDirectionsRenderer = new google.maps.DirectionsRenderer;
+    document.dispatchEvent(initializedAlfredMapEvent);
+}
+
+/**
+ * set a marker on the map
+ * @param {Object} place - place object
+ * @param {string} place.name - name of place
+ * @param {string} place.formatted_address - address of place
+ * @param {Object} place.geometry
+ * @param {google.maps.LatLng} place.geometry.location - LatLng of place
+ */
+function createMarker(place) {
+    alfredMapMarkers.push({
+        marker:new google.maps.Marker({
+            map: alfredMap,
+            label: alfredMapMarkerLabels[alfredMapMarkers.length % alfredMapMarkerLabels.length],
+            position: place.geometry.location
+        }),
+        name: place.name,
+        address: place.formatted_address
+    });
+}
+
+/**
+ * clear all markers from the map
+ */
+function clearMarkers() {
+    alfredMapMarkers.forEach(function(marker) {
+        marker.marker.setMap(null);
+    });
+    alfredMapMarkers = [];
+}
+
+//noinspection JSUnusedLocalSymbols
+/**
+ * search and show locations on the map
+ * @param {String} query - search text
+ */
+function searchLocationOnAlfredMap(query) {
+    clearDisplayedRoute();
+    alfredMapPlacesService.textSearch(
+        {query: query},
+        function(results, status) {
+            var bounds = new google.maps.LatLngBounds();
+
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                if (results.length > 0) {
+                    //clear markers
+                    clearMarkers();
+
+                    //create new markers
+                    for (var i = 0; i < results.length; i++) {
+                        createMarker(results[i]);
+
+                        //set bounds
+                        if (results[i].geometry.viewport) {
+                            //only for geo codes
+                            bounds.union(results[i].geometry.viewport);
+                        } else {
+                            bounds.extend(results[i].geometry.location);
+                        }
+                    }
+
+                    //arrange map that all results are shown
+                    alfredMap.fitBounds(bounds);
+
+                    if (results.length == 1) {
+                        showMessage({content: translate("foundPlaceX").format([query])});
+                    } else {
+                        showMessage({content: translate("foundXPlacesForY").format([query])});
+                    }
+                } else {
+                    //nothing found
+                    showMessage({content:translate("cannotFindPlaceX").format([query])});
+                }
+            } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS)  {
+                //nothing found
+                showMessage({content:translate("cannotFindPlaceX").format([query])});
+            } else {
+                showMessage({content:translate("serviceNotAvailable")});
+                console.warn('Places request failed due to ' + status);
+            }
+        }
+    );
+}
+
+/**
+ * clear the displayed route
+ */
+function clearDisplayedRoute() {
+    if (alfredMapRouteDisplayed) {
+        alfredMapDirectionsRenderer.setMap(null);
+        alfredMapRouteDisplayed = false;
+
+        if (alfredMapRouteMessageId >= 0) {
+            hideMessage({id:alfredMapRouteMessageId});
+            alfredMapRouteMessageId = -1;
+        }
+    }
+}
+
+//noinspection JSUnusedLocalSymbols
+/**
+ * search and show route on the map
+ * @param {String} origin - name of origin
+ * @param {String} destination - name of destination
+ */
+function searchRouteOnAlfredMap(origin, destination) {
+    clearMarkers();
+    clearDisplayedRoute();
+
+    alfredMapDirectionsService.route({
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode.DRIVING
+    }, function(response, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+            alfredMapDirectionsRenderer.setDirections(response);
+            alfredMapDirectionsRenderer.setMap(alfredMap);
+            alfredMapRouteDisplayed = true;
+
+            //create dummy markers for interaction
+            alfredMapMarkers.push({
+                marker: new google.maps.Marker({
+                    label: 'A',
+                    position: response.routes[0].legs[0].start_location
+                }),
+                name: origin,
+                address: response.routes[0].legs[0].start_address
+            });
+            alfredMapMarkers.push({
+                marker: new google.maps.Marker({
+                    label: 'B',
+                    position: response.routes[0].legs[0].end_location
+                }),
+                name: destination,
+                address: response.routes[0].legs[0].end_address
+            });
+            alfredMapRouteMessageId = showMessage({
+                content: translate("routeBetweenWAndXTimeYDistanceZ").format([origin, destination, response.routes[0].legs[0].duration.text, response.routes[0].legs[0].distance.text]),
+                time: 0
+            });
+        } else {
+            showMessage({content:translate("cannotFindRouteBetweenXAndY").format([origin, destination])});
+            console.warn('Directions request failed due to ' + status);
+        }
+    });
+}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-XJsCGm_N1cAfYeuTwgsiFp0iWgcAi0&libraries=places&callback=initAlfredMap"></script>

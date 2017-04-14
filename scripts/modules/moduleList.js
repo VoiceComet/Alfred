@@ -1,8 +1,21 @@
 var moduleList = [
-	"BrowserActionsModule.js"
+	"tabHandleModule.js",
+	"scrollModule.js",
+	"weatherModule.js",
+	"zoomModule.js",
+	"searchModule.js",
+	"videoModule.js",
+	"searchEngineModule.js",
+	"mapModule.js",
+	"bookmarkModule.js",
+	"linkModule.js",
+	"imageModule.js",
+	"addressModule.js",
+	"ownCommandModule.js"
 	//"testModule.js"
 	
 	//add modules here
+	//please add per new module a new entry in options
 ];
 
 
